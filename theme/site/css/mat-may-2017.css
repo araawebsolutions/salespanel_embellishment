@@ -1,0 +1,181 @@
+.mat-may-2017 section{padding:10px;border-bottom:5px solid #e0e0e0;}
+.mat-may-2017 section:last-child{border-bottom:0px}
+.mat-may-2017 section a.link{color:#0066c0;}
+.mat-may-2017 section article.mat-detail .pr-detail{font-size:12px !important;text-align:justify;height:95px;}
+.mat-may-2017 section article.mat-detail .pr-detail span{color:#19afe2;font-size:13px;font-weight:bold;line-height:normal;}
+.mat-may-2017 section article.mat-detail .pr-detail .group_name{font-size:16px;color:#006da4;}
+.mat-may-2017 section article.mat-detail h4{color:#19afe2;font-size:16px;font-weight:bold;line-height:normal;margin:0 0 5px;padding:0;}
+.mat-may-2017 section article.mat-detail p{font-size:13px;}
+.mat-may-2017 section article.mat-detail .specs{font-size:12px;margin-top:20px;}
+.mat-may-2017 section article.mat-detail .specs img{max-height:128px;}
+.mat-may-2017 section article.mat-detail .specs b{color:#19afe2;}
+.mat-may-2017 section article.mat-detail .specs .cl-sel{margin-top:14px;}
+.mat-may-2017 section article.mat-detail .specs .cl-sel .labels-form{margin-top:25px;}
+.mat-may-2017 section article.mat-detail .specs .cl-sel ul.cl-list{margin:0;padding:0;width:100%;height:42px;display:table-cell;vertical-align:bottom;}
+.mat-may-2017 section article.mat-detail .specs .cl-sel ul.cl-list li{float:left;margin-right:2px;width:20px;height:20px;border:2px solid #e0e0e0;border-radius:100%;padding:2px;list-style:none;cursor:pointer;display:inline-block;}
+.mat-may-2017 section article.mat-detail .specs .cl-sel ul.cl-list li:hover{border:2px solid #fd4913;}
+.mat-may-2017 section article.mat-detail .specs .cl-sel ul.cl-list li.active{border:2px solid #17b1e3;}
+.mat-may-2017 section article.mat-detail .specs .cl-sel ul.cl-list li:lst-child{margin-right:0;}
+.mat-may-2017 section article.mat-detail .specs .cl-sel ul.cl-list li a{width:12px;height:12px;display:block;border-radius:100%;}
+.mat-may-2017 section article.mat-detail .specs .cl-sel .tooltip-inner{background:#525351;padding:5px;font-size:11px;font-weight:bold;}
+.mat-may-2017 section article.mat-detail .specs .cl-sel .tooltip.bottom .tooltip-arrow,
+.mat-may-2017 section ul.clr-thumbs .tooltip.bottom .tooltip-arrow{border-bottom-color:#FFF8DC !important;}
+.mat-may-2017 section article.mat-detail .specs ul.clr-thumbs{margin:-2px 0 0 0;padding:0;display:inline-block;}
+.mat-may-2017 section article.mat-detail .specs ul.clr-thumbs li{float:right;display:inline-block;list-style:none;position:relative;margin-right:-10.5px;width:42px;}
+.mat-may-2017 section article.mat-detail .specs ul.clr-thumbs li:first-child{margin-left:0px;}
+.mat-may-2017 section article.mat-detail .specs ul.clr-thumbs li a{text-decoration:none;}
+.mat-may-2017 section article.mat-detail .specs ul.clr-thumbs li a img{outline:0;border:0;height:55px;box-shadow:2px 2px 2px rgba(0,0,0,.3);}
+.mat-may-2017 section article.mat-detail .specs ul.clr-thumbs li:hover{box-shadow:0px 0px 0px rgba(0,0,0,.2);z-index:1000;width:42px;height:56px;}
+.mat-may-2017 section article.mat-detail .specs ul.clr-thumbs li:hover a{position:absolute;z-index:1000;width:73px;height:100px !important;margin-top:-44px;}
+.mat-may-2017 section article.mat-detail .specs ul.clr-thumbs li:hover a img{box-shadow:0px 0px 10px rgba(0,0,0,.5);background:#fff;width:auto;height:100px !important;position:absolute;}
+.mat-may-2017 section article.mat-detail .specs ul.clr-thumbs li.active{box-shadow:0px 0px 0px rgba(0,0,0,.2);}
+.mat-may-2017 section article.mat-detail .specs ul.clr-thumbs li.active a{position:relative;cursor:default;}
+.mat-may-2017 section article.mat-detail .specs ul.clr-thumbs li.active a img,
+.mat-may-2017 section article.mat-detail .specs ul.clr-thumbs li.active:hover a img,
+.mat-may-2017 section article.mat-detail .specs ul.clr-thumbs li.active a:hover img,
+.mat-may-2017 section article.mat-detail .specs ul.clr-thumbs li.active a img:hover{box-shadow:0px 0px 5px rgba(0,0,0,.5);width:42px !important;height:56px !important;position:relative;}
+.mat-may-2017 section article.mat-detail .specs a.technical_specs{top:2px;display:inline-block;position:relative;}
+.mat-may-2017 section article.mat-detail .specs .comp{text-align:left;position:absolute;margin-left:45%;}
+.mat-may-2017 section article.mat-detail .specs .comp img{height:35px;margin-left:2px;margin-top:2px;cursor:help;}
+.mat-may-2017 section .tooltip{font-size:11px;line-height:14px;text-align:left !important;font-family:"Open Sans", Helvetica, Arial, sans-serif;opacity:1;}
+.mat-may-2017 section .tooltip-inner{text-align:justify;padding:7px 7px;background:#fff8dc;color:#666;opacity:1;box-shadow:3px 3px 3px rgba(0,0,0,.3);}
+.mat-may-2017 section .tooltip.top .tooltip-arrow{border-top-color:#fff8dc;}
+.mat-may-2017 section article.mat-detail .specs .comp img:first-child{margin-left:0;}
+.mat-may-2017 section article.mat-detail .specs .comp a{margin-top:6px;display:inline-block;}
+.mat-may-2017 section article.mat-detail .specs .comp a b{color:#337ab7;}
+.mat-may-2017 section article.mat-detail .specs .comp a .fa{color:#17b1e3;font-size:13px;}
+.mat-may-2017 section article.mat-detail .specs .comp a i small{font-size:12px;}
+.mat-may-2017 section article.mat-detail .specs .title{color:#19afe2;}
+.mat-may-2017 section article.mat-detail .specs .labels-form select,
+.mat-may-2017 section article.mat-detail .specs .labels-form .select{padding:5px 5px;height:30px;-webkit-appearance:none;line-height:18px;margin-top:-3px;margin-left:-5px;}
+.mat-may-2017 section article.mat-detail .specs .labels-form .select i{top:12px;right:20px;background:#fff;box-shadow:0 0 0 8px #fff;}
+.mat-may-2017 section article.mat-tabs .nav{margin-bottom:10px;}
+.mat-may-2017 section article.mat-tabs .nav li a{background-color:#cacaca;border-top:2px solid #cacaca;color:#fff;line-height:normal;font-weight:normal;border-bottom:0px solid #fd4913;margin-left:1px;margin-right:1px;color:#333;text-decoration:underline;}
+.mat-may-2017 section article.mat-tabs .nav li:first-child a{margin-left:0;}
+.mat-may-2017 section article.mat-tabs .nav li:last-child a{margin-right:0;}
+.mat-may-2017 section article.mat-tabs .nav li a:hover{background-color:#bfbfbf;border-top:2px solid #bfbfbf;text-decoration:none;}
+.mat-may-2017 section article.mat-tabs .nav li.active{border:2px solid #fd4913;border-bottom:0;}
+.mat-may-2017 section article.mat-tabs .nav li.active a{border-top:0;border-bottom:0;background-color:#fff;cursor:default;color:#000;text-decoration:none;}
+.mat-may-2017 section article.mat-tabs .nav li.active a:hover{background-color:#fff;border-top:0px solid #fff;cursor:default;}
+.mat-may-2017 section article.mat-tabs b, .mat-may-2017 section article.mat-tabs p, .mat-may-2017 section article.mat-tabs span{font-size:12px;}
+.mat-may-2017 section article.mat-tabs .print_option{margin-top:10px;}
+.mat-may-2017 section article.mat-tabs .art-btn{margin-top:36px;font-size:13px;}
+.mat-may-2017 section article.mat-tabs .art-btn-l{margin-top:20px;padding:5px 9px !important;}
+.mat-may-2017 section article.mat-tabs .art-btn-l .fa{font-size:43px;position:relative;top:2px;}
+.mat-may-2017 section article.mat-tabs .art-btn-l b{display:block;line-height:16px;font-size:16px;margin-left:-20px;}
+.mat-may-2017 section article.mat-tabs .art-btn-l small{display:block;line-height:11px;font-size:11px;margin-top:4px;margin-left:-20px;}
+.mat-may-2017 section article.mat-tabs .qty small{font-size:9px;color:#999;display:block;margin-top:5px;}
+.mat-may-2017 section article.mat-tabs .quotation h4{margin:0;padding:0;color:#fd4913;font-size:24px;font-weight:bold;display:block;clear:both;}
+.mat-may-2017 section article.mat-tabs .quotation span{font-size:12px;}
+.mat-may-2017 section article.mat-tabs .quotation b.rate{color:#fd4913;}
+.mat-may-2017 section article.mat-tabs .quotation .btn-height{height:57px;display:block;clear:both;}
+.mat-may-2017 section article.mat-tabs .service{margin-top:0px;}
+.mat-may-2017 section article.mat-tabs .service .delFree b, .mat-may-2017 section article.mat-tabs .service .delFree .fa{font-size:14px;}
+.mat-may-2017 section article.mat-tabs .service .delFree small{color:#f00;font-size:11px;display:block;}
+.mat-may-2017 section article.mat-tabs .service .delFree .fa-info-circle{color:#999;}
+.mat-may-2017 section article.mat-tabs .service a.apf{display:inline-block;text-align:right;color:#f00;}
+.mat-may-2017 section article.mat-tabs .service a.apf .col-xs-3{width:26px;}
+.mat-may-2017 section article.mat-tabs .service a.apf span{color:#f00;text-decoration:underline;font-size:11px;}
+.mat-may-2017 section article.mat-tabs .service a.apf:hover span{text-decoration:none;}
+.mat-may-2017 section article.mat-tabs .service a.apf .fa{background:#f00;border-radius:100%;color:#fff;height:22px;padding:3px;text-align:center;text-decoration:none;width:22px;margin-top:0px;}
+.mat-may-2017 section article.mat-tabs .note{color:#fd4913;}
+.mat-may-2017 section article.mat-tabs .ofq{line-height:12px;margin-top:145px;position:absolute;}
+.mat-may-2017 section article.mat-tabs .ofq .main-box{background:#f9f9f9;padding-top:5px;padding-bottom:5px;border-right:1px solid #fff;border-radius:5px;}
+.mat-may-2017 section article.mat-tabs .ofq .main-box:last-child{border-right:0;}
+.mat-may-2017 section article.mat-tabs .ofq .clock_time{font-size:12px;font-weight:bold;color:#818181;}
+.mat-may-2017 section article.mat-tabs .ofq .clock_time span{margin-left:2px;margin-right:2px;color:#818181;font-size:10px;font-weight:normal;}
+.mat-may-2017 section article.mat-tabs .ofq b,
+.mat-may-2017 section article.mat-tabs .ofq small{color:#818181;font-size:10px;}
+.mat-may-2017 section article.mat-tabs .ofq .l-icon{color:#17b1e3;font-size:25px;}
+.mat-may-2017 section article.mat-tabs .ofq img{margin-top:3px;}
+.mat-may-2017 section article.mat-tabs .ofq .s-icon{color:#fb3b01;float:right;}
+.mat-may-2017 section article.mat-tabs .quotation .printedprice_box table.price td{line-height:12px;padding-bottom:3px;}
+.mat-may-2017 section article.mat-tabs .quotation .printedprice_box table.price td .priceplain b,
+.mat-may-2017 section article.mat-tabs .quotation .priceplain b{line-height:24px;font-size:24px;}
+.mat-may-2017 section .roll-products article.mat-tabs .ofq{margin-top:136px;}
+.mat-may-2017 section .roll-products article.mat-tabs a.btn-roll-l{text-align:left;}
+.mat-may-2017 section .roll-products article.mat-tabs a.btn-roll-l small{font-size:9px;line-height:10px}
+.mat-may-2017 section .roll-products .rollLable_icon{background:url(../images/roll-dm.png) no-repeat 0 0;font-size:9px !important;padding:2px 0 0 43px;width:100%;text-align:left;margin:18px 0 0 0 !important;height:36px;}
+.mat-may-2017 section .roll-products .rollLable_icon span{display:block;}
+.mat-may-2017 section .roll-products article.mat-tabs .art-btn-l{margin-top:-3px;}
+.mat-may-2017 section .roll-products article.mat-detail .specs img.product_material_image{margin-top:5px;}
+.mat-may-2017 section .roll-products article.mat-detail .specs ul.clr-thumbs{margin-top:12px;}
+.mat-may-2017 section .roll-products article.mat-detail .specs ul.clr-thumbs li{margin-right:5px;margin-left:0px;width:31px;height:38px;}
+.mat-may-2017 section .roll-products article.mat-detail .specs ul.clr-thumbs li a{top:-7px;}
+.mat-may-2017 section .roll-products article.mat-detail .specs ul.clr-thumbs li a img{height:38px;box-shadow:0px 0px 0px rgba(0,0,0,.3);}
+.mat-may-2017 section .roll-products article.mat-detail .specs ul.clr-thumbs li:hover{z-index:1000;width:31px;height:38px;}
+.mat-may-2017 section .roll-products article.mat-detail .specs ul.clr-thumbs li:hover a{width:49px;height:60px !important;margin-top:-15px;}
+.mat-may-2017 section .roll-products article.mat-detail .specs ul.clr-thumbs li:hover a img{background:none;box-shadow:0px 0px 0px rgba(0,0,0,.5);width:auto;height:60px !important;}
+.mat-may-2017 section .roll-products article.mat-detail .specs ul.clr-thumbs li.active a img,
+.mat-may-2017 section .roll-products article.mat-detail .specs ul.clr-thumbs li.active:hover a img,
+.mat-may-2017 section .roll-products article.mat-detail .specs ul.clr-thumbs li.active a:hover img,
+.mat-may-2017 section .roll-products article.mat-detail .specs ul.clr-thumbs li.active a img:hover{background:none;box-shadow:0px 0px 0px rgba(0,0,0,.5);width:auto !important;height:45px !important;position:relative;}
+.panel-heading .hppp-title-text{font-size:16px;line-height:19px;margin-left:10px;background-color:#fd4913;color:#fff;font-weight:normal;margin-top:0px;border-radius:4px;padding-left:10px;padding-right:10px;}
+.mat-may-2017 section .roll-products article.mat-tabs small{font-size:9px;color:#999;display:block;margin-top:5px;}
+.mat-may-2017 section .roll-products article.mat-tabs small.discount_price{display:inline;color:#303030;font-size:16px;}
+.mat-may-2017 section article.mat-tabs .quotation .priceplain img{position:relative;margin-top:0px;}
+.mat-may-2017 section .roll-products article.mat-tabs .service{top:-20px;position:relative;right:175px;}
+@media screen and (-webkit-min-device-pixel-ratio:0){.mat-may-2017 section article.mat-tabs .service a.apf .fa{padding:4px;}
+}
+@media screen and (max-width:1200px){.mat-may-2017 section article.mat-tabs .art-btn{font-size:14px;}
+}
+@media screen and (max-width:1023px){.mat-may-2017 section article.mat-detail .specs .comp{position:relative;margin-left:0;}
+.mat-may-2017 section article.mat-detail .pr-detail{height:auto;}
+.mat-may-2017 section article.mat-tabs{margin-top:10px;}
+.mat-may-2017 section article.mat-tabs .ofq,
+.mat-may-2017 section .roll-products article.mat-tabs .ofq{margin-top:20px;position:relative;}
+.mat-may-2017 section article.mat-tabs .ofq b,
+.mat-may-2017 section .roll-products article.mat-tabs .ofq b{font-size:12px;line-height:normal;}
+.mat-may-2017 section article.mat-tabs .ofq img,
+.mat-may-2017 section article.mat-tabs .ofq .fa,
+.mat-may-2017 section .roll-products article.mat-tabs .ofq img,
+.mat-may-2017 section .roll-products article.mat-tabs .fa{margin:7px auto auto auto;}
+.mat-may-2017 section .mat-tabs .nav-justified > li > a{margin-bottom:0;}
+.mat-may-2017 section .roll-products article.mat-detail .specs ul.clr-thumbs{margin-top:21px;}
+.mat-may-2017 section .roll-products article.mat-tabs .art-btn{font-size:14px !important;}
+.mat-may-2017 section article.mat-tabs .ofq img, .mat-may-2017 section article.mat-tabs .ofq .fa, .mat-may-2017 section .roll-products article.mat-tabs .ofq img, .mat-may-2017 section .roll-products article.mat-tabs .fa{margin-top:0;}
+}
+@media screen and (max-width:768px){.mat-may-2017 section article.mat-detail .specs{margin-top:10px;margin-bottom:10px;}
+.mat-may-2017 section article.mat-detail .specs .cl-sel{margin-top:0px;}
+.mat-may-2017 section article.mat-tabs .service{margin-top:5px;}
+.mat-may-2017 section article.mat-tabs .service .delFree{margin-bottom:5px;}
+.mat-may-2017 section article.mat-tabs .qty{margin-top:5px;text-align:left;}
+.mat-may-2017 section article.mat-tabs .qty .form-control{text-align:left;}
+.mat-may-2017 section article.mat-tabs .nav li{float:left;}
+.mat-may-2017 section article.mat-tabs .qty{margin-top:0;}
+.mat-may-2017 section .roll-products .rollLable_icon{background:url(../images/roll-dm-2.png) no-repeat right;margin-top:0px !important;width:auto;float:right;padding:2px 43px 0 0;text-align:right;}
+.mat-may-2017 section .roll-products .dm-box .dm-selector .btn,
+.mat-may-2017 section .roll-products .dm-box .dm-selector li a{white-space:normal;}
+.mat-may-2017 section .roll-products article.mat-tabs .service{top:-25px;}
+}
+@media screen and (max-width:580px){.mat-may-2017 section article.mat-tabs .ofq b,
+.mat-may-2017 section .roll-products article.mat-tabs .ofq b{font-size:10px;line-height:normal;}
+.mat-may-2017 section article.mat-tabs .ofq img,
+.mat-may-2017 section article.mat-tabs .ofq .fa,
+.mat-may-2017 section .roll-products article.mat-tabs .ofq img,
+.mat-may-2017 section .roll-products article.mat-tabs .fa{display:inline-block;margin:3px 0 0 0;}
+}
+@media screen and (max-width:550px){.mat-may-2017 section article.mat-tabs .ofq .ofq-icon{display:none;}
+.mat-may-2017 section article.mat-tabs .ofq .ofq-text{width:100%;padding-right:7.5px !important;}
+.mat-may-2017 section article.mat-tabs .qty small{text-align:left !important;}
+}
+@media screen and (max-width:480px){.mat-may-2017 section .roll-products article.mat-detail .specs ul.clr-thumbs{margin-top:8%;}
+.mat-may-2017 section .roll-products article.mat-detail .specs .comp img{height:25px;margin-top:5px;}
+}
+@media screen and (max-width:450px){.mat-may-2017 section article.mat-detail .specs a.technical_specs{top:0px;}
+.mat-may-2017 section article.mat-detail .specs ul.clr-thumbs{margin:4% 0 0 0;}
+.mat-may-2017 section article.mat-detail .specs ul.clr-thumbs li{margin-right:0px;}
+.mat-may-2017 section article.mat-detail .specs ul.clr-thumbs li.active a img, .mat-may-2017 section article.mat-detail .specs ul.clr-thumbs li.active:hover a img, .mat-may-2017 section article.mat-detail .specs ul.clr-thumbs li.active a:hover img, .mat-may-2017 section article.mat-detail .specs ul.clr-thumbs li.active a img:hover,
+.mat-may-2017 section article.mat-detail .specs ul.clr-thumbs li a img,
+.mat-may-2017 section article.mat-detail .specs ul.clr-thumbs li:hover,
+.mat-may-2017 section article.mat-detail .specs ul.clr-thumbs li a:hover,
+.mat-may-2017 section article.mat-detail .specs ul.clr-thumbs li:hover a img{width:25px !important;height:36px !important;margin-top:0;}
+.mat-may-2017 section article.mat-detail .specs ul.clr-thumbs li{width:25px;}
+.mat-may-2017 section article.mat-detail .specs .comp img{height:25px;margin-top:5px;}
+.mat-may-2017 section .roll-products article.mat-detail .specs ul.clr-thumbs{margin-top:5%;}
+}
+@media screen and (max-width:400px){.mat-may-2017 section article.mat-detail .specs ul.clr-thumbs{margin:1% 0 0 0;}
+.mat-may-2017 section .roll-products article.mat-detail .specs ul.clr-thumbs{margin-top:2%;}
+}
+@media screen and (max-width:380px){.mat-may-2017 section article.mat-detail .specs ul.clr-thumbs{margin:0 0 0 0;}
+}

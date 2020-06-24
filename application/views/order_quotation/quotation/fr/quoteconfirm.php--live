@@ -1,0 +1,712 @@
+<?php
+error_reporting(1);
+$segment1 = $this->uri->segment(1);
+$segment2 = $this->uri->segment(2);
+
+?>
+<meta charset="utf-8" />
+
+<style>
+body{
+font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif;
+}
+tr {
+	font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif;
+}
+td {
+font-family: Calibri,Candara,Segoe,Segoe UI,Optima,Arial,sans-serif;
+	font-size:11px;
+
+}
+tr.table_blue_bar {
+	border-bottom: 1px solid #cccccc;
+	width: 100%;
+}
+tr.table_white_bar {
+	background-color: #F0F0F0;
+	border-bottom: 1px solid #cccccc;
+	width: 100%;
+}
+.invoicetable_PCode_loop {
+	border-bottom: 1px solid #cccccc;
+	color: #000000;
+	font-size: 11px;
+	padding: 5px;
+	text-align: left;
+	width: 10%px;
+}
+.invoicetable_description_loop {
+	border-bottom: 1px solid #cccccc;
+	border-left: 1px solid #cccccc;
+	color: #000000;
+	font-size: 11px;
+	padding: 5px;
+	text-align: left;
+	width: 80%;
+}
+.invoicetable_sml_headings_loop {
+	border-bottom: 1px solid #cccccc;
+	border-left: 1px solid #cccccc;
+	color: #000000;
+	font-size: 11px;
+	padding: 5px;
+	text-align: center;
+	width: 15%;
+}
+.invoicetable_Qty_loop {
+	border-bottom: 1px solid #cccccc;
+	border-left: 1px solid #cccccc;
+	color: #000000;
+	font-size: 11px;
+	padding: 5px;
+	text-align: center;
+	width: 10%;
+}
+.line_total_loop {
+	border-bottom: 1px solid #cccccc;
+	border-left: 1px solid #cccccc;
+	color: #000000;
+	font-size: 11px;
+	padding: 5px 0 5px 5px;
+	text-align: center;
+	width: 70px;
+}
+.invoicetable_PCode {
+	background-color: #17b1e3;
+	border-bottom: 1px solid #cccccc;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 5px;
+	text-align: left;
+	width: 15%;
+      color:#fff;
+}
+.invoicetable_description {
+	background-color: #17b1e3;
+	border-bottom: 1px solid #cccccc;
+	border-left: 1px solid #cccccc;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 5px;
+	text-align: left;
+	width: 50%;color:#fff;
+}
+.invoicetable_sml_headings {
+	background-color: #17b1e3;
+	border-bottom: 1px solid #cccccc;
+	border-left: 1px solid #cccccc;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 5px;
+	text-align: center;
+	width: 15%;color:#fff;
+}
+.invoicetable_Qty {
+	background-color: #17b1e3;
+	border-bottom: 1px solid #cccccc;
+	border-left: 1px solid #cccccc;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 5px;
+	text-align: center;
+	width: 10%;color:#fff;
+}
+.invoicetable_Qty22 {
+	background-color:#17b1e3;
+	border-bottom: 1px solid #cccccc;
+	border-left: 1px solid #cccccc;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 5px;
+	width: 4%;
+}
+.invoicetable_sml_headings2 {
+	border-bottom: 1px solid #cccccc;
+	border-left: 1px solid #cccccc;
+	font-weight: bold;
+	padding: 5px;
+	text-align: center;
+	width: 15%;
+}
+.invoicetable_Qty2 {
+	border-bottom: 1px solid #cccccc;
+	border-left: 1px solid #cccccc;
+	font-weight: bold;
+	padding: 5px;
+	text-align: center;
+	width: 10%;
+}
+.invuice_subtotal {
+	border-bottom: 1px solid #cccccc;
+	border: 1px solid #cccccc;
+	color: #000000;
+	font-size: 11px;
+	padding: 5px 10px 5px 5px;
+	text-align: left;
+}
+.invuice_subtotal_price {
+	border-bottom: 1px solid #cccccc;
+	border: 1px solid #cccccc;
+	color: #000000;
+	font-size: 11px;
+	padding: 5px 0 5px 5px;
+	text-align: left;
+}
+
+
+.invoicetable_bgBlue {
+	background-color: #17b1e3;
+	border-right: 1px solid #cccccc;
+	font-size: 12px;
+	font-weight: bold;
+	padding: 5px;
+	text-align: center;
+    color:#fff;
+}
+
+.invoicetable_tabel_border {
+	border-bottom: 1px solid #cccccc;
+	border-right: 1px solid #cccccc;
+	color: #000000;
+	font-size: 11px;
+	padding: 5px;
+}
+</style>
+<table width="100%" align="center" border="0" cellspacing="0">
+  <tr>
+    <td><img src="https://www.aalabels.com/theme/site/images/logo.png" border="0" width="160" height="66" /></td>
+    <td width="30%" align="left" valign="middle"><?php
+
+			echo "<strong  style='margin-left:80px;'>QUOTATION :</strong> ";
+			echo'<font color="#000000"> '.$OrderInfo['QuotationNumber'].'</font>';
+		    ?>
+        </td>
+  </tr>
+
+  </table>
+
+  <br></br>
+
+<table width="100%" align="center" border="0" cellspacing="0" >
+
+
+  <tr>
+    <td align="left" valign="top" class="print_address" width="50%">
+
+
+    <!-- ------------------------------------->
+    <table width="100%" border="0">
+        <tr>
+          <td align="left" class="print_address">AA Labels, </td>
+        </tr>
+        <tr>
+          <td align="left" valign="top" class="print_address">23 Wainman Road,</td>
+        </tr>
+        <tr>
+          <td align="left" valign="top" class="print_address">Peterborough, </td>
+        </tr>
+        <tr>
+          <td align="left" valign="top" class="print_address">PE2 7BU</td>
+        </tr>
+      </table>
+
+      <!-- ------------------------------------->
+
+     </td>
+
+
+    <td align="left" valign="top" width="50%">
+
+    <table width="100%" border="0">
+        <tr>
+          <td align="left" class="print_address"><strong style="margin-left:80px;">Telephone: </strong></td>
+          <td align="left" class="print_address"><span class="phone_right">+441733 588 390 (anglais uniquement)</span></td>
+        </tr>
+        <tr>
+          <td align="left" valign="top" class="print_address"><strong style="margin-left:80px;">e-mail: </strong></td>
+          <td align="left" valign="top" class="print_address"><span class="phone_right"><a href="mailto:customercare@aalabels.com" style="text-decoration:none; color:#257cac;">customercare@aalabels.com</a></span></td>
+        </tr>
+        <tr>
+          <td align="left" valign="top" class="print_address"><strong style="margin-left:80px;">N° TVA: </strong></td>
+          <td align="left" valign="top" class="print_address"><span class="phone_right">
+             <?php
+                if(isset($OrderInfo['BillingCountry']) && $OrderInfo['BillingCountry'] == 'France'){
+                    echo "FR 21 851063453";
+                } else{
+                    echo "GB 945 028 620";
+                }
+              ?>  
+          </span></td>
+        </tr>
+      </table>
+      </td>
+
+
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border:#CCCCCC 1px solid; padding-bottom:10px;">
+
+        <tr>
+          <td align="left" style="background-color:#17b1e3; border-bottom:#CCCCCC 1px solid; line-height:0px;height:30px;" width="100%"><h3 style="padding-top:-10px; white-space:nowrap;color:#fff;padding-left:5px;">Details de la commande</h3></td>
+        </tr>
+
+        <tr>
+          <td align="left" valign="top" style="padding-top:10px;" width="100%">
+          <table width="100%" border="0" cellspacing="3" cellpadding="0">
+              <tr>
+                <td class="print_address"><b>de la commande nombre:</b></td>
+                <td class="print_address"><b>Date:</b></td>
+                <td class="print_address"><b>Heures:</b></td>
+                <td class="print_address"><b>Statut:</b></td>
+              </tr>
+              <tr>
+                <td class="print_address" width="50%"><?php echo $OrderInfo['QuotationNumber'];   ?></td>
+                <td class="print_address" width="50%"><?php echo date('jS F Y', $OrderInfo['QuotationDate']); ?></td>
+                <td class="print_address" width="50%"><?php echo date('h:i:s A', $OrderInfo['QuotationTime']); ?></td>
+                <td class="print_address" width="50%"><?php
+                   $status= $this->user_model->getstatus($OrderInfo['QuotationStatus']);
+                   echo $status[0]->StatusTitle;
+                  ?>
+               </td>
+              </tr>
+            </table></td>
+        </tr>
+      </table>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0" style="border:#CCCCCC 1px solid; padding-bottom:10px;">
+
+<tr>
+
+
+
+ <td width="50%" border="0" cellspacing="0" cellpadding="0" align="left" valign="middel" >
+
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+          <tr>
+          <td align="left" style="background-color:#17b1e3; border-bottom:#CCCCCC 1px solid; line-height:0px;height:30px" valign="middel" width="50%"><h3 style="padding-top:7px;white-space:nowrap; text-align:left;color:#fff;">&nbsp;&nbsp;Adresse de facturation</h3></td>
+         </tr>
+
+
+        <tr>
+          <td align="left" valign="top" style="padding-top:10px;padding-left:5px">
+          <table width="100%" border="0" cellspacing="4" cellpadding="0">
+              <tr >
+                <td align="left" style="width: 30%"><b>Entreprise : </b></td>
+                <td style="width: 70%"><?=$OrderInfo['BillingCompanyName']?></td>
+              </tr>
+              <tr>
+                <td><b> Nom complet  : </b></td>
+                <td><?=$OrderInfo['BillingFirstName'].' '.$OrderInfo['BillingLastName']?></td>
+              </tr>
+              <tr>
+                <td><b>  e-mail  : </b></td>
+                <td><?=$OrderInfo['Billingemail']?></td>
+              </tr>
+              <tr>
+                <td><b> Adresse 1 :</b></td>
+                <td><?=$OrderInfo['BillingAddress1']?>
+                  &nbsp;
+                  <?=$OrderInfo['BillingAddress2']?></td>
+              </tr>
+              <tr>
+                <td><b>Ville :</b></td>
+                <td><?=$OrderInfo['BillingTownCity']?></td>
+              </tr>
+              <tr>
+                <td><b>Royaume-Uni :</b></td>
+                <td><?=$OrderInfo['BillingCountyState']?></td>
+              </tr>
+              <tr>
+                <td ><b>Code postal</b></td>
+                <td><?=$OrderInfo['BillingPostcode']?></td>
+              </tr>
+              <tr>
+                <td><b>N° de phone</b></td>
+                <td><?=$OrderInfo['Billingtelephone']?></td>
+              </tr>
+            </table>
+        </td>
+        </tr>
+
+         </table>
+</td>
+
+
+    <!-- -------------------------------------------->
+
+   <td width="50%" border="0" cellspacing="0" cellpadding="0" align="left" valign="top" style="border:#CCCCCC 1px solid; padding-bottom:10px;">
+
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+
+        <tr>
+          <td align="left" style="background-color:#17b1e3; border-bottom:#CCCCCC 1px solid; line-height:0px;height:30px" valign="middel" width="50%"><h3 style="padding-top:7px; white-space:nowrap; text-align:left;color:#fff;"><span style="white-space:nowrap;">&nbsp;&nbsp;Adresse d'expedition</span></h3></td>
+        </tr>
+
+
+        <tr>
+          <td align="left" valign="top" style="padding-top:10px; padding-left:5px;">
+          <table width="100%" border="0" cellspacing="4" cellpadding="0">
+              <tr style="padding-top:10px; padding-left:5px;">
+                <td align="left" style="width:30%;"><b>Entreprise : </b></td>
+                <td style="width: 70%"><?=$OrderInfo['DeliveryCompanyName']?></td>
+              </tr>
+              <tr>
+                <td><b> Nom complet  : </b></td>
+                <td><?=$OrderInfo['DeliveryFirstName'].' '.$OrderInfo['DeliveryLastName']?></td>
+              </tr>
+              <tr>
+                <td><b>  e-mail  : </b></td>
+                <td><?=$OrderInfo['Billingemail']?></td>
+              </tr>
+              <tr>
+                <td><b> Adresse :</b></td>
+                <td><?=$OrderInfo['DeliveryAddress1']?>
+                  &nbsp;
+                  <?=$OrderInfo['DeliveryAddress2']?></td>
+              </tr>
+              <tr>
+                <td><b>Ville :</b></td>
+                <td><?=$OrderInfo['DeliveryTownCity']?></td>
+              </tr>
+              <tr>
+                <td><b> Royaume-Uni :</b></td>
+                <td><?=$OrderInfo['DeliveryCountyState']?></td>
+              </tr>
+              <tr>
+                <td ><b>Code postal</b></td>
+                <td><?=$OrderInfo['DeliveryPostcode']?></td>
+              </tr>
+              <tr>
+                <td><b>N° de phone</b></td>
+                <td><?=$OrderInfo['Deliverytelephone']?></td>
+              </tr>
+            </table>
+
+        </td>
+        </tr>
+
+         </table>
+        </td>
+
+ </tr>
+ </table>
+
+
+
+     <!-- -------------------------------------------->
+ <? 
+ $currency = $OrderInfo['currency'];
+ $exchange_rate = $OrderInfo['exchange_rate'];
+ 
+  $fetch_symbol = $this->db->query("select symbol from exchange_rates where currency_code LIKE '".$OrderInfo['currency']."'")->row_array();
+  $symbol = $fetch_symbol['symbol'];
+?>
+
+  <table width="527"  bordercolor="#CCCCCC" cellspacing="0" cellpadding="0" style="border:#CCCCCC 1px solid; padding-bottom:0px;table-layout:fixed;">
+  <tr>
+    <td class="invoicetable_bgBlue" width="20%">PRODUITS</td>
+    <td class="invoicetable_bgBlue" width="55%">La description</td>
+    <td class="invoicetable_bgBlue" width="14%">Etiquettes</td>
+    <td class="invoicetable_bgBlue" width="12%">Quantite</td>
+    <td class="invoicetable_bgBlue" width="12%">HT.vat</td>
+  </tr>
+
+
+         <?php
+       		 $total_exvat = 0;
+             $total_invat = 0;
+			 $i = 0;
+			   $query = $this->db->get_where('quotationdetails', array('QuotationNumber' =>$OrderInfo['QuotationNumber']));
+               $sumarrary = $query->result_array();
+
+		foreach ($OrderDetails as $AccountDetail) {
+			$print_exvat = $print_incvat = 0;
+			if($i%2==0)
+				{
+					$css="class='table_blue_bar'";
+				}
+				else
+				{
+					$css="class='table_white_bar'";
+				}
+
+				 $LabelsPerSheet = 1;
+				 $colorcode = (isset($AccountDetail->colorcode) and $AccountDetail->colorcode!='')?'-'.$AccountDetail->colorcode:'';
+
+
+				if($AccountDetail->ProductID==0){
+					$ManufactureID= $AccountDetail->ManufactureID;
+				}else{
+					 $ManufactureID= $this->user_model->manufactureid("",$AccountDetail->ProductID);
+				 	$LabelsPerSheet= $this->user_model->LabelsPerSheet($AccountDetail->ProductID);
+				 	if(isset($AccountDetail->is_custom) and $AccountDetail->is_custom=='Yes'){
+						$LabelsPerSheet = $AccountDetail->LabelsPerRoll;
+				 	}
+				}
+
+
+
+				$total_labels = $LabelsPerSheet*$AccountDetail->Quantity;
+				if($AccountDetail->Printing == 'Y'){
+					$labels = $this->user_model->calculate_total_printed_labels($AccountDetail->SerialNumber);
+					if($labels > 0){ $total_labels =$labels;}
+
+				        	if($AccountDetail->orignalQty !="" && $AccountDetail->orignalQty !=0){
+							 $total_labels = $AccountDetail->orignalQty;
+							}
+				}
+
+
+
+				$img = $this->user_model->getproductimg($AccountDetail->ProductID, $colorcode);
+
+		       	?>
+  <tr>
+    <td class="invoicetable_tabel_border"><?=$ManufactureID?></td>
+    <td class="invoicetable_tabel_border" width="350px;"><?php
+              if($AccountDetail->ProductID==0){
+		          $prod_name = $this->user_model->ReplaceHtmlToString_($AccountDetail->ProductName);
+	              echo $prod_name;
+		      }else{
+                 $prod = $this->user_model->show_product($AccountDetail->ProductID);
+				 $merge = array_merge($prod,$sumarrary[$i]);
+		         $prod_name = $this->user_model->fetch_product_name($merge);
+				 echo $this->user_model->ReplaceHtmlToString_($prod_name);
+		      }
+            ?>
+
+               <?   if($ManufactureID=="SCO1"){
+					 $custominfo = $this->user_model->fetch_custom_die_quote($AccountDetail->SerialNumber);
+					 include(APPPATH . 'views/old_pdf_views/fr/assc_die.php');
+				   }
+			   ?>
+
+
+    </td>
+    <td align="center" class="invoicetable_tabel_border"><?php echo $total_labels; ?></td>
+    <td align="center" class="invoicetable_tabel_border"><?php echo $AccountDetail->Quantity; ?></td>
+    <td align="center" class="invoicetable_tabel_border">
+	<?php  $exvat = number_format($AccountDetail->Price,2,'.','');
+      echo $symbol."".(number_format($exvat*$exchange_rate,2));
+	?>
+    </td>
+  </tr>
+
+<?
+    $stylo = "";
+	if($AccountDetail->Printing =="Y"){
+	}else{
+		$stylo = "style='display:none;'";
+	}
+?>
+<? if($AccountDetail->Printing =="Y" && $AccountDetail->regmark !="Y"){?>
+  <tr <?=$stylo?>>
+    <td class="invoicetable_tabel_border">Impression</td>
+
+     <?php $print_style='font-size: 8px;'; include(APPPATH . 'views/old_pdf_views/fr/print_line_txt.php'); ?>
+
+    <td class="invoicetable_tabel_border" align="center">&nbsp;</td>
+    <td class="invoicetable_tabel_border" align="center"><?php echo $AccountDetail->Print_Qty; ?></td>
+    <td class="invoicetable_tabel_border" align="center">
+    <?  $print_exvat = $AccountDetail->Print_Total;
+        echo $symbol."".(number_format($print_exvat*$exchange_rate,2));
+   ?>
+    </td>
+  </tr>
+ <? }elseif($AccountDetail->Printing =="Y" && $AccountDetail->regmark =="Y"){?>
+    <tr>
+        <td></td>
+        <td><b>Service d'impression(Marque d'immatriculation noire au verso)</b></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+<? }?>
+   <?  if($ManufactureID=="PRL1"){
+		$result = $this->quoteModel->get_details_roll_quotation($AccountDetail->Prl_id);  ?>
+  <tr>
+  <td class="invoicetable_tabel_border"></td>
+   <td class="invoicetable_tabel_border"></td>
+   <td class="invoicetable_tabel_border">   <b>Forme:</b>
+						<?=$result['shape']?>
+                        &nbsp;&nbsp; <b>Taille:</b>
+                        <?=$result['size']?>
+                        &nbsp;&nbsp; <b>Materiel:</b>
+                        <?=$result['material']?>
+                        &nbsp;&nbsp; <b>Impression:</b>
+                        <?=$result['printing']?>
+                        &nbsp;&nbsp; <b>Finition:</b>
+               <?     if($result['finishing'] == "Gloss Lamination"){
+						$finish_type_fr = 'Lamination Gloss';
+					  }else if($result['finishing'] == "Matt Lamination"){
+						$finish_type_fr = 'Matt Lamination';
+					  }else if($result['finishing'] =="Matt Varnish"){
+						$finish_type_fr = 'Vernis mat';
+					  }else if($result['finishing'] == "Gloss Varnish"){
+						$finish_type_fr = 'Vernis brillant';
+					  }else{
+						$finish_type_fr == 'No Finish';
+					  } echo $finish_type_fr;
+				   ?>
+                        &nbsp;&nbsp; <b>pas de design:</b>
+                        <?=$result['no_designs']?>
+                        &nbsp;&nbsp; <b>N ° Rolls:</b>
+                        <?=$result['no_rolls']?>
+                        &nbsp;&nbsp; <b>N ° etiquettes:</b>
+                        <?=$result['no_labels']?>
+                        &nbsp;&nbsp; <b>Taille du noyau:</b>
+                        <?=$result['coresize']?>
+                        &nbsp;&nbsp; <b>Blessure:</b>
+                        <?=$result['wound']?>
+                        &nbsp;&nbsp;<b>Remarques:</b>
+                        <?=$result['notes']?>
+                        &nbsp;&nbsp;</td>
+ <td class="invoicetable_tabel_border" align="center"></td>
+  <td class="invoicetable_tabel_border" align="center"></td>
+   <td class="invoicetable_tabel_border" align="center"></td>
+   <td class="invoicetable_tabel_border" align="center"></td>
+ </tr>
+
+ <? } ?>
+
+
+                 <?
+
+            if($ManufactureID=="SCO1"){
+			  include(APPPATH . 'views/old_pdf_views/fr/assc_material.php');
+			}
+
+			    ?>
+
+
+
+ <tr>
+
+  <td colspan="2" class="invoicetable_tabel_border"> </td>
+   <td colspan="2" class="invoicetable_tabel_border" align="center"><b>Total de ligne</b></td>
+  <td class="invoicetable_tabel_border" align="center">
+  <?
+
+  $linetotalexvat =  $print_exvat  + $exvat;
+
+      echo $symbol."".(number_format($linetotalexvat*$exchange_rate,2));
+  ?>
+  </td>
+  </tr>
+
+
+        <?php
+
+				                   $total_exvat += $linetotalexvat;
+                                   $total_invat += $linetotalinvat;
+					 $i++;
+
+
+		} // end foreach
+
+
+		$ship_invat=number_format($OrderInfo['QuotationShippingAmount'],2,'.','');
+	    $gt_invat = number_format($ship_invat+$total_invat,2,'.','');
+		$ship_exvat = number_format($OrderInfo['QuotationShippingAmount']/vat_rate,2,'.','');
+		$gt_exvat  = number_format($ship_exvat+$total_exvat,2,'.','');
+	?>
+    </table>
+
+<table width="280px;" align="right" style="table-layout:fixed;">
+
+  <?
+
+ $serviceID = $OrderInfo['ShippingServiceID'];
+ $service = $this->user_model->getShipingServiceName($serviceID);?>
+
+  <tr>
+    <td colspan="5"  class="invuice_subtotal" width="65%">&nbsp;&nbsp;&nbsp;<b><? echo $service['ServiceName'];?>&nbsp;
+       <? echo $symbol."".(number_format($ship_exvat*$exchange_rate,2)); ?>
+      </b></td>
+  </tr>
+
+  <tr>
+    <td colspan="4"  class="invuice_subtotal" width="65%"><b>Livraison-total</b></td>
+    <td  class="invuice_subtotal_price" width="20%"><? echo $symbol."".(number_format($ship_exvat*$exchange_rate,2));?></td>
+  </tr>
+
+  <tr>
+    <td colspan="4" class="invuice_subtotal" width="65%"><b>Sous-total (Ex. T.V.A)</b></td>
+    <td  class="invuice_subtotal_price" width="20%"><? echo $symbol."".(number_format($gt_exvat*$exchange_rate,2));?></td>
+  </tr>
+
+
+  <? $gt_invat  = number_format($gt_exvat*1.2,2,'.',''); ?>
+
+
+
+  	<?php if($OrderInfo['vat_exempt']=='yes'){
+	      $final_exempt_price = $gt_invat - $gt_exvat;
+		  $gt_invat = $gt_exvat;
+	?>
+
+           <tr>
+            <td colspan="4"  class="invuice_subtotal" width="65%"><b>Exemption de TVA:</b></td>
+            <td  class="invuice_subtotal_price" width="20%">
+             - <?php echo $symbol.number_format(($final_exempt_price)* $exchange_rate,2,'.',''); ?>
+            </td>
+          </tr>
+
+      <? } ?>
+
+
+
+       <?php
+	$disuntoffer_inc = 0.00;
+	$disuntoffer_ex  = 0.00;
+	$voucher = $this->user_model->calculate_total_printedroll_amount($OrderInfo['QuotationNumber']); //currently returns false
+	if($voucher > 0){
+		$disuntoffer_inc =$voucher;
+		$disuntoffer_ex =$voucher/1.2;
+		$gt_invat = $gt_invat-$disuntoffer_inc;
+		 ?>
+			 <tr>
+                <td colspan="4" class="invuice_subtotal" width="65%"><b>Reduction-total:</b></td>
+                <td class="invuice_subtotal_price" width="20%">&nbsp;</td>
+
+                <td class="invuice_subtotal_price" width="20%"><b>
+               		 <?php echo $symbol.number_format($voucher* $exchange_rate,2,'.',''); ?>
+                 </b></td>
+              </tr>
+
+
+	<? } ?>
+
+
+
+         <tr>
+            <td colspan="4"  class="invuice_subtotal" width="65%"><b>Sous-total (Dans. T.V.A)</b></td>
+            <td  class="invuice_subtotal_price" width="20%">
+            <? echo $symbol."".(number_format($gt_invat*$exchange_rate,2,'.',''));?>
+            </td>
+          </tr>
+
+
+          <tr>
+    <td colspan="4" class="invuice_subtotal" width="65%"><b>Somme finale:</b></td>
+    <td class="invuice_subtotal_price" width="20%"><b>
+      <? echo $symbol."".(number_format(($gt_invat*$exchange_rate),2,'.',''));?>
+     </b></td>
+  </tr>
+
+
+
+
+</table>
+
+<?php if($OrderInfo['DeliveryCountry'] !='United Kingdom'){ ?>
+
+<table align="left" width="60%" style="bottom:240px;padding-top:5px;">
+
+<tr>
+	<td>* Si vous êtes inscrit à la TVA, veuillez indiquer votre numéro de TVA ou votre numéro autorisé pour appliquer l'exonération de la TVA.</td>
+</tr>
+
+</table>
+
+<?php } ?>

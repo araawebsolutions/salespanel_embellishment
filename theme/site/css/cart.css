@@ -1,0 +1,25 @@
+#cart .btn{background:none repeat scroll 0 0 rgba(0, 0, 0, 0);border:medium none;border-radius:0;box-shadow:none;font-size:14px;padding-right:0 !important;}
+#cart .btn .fa-shopping-cart{color:#00b6f0;font-size:36px;margin-right:20px;vertical-align:middle;}
+#cart .btn span{color:#252a2f;font-size:16px;text-transform:uppercase;}
+#cart .btn span#cart-total{color:#43a2e0;padding:10px 20px;position:relative;font-size:24px;}
+#cart .btn span#cart-total::before{}
+#cart .btn i.fa-caret-down{color:#967e4b;margin-left:5px;}
+#cart .dropdown-menu{background:none repeat scroll 0 0 #252a2f;border:medium none;border-radius:0;color:#303030;margin:0px;min-width:80%;padding:0px;z-index:1001;}
+#cart .dropdown-menu .header{background-color:#43a2e0;padding:16px 20px 20px 20px;}
+#cart .dropdown-menu .header{font-weight:400;color:#FFF;text-decoration:none;}
+#cart .dropdown-menu .header span{font-weight:700;padding-top:15px;}
+#cart .dropdown-menu .header span span{font-weight:700;font-size:21px;color:#FFF;text-decoration:none;padding-top:0px;}
+#cart tr{margin:10px !important;}
+#cart .dropdown-menu .footerC{padding:16px 0 0px 0;}
+#cart .dropdown-menu .footerC .btn-block1 a{background:#fd4913;color:#fff;border-radius:6px;padding:15px;float:left;width:45% !important;margin-bottom:15px;text-align:center}
+#cart .dropdown-menu .footerC .bg{color:#fff;background:#43a2e0 !important;}
+#cart .dropdown-menu{background:none repeat scroll 0 0 #252a2f;border:medium none;border-radius:0;color:#303030;margin:0px;min-width:70%;padding:0px;z-index:1001;}
+#cart .open > .dropdown-menu{display:block;}
+#cart .dropdown-menu table{margin-bottom:10px;}
+#cart .dropdown-menu table, #cart .dropdown-menu table td{background:none repeat scroll 0 0 rgba(0, 0, 0, 0);border:medium none;}
+#cart .dropdown-menu table.hcart td, .line-bottom{border-bottom:1px solid #54575b;}
+.line-top, .btn-block1{border-top:0px solid #54575b;margin:0px !important;}
+#cart .btn-block1{padding:0px 0 0;}
+#cart .btn-block1 a{font-size:12px;margin-left:10px;padding:8px 12px;text-decoration:none;text-transform:uppercase;}
+@media (max-width:767px){#cart .dropdown-menu{margin-top:48px !important;}
+}

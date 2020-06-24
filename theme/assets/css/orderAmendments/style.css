@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css?family=PT+Sans:400,700');
+body {
+    font-family: 'PT Sans', sans-serif;
+    font-size: 13px;
+}
+tr:nth-child(even) {background-color: #efefef;}
+.table-striped thead {
+    background: #ffffff;
+    background: -moz-linear-gradient(top, #ffffff 0%, #dcdcdc 100%);
+    background: -webkit-linear-gradient(top, #ffffff 0%,#dcdcdc 100%);
+    background: linear-gradient(to bottom, #ffffff 0%,#dcdcdc 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#dcdcdc',GradientType=0 );
+}
+.table-striped {
+    -webkit-border: 1px solid #bcbcbc;
+    -moz-border: 1px solid #bcbcbc;
+    -ms-border: 1px solid #bcbcbc;
+    -o-border: 1px solid #bcbcbc;
+    -khtml-border: 1px solid #bcbcbc;
+    border: 1px solid #bcbcbc;
+}
+.table-striped thead tr th {
+    border-bottom: 1px solid #bcbcbc !important;
+    border-right: 1px solid #bcbcbc;
+    text-align: center;
+    font-weight: bold;
+    height: 48px;
+    vertical-align: middle !important;
+}
+.PermissionsBody tr td {
+    border-right: 1px dotted #bcbcbc;
+    border-top: 1px solid #bcbcbc !important;
+    text-align: center;
+    font-size: 12px;
+    position: relative;
+}
+.PermissionsBody tr td:first-child {
+    border-top: 1px transparent;
+}
+.PermissionTitle {
+    background: #e2e2e2;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px !important;
+}
+.EnableBtn {
+    background: #00a651;
+    border-radius: 3px;
+    -webkit-box-shadow:inset 0 2px 20px 5px rgba(0,0,0,0.15);
+    box-shadow:inset 0 2px 20px 5px rgba(0,0,0,0.15);
+    line-height: 20px;
+    text-transform: uppercase;
+    color: #fff;
+    font-weight: bold;
+    font-size: 11px;
+    position: absolute;
+    bottom: 4px;
+    right: 0;
+    left: 0;
+    width: 78px;
+    height: 20px;
+    margin: 0 auto;
+}
+.EnableBtn:hover {
+    background: #03893b;
+    color: #fff;
+    text-decoration: none;
+}
+.DisableBtn {
+    background: #b0b0b0;
+    border-radius: 3px;
+    -webkit-box-shadow:inset 0 2px 20px 5px rgba(0,0,0,0.15);
+    box-shadow:inset 0 2px 20px 5px rgba(0,0,0,0.15);
+    line-height: 20px;
+    text-transform: uppercase;
+    color: #333;
+    font-weight: bold;
+    font-size: 11px;
+    position: absolute;
+    bottom: 10px;
+    right: 0;
+    left: 0;
+    width: 78px;
+    height: 20px;
+    margin: 0 auto;
+}
+.DisableBtn:hover {
+    background: #999999;
+    color: #000;
+    text-decoration: none;
+}
+.PermissionsBody tr td {
+    width: 130px;
+}
+.PermissionsBody tr td p {
+    line-height: 14px;
+    margin-bottom: 0;
+    float: left;
+}
+.SmallText {
+    height: 65px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.Starik {
+    float: left;
+    margin-left: 135px;
+    font-weight: bold;
+    line-height: 1.5;
+}
+.Starik span {
+    font-size: 32px;
+    float: left;
+    line-height: 1;
+}
+
+
+
+
+
+
+
+
+
