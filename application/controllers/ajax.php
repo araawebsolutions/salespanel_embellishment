@@ -11588,6 +11588,8 @@ function unsave_checkout_data(){
                     $promotiondiscount = $response['promotiondiscount'];
 
                 }
+
+                $label_finish_individual_cost_array = $response['label_finish_individual_cost_array'];
                 $plainlabelsprice = $response['plainlabelsprice'];
                 $label_finish = $response['label_finish'];
                 $rec = $this->home_model->get_total_uploaded_qty($cartid, $prd_id);
@@ -11651,7 +11653,8 @@ function unsave_checkout_data(){
                     'artworks'    =>$response['artworks'],
                     'symbol' => symbol,
                     'vatoption' => vatoption,
-                    'rawprice' => $price);
+                    'rawprice' => $price,
+                    'label_finish_individual_cost_array' => $label_finish_individual_cost_array);
             }
             $this->save_browsing_history('roll');
         }
@@ -11717,6 +11720,7 @@ function unsave_checkout_data(){
 
                 $response = $this->home_model->rolls_calculation($min_qty, $persheets, $labels, "", $accessedBy);
             } else {
+
                 $response = $this->home_model->rolls_calculation($min_qty, $persheets, $labels);
             }
 
@@ -11730,6 +11734,7 @@ function unsave_checkout_data(){
             $collection['finish'] = $data['finish'];
             $collection['rolls'] = $sheets;
             $collection['labeltype'] = $labeltype;
+
             $price_res = $this->home_model->calculate_printing_price_label_embellishment($collection);
             $label_finish_individual_cost_array = $price_res['label_finish_individual_cost_array'];
             $promotiondiscount = $price_res['promotiondiscount'];
