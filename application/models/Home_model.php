@@ -9578,6 +9578,22 @@ class Home_model extends CI_Model
         return $matched_row;
     }
 
+    function label_embelishment_with_parent_title($parsed_title=NULL){
+
+        if ($parsed_title) {
+            $sql = "SELECT a.*,b.title AS parent_title
+                FROM label_embellishment a, label_embellishment b
+                WHERE a.label_emb_parent_id = b.id AND a.parsed_title = '".$parsed_title."' ";
+        } else {
+            $sql = "SELECT a.*,b.title AS parent_title
+                FROM label_embellishment a, label_embellishment b
+                WHERE a.label_emb_parent_id = b.id";
+        }
+
+        $result = $this->db->query($sql)->result();
+        return  $result;    
+    }
+
         /***************************************************/
         /***********LABEL EMBELLISHMENT TASK ENDS***********/
         /***************************************************/

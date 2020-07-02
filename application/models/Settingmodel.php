@@ -390,67 +390,67 @@ class SettingModel extends CI_Model {
 		   ->get('orders')
 		   ->row();
 
-   if(($linedetails['ProductionStatus']==3 && $order_data->picking_status == 1) || $orderstatus==7 || $orderstatus==33 || $orderstatus==8 || $orderstatus==27 || $linedetails['ManufactureID']=='SCO1' || $linedetails['ProductionStatus']==10 || $linedetails['ProductionStatus']==11 || $linedetails['ProductionStatus']==12 || $linedetails['source']=="LBA"  || $editcheck=="no"){
+    if(($linedetails['ProductionStatus']==3 && $order_data->picking_status == 1) || $orderstatus==7 || $orderstatus==33 || $orderstatus==8 || $orderstatus==27 || $linedetails['ManufactureID']=='SCO1' || $linedetails['ProductionStatus']==10 || $linedetails['ProductionStatus']==11 || $linedetails['ProductionStatus']==12 || $linedetails['source']=="LBA"  || $editcheck=="no"){ //die('1');
 	 
-	 $allow_die_change = $allow_mat_change = $allow_qty_change = $allow_remove_product = $allow_add_remove_print = $allow_add_remove_artwork = 0;
+	 	$allow_die_change = $allow_mat_change = $allow_qty_change = $allow_remove_product = $allow_add_remove_print = $allow_add_remove_artwork = 0;
 
-   }else if($orderstatus==6){
+   	}else if($orderstatus==6){ //die('2');
   
-    $allow_die_change = $allow_mat_change = $allow_qty_change = $allow_remove_product = $allow_add_remove_print = $allow_add_remove_artwork = 1;
+    	$allow_die_change = $allow_mat_change = $allow_qty_change = $allow_remove_product = $allow_add_remove_print = $allow_add_remove_artwork = 1;
   
-  }else if($productdetails['ProductID']==0){
+  	}else if($productdetails['ProductID']==0){ //die('3');
   
-    if($orderstatus==2 || $orderstatus==32){
-	  $allow_die_change = $allow_mat_change = $allow_qty_change = $allow_remove_product = $allow_add_remove_print = $allow_add_remove_artwork = 0;
-    }else{
-      $get_permissions          = $this->get_permissions(5);
-	  $allow_die_change         = ($get_permissions['die']==1)?1:0;
-	  $allow_mat_change         = ($get_permissions['mat']==1)?1:0;
-	  $allow_qty_change         = ($get_permissions['qty']==1)?1:0;
-	  $allow_remove_product     = ($get_permissions['add_rem_pro']==1)?1:0;
-	  $allow_add_remove_print   = $allow_add_remove_artwork = 0;
-	}
-   }else if(preg_match('/Roll Labels/is',$productdetails['ProductBrand'])){
-     if($linedetails['Printing']=="Y"){
-	  $get_permissions          = $this->get_permissions(4);
-	  $allow_die_change         = ($get_permissions['die']==1 && ($orderstatus==55 || $orderstatus==6 || $orderstatus==78))?1:0;
-	  $allow_mat_change         = ($get_permissions['mat']==1 && ($orderstatus==55 || $orderstatus==6 || $orderstatus==78))?1:0;
-	  $allow_qty_change         = ($get_permissions['qty']==1 && ($orderstatus==55 || $orderstatus==6 || $orderstatus==78))?1:0;
-	  $allow_remove_product     = ($get_permissions['add_rem_pro']==1 && ($orderstatus==55 || $orderstatus==6 || $orderstatus==78))?$this->check_artwork($serial):0;
-	  $allow_add_remove_print   = ($get_permissions['add_rem_prnt']==1 && ($orderstatus==55 || $orderstatus==6 || $orderstatus==78))?1:0;
-	  $allow_add_remove_artwork = ($get_permissions['add_rem_art']==1 && ($orderstatus==55 || $orderstatus==6 || $orderstatus==78))?$this->check_artwork($serial):0;
-	}else{
-	  $get_permissions          = $this->get_permissions(2);
-	  $allow_die_change         = ($get_permissions['die']==1)?$this->check_allocation_roll($serial):0;
-	  $allow_mat_change         = ($get_permissions['mat']==1)?$this->check_allocation_roll($serial):0;
-	  $allow_qty_change         = ($get_permissions['qty']==1)?$this->check_allocation_roll($serial):0;
-	  $allow_remove_product     = ($get_permissions['add_rem_pro']==1)?$this->check_allocation_roll($serial):0;
-	  $allow_add_remove_print   = $this->check_order_roll_allocation($linedetails['OrderNumber'],$serial);  $allow_add_remove_artwork = 0;
-	}
+	    if($orderstatus==2 || $orderstatus==32){
+		  	$allow_die_change = $allow_mat_change = $allow_qty_change = $allow_remove_product = $allow_add_remove_print = $allow_add_remove_artwork = 0;
+	    }else{
+	      	$get_permissions          = $this->get_permissions(5);
+		  	$allow_die_change         = ($get_permissions['die']==1)?1:0;
+		  	$allow_mat_change         = ($get_permissions['mat']==1)?1:0;
+		  	$allow_qty_change         = ($get_permissions['qty']==1)?1:0;
+		  	$allow_remove_product     = ($get_permissions['add_rem_pro']==1)?1:0;
+		  	$allow_add_remove_print   = $allow_add_remove_artwork = 0;
+		}
+	}else if(preg_match('/Roll Labels/is',$productdetails['ProductBrand'])){ //die('4');
+     	if($linedetails['Printing']=="Y"){
+		  	$get_permissions          = $this->get_permissions(4);
+		  	$allow_die_change         = ($get_permissions['die']==1 && ($orderstatus==55 || $orderstatus==6 || $orderstatus==78))?1:0;
+		  	$allow_mat_change         = ($get_permissions['mat']==1 && ($orderstatus==55 || $orderstatus==6 || $orderstatus==78))?1:0;
+		  	$allow_qty_change         = ($get_permissions['qty']==1 && ($orderstatus==55 || $orderstatus==6 || $orderstatus==78))?1:0;
+		  	$allow_remove_product     = ($get_permissions['add_rem_pro']==1 && ($orderstatus==55 || $orderstatus==6 || $orderstatus==78))?$this->check_artwork($serial):0;
+		  	$allow_add_remove_print   = ($get_permissions['add_rem_prnt']==1 && ($orderstatus==55 || $orderstatus==6 || $orderstatus==78))?1:0;
+		  	$allow_add_remove_artwork = ($get_permissions['add_rem_art']==1 && ($orderstatus==55 || $orderstatus==6 || $orderstatus==78))?$this->check_artwork($serial):0;
+		}else{
+		  	$get_permissions          = $this->get_permissions(2);
+		  	$allow_die_change         = ($get_permissions['die']==1)?$this->check_allocation_roll($serial):0;
+		  	$allow_mat_change         = ($get_permissions['mat']==1)?$this->check_allocation_roll($serial):0;
+		  	$allow_qty_change         = ($get_permissions['qty']==1)?$this->check_allocation_roll($serial):0;
+		  	$allow_remove_product     = ($get_permissions['add_rem_pro']==1)?$this->check_allocation_roll($serial):0;
+		  	$allow_add_remove_print   = $this->check_order_roll_allocation($linedetails['OrderNumber'],$serial);  $allow_add_remove_artwork = 0;
+		}
  
-  }else{
-    if($linedetails['Printing']=="Y"){
-	  $get_permissions          = $this->get_permissions(3);
-	  $allow_die_change         = ($get_permissions['die']==1 && ($orderstatus==55 || $orderstatus==6 || $orderstatus==78))?1:0;
-	  $allow_mat_change         = ($get_permissions['mat']==1)?$this->check_allocation($serial):0;
-	  $allow_qty_change         = ($get_permissions['qty']==1)?$this->check_allocation($serial):0;
-	  $allow_remove_product     = ($get_permissions['add_rem_pro']==1  && ($orderstatus==55 || $orderstatus==6 || $orderstatus==78))?$this->check_artwork($serial):0;
-	  $allow_add_remove_print   = ($get_permissions['add_rem_prnt']==1 && ($orderstatus==55 || $orderstatus==6 || $orderstatus==78))?1:0;
-	  $allow_add_remove_artwork = ($get_permissions['add_rem_art']==1  && ($orderstatus==55 || $orderstatus==6 || $orderstatus==78))?$this->check_artwork($serial):0;
-	}else{
-	  $get_permissions          = $this->get_permissions(1);
-	  $allow_die_change         = ($get_permissions['die']==1)?$this->check_allocation($serial):0;
-	  $allow_mat_change         = ($get_permissions['mat']==1)?$this->check_allocation($serial):0;
-	  $allow_qty_change         = ($get_permissions['qty']==1)?$this->check_allocation($serial):0;
-	  $allow_remove_product     = ($get_permissions['add_rem_pro']==1)?$this->check_allocation($serial):0;
-	  $allow_add_remove_print   = $this->check_order_allocation($linedetails['OrderNumber'],$serial); $allow_add_remove_artwork = 0;
-	}
-  }
+  	}else{  //die('5');
+    	if($linedetails['Printing']=="Y"){
+		  	$get_permissions          = $this->get_permissions(3);
+		  	$allow_die_change         = ($get_permissions['die']==1 && ($orderstatus==55 || $orderstatus==6 || $orderstatus==78))?1:0;
+		  	$allow_mat_change         = ($get_permissions['mat']==1)?$this->check_allocation($serial):0;
+		  	$allow_qty_change         = ($get_permissions['qty']==1)?$this->check_allocation($serial):0;
+		  	$allow_remove_product     = ($get_permissions['add_rem_pro']==1  && ($orderstatus==55 || $orderstatus==6 || $orderstatus==78))?$this->check_artwork($serial):0;
+		  	$allow_add_remove_print   = ($get_permissions['add_rem_prnt']==1 && ($orderstatus==55 || $orderstatus==6 || $orderstatus==78))?1:0;
+		  	$allow_add_remove_artwork = ($get_permissions['add_rem_art']==1  && ($orderstatus==55 || $orderstatus==6 || $orderstatus==78))?$this->check_artwork($serial):0;
+		}else{
+		  	$get_permissions          = $this->get_permissions(1);
+		  	$allow_die_change         = ($get_permissions['die']==1)?$this->check_allocation($serial):0;
+		  	$allow_mat_change         = ($get_permissions['mat']==1)?$this->check_allocation($serial):0;
+		  	$allow_qty_change         = ($get_permissions['qty']==1)?$this->check_allocation($serial):0;
+		  	$allow_remove_product     = ($get_permissions['add_rem_pro']==1)?$this->check_allocation($serial):0;
+		  	$allow_add_remove_print   = $this->check_order_allocation($linedetails['OrderNumber'],$serial); $allow_add_remove_artwork = 0;
+		}
+  	}
           
-			$array =  array('die'=>$allow_die_change,'mat'=>$allow_mat_change,'qty'=>$allow_qty_change,'add_rem_pro'=>$allow_remove_product,'add_rem_prnt' =>$allow_add_remove_print,'add_rem_art'=>$allow_add_remove_artwork); 
-			  //echo "<pre>"; print_r($array);
-			   return $array;
-  }
+	$array =  array('die'=>$allow_die_change,'mat'=>$allow_mat_change,'qty'=>$allow_qty_change,'add_rem_pro'=>$allow_remove_product,'add_rem_prnt' =>$allow_add_remove_print,'add_rem_art'=>$allow_add_remove_artwork); 
+	  //echo "<pre>"; print_r($array);
+	   return $array;
+}
 
 
 

@@ -182,7 +182,7 @@ if ($TotalHold > 0) {
     });
 
     function record(order, status, date) {
-         $('#aa_loader').show();
+        $('#aa_loader').show();
         $('#responsive-datatable').DataTable({
             "sDom": 'l<"toolbar">frtip',
             "bProcessing": true,
