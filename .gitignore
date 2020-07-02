@@ -12,6 +12,7 @@
 *.log
 *.txt
 
+/theme/
 application/cache/
 application/logs/
 system/
