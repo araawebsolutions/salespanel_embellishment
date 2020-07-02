@@ -165,7 +165,7 @@ class search extends CI_Controller
             $data['productid'] = $productid;
             $data['materials'] = $this->home_model->fetch_sheets_materials($catid, $productid);
 
-            
+
 
             $data['othermaterials'] = $this->home_model->grouping_material_listing($condition);
             $data['filter'] = '';

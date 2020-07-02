@@ -470,24 +470,23 @@
     var embellishment_base_title = '';
     //global variable for plate price
     var total_emb_plate_price = 0;
+    //cart id for upload artwork modal
+    var cartid = '';
 
 
     $('.conflict_selection_remove_and_base_change_note').hide();
 
     //function run on emb_conflict option selection on conflict modal
     $(document).on("click", ".emb_conflict_option", function (e) {
-        //alert('kk');
         var clicked_id = $(this).data('embellishment_conflict_id');
         //show conflict_selection_remove_and_base_change_note if user select other option instead of current
         // combination_base
         if (combination_base != clicked_id) {
             $('.conflict_selection_remove_and_base_change_note').fadeIn();
 
-            //alert('11');
         } else {
             $('.conflict_selection_remove_and_base_change_note').fadeOut();
-            //alert(clicked_id);
-            //alert(combination_base);
+
         }
 
 
@@ -495,11 +494,8 @@
             var conflict_id = $(this).data('embellishment_conflict_id');
             var option_title = $(this).data('embellishment_base_title');
 
-            //alert(conflict_id);
-            //alert(option_title);
 
             if ($(this).is(":checked")) {
-                //alert('checkd');
                 //update global checked variable value
                 checked_id = conflict_id;
                 //update global embellishment_id variable value
@@ -507,7 +503,6 @@
                 //update global option_clicked variable value
                 option_clicked = 1;
             } else {
-                //alert('un checkd');
                 //getting uncheck option id from conflict modal after user selection  to uncheck embellishment option
                 conflict_id_unchecked = conflict_id;
                 embellishment_id = $(this).data('embellishment_id');
@@ -527,42 +522,46 @@
 
     $(document).on("click", ".continue_conflict_modal", function (e) {
         var modal_type = $(this).data('modal_type');
-        //alert(modal_type);
 
         //conflict modal when user wants to unselect base this will show when he selects option from modal to
         //yes as continue and no as not continue
 
         if (modal_type == 'base_uncheck_by_user') {
-
             var uncheck_val = $(this).data('uncheck_val');
             var comb_base = $(this).data('comb_base');
-            //alert(uncheck_val);
-            //alert(comb_base);
+            var emb_selection_id = $(this).data('emb_selection_id');
             if (uncheck_val == 'yes') {
+                // alert('uncheck yes');
                 //check this val >0 to close conflict modal after value selection from modal
                 option_clicked = 1;
-                $('.emb_option ').each(function (i, obj) {
+                $('.emb_option , already_plates').each(function (i, obj) {
                     var option_embellishment_id = $(this).data('embellishment_id');
                     var option_embellishment_selection_id = $(this).data('embellishment_selection_id');
                     //uncheck all selected options from Label Finishes & Embellishments section
 
                     // $('#uncheck' + option_embellishment_selection_id).attr('checked', false);
                     $('#uncheck' + option_embellishment_selection_id).prop('checked', false);
+                    //also add same functionality to purchased plate section
+                    $('#uncheck_purchased_plate' + option_embellishment_selection_id).prop("checked", false);
                     //also reset plate cost price total val
                     total_emb_plate_price = 0;
+                    //use to remove new selected value from global selected_already_plates array if user retain its selection from conflict combination modal
 
 
                 });
                 //reset selected and combination_base after uncheck all options from above loop
                 selected = [];
+                selected_already_plates = [];
+                selected_already_plates_composite_array = [];
                 combination_base = '';
 
             } else {
 
                 // reset total_emb_plate_price and add it according to base option selected
                 $.each(embellishment_plate_price_global, function (k, embellishment_plate_price_single) {
+                    console.log(embellishment_plate_price_single);
                     // Reset total_emb_plate_price and then set it according to selected base value if it has any plate cost
-                    if (comb_base == embellishment_plate_price_single.id) {
+                    if (emb_selection_id == embellishment_plate_price_single.id) {
                         total_emb_plate_price += parseInt(embellishment_plate_price_single.plate_cost);
                     }
                 });
@@ -572,8 +571,42 @@
                 //check this val >0 to close conflict modal after value selection from modal
 
                 option_clicked = 1;
+                // if (combination_base == 2 || combination_base == 3 || combination_base == 4 || combination_base == 5) {
+                //
+                //     var emb_selection_id = $("#uncheck" + user_selected_embellishment_actual_id);
+                //     var emb_id = $(emb_selection_id).data('embellishment_id');
+                //
+                //     if (emb_id == combination_base) {
+                //     }
+                // }
+                //also add same functionality to purchased plate section
+                if($(this).data('tirggered_source')){
 
-                $('#uncheck' + comb_base).prop("checked", true);
+                    $('#uncheck_purchased_plate' + emb_selection_id).prop("checked", true);
+                    $('#uncheck' + emb_selection_id).prop("checked", true);
+                    selected_already_plates.push(emb_selection_id);
+
+                    // var composite_array = [];
+                    // composite_array['plate_order_no'] = $(this).data('plate_order_no');
+                    // composite_array['already_used_plate_id'] = $(this).data('embellishment_selection_id') ;
+
+                    var composite_obj = {already_used_plate_id:emb_selection_id, plate_order_no:plate_order_no_last};
+                    var index_composite = selected_already_plates_composite_array.indexOf(emb_selection_id);
+                    var lenght = selected_already_plates_composite_array.length;
+                    selected_already_plates_composite_array[lenght] =  JSON.stringify(composite_obj) ;
+
+                    // var last_index = selected_already_plates_composite_array[selected_already_plates_composite_array.length - 1];
+                    // selected_already_plates_composite_array[++last_index] = composite_array ;
+
+                }else{
+                    $('#uncheck' + emb_selection_id).prop("checked", true);
+
+                }
+
+
+
+                // var index = selected_already_plates.indexOf(emb_selection_id);
+                // if (index !== -1) selected_already_plates.splice(index, 1);
                 combination_base = comb_base;
             }
             if (option_clicked > 0) {
@@ -584,9 +617,8 @@
             }
             //    Execute else if its label combination conflict modal
         } else {
-            //alert(option_clicked);
             if (option_clicked > 0) {
-                //add toggle to modal to close it as default colose and keyboard esc button options are disabled to
+                //add toggle to modal to close it as default close and keyboard esc button options are disabled to
                 //force user to only close modal after one option selection
                 $('.combination_conflict_modal_close').modal('toggle');
                 //once modal close then set it to 0 to re-apply all checks related to close modal
@@ -595,17 +627,24 @@
             }
             // if user select other option from conflict modal other then its current combination base then uncheck users all selections and
             //change its combination_base on run time
-            //alert(combination_base);
-            //alert('checked_id = '+checked_id);
             if (combination_base != checked_id) {
 
-                $('.emb_option ').each(function (i, obj) {
+                $('.emb_option, .already_plates').each(function (i, obj) {
                     var option_embellishment_id = $(this).data('embellishment_id');
                     var option_embellishment_selection_id = $(this).data('embellishment_selection_id');
                     //uncheck all options other then selected option from conflict modal
                     if (option_embellishment_selection_id != checked_id && checked_id != '') {
 
                         $('#uncheck' + option_embellishment_selection_id).prop('checked', false);
+                        $('#uncheck_purchased_plate' + option_embellishment_selection_id).prop('checked', false);
+                        selected_already_plates = [];
+                        selected_already_plates_composite_array = [];
+
+                        selected_already_plates.push(checked_id);
+
+
+                        var composite_obj = {already_used_plate_id:checked_id, plate_order_no:plate_order_no_last};
+                        selected_already_plates_composite_array[0] =  JSON.stringify(composite_obj);
 
                     }
 
@@ -613,16 +652,16 @@
                 //if user selects hot_foil,embossing,silk screen or sequential date from conflict modal then change its combination_base to
                 // emb parent id as he can't select more then one child from these parents and if parent is disable
                 // then their all childs will also be disabled.
-
+                $.each(embellishment_plate_price_global, function (k, embellishment_plate_price_single) {
+                    // Reset total_emb_plate_price and then set it according to selected base value if it has any plate cost
+                    if (checked_id == embellishment_plate_price_single.id) {
+                        total_emb_plate_price = 0;
+                        total_emb_plate_price += parseInt(embellishment_plate_price_single.plate_cost);
+                    }
+                });
                 if (embellishment_id == 2 || embellishment_id == 3 || embellishment_id == 4 || embellishment_id == 5) {
                     // reset total_emb_plate_price and add it according to base option selected
-                    $.each(embellishment_plate_price_global, function (k, embellishment_plate_price_single) {
-                        // Reset total_emb_plate_price and then set it according to selected base value if it has any plate cost
-                        if (checked_id == embellishment_plate_price_single.id) {
-                            total_emb_plate_price = 0;
-                            total_emb_plate_price += parseInt(embellishment_plate_price_single.plate_cost);
-                        }
-                    });
+
 
                     combination_base = embellishment_id;
                     //    its execute in case of lamination & varnishes as they have separate values in combination_array and can be selected
@@ -630,24 +669,16 @@
                 } else {
                     // Reset total_emb_plate_price and then set it according to selected base value if it has any plate cost
 
-                    $.each(embellishment_plate_price_global, function (k, embellishment_plate_price_single) {
-                        // console.log(embellishment_plate_price_single);
-                        if (checked_id == embellishment_plate_price_single.id) {
-                            total_emb_plate_price = 0;
-                            total_emb_plate_price += parseInt(embellishment_plate_price_single.plate_cost);
-                        }
-                    });
+
 
                     // make combination_base to current selection id as user can select more then one value
                     // from lamination and varnish section
                     combination_base = checked_id;
 
                 }
-
             } else {
-                //alert('jj0');
                 // Remove plate cost price if any if user select retain its selection from conflict combination modal
-
+                var i = 0;
                 $.each(embellishment_plate_price_global, function (k, embellishment_plate_price_single) {
                     // console.log(embellishment_plate_price_single);
                     if (conflict_id_unchecked == embellishment_plate_price_single.id) {
@@ -656,8 +687,40 @@
                 });
                 //uncheck user option that is not selected from combination conflict modal
                 // when user selects same combination_base
-                //alert(conflict_id_unchecked);
-                $('#uncheck' + conflict_id_unchecked).prop('checked', false);
+                $('#uncheck' + conflict_id_unchecked).attr('checked', false);
+                $('#uncheck_purchased_plate' + conflict_id_unchecked).attr('checked', false);
+                //use to remove new selected value from global selected_already_plates array if user retain its selection from conflict combination modal
+                var index = selected_already_plates.indexOf(conflict_id_unchecked);
+                if (index !== -1) selected_already_plates.splice(index, 1);
+
+                //maintain composite array with order no to select purchased plate of exact order if user has same plate more then one in different order with different softproof.
+                // var index_composite = selected_already_plates_composite_array.indexOf(conflict_id_unchecked);
+                // if (index !== -1) selected_already_plates_composite_array.splice(index_composite, 1);
+
+                // selected_already_plates = [];
+                selected_already_plates_composite_array = [];
+                $('.already_plates:checked').each(function () {
+                    var  id_uncheck =  $(this).data('embellishment_selection_id');
+                    //use t uncheck conflicted plate from purchased history modal if user has more then one plates of same type in different orders
+                    if(id_uncheck == conflict_id_unchecked){
+                        $(this).attr('checked', false);
+
+                    }
+
+                    //maintain user selected option array
+                    // selected[i++] = $(this).data('embellishment_selection_id')+'_plateHistory';
+                    // var composite_array = [];
+                    // composite_array['plate_order_no'] = $(this).data('plate_order_no');
+                    // composite_array['already_used_plate_id'] = $(this).data('embellishment_selection_id') ;
+                    var composite_obj = {already_used_plate_id:$(this).data('embellishment_selection_id'), plate_order_no:$(this).data('plate_order_no')};
+
+
+                    selected_already_plates_composite_array[i] =  JSON.stringify(composite_obj) ;
+
+                    // selected_already_plates[i] = $(this).data('embellishment_selection_id');
+                    i++;
+                });
+
 
             }
         }
@@ -665,34 +728,248 @@
         $('#embellishment_plate_total_cost').html(total_emb_plate_price);
         //hide base change modal if showing
         $('.conflict_selection_remove_and_base_change_note').hide();
+        $('#uncheck' + conflict_id_unchecked).attr('checked', false);
+        $('#uncheck_purchased_plate' + conflict_id_unchecked).attr('checked', false);
 
         // alert(checked_id);
         // alert(total_emb_plate_price);
 
     });
 
+    //used to check matched options on label finish & embellishments section on click of already purchased plate selection
+    // $(document).on('click','.already_plates', function(event) {
+    //     var embellishment_selection_id = $(this).data('embellishment_selection_id');
+    //     if (!$("#uncheck" + embellishment_selection_id).is(":checked") ) {
+    //         $('#uncheck' + embellishment_selection_id).trigger('click');
+    //
+    //     }else{
+    //         $('#uncheck' + embellishment_selection_id).attr('checked', false);
+    //
+    //         // $('#uncheck' + embellishment_selection_id).trigger('click');
+    //
+    //     }
+    //
+    //     // alert("dsfsdfsd");
+    // });
     var combination_base = '';
+    var selected_already_plates = [];
+    var selected_already_plates_composite_array = [];
     //function to check combinations start
-    $(document).on("click", ".emb_option", function (e) {
+    var plate_order_no_last = '';
+    $(document).on("click", ".already_plates", function (e) {
+
+        console.log(combination_base);
+        //use to get plate no  against order number in conflict pop up if user retain his previous selection (using at combination_conflict_modal function)
+        plate_order_no_last = $(this).data('plate_order_no');
         var user_selected_id = $(this).data('embellishment_id');
         var user_selected_title = $(this).data('embellishment_selected_title');
         var user_selected_embellishment_actual_id = $(this).data('embellishment_selection_id');
-        var selected = [];
+        // var selected = [];
+        // used to sync check & uncheck behaviour of embellishment and finishes & purchased plate history modal
+
+        //will execute when select already purchased plate
+        if (!$("#uncheck" + user_selected_embellishment_actual_id).is(":checked")) {
+            alert("uncheck id if");
+            $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
+            //will execute when base already selected from main embellishment & finishes and then select same base and same element from select already purchased plate
+
+        }else{
+            if (user_selected_id == 2 || user_selected_id == 3 || user_selected_id == 4 || user_selected_id == 5) {
+                alert("base=2");
+                alert(plate_order_no_last);
+                alert($("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).data('plate_order_no'));
+                if ($("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).is(":checked") ) {
+                    if ($("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).data('plate_order_no') == plate_order_no_last){
+                        alert("above if");
+
+                        $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
+                        $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', false);
+                        $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', false);
+                    }else{
+                        alert("above else");
+
+                        $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
+                        $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', true);
+                        $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', true);
+                    }
+
+                    // $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', true);
+
+                }else{
+                    if ($("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).data('plate_order_no') == plate_order_no_last){
+                        $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
+                        $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', false);
+                        $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', false);
+                    }else{
+                        $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
+                        $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', true);
+                        $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', true);
+                    }
+                    alert("gfdgfd");
+                    // $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
+                    // $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', false);
+                    // $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', false);
+                    // $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', false);
+                    // $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', false);
+                }
+            }else{
+                if ($("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).is(":checked")) {
+                    alert("above2");
+                    // $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
+                    $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', true);
+                }else{
+                    alert("gfdgfd2");
+                    $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
+                    $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', false);
+                    $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', false);
+                    // $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', true);
+
+                }
+            }
+
+
+
+        }
+        // if (!$("#uncheck" + user_selected_embellishment_actual_id).is(":checked") && !$("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).is(":checked")) {
+        //     $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
+        //
+        // } else if(!$("#uncheck" + user_selected_embellishment_actual_id).is(":checked") && $("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).is(":checked")) {
+        //
+        //     $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
+        //     $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', false);
+        //     $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', false);
+        // }else if ($("#uncheck" + user_selected_embellishment_actual_id).is(":checked") && $("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).is(":checked")) {
+        //
+        //     $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', true);
+        //
+        // }
+
+        //     if (!$("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).is(":checked")) {
+        //
+        //         $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
+        //         // $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', false);
+        //         $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', true);
+        //     } else {
+        //         if (!$("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).is(":checked")) {
+        //             $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
+        //             $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', false);
+        //             $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', false);
+        //         } else {
+        //             alert("2");
+        //
+        //             // $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
+        //             // $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', false);
+        //             $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', true);
+        //         }
+        //
+        //     }
+        // }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //
+        // if (!$("#uncheck" + user_selected_embellishment_actual_id).is(":checked")) {
+        //     $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
+        //
+        // } else {
+        //     if (!$("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).is(":checked")){
+        //
+        //         $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
+        //         // $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', false);
+        //         $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', true);
+        //     }else{
+        //         if (!$("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).is(":checked")) {
+        //             $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
+        //             $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', false);
+        //             $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', false);
+        //         }else{
+        //             alert("2");
+        //
+        //             // $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
+        //             // $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', false);
+        //             $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', true);
+        //         }
+        //
+        //     }
+        //
+        //
+        //     // $('#uncheck' + embellishment_selection_id).trigger('click');
+        //
+        // }
+
         //global variable for plate price
-        total_emb_plate_price = 0;
+        // total_emb_plate_price = 0;
         var i = 0;
-        //alert(combination_base);
         // if hot_foil,embossing,silk screen, sequential then do nothing as user can't unselect its base
         // as all options/childs under it have same base id according to each parent and all these are radio
         // so can be check just one option at a time from respected parent decesendent child options
         if (combination_base == 2 || combination_base == 3 || combination_base == 4 || combination_base == 5) {
+
+            var emb_selection_id = $("#uncheck" + user_selected_embellishment_actual_id);
+            var emb_id = $(emb_selection_id).data('embellishment_id');
+
+            if (emb_id == combination_base) {
+                // if(!$("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).is(":checked")){
+
+                // if( $("#uncheck" + user_selected_embellishment_actual_id).is(":checked")){
+
+                //     $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', true);
+                //     selected_already_plates.push(user_selected_embellishment_actual_id);
+                //
+                //
+                // }else
+                if (!$("#uncheck" + user_selected_embellishment_actual_id).is(":checked") && user_selected_embellishment_actual_id != '') {
+                    alert("inside if");
+
+                    var conflict_selection_remove_and_base_change_note = '';
+                    var conflict_modl_msg_container = '';
+                    var conflict_data_desc = '';
+                    var conflict_data_footer = '';
+                    conflict_data_desc += '<p> If You Uncheck this option your ';
+                    conflict_data_desc += 'previous selections will be reset <br><br> ';
+                    conflict_data_desc += 'Do you want to continue?</p>';
+
+                    conflict_data_footer += '<div class="modal-footer row " style="padding: 15px !important;">';
+                    conflict_data_footer += '<button data-toggle="modal" style="margin-left: -6% !important;" data-tirggered_source="purchased_plate_modal" data-backdrop="static" data-keyboard="false" data-modal_type="base_uncheck_by_user" data-uncheck_val="no" data-emb_selection_id = "'+user_selected_embellishment_actual_id+'" data-comb_base="' + combination_base + '" class=" m-t-10 m-b-30 continue_conflict_modal btn orange cal_btn MaterialModalButton col-sm-4" type="button">No';
+                    conflict_data_footer += ' </button>';
+
+                    conflict_data_footer += '<button data-toggle="modal" style="float:right ;" data-tirggered_source="purchased_plate_modal" data-backdrop="static" data-keyboard="false" data-modal_type="base_uncheck_by_user" data-uncheck_val="yes" data-emb_selection_id = "'+user_selected_embellishment_actual_id+'" class="m-t-10 m-b-30 continue_conflict_modal btn orange cal_btn MaterialModalButton float-right col-sm-4  "  type="button">Yes';
+                    conflict_data_footer += '</button>';
+
+                    conflict_data_footer += '</div>';
+
+                    $('#base_conflict_desc').html(conflict_data_desc);
+                    //hide base change message that is made for combination conflict modal not for this
+                    $('.conflict_selection_remove_and_base_change_note').hide();
+                    $('#conflict_modl_msg_container').html(conflict_modl_msg_container);
+                    $('#base_conflict_footer').html(conflict_data_footer);
+                    // add trigger event to click modal <a> to show modal
+                    if (!$('.emb_modal').hasClass('in')){
+                        $('.emb_modal').trigger("click");
+                    }
+                    // $('.emb_modal').trigger("click");
+
+                }
+            }
+
 
             //    execute if user unselect its base and also create conflict modal layout and options
             //    using same modal (with class .emb_modal) for both base unselect and combination conflict modal
             //    each creates its modal body data dynamically
         } else {
             if (!$("#uncheck" + combination_base).is(":checked") && combination_base != '') {
-                 //alert("inside if");
+                // alert("inside if");
+
                 var conflict_selection_remove_and_base_change_note = '';
                 var conflict_modl_msg_container = '';
                 var conflict_data_desc = '';
@@ -702,10 +979,10 @@
                 conflict_data_desc += 'Do you want to continue?</p>';
 
                 conflict_data_footer += '<div class="modal-footer row " style="padding: 15px !important;">';
-                conflict_data_footer += '<button data-toggle="modal" style="margin-left: -6% !important;" data-backdrop="static" data-keyboard="false" data-modal_type="base_uncheck_by_user" data-uncheck_val="no" data-comb_base="' + combination_base + '" class=" m-t-10 m-b-30 continue_conflict_modal btn orange cal_btn MaterialModalButton col-sm-4" type="button">No';
+                conflict_data_footer += '<button data-toggle="modal" style="margin-left: -6% !important;" data-tirggered_source="purchased_plate_modal" data-backdrop="static" data-keyboard="false" data-modal_type="base_uncheck_by_user" data-emb_selection_id = "'+user_selected_embellishment_actual_id+'" data-uncheck_val="no" data-comb_base="' + combination_base + '" class=" m-t-10 m-b-30 continue_conflict_modal btn orange cal_btn MaterialModalButton col-sm-4" type="button">No';
                 conflict_data_footer += ' </button>';
 
-                conflict_data_footer += '<button data-toggle="modal" style="float:right ;" data-backdrop="static" data-keyboard="false" data-modal_type="base_uncheck_by_user" data-uncheck_val="yes" class="m-t-10 m-b-30 continue_conflict_modal btn orange cal_btn MaterialModalButton float-right col-sm-4  " type="button">Yes';
+                conflict_data_footer += '<button data-toggle="modal" style="float:right ;" data-tirggered_source="purchased_plate_modal"  data-backdrop="static" data-keyboard="false" data-modal_type="base_uncheck_by_user" data-emb_selection_id = "'+user_selected_embellishment_actual_id+'" data-uncheck_val="yes" class="m-t-10 m-b-30 continue_conflict_modal btn orange cal_btn MaterialModalButton float-right col-sm-4  " type="button">Yes';
                 conflict_data_footer += '</button>';
 
                 conflict_data_footer += '</div>';
@@ -716,17 +993,282 @@
                 $('#conflict_modl_msg_container').html(conflict_modl_msg_container);
                 $('#base_conflict_footer').html(conflict_data_footer);
                 // add trigger event to click modal <a> to show modal
-                $('.emb_modal').trigger("click");
+                // $('.emb_modal').trigger("click");
 
             }
         }
 
+        //get user selected element values
+        selected_already_plates = [];
+        selected_already_plates_composite_array = [];
+        $('.already_plates:checked').each(function () {
+            //maintain user selected option array
+            // selected[i++] = $(this).data('embellishment_selection_id')+'_plateHistory';
+            // var composite_array = [];
+            // composite_array['plate_order_no'] = $(this).data('plate_order_no');
+            // composite_array['already_used_plate_id'] = $(this).data('embellishment_selection_id') ;
+            var composite_obj = {already_used_plate_id:$(this).data('embellishment_selection_id'), plate_order_no:$(this).data('plate_order_no')};
+
+
+            selected_already_plates_composite_array[i] =  JSON.stringify(composite_obj) ;
+
+            selected_already_plates[i] = $(this).data('embellishment_selection_id');
+            i++;
+        });
+        console.log('selected_already_plates[i]' + selected_already_plates);
+        console.log('selected_already_plates_composite_array[i]' + selected_already_plates_composite_array);
+        // set combination base on user selection on first element selection
+        if (selected_already_plates.length == 1 && combination_base == '') {
+            //main array with base data and array of its child options
+            $.each(parent_child_global, function (key, parent_value_array) {
+                // console.log(parent_value_array);
+                $.each(parent_value_array.child_options, function (k, child_single_data) {
+                    if (selected_already_plates[0] == child_single_data.id) {
+                        //set parent id as base in case of hot_foil,embossing,silk print, sequential
+                        if (parent_value_array.id == 2 || parent_value_array.id == 3 || parent_value_array.id == 4 || parent_value_array.id == 5) {
+                            combination_base = parent_value_array.id;
+                            // total_emb_plate_price += parseInt(child_single_data.plate_cost);
+
+                        } else {
+                            // total_emb_plate_price += parseInt(child_single_data.plate_cost);
+                            //set actual selected id  as base in case of lamination and varnishes as their all childs
+                            //has its separate entry in combination table
+
+                            combination_base = selected_already_plates[0];
+                        }
+                    }
+                });
+            });
+
+        }
+        if (selected_already_plates.length > 1 || combination_base != '') {
+
+            // console.log(parent_child_global);
+            //combination array  with parent_id and title as key and its valid combination array as value according to
+            // parent id and has valid combinations of every value against parent id
+            $.each(combination_global, function (array_key_with_id_name, specific_comb_array) {
+                var specific_combination_id = array_key_with_id_name.split('_');
+                //get combination array of user selected element from arrays of all combinations in combination_global array
+
+                if (combination_base == specific_combination_id[0]) {
+
+                    $.each(specific_comb_array, function (key1, value) {
+                        $.each(selected_already_plates, function (key2, user_selection_prev_val) {
+                            // check if combination base is compatible with user selection or not
+                            if (combination_base != value.label_embellishment_agianst_id) {
+                                //if found conflict then make conflict combination modal and check
+                                //for hot_foil,embossing,silk screen , sequential
+                                //show user selected option on first position and base is at second position
+                                if (user_selected_id == 2 || user_selected_id == 3 || user_selected_id == 4 || user_selected_id == 5) {
+                                    // specific_combination_id[1] = value.label_embellishment_title;
+                                    // $('.emb_option ').each(function(i, obj) {
+                                    //
+                                    // });
+                                    if (user_selected_id == value.label_embellishment_agianst_id && value.label_condition != 1) {
+
+                                        var conflict_data = '';
+                                        var conflict_data_desc = '';
+                                        var conflict_data_footer = '';
+                                        conflict_data_desc += '<p> These 2 options are not available together<br>';
+                                        conflict_data_desc += 'Please select 1 of following</p>';
+                                        conflict_data += '<div class="row">';
+                                        conflict_data += '    <div class="col-sm-offset-1 col-sm-7">';
+                                        conflict_data += '    <p>' + user_selected_title + '</p>';
+                                        conflict_data += '</div>';
+                                        conflict_data += '<div class="col-sm-offset-2 col-sm-1">';
+                                        conflict_data += '    <label class="containerr left-no-margin">';
+                                        conflict_data += '    <input type="radio" data-embellishment_id="' + user_selected_id + '" data-user_selected_title="' + user_selected_title + '" data-embellishment_conflict_id="' + user_selected_embellishment_actual_id + '" class="emb_conflict_option" name="label_embellishment["laminations_and_varnishes"][]">';
+                                        conflict_data += '    <span class="checkmark"></span>';
+
+                                        conflict_data += '    </label>';
+                                        conflict_data += '    </div>';
+                                        conflict_data += '    <div class="col-sm-1"></div>';
+                                        conflict_data += '    </div>';
+
+
+                                        conflict_data += '<div class="row">';
+                                        conflict_data += '    <div class="col-sm-offset-1 col-sm-7">';
+                                        conflict_data += '    <p>' + specific_combination_id[1] + '</p>';
+                                        conflict_data += '</div>';
+                                        conflict_data += '<div class="col-sm-offset-2 col-sm-1">';
+                                        conflict_data += '    <label class="containerr left-no-margin">';
+                                        conflict_data += '    <input type="radio" data-embellishment_id="' + user_selected_id + '" data-user_selected_title="' + user_selected_title + '" data-embellishment_conflict_id="' + specific_combination_id[0] + '" class="emb_conflict_option" name="label_embellishment["laminations_and_varnishes"][]">';
+                                        conflict_data += '    <span class="checkmark"></span>';
+
+                                        conflict_data += '    </label>';
+                                        conflict_data += '    </div>';
+                                        conflict_data += '    <div class="col-sm-1"></div>';
+                                        conflict_data += '    </div>';
+
+                                        conflict_data_footer += '<button data-toggle="modal" data-backdrop="static" data-keyboard="false" data-modal_type="base_conflict_option_modal" class="m-t-10 m-b-30 continue_conflict_modal btn orange cal_btn MaterialModalButton col-sm-offset-3 col-sm-6" type="button">  Continue ';
+                                        conflict_data_footer += '     <i class="fa fa-arrow-circle-right"></i>';
+                                        conflict_data_footer += '    </button>';
+
+                                        $('#base_conflict_desc').html(conflict_data_desc);
+                                        $('#conflict_modl_msg_container').html(conflict_data);
+                                        $('#base_conflict_footer').html(conflict_data_footer);
+
+                                        if(selected_already_plates.length ==1){
+                                            if (!$('.emb_modal').hasClass('in')){
+                                                $('.emb_modal').trigger("click");
+                                            }
+                                        }
+
+
+                                        // $('.emb_modal').trigger("click");
+
+                                        // alert( value.label_embellishment_title);
+                                        user_selected_id = 0;
+                                    }
+                                } else {
+                                    //show conflict modal for Label Finishes & Embellishments section and show user selected option
+                                    //at 1st position and base at second
+                                    if (user_selection_prev_val == value.label_embellishment_agianst_id && value.label_condition != 1) {
+
+
+                                        var conflict_data = '';
+                                        var conflict_data_desc = '';
+                                        var conflict_data_footer = '';
+
+                                        conflict_data_desc += '<p> These 2 options are not available together<br>';
+                                        conflict_data_desc += 'Please select 1 of following</p>';
+                                        conflict_data += '<div class="row">';
+                                        conflict_data += '    <div class="col-sm-offset-1 col-sm-7">';
+                                        conflict_data += '    <p>' + user_selected_title + '</p>';
+                                        conflict_data += '</div>';
+                                        conflict_data += '<div class="col-sm-offset-2 col-sm-1">';
+                                        conflict_data += '    <label class="containerr left-no-margin">';
+                                        conflict_data += '    <input type="radio" data-embellishment_id="' + user_selected_id + '" data-user_selected_title="' + user_selected_title + '" data-embellishment_conflict_id="' + user_selected_embellishment_actual_id + '" class="emb_conflict_option" name="label_embellishment["laminations_and_varnishes"][]">';
+                                        conflict_data += '    <span class="checkmark"></span>';
+
+                                        conflict_data += '    </label>';
+                                        conflict_data += '    </div>';
+                                        conflict_data += '    <div class="col-sm-1"></div>';
+                                        conflict_data += '    </div>';
+
+
+                                        conflict_data += '<div class="row">';
+                                        conflict_data += '    <div class="col-sm-offset-1 col-sm-7">';
+                                        conflict_data += '    <p>' + specific_combination_id[1] + '</p>';
+                                        conflict_data += '</div>';
+                                        conflict_data += '<div class="col-sm-offset-2 col-sm-1">';
+                                        conflict_data += '    <label class="containerr left-no-margin">';
+                                        conflict_data += '    <input type="radio" data-embellishment_id="' + user_selected_id + '" data-user_selected_title="' + user_selected_title + '" data-embellishment_conflict_id="' + specific_combination_id[0] + '" class="emb_conflict_option" name="label_embellishment["laminations_and_varnishes"][]">';
+                                        conflict_data += '    <span class="checkmark"></span>';
+
+                                        conflict_data += '    </label>';
+                                        conflict_data += '    </div>';
+                                        conflict_data += '    <div class="col-sm-1"></div>';
+                                        conflict_data += '    </div>';
+
+                                        conflict_data_footer += '<button data-toggle="modal" data-backdrop="static" data-keyboard="false" data-modal_type="base_conflict_option_modal" class="m-t-10 m-b-30 continue_conflict_modal btn orange cal_btn MaterialModalButton col-sm-offset-3 col-sm-6" type="button">  Continue ';
+                                        conflict_data_footer += '     <i class="fa fa-arrow-circle-right"></i>';
+                                        conflict_data_footer += '    </button>';
+
+                                        $('#base_conflict_desc').html(conflict_data_desc);
+                                        $('#conflict_modl_msg_container').html(conflict_data);
+                                        $('#base_conflict_footer').html(conflict_data_footer);
+
+                                        // alert( value.label_embellishment_title);
+                                        // alert(specific_combination_id[1]);
+
+                                        // $('.emb_modal').trigger("click");
+
+                                    }
+                                }
+                                //    this execute if user
+                            } else {
+                                $.each(embellishment_plate_price_global, function (k, embellishment_plate_price_single) {
+                                    // console.log(embellishment_plate_price_single);
+                                    if (user_selection_prev_val == embellishment_plate_price_single.id) {
+                                        // total_emb_plate_price += parseInt(embellishment_plate_price_single.plate_cost);
+                                    }
+                                });
+                                // console.log(selected);
+                            }
+
+                        });
+                    });
+                    // console.log(specific_comb_array);
+                }
+            });
+
+        }
+        //update emb plate cost price total value in cart summery
+        // $('#embellishment_plate_total_cost').html(total_emb_plate_price);
+
+        console.log(total_emb_plate_price);
+
+
+        // alert(id);
+    });
+
+    //function to check combinations end
+
+
+    // var combination_base = '';
+    //function to check combinations start
+    $(document).on("click", ".emb_option", function (e) {
+// alert(combination_base);
+        var user_selected_id = $(this).data('embellishment_id');
+        var user_selected_title = $(this).data('embellishment_selected_title');
+        var user_selected_embellishment_actual_id = $(this).data('embellishment_selection_id');
+        var selected = [];
+
+
+        //global variable for plate price
+        total_emb_plate_price = 0;
+        var i = 0;
+        // if hot_foil,embossing,silk screen, sequential then do nothing as user can't unselect its base
+        // as all options/childs under it have same base id according to each parent and all these are radio
+        // so can be check just one option at a time from respected parent decesendent child options
+        if (combination_base == 2 || combination_base == 3 || combination_base == 4 || combination_base == 5) {
+
+            //    execute if user unselect its base and also create conflict modal layout and options
+            //    using same modal (with class .emb_modal) for both base unselect and combination conflict modal
+            //    each creates its modal body data dynamically
+        } else {
+            if (!$("#uncheck" + combination_base).is(":checked") && combination_base != '') {
+                // alert("inside if");
+
+                var conflict_selection_remove_and_base_change_note = '';
+                var conflict_modl_msg_container = '';
+                var conflict_data_desc = '';
+                var conflict_data_footer = '';
+                conflict_data_desc += '<p> If You Uncheck this option your ';
+                conflict_data_desc += 'previous selections will be reset <br><br> ';
+                conflict_data_desc += 'Do you want to continue?</p>';
+
+                conflict_data_footer += '<div class="modal-footer row " style="padding: 15px !important;">';
+                conflict_data_footer += '<button data-toggle="modal" style="margin-left: -6% !important;" data-backdrop="static" data-keyboard="false" data-modal_type="base_uncheck_by_user" data-uncheck_val="no" data-emb_selection_id = "'+user_selected_embellishment_actual_id+'" data-comb_base="' + combination_base + '" class=" m-t-10 m-b-30 continue_conflict_modal btn orange cal_btn MaterialModalButton col-sm-4" type="button">No';
+                conflict_data_footer += ' </button>';
+
+                conflict_data_footer += '<button data-toggle="modal" style="float:right ;" data-backdrop="static" data-keyboard="false" data-modal_type="base_uncheck_by_user" data-uncheck_val="yes" data-emb_selection_id = "'+user_selected_embellishment_actual_id+'" class="m-t-10 m-b-30 continue_conflict_modal btn orange cal_btn MaterialModalButton float-right col-sm-4  " type="button">Yes';
+                conflict_data_footer += '</button>';
+
+                conflict_data_footer += '</div>';
+
+                $('#base_conflict_desc').html(conflict_data_desc);
+                //hide base change message that is made for combination conflict modal not for this
+                $('.conflict_selection_remove_and_base_change_note').hide();
+                $('#conflict_modl_msg_container').html(conflict_modl_msg_container);
+                $('#base_conflict_footer').html(conflict_data_footer);
+                // add trigger event to click modal <a> to show modal
+                if (!$('.emb_modal').hasClass('in')){
+                    $('.emb_modal').trigger("click");
+                }
+                // $('.emb_modal').trigger("click");
+
+            }
+        }
 
         //get user selected element values
         $('.emb_option:checked').each(function () {
+            // alert("inside emb_option_loop");
             //maintain user selected option array
             selected[i++] = $(this).data('embellishment_selection_id');
         });
+        console.log(selected);
         // set combination base on user selection on first element selection
         if (selected.length == 1) {
             //main array with base data and array of its child options
@@ -749,7 +1291,7 @@
                     }
                 });
             });
-// alert(combination_base);
+
         }
         if (selected.length > 1) {
             // console.log(parent_child_global);
@@ -817,8 +1359,10 @@
                                         $('#conflict_modl_msg_container').html(conflict_data);
                                         $('#base_conflict_footer').html(conflict_data_footer);
 
-
-                                        $('.emb_modal').trigger("click");
+                                        if (!$('.emb_modal').hasClass('in')){
+                                            $('.emb_modal').trigger("click");
+                                        }
+                                        // $('.emb_modal').trigger("click");
 
                                         // alert( value.label_embellishment_title);
                                         user_selected_id = 0;
@@ -834,7 +1378,7 @@
                                         var conflict_data_desc = '';
                                         var conflict_data_footer = '';
 
-                                        conflict_data_desc += '<p> These 2 options are not available togethers<br>';
+                                        conflict_data_desc += '<p> These 2 options are not available together<br>';
                                         conflict_data_desc += 'Please select 1 of following</p>';
                                         conflict_data += '<div class="row">';
                                         conflict_data += '    <div class="col-sm-offset-1 col-sm-7">';
@@ -876,8 +1420,10 @@
                                         // alert( value.label_embellishment_title);
                                         // alert(specific_combination_id[1]);
 
-                                        $('.emb_modal').trigger("click");
-
+                                        // $('.emb_modal').trigger("click");
+                                        if (!$('.emb_modal').hasClass('in')){
+                                            $('.emb_modal').trigger("click");
+                                        }
                                     }
                                 }
                                 //    this execute if user
@@ -977,6 +1523,7 @@
         var contentbox = $('#product_content');
         var finish_content = $('#finish_content');
         var cart_summery = $('#cart_summery');
+
 
         $.ajax({
             url: mainUrl + 'ajax/material_load_preferences',
@@ -1092,8 +1639,6 @@
 
         setTimeout(function () {
 
-            //alert(data.wound_roll);
-            //alert(data.orientation);
             if (data.available_in == "Roll") {
                 if (data.wound_roll == 'Inside') {
                     $('.insideorientation').show();
@@ -1250,16 +1795,13 @@
             press_proof = 1;
         }
         var id = allPreferences.ProductID;
+        // console.log(allPreferences);
         var menuid = allPreferences.ManufactureID;
         var rollfinish = '';
         var coresize = '';
         var woundoption = '';
         var orientation = '';
-        var pressproof = '';
         var type = $('#producttype' + id).val();
-        //alert(type);
-        //alert($('#producttype' + id).val());
-        //var type = $('#producttype').val();
         var unitqty = $('#calculation_unit' + id).val();
         //get user selected element values
         var laminations_and_varnishes = [];
@@ -1269,7 +1811,6 @@
         var artwork_upload_view = $('#artwork_upload_view');
 
         $('.emb_option:checked').each(function () {
-            //alert('k');
             //maintain user selected option array
             laminations_and_varnishes[i] = $(this).data('embellishment_parsed_title');
             laminations_and_varnishes_childs[i] = $(this).data('embellishment_parsed_title_child');
@@ -1295,7 +1836,6 @@
         var printing = $(".digital_process:checked").parents().data("printing_process");
 
         var labels = $('#labels_p_sheet' + id).val();
-        //var labels = $('#labels_p_sheet').val();
         var min_qty = parseInt($('#min_qty' + id).val());
         var max_qty = parseInt($('#max_qty' + id).val());
 
@@ -1304,6 +1844,33 @@
         // show_loader('80', '27');
         var _this = $("#add_btn" + id);
         // change_btn_state(_this, 'disable', 'proceed-print');
+
+
+
+        //unselect already purchased plate of same base when user select another from laminations and varnish section(new plate in case of hot_foil,emboss/deboss as they have same base->parent for is child)
+
+        //get user selected element values
+        $('.emb_option:checked').each(function () {
+            current_emb_id = $(this).data('embellishment_id');
+            current_emb_selection_id = $(this).data('embellishment_selection_id');
+            $('.already_plates:checked').each(function () {
+                history_selected_emb_id = $(this).data('embellishment_id');
+                history_emb_selection_id = $(this).data('embellishment_selection_id');
+                if(current_emb_id == history_selected_emb_id &&  current_emb_selection_id != history_emb_selection_id){
+                    $('#uncheck_purchased_plate' + history_emb_selection_id).attr('checked', false);
+
+                    var index = selected_already_plates.indexOf(history_emb_selection_id);
+                    if (index !== -1) selected_already_plates.splice(index, 1);
+
+                    //maintain composite array with order no to select purchased plate of exact order if user has same plate more then one in different order with different softproof.
+                    var index_composite = selected_already_plates_composite_array.indexOf(history_emb_selection_id);
+                    if (index !== -1) selected_already_plates_composite_array.splice(index_composite, 1);
+                    // console.log(selected_already_plates_composite_array);
+                }
+            });
+        });
+
+        // selected_already_plates_composite_array.serializeArray()
         $('#cart_summery_loader').show();
 
         $.ajax({
@@ -1327,7 +1894,11 @@
                 total_emb_plate_price: total_emb_plate_price,
                 press_proof: press_proof,
                 laminations_and_varnishes: laminations_and_varnishes,
-                laminations_and_varnishes_childs: laminations_and_varnishes_childs
+                laminations_and_varnishes_childs: laminations_and_varnishes_childs,
+                selected_already_plates: selected_already_plates,
+                selected_already_plates_composite_array: selected_already_plates_composite_array
+
+
             },
             success: function (data) {
                 if (!data == '') {
@@ -1338,7 +1909,6 @@
                         // $('#Printing_Step_4').find('.show_selected_product').html(data.content);
                         $('#cart_summery').html(data.data.content);
                         artwork_upload_view.html(data.data.artwork_upload_view);
-
                         // $('#Printing_Step_2').find('#product_summary_overview_home').html(data.content_home);
 
                         $("[data-toggle=tooltip-orintation_popup]").tooltip('destroy');
@@ -1451,7 +2021,7 @@
                 if (returned.shortcode) {
                     $('.roll_sheets_block').find('[name="productcode_text"]').text(returned.shortcode);
                 }
-                console.log(returned);
+                //console.log(returned);
             }, 'json');
             $('.roll_sheets_block').find('[name="productcode_text"]').text();
             $('.roll_sidebar').find('[name="productcode_text"]').text();
@@ -1579,15 +2149,6 @@
                 }
             });
     });
-
-
-
-
-
-
-
-
-
     var product_type = '';
     var proceed_next_screen = '';
     $(document).on("click", "#about_your_artwork_cta", function (event) {
@@ -1604,8 +2165,7 @@
             $("#proceed_artwork_btn").removeAttr("data-target");
 
         }
-        if ((preferences_global.available_in  == "A4" || preferences_global.available_in  == "A3" || preferences_global.available_in  == "SRA3" || preferences_global.available_in == "A5") && preferences_global.categorycode_a4 != '')
-        {
+        if ((preferences_global.available_in  == "A4" || preferences_global.available_in  == "A3" || preferences_global.available_in  == "SRA3" || preferences_global.available_in == "A5") && preferences_global.categorycode_a4 != '') {
             //for sheet change/hide roll upload options of 20 pound and lpr & no of rolls
             $('.roll_upload_options').hide();
             $('.artwork_container').removeClass('col-md-4');
@@ -1915,23 +2475,24 @@
         $('.modal-body').css("height","auto");
 
         var lines_to_enter = $('#user_entered_lines_qty').val();
+
         lines_to_populate = lines_to_enter;
         upload_artwork_radio = $('.upload_artwork_radio:checked').val();
         upload_artwork_option_radio = $('.upload_artwork_option_radio:checked').val();
         // $('#upload_artwork_table').empty();
         var content = '';
-        if (product_type == 'roll'){
+        if (product_type == 'roll') {
 
-            if (lines_to_enter && lines_to_enter > 0 && upload_artwork_radio && upload_artwork_radio !== 'undefined'
+            if (lines_to_enter && lines_to_enter !== '' && lines_to_enter > 0 && upload_artwork_radio && upload_artwork_radio !== 'undefined'
                 && upload_artwork_radio !== '' && upload_artwork_option_radio && upload_artwork_option_radio !== 'undefined'
                 && upload_artwork_option_radio !== '') {
 
                 proceed_next_screen = 1;
             }
-        }else{
+        } else {
 
             if (lines_to_enter && lines_to_enter > 0 && upload_artwork_radio && upload_artwork_radio !== 'undefined'
-                && upload_artwork_radio !== '' ) {
+                && upload_artwork_radio !== '') {
 
                 proceed_next_screen = 1;
             }
@@ -1954,10 +2515,14 @@
         });
         //proceed to next (inner) modal if all checks fulfilled otherwise show error
         if (proceed_next_screen == 1) {
-            $('#artworkuploadpopup').hide( );
-            $('#artwork-upload-popup').trigger('click');
+
+
 
             if (lines_to_enter && lines_to_enter <= 50) {
+                $('#artwork-upload-popup').trigger('click');
+                $('#artworkuploadpopup').hide();
+                $('body').removeClass('modal-open');
+                $('.modal-backdrop').remove();
 
                 $('.upload_artwork').show();
 
@@ -1997,30 +2562,12 @@
                                 // }, 2000);
 
 
-
-
                             }
                         }
                         // $('#cart_summery_loader').hide();
 
                     }
                 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                 content += '<table class="table table-striped ">';
@@ -2104,7 +2651,10 @@
                 content += ' </tbody>';
                 $("#proceed_artwork_btn").attr("data-target", "#artworkuploadpopup1");
 
-            } else {
+            }else if (lines_to_enter == '') {
+                $("#proceed_artwork_btn").removeAttr("data-target");
+                swal("Something Missing", "Please Select Above Options To Continue", "error");
+            }else {
                 $("#proceed_artwork_btn").removeAttr("data-target");
 
                 swal({
@@ -2129,7 +2679,7 @@
                         }
                     });
             }
-        }else{
+        } else {
             $("#proceed_artwork_btn").removeAttr("data-target");
             swal("Something Missing", "Please Select Above Options To Continue", "error");
 
@@ -2139,40 +2689,26 @@
         // alert(lines_to_enter);
 
     });
+    $(document).on("click", ".browse_btn", function (e) {
 
-    /*$(document).on("click", ".browse_btn", function (e) {
-        alert(111);
-        //e.preventDefault();
         $(this).parents('.upload_row').find('.artwork_file').click();
-    });*/
+    });
+
     function isFloat(n) {
         return Number(n) === n && n % 1 !== 0;
     }
+
     function is_numeric(mixed_var) {
         var whitespace =
             " \n\r\t\f\x0b\xa0\u2000\u2001\u2002\u2003\u2004\u2005\u2006\u2007\u2008\u2009\u200a\u200b\u2028\u2029\u3000";
         return (typeof mixed_var === 'number' || (typeof mixed_var === 'string' && whitespace.indexOf(mixed_var.slice(-1)) === -
             1)) && mixed_var !== '' && !isNaN(mixed_var);
     }
+
     var timer = '';
 
 
-
     //test scripts
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     function intialize_progressbar() {
@@ -2185,13 +2721,11 @@
     }
 
 
-
     $(document).on("change", ".artwork_file", function (e) {
         readURL(this);
     });
 
     function readURL(input) {
-        //alert(1);
         if (input.files && input.files[0]) {
             var url = input.value;
             var ext = url.substring(url.lastIndexOf('.') + 1).toLowerCase();
@@ -2218,6 +2752,7 @@
             }
         }
     }
+
     $(document).on("click", "#preview_po_img", function (e) {
         swal({
                 title: 'Are you sure you want to delete this file?',
@@ -2239,7 +2774,6 @@
                 }
             });
     });
-
 
 
     $(document).on("blur", ".labels_input", function (e) {
@@ -2516,11 +3050,14 @@
                 }
 //get user selected element values
                 var laminations_and_varnishes = [];
+                var laminations_and_varnishes_childs = [];
                 var i = 0;
 
                 $('.emb_option:checked').each(function () {
                     //maintain user selected option array
-                    laminations_and_varnishes[i++] = $(this).data('embellishment_parsed_title');
+                    laminations_and_varnishes[i] = $(this).data('embellishment_parsed_title');
+                    laminations_and_varnishes_childs[i] = $(this).data('embellishment_parsed_title_child');
+                    i++;
                 });
                 if (upload_artwork_radio == "upload_artwork_now") {
 
@@ -2542,8 +3079,10 @@
                 form_data.append("total_emb_plate_price", total_emb_plate_price);
                 form_data.append("press_proof", press_proof);
                 form_data.append("laminations_and_varnishes", laminations_and_varnishes);
+                form_data.append("laminations_and_varnishes_childs", laminations_and_varnishes_childs);
                 form_data.append("upload_artwork_radio", upload_artwork_radio);
                 form_data.append("upload_artwork_option_radio", upload_artwork_option_radio);
+                form_data.append("selected_already_plates_composite_array", JSON.stringify(selected_already_plates_composite_array));
                 form_data.append("lines_to_populate", lines_to_populate);
 
                 // console.log(type);
@@ -2563,10 +3102,9 @@
                 if (designs_remain < 1) {
                     form_data.append("limit_exceed_designs", 'yes');
                     var msg = 'You have entered extra designs, click here to update your basket.';
-                }else{
+                } else {
                     form_data.append("limit_exceed_designs", 'no');
                 }
-                alert(remaing);
                 if (remaing < 0) {
                     form_data.append("limit_exceed_sheet", 'yes');
                     var msg = 'You have entered extra ' + lb_txt + ', click here to update your basket.';
@@ -2592,7 +3130,7 @@
                     upload_printing_artworks(form_data);
                 }
             }
-        }else{
+        } else {
             if (labels == 0 || labels == '') {
                 alert_box("Please complete line ");
             } else if (artworkname.length == 0) {
@@ -2604,11 +3142,15 @@
                 }
 //get user selected element values
                 var laminations_and_varnishes = [];
+                var laminations_and_varnishes_childs = [];
+
                 var i = 0;
 
                 $('.emb_option:checked').each(function () {
                     //maintain user selected option array
-                    laminations_and_varnishes[i++] = $(this).data('embellishment_parsed_title');
+                    laminations_and_varnishes[i] = $(this).data('embellishment_parsed_title');
+                    laminations_and_varnishes_childs[i] = $(this).data('embellishment_parsed_title_child');
+                    i++;
                 });
                 if (upload_artwork_radio == "upload_artwork_now") {
 
@@ -2633,6 +3175,8 @@
                 form_data.append("total_emb_plate_price", total_emb_plate_price);
                 form_data.append("press_proof", press_proof);
                 form_data.append("laminations_and_varnishes", laminations_and_varnishes);
+                form_data.append("laminations_and_varnishes_childs", laminations_and_varnishes_childs);
+                form_data.append("selected_already_plates_composite_array", JSON.stringify(selected_already_plates_composite_array));
 
                 // console.log(type);
                 if (upload_artwork_radio == "upload_artwork_now") {
@@ -2651,7 +3195,7 @@
                 if (designs_remain < 1) {
                     form_data.append("limit_exceed_designs", 'yes');
                     var msg = 'You have entered extra designs, click here to update your basket.';
-                }else{
+                } else {
                     form_data.append("limit_exceed_designs", 'no');
                 }
                 if (remaing < 0) {
@@ -2682,6 +3226,7 @@
         }
 
     });
+
     function progress(e) {
         if (e.lengthComputable) {
             var max = e.total;
@@ -2695,6 +3240,7 @@
             }
         }
     }
+
     $(document).on("click", ".delete_artwork_file", function (event) {
         var id = $(this).attr('id');
         var additional_cost = $(this).data('additional_cost');
@@ -2751,125 +3297,620 @@
         $(this).hide();
         $('#add_another_line').hide();
     });
+    $(document).on("click", ".quantity_updater", function (e) {
+
+        verify_labels_or_rolls_qty(this);
+        $(this).parents('.upload_row').find('.quantity_updater').hide();
+    });
     $(document).on("click", ".quantity_editor", function (e) {
         $(this).hide();
         $(this).parents('.upload_row').find('.quantity_labels').hide();
         $(this).parents('.upload_row').find('.input_rolls').show();
     });
+    //backup function of 3 input of labels before my work
+    // function verify_labels_or_rolls_qty(id) {
+    //      var prdid = $('#cartproductid').val();
+    //     var labelspersheets = parseInt($('#labels_p_sheet' + prdid).val());
+    //     var min_qty = parseInt($('#min_qty' + prdid).val());
+    //     var min_rolls = parseInt($('#min_rolls' + prdid).val());
+    //     var max_qty = parseInt($('#max_qty' + prdid).val());
+    //     var dieacross = parseInt($('#min_rolls' + prdid).val());
+    //     var minlabels = parseInt(min_qty / dieacross);
+    //     var rolls = parseInt($(id).parents('.upload_row').find('.input_rolls').val());
+    //     var total_labels = parseInt($(id).parents('.upload_row').find('.roll_labels_input').val());
+    //     var perroll = parseFloat(total_labels / rolls);
+    //     if (isFloat(perroll)) {
+    //         perroll = Math.ceil(perroll);
+    //     }
+    //     var roll_text = 'roll';
+    //     if (rolls > 1) {
+    //         var roll_text = 'rolls';
+    //     }
+    //     if (!is_numeric(total_labels)) {
+    //         //alert_box("Please enter number of labels ");
+    //         var _this = $(id).parents('.upload_row').find('.roll_labels_input');
+    //         show_faded_popover(_this, "Please enter number of labels.");
+    //         $(id).parents('.upload_row').find('.roll_labels_input').val('');
+    //         update_remaing_labels();
+    //         return false;
+    //     } else if (total_labels == 0) {
+    //         //alert_box("Minimum Label quantity is "+minlabels+" Labels per roll.");
+    //         var _this = $(id).parents('.upload_row').find('.roll_labels_input');
+    //         show_faded_popover(_this, "Minimum Label quantity is " + minlabels + " Labels per roll.");
+    //         $(id).parents('.upload_row').find('.roll_labels_input').val('');
+    //         update_remaing_labels();
+    //         return false;
+    //     } else if (!is_numeric(rolls) || rolls == 0) {
+    //         //alert_box("Minimum roll quantity is 1 roll.");
+    //         var _this = $(id).parents('.upload_row').find('.input_rolls');
+    //         show_faded_popover(_this, "Minimum roll quantity is 1 roll.");
+    //         $(id).parents('.upload_row').find('.input_rolls').val('');
+    //         update_remaing_labels();
+    //         return false;
+    //     } else if (perroll < minlabels) {
+    //         var roll_input_display = $(id).parents('.upload_row').find('.input_rolls').css('display');
+    //         if (roll_input_display == 'block') {
+    //             var requiredlabels = minlabels * rolls
+    //             //alert_box("Minimum "+requiredlabels+" labels are allowed on "+rolls+" "+roll_text);
+    //             var _this = $(id).parents('.upload_row').find('.roll_labels_input');
+    //             show_faded_popover(_this, "Quantity has been amended for production as " + requiredlabels + " Labels.");
+    //             $(id).parents('.upload_row').find('.show_labels_per_roll').text(minlabels);
+    //             $(id).parents('.upload_row').find('.roll_labels_input').val(requiredlabels);
+    //             update_remaing_labels();
+    //             return false;
+    //         } else {
+    //             if (total_labels > labelspersheets) {
+    //                 var expectedrolls = parseFloat(total_labels / labelspersheets);
+    //                 if (isFloat(expectedrolls)) {
+    //                     expectedrolls = Math.ceil(expectedrolls);
+    //                 }
+    //                 labelspersheets = parseInt(total_labels / expectedrolls);
+    //                 var _this = $(id).parents('.upload_row').find('.input_rolls');
+    //                 show_faded_popover(_this, "Quantity has been amended for production as " + expectedrolls + " Rolls.");
+    //                 //alert_box(total_labels+" labels are allowed on "+expectedrolls+" rolls");
+    //                 //alert_box(expectedrolls+" rolls are allowed on "+total_labels+" labels");
+    //                 $(id).parents('.upload_row').find('.show_labels_per_roll').text(labelspersheets);
+    //                 $(id).parents('.upload_row').find('.input_rolls').val(expectedrolls);
+    //                 $(id).parents('.upload_row').find('.quantity_labels').text(expectedrolls);
+    //                 update_remaing_labels();
+    //                 return false;
+    //             } else {
+    //                 if (total_labels < minlabels) {
+    //                     total_labels = minlabels;
+    //                     var _this = $(id).parents('.upload_row').find('.roll_labels_input');
+    //                     show_faded_popover(_this, "Quantity has been amended for production as " + total_labels + " Labels.");
+    //                 } else {
+    //                     var _this = $(id).parents('.upload_row').find('.roll_labels_input');
+    //                     show_faded_popover(_this, "Quantity has been amended for production as 1 Roll.");
+    //                 }
+    //                 // alert_box("1 roll allowed on "+total_labels+" labels");
+    //                 $(id).parents('.upload_row').find('.show_labels_per_roll').text(total_labels);
+    //                 $(id).parents('.upload_row').find('.quantity_labels').text(1);
+    //                 $(id).parents('.upload_row').find('.input_rolls').val(1);
+    //                 $(id).parents('.upload_row').find('.roll_labels_input').val(total_labels);
+    //                 update_remaing_labels();
+    //                 return false;
+    //             }
+    //         }
+    //     } else if (perroll > labelspersheets) {
+    //         var response = rolls_calculation(min_rolls, labelspersheets, total_labels, 0);
+    //         var total_labels = response['total_labels'];
+    //         var expectedrolls = response['rolls'];
+    //         var labelspersheets = parseInt(total_labels / expectedrolls);
+    //         //var expectedrolls = parseFloat(total_labels/labelspersheets);
+    //         //if(isFloat(expectedrolls)){  expectedrolls = Math.ceil(expectedrolls);}
+    //         //total_labels = parseInt(labelspersheets*expectedrolls);
+    //         var infotxt = 'Quantity has been amended for production as ' + expectedrolls + ' rolls and ' + total_labels + ' labels';
+    //         show_faded_popover($(id).parents('.upload_row').find('.roll_labels_input'), infotxt);
+    //         //alert_box(total_labels+" labels are allowed on "+expectedrolls+" rolls");
+    //         $(id).parents('.upload_row').find('.show_labels_per_roll').text(labelspersheets);
+    //         $(id).parents('.upload_row').find('.roll_labels_input').val(total_labels);
+    //         $(id).parents('.upload_row').find('.input_rolls').val(expectedrolls);
+    //         $(id).parents('.upload_row').find('.quantity_labels').text(expectedrolls);
+    //         update_remaing_labels();
+    //         return false;
+    //         /*var requiredlabels = labelspersheets*rolls
+    // 			alert_box("Maximum "+requiredlabels+" labels are allowed on "+rolls+" "+roll_text);
+    // 			$(id).parents('.upload_row').find('.show_labels_per_roll').text(labelspersheets);
+    // 			$(id).parents('.upload_row').find('.roll_labels_input').val(requiredlabels);
+    // 			update_remaing_labels();
+    // 			return false;*/
+    //     } else {
+    //         var total_labels = parseInt(perroll) * parseInt(rolls);
+    //         $(id).parents('.upload_row').find('.show_labels_per_roll').text(perroll);
+    //         $(id).parents('.upload_row').find('.roll_labels_input').val(total_labels);
+    //         update_remaing_labels();
+    //     }
+    //     $(id).parents('.upload_row').find('.quantity_updater').hide();
+    // }
+
     function verify_labels_or_rolls_qty(id) {
+        // $(id).parents('.upload_row').find('.input_rolls').val()
+        var current_input_selected_element = $(id).data('current-element');
         var prdid = $('#cartproductid').val();
         var labelspersheets = parseInt($('#labels_p_sheet' + prdid).val());
         var min_qty = parseInt($('#min_qty' + prdid).val());
-        var min_rolls = parseInt($('#min_rolls' + prdid).val());
+        // var min_rolls = parseInt($('#min_rolls' + prdid).val());
+        var min_rolls = 1;
         var max_qty = parseInt($('#max_qty' + prdid).val());
         var dieacross = parseInt($('#min_rolls' + prdid).val());
-        var minlabels = parseInt(min_qty / dieacross);
+        //for free(cost effective) option set minlabels as 100/6 = 16 labels if die across 6 and minimum label is 100
+        if ((upload_artwork_option_radio) && upload_artwork_option_radio == "cost_effective") {
+            var minlabels = parseInt(min_qty / dieacross);
+        } else {
+            //for 20 pound option user can get minimum 1 label also
+            var minlabels = 1;
+        }
+
         var rolls = parseInt($(id).parents('.upload_row').find('.input_rolls').val());
         var total_labels = parseInt($(id).parents('.upload_row').find('.roll_labels_input').val());
+
         var perroll = parseFloat(total_labels / rolls);
         if (isFloat(perroll)) {
             perroll = Math.ceil(perroll);
         }
-        var roll_text = 'roll';
-        if (rolls > 1) {
-            var roll_text = 'rolls';
-        }
-        if (!is_numeric(total_labels)) {
-            //alert_box("Please enter number of labels ");
-            var _this = $(id).parents('.upload_row').find('.roll_labels_input');
-            show_faded_popover(_this, "Please enter number of labels.");
-            $(id).parents('.upload_row').find('.roll_labels_input').val('');
-            update_remaing_labels();
-            return false;
-        } else if (total_labels == 0) {
-            //alert_box("Minimum Label quantity is "+minlabels+" Labels per roll.");
-            var _this = $(id).parents('.upload_row').find('.roll_labels_input');
-            show_faded_popover(_this, "Minimum Label quantity is " + minlabels + " Labels per roll.");
-            $(id).parents('.upload_row').find('.roll_labels_input').val('');
-            update_remaing_labels();
-            return false;
-        } else if (!is_numeric(rolls) || rolls == 0) {
-            //alert_box("Minimum roll quantity is 1 roll.");
-            var _this = $(id).parents('.upload_row').find('.input_rolls');
-            show_faded_popover(_this, "Minimum roll quantity is 1 roll.");
-            $(id).parents('.upload_row').find('.input_rolls').val('');
-            update_remaing_labels();
-            return false;
-        } else if (perroll < minlabels) {
-            var roll_input_display = $(id).parents('.upload_row').find('.input_rolls').css('display');
-            if (roll_input_display == 'block') {
-                var requiredlabels = minlabels * rolls
-                //alert_box("Minimum "+requiredlabels+" labels are allowed on "+rolls+" "+roll_text);
+
+        //Run for free cost effective options to calculate label/roll and num of rolls on the basis of total labels entered qty
+        if ((upload_artwork_option_radio) && upload_artwork_option_radio == "cost_effective") {
+            var roll_text = 'roll';
+            if (rolls > 1) {
+                var roll_text = 'rolls';
+            }
+            if (!is_numeric(total_labels)) {
+                //alert_box("Please enter number of labels ");
                 var _this = $(id).parents('.upload_row').find('.roll_labels_input');
-                show_faded_popover(_this, "Quantity has been amended for production as " + requiredlabels + " Labels.");
-                $(id).parents('.upload_row').find('.show_labels_per_roll').text(minlabels);
-                $(id).parents('.upload_row').find('.roll_labels_input').val(requiredlabels);
+                show_faded_popover(_this, "Please enter number of labels.");
+                $(id).parents('.upload_row').find('.roll_labels_input').val('');
                 update_remaing_labels();
                 return false;
-            } else {
-                if (total_labels > labelspersheets) {
-                    var expectedrolls = parseFloat(total_labels / labelspersheets);
-                    if (isFloat(expectedrolls)) {
-                        expectedrolls = Math.ceil(expectedrolls);
+            } else if (total_labels == 0) {
+                //alert_box("Minimum Label quantity is "+minlabels+" Labels per roll.");
+                var _this = $(id).parents('.upload_row').find('.roll_labels_input');
+                show_faded_popover(_this, "Minimum Label quantity is " + minlabels + " Labels per roll.");
+                $(id).parents('.upload_row').find('.roll_labels_input').val('');
+                update_remaing_labels();
+                return false;
+            } else if (!is_numeric(rolls) || rolls == 0) {
+                //alert_box("Minimum roll quantity is 1 roll.");
+                var _this = $(id).parents('.upload_row').find('.input_rolls');
+                show_faded_popover(_this, "Minimum roll quantity is 1 roll.");
+                $(id).parents('.upload_row').find('.input_rolls').val('');
+                update_remaing_labels();
+                return false;
+            } else if (perroll < minlabels) {
+                var roll_input_display = $(id).parents('.upload_row').find('.input_rolls').css('display');
+                if (roll_input_display == 'block') {
+                    var requiredlabels = minlabels * rolls;
+                    //alert_box("Minimum "+requiredlabels+" labels are allowed on "+rolls+" "+roll_text);
+                    var _this = $(id).parents('.upload_row').find('.roll_labels_input');
+                    show_faded_popover(_this, "Quantity has been amended for production as " + requiredlabels + " Labels.");
+                    $(id).parents('.upload_row').find('.show_labels_per_roll').text(minlabels);
+                    $(id).parents('.upload_row').find('.roll_labels_input').val(requiredlabels);
+                    update_remaing_labels();
+                    return false;
+                } else {
+                    if (total_labels > labelspersheets) {
+                        var expectedrolls = parseFloat(total_labels / labelspersheets);
+                        if (isFloat(expectedrolls)) {
+                            expectedrolls = Math.ceil(expectedrolls);
+                        }
+                        labelspersheets = parseInt(total_labels / expectedrolls);
+                        var _this = $(id).parents('.upload_row').find('.input_rolls');
+                        show_faded_popover(_this, "Quantity has been amended for production as " + expectedrolls + " Rolls.");
+                        //alert_box(total_labels+" labels are allowed on "+expectedrolls+" rolls");
+                        //alert_box(expectedrolls+" rolls are allowed on "+total_labels+" labels");
+                        $(id).parents('.upload_row').find('.show_labels_per_roll').text(labelspersheets);
+                        $(id).parents('.upload_row').find('.input_rolls').val(expectedrolls);
+                        $(id).parents('.upload_row').find('.quantity_labels').text(expectedrolls);
+                        update_remaing_labels();
+                        return false;
+                    } else {
+                        if (total_labels < minlabels) {
+                            total_labels = minlabels;
+                            var _this = $(id).parents('.upload_row').find('.roll_labels_input');
+                            show_faded_popover(_this, "Quantity has been amended for production as " + total_labels + " Labels.");
+                        } else {
+                            var _this = $(id).parents('.upload_row').find('.roll_labels_input');
+                            show_faded_popover(_this, "Quantity has been amended for production as 1 Roll.");
+                        }
+                        // alert_box("1 roll allowed on "+total_labels+" labels");
+                        $(id).parents('.upload_row').find('.show_labels_per_roll').text(total_labels);
+                        $(id).parents('.upload_row').find('.quantity_labels').text(1);
+                        $(id).parents('.upload_row').find('.input_rolls').val(1);
+                        $(id).parents('.upload_row').find('.roll_labels_input').val(total_labels);
+                        update_remaing_labels();
+                        return false;
                     }
-                    labelspersheets = parseInt(total_labels / expectedrolls);
-                    var _this = $(id).parents('.upload_row').find('.input_rolls');
-                    show_faded_popover(_this, "Quantity has been amended for production as " + expectedrolls + " Rolls.");
-                    //alert_box(total_labels+" labels are allowed on "+expectedrolls+" rolls");
-                    //alert_box(expectedrolls+" rolls are allowed on "+total_labels+" labels");
+                }
+            } else if (perroll > labelspersheets) {
+                var response = rolls_calculation(min_rolls, labelspersheets, total_labels, 0);
+                var total_labels = response['total_labels'];
+                var expectedrolls = response['rolls'];
+                var labelspersheets = parseInt(total_labels / expectedrolls);
+                //var expectedrolls = parseFloat(total_labels/labelspersheets);
+                //if(isFloat(expectedrolls)){  expectedrolls = Math.ceil(expectedrolls);}
+                //total_labels = parseInt(labelspersheets*expectedrolls);
+                var infotxt = 'Quantity has been amended for production as ' + expectedrolls + ' rolls and ' + total_labels + ' labels';
+                show_faded_popover($(id).parents('.upload_row').find('.roll_labels_input'), infotxt);
+                //alert_box(total_labels+" labels are allowed on "+expectedrolls+" rolls");
+                $(id).parents('.upload_row').find('.show_labels_per_roll').text(labelspersheets);
+                $(id).parents('.upload_row').find('.roll_labels_input').val(total_labels);
+                $(id).parents('.upload_row').find('.input_rolls').val(expectedrolls);
+                $(id).parents('.upload_row').find('.quantity_labels').text(expectedrolls);
+                update_remaing_labels();
+                return false;
+                /*var requiredlabels = labelspersheets*rolls
+                    alert_box("Maximum "+requiredlabels+" labels are allowed on "+rolls+" "+roll_text);
                     $(id).parents('.upload_row').find('.show_labels_per_roll').text(labelspersheets);
+                    $(id).parents('.upload_row').find('.roll_labels_input').val(requiredlabels);
+                    update_remaing_labels();
+                    return false;*/
+            } else {
+                var total_labels = parseInt(perroll) * parseInt(rolls);
+                $(id).parents('.upload_row').find('.show_labels_per_roll').text(perroll);
+                $(id).parents('.upload_row').find('.roll_labels_input').val(total_labels);
+                update_remaing_labels();
+            }
+            $(id).parents('.upload_row').find('.quantity_updater').hide();
+        }
+        //run for 20 pound paid option to calculate user desired label/roll,no of labels & no of rolls
+        else if ((upload_artwork_option_radio) && upload_artwork_option_radio == "custom_roll_and_label") {
+            //get value of label/roll input field
+            var input_label_p_roll = parseInt($(id).parents('.upload_row').find('.input_label_p_roll').val());
+            //set perroll qty if user added qty in this input field
+            if (is_numeric(input_label_p_roll) || input_label_p_roll == 0) {
+                if (input_label_p_roll == 0) {
+                    //alert_box("Minimum Label quantity is "+minlabels+" Labels per roll.");
+                    var _this = $(id).parents('.upload_row').find('.input_label_p_roll');
+                    show_faded_popover(_this, "Minimum Label/Roll quantity is " + minlabels + " Labels per roll.");
+                    $(id).parents('.upload_row').find('.roll_labels_input').val('');
+                    update_remaing_labels();
+                    return false;
+                } else {
+                    var perroll = parseFloat(input_label_p_roll);
+                    if (isFloat(perroll)) {
+                        perroll = Math.ceil(perroll);
+                    }
+                }
+
+            }
+
+            // var total_labels = parseFloat(perroll * rolls);
+            // if (isFloat(total_labels)) {
+            //     total_labels = Math.ceil(total_labels);
+            // }
+            // alert(total_labels);
+            //make calculation scenarios when user enter value in no of labels field
+            if (current_input_selected_element == "input_no_of_labels") {
+
+                var perroll = parseFloat(total_labels / rolls);
+                if (isFloat(perroll)) {
+                    perroll = Math.ceil(perroll);
+                }
+
+
+                var roll_text = 'roll';
+                if (rolls > 1) {
+                    var roll_text = 'rolls';
+                }
+                if (!is_numeric(total_labels)) {
+                    //alert_box("Please enter number of labels ");
+                    var _this = $(id).parents('.upload_row').find('.roll_labels_input');
+                    show_faded_popover(_this, "Please enter number of labels.");
+                    $(id).parents('.upload_row').find('.roll_labels_input').val('');
+                    update_remaing_labels();
+                    return false;
+                } else if (total_labels == 0) {
+                    //alert_box("Minimum Label quantity is "+minlabels+" Labels per roll.");
+                    var _this = $(id).parents('.upload_row').find('.roll_labels_input');
+                    show_faded_popover(_this, "Minimum Label quantity is " + minlabels + " Labels per roll.");
+                    $(id).parents('.upload_row').find('.roll_labels_input').val('');
+                    update_remaing_labels();
+                    return false;
+                } else if (!is_numeric(rolls) || rolls == 0) {
+                    //alert_box("Minimum roll quantity is 1 roll.");
+                    var _this = $(id).parents('.upload_row').find('.input_rolls');
+                    show_faded_popover(_this, "Minimum roll quantity is 1 roll.");
+                    $(id).parents('.upload_row').find('.input_rolls').val('');
+                    update_remaing_labels();
+                    return false;
+                } else if (perroll < minlabels) {
+                    var roll_input_display = $(id).parents('.upload_row').find('.input_rolls').css('display');
+                    if (roll_input_display == 'block') {
+                        var requiredlabels = minlabels * rolls;
+                        //alert_box("Minimum "+requiredlabels+" labels are allowed on "+rolls+" "+roll_text);
+                        var _this = $(id).parents('.upload_row').find('.roll_labels_input');
+                        show_faded_popover(_this, "Quantity has been amended for production as " + requiredlabels + " Labels.");
+                        $(id).parents('.upload_row').find('.show_labels_per_roll').text(minlabels);
+                        $(id).parents('.upload_row').find('.input_label_p_roll').val(minlabels);
+                        $(id).parents('.upload_row').find('.roll_labels_input').val(requiredlabels);
+                        update_remaing_labels();
+                        return false;
+                    } else {
+                        if (total_labels > labelspersheets) {
+                            var expectedrolls = parseFloat(total_labels / labelspersheets);
+                            if (isFloat(expectedrolls)) {
+                                expectedrolls = Math.ceil(expectedrolls);
+                            }
+                            labelspersheets = parseInt(total_labels / expectedrolls);
+                            var _this = $(id).parents('.upload_row').find('.input_rolls');
+                            show_faded_popover(_this, "Quantity has been amended for production as " + expectedrolls + " Rolls.");
+                            //alert_box(total_labels+" labels are allowed on "+expectedrolls+" rolls");
+                            //alert_box(expectedrolls+" rolls are allowed on "+total_labels+" labels");
+                            $(id).parents('.upload_row').find('.show_labels_per_roll').text(labelspersheets);
+                            $(id).parents('.upload_row').find('.input_label_p_roll').val(labelspersheets);
+                            $(id).parents('.upload_row').find('.input_rolls').val(expectedrolls);
+                            $(id).parents('.upload_row').find('.quantity_labels').text(expectedrolls);
+                            update_remaing_labels();
+                            return false;
+                        } else {
+                            if (total_labels < minlabels) {
+                                total_labels = minlabels;
+                                var _this = $(id).parents('.upload_row').find('.roll_labels_input');
+                                show_faded_popover(_this, "Quantity has been amended for production as " + total_labels + " Labels.");
+                            } else {
+                                var _this = $(id).parents('.upload_row').find('.roll_labels_input');
+                                show_faded_popover(_this, "Quantity has been amended for production as 1 Roll.");
+                            }
+                            // alert_box("1 roll allowed on "+total_labels+" labels");
+                            $(id).parents('.upload_row').find('.show_labels_per_roll').text(total_labels);
+                            $(id).parents('.upload_row').find('.input_label_p_roll').val(total_labels);
+                            $(id).parents('.upload_row').find('.quantity_labels').text(1);
+                            $(id).parents('.upload_row').find('.input_rolls').val(1);
+                            $(id).parents('.upload_row').find('.roll_labels_input').val(total_labels);
+                            update_remaing_labels();
+                            return false;
+                        }
+                    }
+                } else if (perroll > labelspersheets) {
+                    var response = rolls_calculation(min_rolls, labelspersheets, total_labels, 0);
+                    var total_labels = response['total_labels'];
+                    var expectedrolls = response['rolls'];
+                    var labelspersheets = parseInt(total_labels / expectedrolls);
+                    //var expectedrolls = parseFloat(total_labels/labelspersheets);
+                    //if(isFloat(expectedrolls)){  expectedrolls = Math.ceil(expectedrolls);}
+                    //total_labels = parseInt(labelspersheets*expectedrolls);
+                    var infotxt = 'Quantity has been amended for production as ' + expectedrolls + ' rolls and ' + total_labels + ' labels';
+                    show_faded_popover($(id).parents('.upload_row').find('.roll_labels_input'), infotxt);
+                    //alert_box(total_labels+" labels are allowed on "+expectedrolls+" rolls");
+                    $(id).parents('.upload_row').find('.show_labels_per_roll').text(labelspersheets);
+                    $(id).parents('.upload_row').find('.input_label_p_roll').val(labelspersheets);
+                    $(id).parents('.upload_row').find('.roll_labels_input').val(total_labels);
                     $(id).parents('.upload_row').find('.input_rolls').val(expectedrolls);
                     $(id).parents('.upload_row').find('.quantity_labels').text(expectedrolls);
                     update_remaing_labels();
                     return false;
+                    /*var requiredlabels = labelspersheets*rolls
+                        alert_box("Maximum "+requiredlabels+" labels are allowed on "+rolls+" "+roll_text);
+                        $(id).parents('.upload_row').find('.show_labels_per_roll').text(labelspersheets);
+                        $(id).parents('.upload_row').find('.roll_labels_input').val(requiredlabels);
+                        update_remaing_labels();
+                        return false;*/
                 } else {
-                    if (total_labels < minlabels) {
-                        total_labels = minlabels;
-                        var _this = $(id).parents('.upload_row').find('.roll_labels_input');
-                        show_faded_popover(_this, "Quantity has been amended for production as " + total_labels + " Labels.");
-                    } else {
-                        var _this = $(id).parents('.upload_row').find('.roll_labels_input');
-                        show_faded_popover(_this, "Quantity has been amended for production as 1 Roll.");
-                    }
-                    // alert_box("1 roll allowed on "+total_labels+" labels");
-                    $(id).parents('.upload_row').find('.show_labels_per_roll').text(total_labels);
-                    $(id).parents('.upload_row').find('.quantity_labels').text(1);
-                    $(id).parents('.upload_row').find('.input_rolls').val(1);
+                    var total_labels = parseInt(perroll) * parseInt(rolls);
+                    $(id).parents('.upload_row').find('.show_labels_per_roll').text(perroll);
+                    $(id).parents('.upload_row').find('.input_label_p_roll').val(perroll);
                     $(id).parents('.upload_row').find('.roll_labels_input').val(total_labels);
+                    update_remaing_labels();
+                }
+                $(id).parents('.upload_row').find('.quantity_updater').hide();
+
+            }
+            //make calculation scenarios when user enter value in labels per roll field
+
+            else if (current_input_selected_element == "input_label_p_roll") {
+                var roll_text = 'roll';
+                if (rolls > 1) {
+                    var roll_text = 'rolls';
+                }
+                if (!is_numeric(rolls) || rolls == 0) {
+                    //alert_box("Minimum roll quantity is 1 roll.");
+                    var _this = $(id).parents('.upload_row').find('.input_rolls');
+                    show_faded_popover(_this, "Minimum roll quantity is 1 roll.");
+                    $(id).parents('.upload_row').find('.input_rolls').val('');
                     update_remaing_labels();
                     return false;
                 }
+
+
+                //   else if (perroll < minlabels) {
+                //     var roll_input_display = $(id).parents('.upload_row').find('.input_rolls').css('display');
+                //     if (roll_input_display == 'block') {
+                //         var requiredlabels = minlabels * rolls;
+                //         //alert_box("Minimum "+requiredlabels+" labels are allowed on "+rolls+" "+roll_text);
+                //         var _this = $(id).parents('.upload_row').find('.roll_labels_input');
+                //         show_faded_popover(_this, "Quantity has been amended for production as " + requiredlabels + " Labels.");
+                //         $(id).parents('.upload_row').find('.show_labels_per_roll').text(minlabels);
+                //         $(id).parents('.upload_row').find('.roll_labels_input').val(requiredlabels);
+                //         update_remaing_labels();
+                //         return false;
+                //     } else {
+                //         if (total_labels > labelspersheets) {
+                //             var expectedrolls = parseFloat(total_labels / labelspersheets);
+                //             if (isFloat(expectedrolls)) {
+                //                 expectedrolls = Math.ceil(expectedrolls);
+                //             }
+                //             labelspersheets = parseInt(total_labels / expectedrolls);
+                //             var _this = $(id).parents('.upload_row').find('.input_rolls');
+                //             show_faded_popover(_this, "Quantity has been amended for production as " + expectedrolls + " Rolls.");
+                //             //alert_box(total_labels+" labels are allowed on "+expectedrolls+" rolls");
+                //             //alert_box(expectedrolls+" rolls are allowed on "+total_labels+" labels");
+                //             $(id).parents('.upload_row').find('.show_labels_per_roll').text(labelspersheets);
+                //             $(id).parents('.upload_row').find('.input_rolls').val(expectedrolls);
+                //             $(id).parents('.upload_row').find('.quantity_labels').text(expectedrolls);
+                //             update_remaing_labels();
+                //             return false;
+                //         } else {
+                //             if (total_labels < minlabels) {
+                //                 total_labels = minlabels;
+                //                 var _this = $(id).parents('.upload_row').find('.roll_labels_input');
+                //                 show_faded_popover(_this, "Quantity has been amended for production as " + total_labels + " Labels.");
+                //             } else {
+                //                 var _this = $(id).parents('.upload_row').find('.roll_labels_input');
+                //                 show_faded_popover(_this, "Quantity has been amended for production as 1 Roll.");
+                //             }
+                //             // alert_box("1 roll allowed on "+total_labels+" labels");
+                //             $(id).parents('.upload_row').find('.show_labels_per_roll').text(total_labels);
+                //             $(id).parents('.upload_row').find('.quantity_labels').text(1);
+                //             $(id).parents('.upload_row').find('.input_rolls').val(1);
+                //             $(id).parents('.upload_row').find('.roll_labels_input').val(total_labels);
+                //             update_remaing_labels();
+                //             return false;
+                //         }
+                //     }
+                // }
+
+                else if (perroll > labelspersheets) {
+                    var response = rolls_calculation(min_rolls, labelspersheets, total_labels, 0);
+
+                    //  var rolls = parseFloat(parseInt(perroll) / labelspersheets);
+                    // if (isFloat(rolls)) {
+                    //     rolls = Math.ceil(rolls);
+                    // }
+                    var perroll = labelspersheets;
+                    if (isFloat(perroll)) {
+                        perroll = Math.ceil(perroll);
+                    }
+
+                    var total_labels = parseFloat(parseInt(perroll) * rolls);
+                    if (isFloat(total_labels)) {
+                        total_labels = Math.ceil(total_labels);
+                    }
+
+                    // var total_labels = response['total_labels'];
+                    var expectedrolls = rolls;
+                    var labelspersheets = perroll;
+                    //var expectedrolls = parseFloat(total_labels/labelspersheets);
+                    //if(isFloat(expectedrolls)){  expectedrolls = Math.ceil(expectedrolls);}
+                    //total_labels = parseInt(labelspersheets*expectedrolls);
+                    var infotxt = 'Quantity has been amended for production as ' + labelspersheets + ' labels/roll and ' + total_labels + ' labels';
+                    show_faded_popover($(id).parents('.upload_row').find('.input_label_p_roll'), infotxt);
+                    //alert_box(total_labels+" labels are allowed on "+expectedrolls+" rolls");
+                    $(id).parents('.upload_row').find('.show_labels_per_roll').text(labelspersheets);
+                    $(id).parents('.upload_row').find('.input_label_p_roll').text(labelspersheets);
+                    $(id).parents('.upload_row').find('.input_label_p_roll').val(labelspersheets);
+                    $(id).parents('.upload_row').find('.roll_labels_input').val(total_labels);
+                    // $(id).parents('.upload_row').find('.input_rolls').val(expectedrolls);
+                    $(id).parents('.upload_row').find('.quantity_labels').text(expectedrolls);
+                    update_remaing_labels();
+                    return false;
+                    /*var requiredlabels = labelspersheets*rolls
+                        alert_box("Maximum "+requiredlabels+" labels are allowed on "+rolls+" "+roll_text);
+                        $(id).parents('.upload_row').find('.show_labels_per_roll').text(labelspersheets);
+                        $(id).parents('.upload_row').find('.roll_labels_input').val(requiredlabels);
+                        update_remaing_labels();
+                        return false;*/
+                } else {
+                    var rolls = parseInt(total_labels) / parseInt(perroll);
+                    if (isFloat(rolls)) {
+                        rolls = Math.ceil(rolls);
+                    }
+
+                    var total_labels = parseInt((perroll * rolls));
+                    var infotxt = 'Quantity has been amended for production as ' + perroll + ' labels/roll and ' + rolls + ' rolls';
+                    show_faded_popover($(id).parents('.upload_row').find('.input_label_p_roll'), infotxt);
+                    // var total_labels = parseInt(perroll) * parseInt(rolls);
+                    $(id).parents('.upload_row').find('.input_rolls').val(rolls);
+                    $(id).parents('.upload_row').find('.show_labels_per_roll').text(perroll);
+                    $(id).parents('.upload_row').find('.roll_labels_input').val(total_labels);
+                    update_remaing_labels();
+                }
+                $(id).parents('.upload_row').find('.quantity_updater').hide();
             }
-        } else if (perroll > labelspersheets) {
-            var response = rolls_calculation(min_rolls, labelspersheets, total_labels, 0);
-            var total_labels = response['total_labels'];
-            var expectedrolls = response['rolls'];
-            var labelspersheets = parseInt(total_labels / expectedrolls);
-            //var expectedrolls = parseFloat(total_labels/labelspersheets);
-            //if(isFloat(expectedrolls)){  expectedrolls = Math.ceil(expectedrolls);}
-            //total_labels = parseInt(labelspersheets*expectedrolls);
-            var infotxt = 'Quantity has been amended for production as ' + expectedrolls + ' rolls and ' + total_labels + ' labels';
-            show_faded_popover($(id).parents('.upload_row').find('.roll_labels_input'), infotxt);
-            //alert_box(total_labels+" labels are allowed on "+expectedrolls+" rolls");
-            $(id).parents('.upload_row').find('.show_labels_per_roll').text(labelspersheets);
-            $(id).parents('.upload_row').find('.roll_labels_input').val(total_labels);
-            $(id).parents('.upload_row').find('.input_rolls').val(expectedrolls);
-            $(id).parents('.upload_row').find('.quantity_labels').text(expectedrolls);
-            update_remaing_labels();
-            return false;
-            /*var requiredlabels = labelspersheets*rolls
-				alert_box("Maximum "+requiredlabels+" labels are allowed on "+rolls+" "+roll_text);
-				$(id).parents('.upload_row').find('.show_labels_per_roll').text(labelspersheets);
-				$(id).parents('.upload_row').find('.roll_labels_input').val(requiredlabels);
-				update_remaing_labels();
-				return false;*/
-        } else {
-            var total_labels = parseInt(perroll) * parseInt(rolls);
-            $(id).parents('.upload_row').find('.show_labels_per_roll').text(perroll);
-            $(id).parents('.upload_row').find('.roll_labels_input').val(total_labels);
-            update_remaing_labels();
+            //make calculation scenarios when user enter value in no of rolls field
+            //calculate on the basis of no of labels will same and calculate label/roll and no of rolls
+
+            else if (current_input_selected_element == "input_no_of_rolls") {
+
+                var perroll = parseFloat(total_labels / rolls);
+                if (isFloat(perroll)) {
+                    perroll = Math.ceil(perroll);
+                }
+                var roll_text = 'roll';
+                if (rolls > 1) {
+                    var roll_text = 'rolls';
+                }
+                if (!is_numeric(total_labels)) {
+                    //alert_box("Please enter number of labels ");
+                    var _this = $(id).parents('.upload_row').find('.roll_labels_input');
+                    show_faded_popover(_this, "Please enter number of labels.");
+                    $(id).parents('.upload_row').find('.roll_labels_input').val('');
+                    update_remaing_labels();
+                    return false;
+                } else if (total_labels == 0) {
+                    //alert_box("Minimum Label quantity is "+minlabels+" Labels per roll.");
+                    var _this = $(id).parents('.upload_row').find('.roll_labels_input');
+                    show_faded_popover(_this, "Minimum Label quantity is " + minlabels + " Labels per roll.");
+                    $(id).parents('.upload_row').find('.roll_labels_input').val('');
+                    update_remaing_labels();
+                    return false;
+                } else if (!is_numeric(rolls) || rolls == 0) {
+                    //alert_box("Minimum roll quantity is 1 roll.");
+                    var _this = $(id).parents('.upload_row').find('.input_rolls');
+                    show_faded_popover(_this, "Minimum roll quantity is 1 roll.");
+                    $(id).parents('.upload_row').find('.input_rolls').val('');
+                    update_remaing_labels();
+                    return false;
+                } else if (perroll > labelspersheets) {
+// alert("gfdfdg");
+                    var perroll = labelspersheets;
+                    if (isFloat(perroll)) {
+                        perroll = Math.ceil(perroll);
+                    }
+
+                    var rolls = parseFloat((total_labels) / perroll);
+                    if (isFloat(rolls)) {
+                        rolls = Math.ceil(rolls);
+                    }
+
+                    var perroll = parseFloat((total_labels) / rolls);
+                    if (isFloat(perroll)) {
+                        perroll = Math.ceil(perroll);
+                    }
+                    var total_labels = parseFloat(parseInt(perroll) * rolls);
+                    if (isFloat(total_labels)) {
+                        total_labels = Math.ceil(total_labels);
+                    }
+
+
+                    // var response = rolls_calculation(min_rolls, labelspersheets, total_labels, 0);
+                    var total_labels = total_labels;
+                    var expectedrolls = rolls;
+                    var labelspersheets = perroll;
+                    //var expectedrolls = parseFloat(total_labels/labelspersheets);
+                    //if(isFloat(expectedrolls)){  expectedrolls = Math.ceil(expectedrolls);}
+                    //total_labels = parseInt(labelspersheets*expectedrolls);
+                    var infotxt = 'Quantity has been amended for production as ' + expectedrolls + ' rolls and ' + labelspersheets + ' labels/roll';
+                    show_faded_popover($(id).parents('.upload_row').find('.input_rolls'), infotxt);
+                    //alert_box(total_labels+" labels are allowed on "+expectedrolls+" rolls");
+                    $(id).parents('.upload_row').find('.show_labels_per_roll').text(labelspersheets);
+                    $(id).parents('.upload_row').find('.input_label_p_roll').val(labelspersheets);
+                    $(id).parents('.upload_row').find('.roll_labels_input').val(total_labels);
+                    $(id).parents('.upload_row').find('.input_rolls').val(expectedrolls);
+                    $(id).parents('.upload_row').find('.quantity_labels').text(expectedrolls);
+                    update_remaing_labels();
+                    return false;
+                    /*var requiredlabels = labelspersheets*rolls
+                        alert_box("Maximum "+requiredlabels+" labels are allowed on "+rolls+" "+roll_text);
+                        $(id).parents('.upload_row').find('.show_labels_per_roll').text(labelspersheets);
+                        $(id).parents('.upload_row').find('.roll_labels_input').val(requiredlabels);
+                        update_remaing_labels();
+                        return false;*/
+                } else {
+                    var total_labels = parseInt(perroll) * parseInt(rolls);
+
+                    $(id).parents('.upload_row').find('.show_labels_per_roll').text(perroll);
+                    $(id).parents('.upload_row').find('.input_label_p_roll').val(perroll);
+                    $(id).parents('.upload_row').find('.roll_labels_input').val(total_labels);
+                    update_remaing_labels();
+                }
+                $(id).parents('.upload_row').find('.quantity_updater').hide();
+            }
+
+
         }
-        $(id).parents('.upload_row').find('.quantity_updater').hide();
+
+
     }
 
 
@@ -2881,6 +3922,8 @@
                 total_qty = parseInt(total_qty) + parseInt($(this).val());
             }
         });
+        // console.log("before qty 2");
+
         if (total_qty != 'NaN') {
             var prdid = $('#cartproductid').val();
             var labelspersheets = parseInt($('#labels_p_sheet' + prdid).val());
@@ -2892,10 +3935,13 @@
                 $('.remaing_user_sheets').html(reaming);
                 $('.remaing_user_labels').html(reaming * labelspersheets);
             }
+            // console.log(" qty 2");
+
             $('#upload_remaining_labels').val(reaming);
-            console.log('Actual: ' + actual_qty);
-            console.log('Remaing: ' + reaming);
+            // console.log('Actual: ' + actual_qty);
+            // console.log('Remaing: ' + reaming);
         }
+
     }
 
 
@@ -2914,6 +3960,7 @@
         var data = {per_roll: Math.ceil(per_roll), total_labels: Math.ceil(per_roll) * rolls, rolls: rolls};
         return data;
     }
+
     //already copied
     function show_faded_popover(_this, text) {
         $(_this).attr('data-content', '');
@@ -3171,11 +4218,14 @@
         }
 //get user selected element values
         var laminations_and_varnishes = [];
+        var laminations_and_varnishes_childs = [];
         var i = 0;
 
         $('.emb_option:checked').each(function () {
             //maintain user selected option array
-            laminations_and_varnishes[i++] = $(this).data('embellishment_parsed_title');
+            laminations_and_varnishes[i] = $(this).data('embellishment_parsed_title');
+            laminations_and_varnishes_childs[i] = $(this).data('embellishment_parsed_title_child');
+            i++;
         });
 
         $('#cart_summery_loader').show();
@@ -3193,6 +4243,8 @@
                 total_emb_plate_price: total_emb_plate_price,
                 press_proof: press_proof,
                 laminations_and_varnishes: laminations_and_varnishes,
+                laminations_and_varnishes_childs: laminations_and_varnishes_childs,
+                selected_already_plates_composite_array: selected_already_plates_composite_array,
                 upload_artwork_radio: upload_artwork_radio,
                 upload_artwork_option_radio: upload_artwork_option_radio,
                 lines_to_populate: lines_to_populate
@@ -3219,6 +4271,7 @@
     }
 
     var checkoutconfirm = false;
+
     function add_to_car_product() {
         var cartid = $('#cartid').val();
         var prdid = $('#cartproductid').val();
@@ -3270,9 +4323,6 @@
                 if (data.response == 'yes') {
                     ecommerce_add_to_cart();
                     checkoutconfirm = true;
-                    //alert('transactionregistration.php');
-                    //window.location.reload(true);
-                    //window.location.href = 'https://www.aalabels.com/transactionregistration.php';
                     window.location.href = '<?php echo SAURL ?>order_quotation/order/index';
                     $('#aa_loader').hide();
                 }
@@ -3314,11 +4364,16 @@
     var old_labels_input;
     var old_roll_labels_input;
     var old_roll_input;
+    var old_label_p_roll_input;
     $(document).on("focus", ".labels_input", function (e) {
         old_labels_input = $(this).val();
     });
     $(document).on("focus", ".roll_labels_input", function (e) {
         old_roll_labels_input = $(this).val();
+    });
+
+    $(document).on("focus", ".input_label_p_roll", function (e) {
+        old_label_p_roll_input = $(this).val();
     });
     $(document).on("focus", ".input_rolls", function (e) {
         old_roll_input = $(this).val();
@@ -3332,7 +4387,7 @@
         var rolls = $(this).parents('.upload_row').find('.input_rolls').val();
         if ($(this).val() != old_roll_labels_input && rolls.length > 0) {
             $(this).parents('.upload_row').find('.roll_updater').show();
-            $(this).parents('.upload_row').find('.quantity_updater').show();
+            $(this).parents('.upload_row').find('.no_of_labels_field').show();
         }
     });
     //my code to apply update functionality on label/roll
@@ -3347,7 +4402,7 @@
         var labels = $(this).parents('.upload_row').find('.roll_labels_input').val();
         if ($(this).val() != old_roll_input && labels.length > 0) {
             $(this).parents('.upload_row').find('.roll_updater').show();
-            $(this).parents('.upload_row').find('.quantity_updater').show();
+            $(this).parents('.upload_row').find('.no_of_rolls_field').show();
         }
     });
     $(document).on("click", ".roll_updater,.sheet_updater", function (event) {
@@ -3404,11 +4459,14 @@
         }
 //get user selected element values
         var laminations_and_varnishes = [];
+        var laminations_and_varnishes_childs = [];
         var i = 0;
 
         $('.emb_option:checked').each(function () {
             //maintain user selected option array
-            laminations_and_varnishes[i++] = $(this).data('embellishment_parsed_title');
+            laminations_and_varnishes[i] = $(this).data('embellishment_parsed_title');
+            laminations_and_varnishes_childs[i] = $(this).data('embellishment_parsed_title_child');
+            i++;
         });
 
         // console.log("before qty 3");
@@ -3439,6 +4497,8 @@
                 total_emb_plate_price: total_emb_plate_price,
                 press_proof: press_proof,
                 laminations_and_varnishes: laminations_and_varnishes,
+                laminations_and_varnishes_childs: laminations_and_varnishes_childs,
+                selected_already_plates_composite_array: selected_already_plates_composite_array,
                 upload_artwork_radio: upload_artwork_radio,
                 upload_artwork_option_radio: upload_artwork_option_radio,
                 lines_to_populate: lines_to_populate
@@ -3479,12 +4539,17 @@
         }
 //get user selected element values
         var laminations_and_varnishes = [];
+        var laminations_and_varnishes_childs = [];
         var i = 0;
 
         $('.emb_option:checked').each(function () {
             //maintain user selected option array
-            laminations_and_varnishes[i++] = $(this).data('embellishment_parsed_title');
+            laminations_and_varnishes[i] = $(this).data('embellishment_parsed_title');
+            laminations_and_varnishes_childs[i] = $(this).data('embellishment_parsed_title_child');
+            i++;
         });
+        $('#cart_summery_loader').show();
+
         $.ajax({
             url: mainUrl + 'ajax/material_update_printing_artworks_label_emb',
             type: "POST",
@@ -3500,6 +4565,8 @@
                 total_emb_plate_price: total_emb_plate_price,
                 press_proof: press_proof,
                 laminations_and_varnishes: laminations_and_varnishes,
+                laminations_and_varnishes_childs: laminations_and_varnishes_childs,
+                selected_already_plates_composite_array: selected_already_plates_composite_array,
                 upload_artwork_radio: upload_artwork_radio,
                 upload_artwork_option_radio: upload_artwork_option_radio,
                 lines_to_populate: lines_to_populate
@@ -3518,6 +4585,7 @@
 
                     }
                     $('#cart_summery_loader').hide();
+                    $('.upload_artwork_loader').hide();
 
                 }
             }
@@ -3568,17 +4636,17 @@
         } else if (upload_option == 'design_services' && typeof designservice == 'undefined') {
             alert_box("Please select no of design against design service");
             return false;
-        } else if (type == 'sheet' && uploaded_sheets < 25 && upload_option == 'upload_artwork') {
+        } else if (type == 'sheet' && uploaded_sheets < 25 && (upload_option == 'upload_artwork' || upload_option == 'email_artwork')) {
             var minqty = 25;
             if (cartunitqty == 'labels') {
                 var minqty = 25 * parseInt(labelpersheets);
             }
             alert_box("Minimum " + minqty + " " + cartunitqty + " required, please adjust remaining sheets in your artworks");
             return false;
-        } else if (actual_designs == remaing_designs && upload_option == 'upload_artwork') {
+        } else if (actual_designs == remaing_designs && (upload_option == 'upload_artwork' || upload_option == 'email_artwork')) {
             alert_box("Please upload your artworks before proceeding to checkout ");
             return false;
-        } else if ($('.uploadsavesection').css('display') == 'table-row' && upload_option == 'upload_artwork') {
+        } else if ($('.uploadsavesection').css('display') == 'table-row' && (upload_option == 'upload_artwork' || upload_option == 'email_artwork')) {
             swal({
                     title: 'Please complete  or delete the incomplete line.',
                     type: "warning",
@@ -3603,7 +4671,8 @@
             //alert_box("Please complete the file upload process to continue.");
             //return false;
         } else {
-            if (upload_option == 'email_artwork' || upload_option == 'design_services') {
+            // if (upload_option == 'email_artwork' || upload_option == 'design_services') {
+            if (upload_option == 'design_services') {
                 swal({
                         title: 'Do you want to continue without uploading artworks.?',
                         type: "warning",
@@ -3622,7 +4691,8 @@
                             add_to_car_product();
                         }
                     });
-            } else if ((remaing > 0 || remaing_designs > 0) && upload_option == 'upload_artwork') {
+                // } else if ((remaing > 0 || remaing_designs > 0) && upload_option == 'upload_artwork') {
+            } else if ((remaing > 0 || remaing_designs > 0) && (upload_option == 'upload_artwork' || upload_option == 'email_artwork')) {
                 if (remaing > 0) {
                     var text = msg_text;
                 } else {
@@ -3670,5 +4740,72 @@
             }
         }
     });
+
+
+    $(document).on("click", "#purchased_plate_cta", function (event) {
+        console.log(selected_already_plates);
+
+
+        //unselect already purchased plate of same base when user select another from laminations and varnish section(new plate)
+
+        //get user selected element values
+        $('.emb_option:checked').each(function () {
+            current_emb_id = $(this).data('embellishment_id');
+            current_emb_selection_id = $(this).data('embellishment_selection_id');
+            $('.already_plates:checked').each(function () {
+                history_selected_emb_id = $(this).data('embellishment_id');
+                history_emb_selection_id = $(this).data('embellishment_selection_id');
+                if(current_emb_id == history_selected_emb_id &&  current_emb_selection_id != history_emb_selection_id){
+                    $('#uncheck_purchased_plate' + history_emb_selection_id).attr('checked', false);
+                    var index = selected_already_plates.indexOf(history_emb_selection_id);
+                    if (index !== -1) selected_already_plates.splice(index, 1);
+
+                    //maintain composite array with order no to select purchased plate of exact order if user has same plate more then one in different order with different softproof.
+                    var index_composite = selected_already_plates_composite_array.indexOf(history_emb_selection_id);
+                    if (index !== -1) selected_already_plates_composite_array.splice(index_composite, 1);
+                    // console.log(selected_already_plates_composite_array);
+                }
+            });
+        });
+
+
+        var user_id = $('#user_id').val();
+        $('#purchased_plate_history_loader').show();
+        $('#purchased_plate_section').html('');
+
+        $.ajax({
+            url: mainUrl + 'ajax/purchased_plate_history',
+            type: "POST",
+            async: "false",
+            dataType: "html",
+            data: {
+                user_id: user_id,
+                selected_already_plates: selected_already_plates,
+
+                selected_already_plates_composite_array: selected_already_plates_composite_array
+
+            },
+            error: function (data) {
+                swal('Some error occured please try again');
+                $('#purchased_plate_history_loader').hide();
+
+            },
+            success: function (data) {
+
+                data = $.parseJSON(data);
+                if (data.response == 'yes') {
+                    $('#purchased_plate_section').html(data.content);
+
+                    $('#purchased_plate_history_loader').hide();
+
+                } else {
+                    swal('Plates Order History', data.message, 'error');
+                    $('#purchased_plate_history_loader').hide();
+
+                }
+            }
+        });
+    });
+
 
 </script>

@@ -14,6 +14,7 @@
 
 application/cache/
 application/logs/
+application/config/
 system/
 constant/
 fr/constant/
@@ -80,4 +81,6 @@ theme/site/dropzone/
 theme/site/fonts/
 theme/site/newsletter/
 theme/site/images/
+theme/assets/images/artworks/
 aa_returns/theme/returnimages/
+index.php

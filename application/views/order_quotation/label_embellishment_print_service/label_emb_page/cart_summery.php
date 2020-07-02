@@ -8,7 +8,6 @@
              style="width:139px; height:29px; " alt="AA Labels Loader">
     </div>
 </div>
-
 <!--<div class="col-md-3 col-xs-6">-->
 <div class="">
     <?php //echo"<pre>";print_r($details);
@@ -19,6 +18,7 @@
     $acutal_labels = $this->home_model->get_db_column('temporaryshoppingbasket', 'orignalQty', 'ID', $cartid);
     $acutal_sheets = $this->home_model->get_db_column('temporaryshoppingbasket', 'Quantity', 'ID', $cartid);
     $total_labels = 0;
+    $total_emb_and_plate_cost =  $prices['label_finish'] + $total_emb_plate_price;
 
     //    print_r($cartid);echo"<br>";
     //    print_r($cartid);
@@ -37,7 +37,7 @@
             $total_finish_emb_cost_and_plate_price= $total_emb_plate_price;
             $total_finish_emb_cost_and_plate_price += $prices['label_finish'];
 
-            $total_ex_vat += $total_finish_emb_cost_and_plate_price;
+//            $total_ex_vat += $total_finish_emb_cost_and_plate_price;
             ?>
         </div>
         <div class="padding-15 font-13x">
@@ -104,6 +104,63 @@
 
                         </strong></div>
                 </div>
+
+                <!--                Show each emb & finish cost saperately-->
+
+                <div class="row">
+
+                    <?php
+                    foreach ($prices['label_finish_individual_cost_array'] as $label_finish_individual_cost_array) { ?>
+                        <!--                     --><?php //echo"<pre>";print_r($label_finish_individual_cost_array)?>
+
+                        <!--                        echo ucwords("hello|world", "|");-->
+
+
+                        <div class="col-md-9"><?php echo  ucwords(str_replace('_',' ' ,$label_finish_individual_cost_array->finish_parsed_title) ); ?></div>
+                        <?php
+
+
+                        $label_finish_individual_cost= $label_finish_individual_cost_array->finish_price+$label_finish_individual_cost_array->plate_cost;
+                        $label_finish_individual_cost = number_format($label_finish_individual_cost, 2, '.', '');
+                        $total_ex_vat +=$label_finish_individual_cost;
+
+                        ?>
+                        <!--                    <div class="col-md-3 text-right"><span id="embellishment_plate_total_cost"> --><?php //echo symbol.$total_emb_and_plate_cost; ?><!-- </span></div>-->
+                        <div class="col-md-3 text-right"><span id=" "> <?php echo symbol.$label_finish_individual_cost; ?> </span></div>
+                    <?php    }
+                    ?>
+                </div>
+                <!--Block that shows already purchased plate prices if any start-->
+                <div class="row">
+
+                    <?php
+                    foreach ($minus_plate_cost as $minus_plate_cost_single) { ?>
+                        <!--                     --><?php //echo"<pre>";print_r($label_finish_individual_cost_array)?>
+
+                        <!--                        echo ucwords("hello|world", "|");-->
+
+
+                        <div class="col-md-9"><?php echo  ucwords(str_replace('_',' ' ,$minus_plate_cost_single->parsed_title) ); ?>(Existing Plate)</div>
+                        <?php
+
+
+
+                        $label_finish_individual_cost_minus = number_format($minus_plate_cost_single->plate_cost, 2, '.', '');
+//                        update total emb and plate price and substract already purchased price in it if any
+                        $total_emb_and_plate_cost -= $minus_plate_cost_single->plate_cost;
+                        $total_ex_vat -= $minus_plate_cost_single->plate_cost;
+
+
+                        ?>
+                        <!--                    <div class="col-md-3 text-right"><span id="embellishment_plate_total_cost"> --><?php //echo symbol.$total_emb_and_plate_cost; ?><!-- </span></div>-->
+                        <div class="col-md-3 text-right"><span id=" "> <?php echo symbol. '-'.$label_finish_individual_cost_minus; ?> </span></div>
+                    <?php    }
+                    ?>
+                </div>
+                <!--Block that shows already purchased plate prices if any end-->
+
+                <!--                Show each emb & finish cost saperately-->
+
                 <!-- below code is seperate display for both plate cost and emb and finishes prices-->
                 <!--            <div class="row">-->
                 <!--                <div class="col-md-9"><strong>Half Print Price Promotion test</strong></div>-->
@@ -118,18 +175,17 @@
                 <!--                <div class="col-md-9">Embellishment Plate Total Cost</div>-->
                 <!--                <div class="col-md-3 text-right"><span id="embellishment_plate_total_cost"> --><?php //echo symbol.$total_emb_plate_price; ?><!-- </span></div>-->
                 <!--            </div>-->
-
+                <?php /*
                 <div class="row">
                     <div class="col-md-9">Embellishment Total Cost</div>
                     <?php
-                    $total_emb_and_plate_cost =  $prices['label_finish'] + $total_emb_plate_price;
                     $total_emb_and_plate_cost = number_format($total_emb_and_plate_cost, 2, '.', '');
 
                     ?>
-                    <!--                    <div class="col-md-3 text-right"><span id="embellishment_plate_total_cost"> --><?php //echo symbol.$total_emb_and_plate_cost; ?><!-- </span></div>-->
+<!--                    <div class="col-md-3 text-right"><span id="embellishment_plate_total_cost"> --><?php //echo symbol.$total_emb_and_plate_cost; ?><!-- </span></div>-->
                     <div class="col-md-3 text-right"><span id=" "> <?php echo symbol.$total_emb_and_plate_cost; ?> </span></div>
                 </div>
-
+ */ ?>
                 <?php
                 if ($producttype == 'sheet' && $prices['designprice'] > 0 ){ ?>
                     <div class="row">

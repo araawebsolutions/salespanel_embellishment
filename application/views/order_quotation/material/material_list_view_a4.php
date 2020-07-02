@@ -14,6 +14,8 @@ foreach ($compatibility as $com) {
     $print_compatible_array[$com->print_method][$com->type] = $com->description;
 }
 
+/*echo '<pre>';
+print_r($materials); exit;*/
 
 foreach ($materials as $rec) {
     if (preg_match("/A3/", $rec->ProductBrand)) {
@@ -160,6 +162,7 @@ foreach ($materials as $rec) {
                 <input type="hidden" name="type" class="type" value="<?php echo $available_in_type;?>">
                 <input type="hidden" name="source" class="source" value="material_page">
                 <input type="hidden" name="available_in" class="available_in" value="<?php echo $available_in_type; ?>">
+                <input type="hidden" name="material" class="material" value="<?php echo $rec->ColourMaterial_upd;?>">
                 <input type="hidden" name="adhesive" class="adhesive" value="<?php echo $adhesive;?>">
                 <input type="hidden" name="color" class="color" value="<?php echo $rec->Material1;?>">
                 <?php
@@ -805,7 +808,7 @@ foreach ($materials as $rec) {
                 if(data)
                 {
                     //document.location = "<?php //echo base_url();?>//material-printed-labels/";
-                    document.location = "<?php echo base_url();?>new_print_service/";
+                    //document.location = "<?php echo base_url();?>new_print_service/";
                 }
                 $(_this).parents('.mainContainer').find('.aa_loader').hide();
             }

@@ -3922,8 +3922,13 @@ class order extends CI_Controller
     function new_print_service()
     {
         $data['main_content'] = 'order_quotation/label_embellishment_print_service/label_emb_page/main';
-        //$data['main_content'] = 'label_embellishment_Print_service/label_emb_page/main';
         $this->load->View('order_quotation/label_embellishment_print_service/page', $data);
+    }
+
+    function order_emb_details()
+    {
+        $data['main_content'] = 'order_quotation/order_emb_details/label_emb_page/main';
+        $this->load->View('order_quotation/order_emb_details/page', $data);
     }
 
     function print_service()
