@@ -186,6 +186,7 @@ foreach ($materials as $rec) {
         <input type="hidden" name="source" class="source" value="material_page">
         <input type="hidden" name="available_in" class="available_in" value="Roll">
         <input type="hidden" name="ColourMaterial_upd" class="ColourMaterial_upd" value="<?php echo $rec->ColourMaterial_upd;?>">
+        <input type="hidden" name="material" class="material" value="<?php echo $rec->ColourMaterial_upd;?>">
         <input type="hidden" name="adhesive" class="adhesive" value="<?php echo $adhesive;?>">
         <input type="hidden" name="color" class="color" value="<?php echo $rec->Material1;?>">
 

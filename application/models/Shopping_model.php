@@ -1107,6 +1107,7 @@ function show_quotation_basket(){
                     'design_service_charge'=>$c->design_service_charge,
                     'design_file'=>$c->design_file,
                     'FinishTypePrintedLabels' => $c->FinishTypePrintedLabels,
+                    'FinishTypePricePrintedLabels' => $c->FinishTypePricePrintedLabels,
                     'page_location'=>$c->page_location);
 				
 				if($c->regmark == "Y")
@@ -1114,7 +1115,153 @@ function show_quotation_basket(){
 					$A4Printing['regmark'] = "Y";
 				}
 				$data_ins = array_merge($data_ins, $A4Printing);
-			}
+//----------------------------purchased plates history algo Starts -------------------------------
+//                Algo overview
+//                purpose is to determine user-purchased plates from user selected finish and embellishment options according
+//                to shopping cart that is converting in order.
+//                Some Rules
+//               1:- if user choose embellishment plate from already purchased plates then it'll not update in customer's
+//                purchased plate section
+//               2:- if user choose embellishment option that requires plate/tool and its not present in his purchased plate
+//                history then it'll update in it's current purchased plates history column alongwith existing plates.
+//                3:- if user select plate from purchased history & also has new plate from embellishment option then existing plate will
+//                be ignored & new plate will be added in already purchased list of plates
+                //add finish plates in customer purchased history for fututre use these plates in order
+                $emb_option_values = json_decode($c->FinishTypePrintedLabels);
+                $use_old_plate = json_decode($c->use_old_plate);
+                $user_purchased_plates = $this->home_model->get_db_column("customers", "purchased_plate_history", "UserID", $userid);
+                if (empty($user_purchased_plates)) {
+                    $user_purchased_plates = array();
+                }
+//               get all emb options that required plates to proceed (have plate cost from label_embellishment table for matching)
+                $this->db->select('parsed_title');
+                $this->db->where('plate_cost !=', 0);
+                $embellishment_plate_parsed_title_all_db = $this->db->get('label_embellishment')->result_array();
+                //convert 2d array into 1d array
+                $embellishment_plate_parsed_title_all_db = array_column($embellishment_plate_parsed_title_all_db, 'parsed_title');
+                if (isset($emb_option_values) && !empty($emb_option_values)) {
+                    //determine those options that requires plate from user selected embellishment options and compare it to array of all available plates in system
+                    $new_plates = array_intersect($embellishment_plate_parsed_title_all_db, $emb_option_values);
+//                    if user selected some plate from already purchased history then remove this to prevent addition in user purchased plate history
+                    if (isset($new_plates) && !empty($new_plates)) {
+
+                        $attach_q = $this->db->query("select * from integrated_attachments 
+									WHERE ProductID LIKE '" . $c->ProductID . "' AND CartID LIKE '" . $c->ID . "' AND status LIKE 'confirm' LIMIT 15 ");
+                        $attach_q = $attach_q->result();
+                        $order_attach_file = '';
+                        $order_attach_name = '';
+                        if (isset($use_old_plate) && !empty($use_old_plate)) {
+                            $new_plates_merged = array_diff($new_plates, $use_old_plate);
+
+                            if (isset($new_plates_merged) && !empty($new_plates_merged)){
+
+                                foreach ($new_plates_merged as $purchased_plate) {
+                                    $loop_count =1;
+                                    if (count($attach_q) >0) {
+
+                                        foreach ($attach_q as $key => $attach) {
+                                            if ($loop_count == 1){
+
+                                                $new_plate_obj = new stdClass();
+                                                $new_plate_obj->order_number = $OrderNumber;
+                                                $new_plate_obj->purchased_plate = $purchased_plate;
+                                                $new_plate_obj->order_attach_file = $attach->file;
+                                                $new_plate_obj->order_attach_name = $attach->name;
+                                                $new_plates_final[] = $new_plate_obj;
+                                                $order_attach_file = $attach->file;
+                                                $order_attach_name = $attach->name;
+                                                unset($attach_q[$key]);
+                                                $loop_count++;
+                                            }
+                                        }
+                                    }else{
+                                        $new_plate_obj = new stdClass();
+                                        $new_plate_obj->order_number = $OrderNumber;
+                                        $new_plate_obj->purchased_plate = $purchased_plate;
+                                        $new_plate_obj->order_attach_file = $order_attach_file;
+                                        $new_plate_obj->order_attach_name = $order_attach_name;
+                                        $new_plates_final[] = $new_plate_obj;
+
+                                    }
+                                }
+                            }
+                        } else {
+                            $new_plates_merged = $new_plates;
+
+                            foreach ($new_plates_merged as $purchased_plate) {
+                                $loop_count =1;
+                                if (count($attach_q) >0){
+                                    foreach ($attach_q as $key=> $attach){
+                                        if ($loop_count == 1){
+
+
+                                            $new_plate_obj = new stdClass();
+                                            $new_plate_obj->order_number = $OrderNumber;
+                                            $new_plate_obj->purchased_plate = $purchased_plate;
+                                            $new_plate_obj->order_attach_file = $attach->file;
+                                            $new_plate_obj->order_attach_name = $attach->name;
+                                            $new_plates_final[] = $new_plate_obj;
+                                            $order_attach_file = $attach->file;
+                                            $order_attach_name = $attach->name;
+                                            unset($attach_q[$key]);
+                                            $loop_count++;
+                                        }
+                                    }
+                                }else{
+
+
+                                    $new_plate_obj = new stdClass();
+                                    $new_plate_obj->order_number = $OrderNumber;
+                                    $new_plate_obj->purchased_plate = $purchased_plate;
+                                    $new_plate_obj->order_attach_file = $order_attach_file;
+                                    $new_plate_obj->order_attach_name = $order_attach_name;
+                                    $new_plates_final[] = $new_plate_obj;
+                                }
+
+                            }
+//                            foreach ($new_plates_merged as $purchased_plate) {
+//                                $new_plate_obj = new stdClass();
+//                                $new_plate_obj->order_number = $OrderNumber;
+//                                $new_plate_obj->purchased_plate = $purchased_plate;
+//                                $new_plates_final[] = $new_plate_obj;
+//                            }
+                        }
+
+                        // if user has already 'purchased plates history' then update it & add new plates in it.
+//                 $plates_add_to_user_existing_plates = array_diff($new_plates_final, json_decode($user_purchased_plates));
+                        if (!empty(json_decode($user_purchased_plates))) {
+                            if (isset($new_plates_final) && !empty($new_plates_final)) {
+
+                                $user_purchased_plates_merged = array_merge(json_decode($user_purchased_plates), $new_plates_final);
+                            }else{
+                                $user_purchased_plates_merged = json_decode($user_purchased_plates);
+                            }
+
+                        } else {
+//                        if user does'nt have any plate then add plates in his purchased plate history
+                            $user_purchased_plates_merged = $new_plates_final;
+
+                        }
+
+                        $update_data = array();
+                        $update_data['purchased_plate_history'] = json_encode($user_purchased_plates_merged);
+                        $this->db->update('customers', $update_data, array('UserID' => $userid));
+                    }
+//                    print_r($new_plates);echo"gfdfgdfgfd";die;
+                }
+                //----------------------------purchased plates history Algo ends -------------------------------
+
+
+//                echo"<pre>";print_r(json_decode($user_purchased_plates));
+//                 print_r( ($emb_option_values));
+//                 var_dump( ($user_purchased_plates_merged));
+//                 print_r( ($use_old_plate));
+//                echo $userid;echo"<br>";
+//                echo $order_num;die;
+
+            }
+
+
             /******************Sample Order implementation***********************/
 
             $this->db->insert('orderdetails', $data_ins);
@@ -1123,6 +1270,7 @@ function show_quotation_basket(){
             
             if(preg_match('/Integrated Labels/is',$ProductBrand['ProductBrand']) || $c->Printing=='Y'){
                 if($c->OrderData=='Black' || $c->OrderData=='Printed' || $c->Printing=='Y'){
+
                     $query = $this->db->query("select count(*) as total from integrated_attachments WHERE ProductID LIKE '".$c->ProductID."' AND CartID LIKE '".$c->ID."' AND status LIKE 'confirm' ");
                     $query = $query->row_array();
                     if($query['total'] > 0 || $c->regmark == "Y"){
