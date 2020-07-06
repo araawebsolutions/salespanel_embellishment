@@ -269,7 +269,6 @@
                 <div id="product_content">
                 </div>
                 <!--               --><?php //include('printing_process_and_product.php') ?>
-                <!--               --><?php //include('printing_process.php') ?>
 
                 <!-- Label Finishes & Embellishments & Cart Summary Starts -->
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
@@ -298,6 +297,7 @@
             </div>
         </div>
         <!-- Sheets Superior Quality Starts -->
+
         <?php include('alternate_option.php') ?>
 
         <!-- Sheets Superior Quality End -->
@@ -393,7 +393,6 @@
 
 
 <!-- Popup For Artwork Upload & Artwork to follow End  -->
-
 
 
 <!-- JS For Label Embellishement Accordion Starts -->
