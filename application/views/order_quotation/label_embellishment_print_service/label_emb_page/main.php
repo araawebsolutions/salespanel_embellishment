@@ -1,5 +1,7 @@
 <link rel='stylesheet' href='<?= Assets ?>css/label_embellishment.css'>
 
+
+
 <!--<link rel='stylesheet' href='<?/*= Assets */?>css/main-unminify.css'>-->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
 <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.1.3/assets/owl.carousel.min.css'>
@@ -230,16 +232,6 @@
 </style>
 
 <?php $assets = 'https://www.aalabels.com/theme/site/'; ?>
-
-
-<?php
-if (isset($flag) and $flag = 'ediable') { ?>
-    <input type="hidden" id="selected_digital_process" name="selected_digital_process" value="<?=$orderDetails[0]->Print_Type?>">
-    <input type="hidden" id="selected_combination_base" name="selected_combination_base" value="<?=$orderDetails[0]->combination_base?>">
-<?php } ?>
-
-
-
 <div id="full_page_loader" class="white-screen"
      style="position: absolute;top: 30%;right: 0;width: 100%;z-index: 999;height: 110%;display: none;background: #FFF;opacity: 0.8;">
     <div class="text-center"
@@ -1298,18 +1290,13 @@ if (isset($flag) and $flag = 'ediable') { ?>
                     }
                 });
             });
+
         }
-
-
-
-
         if (selected.length > 1) {
             // console.log(parent_child_global);
             //combination array  with parent_id and title as key and its valid combination array as value according to
             // parent id and has valid combinations of every value against parent id
-
             $.each(combination_global, function (array_key_with_id_name, specific_comb_array) {
-
                 var specific_combination_id = array_key_with_id_name.split('_');
                 //get combination array of user selected element from arrays of all combinations in combination_global array
 
@@ -1584,26 +1571,57 @@ if (isset($flag) and $flag = 'ediable') { ?>
                     if (data.preferences.selected_size == null) {
                         return false;
                     }
-                   
+                    // $('.preferences').modal('show');
+
+                    //$(".gotoMaterialPage").attr("href", "../" + backtomaterial_ype + "/" + (preferences.shape).toLowerCase() + "/" + (preferences.selected_size).toLowerCase());
                     $(".gotoMaterialPage").attr("href", "../order_quotation/order/index");
-                   
+                    //window.location.href = '<?php echo SAURL ?>order_quotation/order/index';
                     contentbox.html(data.data.printing_process_content);
                     finish_content.html(data.data.finish_content);
                     cart_summery.html(data.data.cart_summery);
-                    
+                    // $('#label_coresize').html(data.data.roll_cores);
                     $("#brandName").text(preferences.available_in);
+                    // if (preferences.available_in == 'Roll') {
+                    //     $("#labels_qty").text(preferences.labels_roll);
+                    // } else {
+                    //     $("#labels_qty").text(preferences.labels_a4);
+                    // }
 
+                    // if(preferences.available_in == 'Roll'){
+                    //     $("#product_color").text(preferences.color_roll);
+                    // }else{
+                    //     $("#product_color").text(preferences.color_a4);
+                    // }
+                    // if(preferences.available_in == 'Roll'){
+                    //     $("#product_material").text(preferences.material_roll);
+                    // }else{
+                    //     $("#product_material").text(preferences.material_a4);
+                    // }
+                    // if(preferences.available_in == 'Roll'){
+                    //     $("#product_code").text(preferences.categorycode_roll);
+                    // }else{
+                    //     $("#product_code").text(preferences.categorycode_a4);
+                    // }
+                    //
+                    // $("#label_size").text(data.data.label_size);
+                    // $("#product_shape").text(preferences.shape);
+                    //
+                    // if(preferences.available_in == 'Roll'){
+                    //     $("#product_material_text").text(preferences.material_roll);
+                    // }else{
+                    //     $("#product_material_text").text(preferences.material_a4);
+                    // }
+                    // if(preferences.available_in == 'Roll'){
+                    //     $("#product_color_text").text(preferences.color_roll);
+                    // }else{
+                    //     $("#product_color_text").text(preferences.color_a4);
+                    // }
+                    // if(preferences.available_in == 'Roll'){
+                    //     $("#product_adhesive").text(preferences.adhesive_roll);
+                    // }else{
+                    //     $("#product_adhesive").text(preferences.adhesive_a4);
+                    // }
 
-
-                   // This is to show preselected label embellishment options
-                    <?php 
-                    if (isset($flag) && $flag = 'editable') {
-                        $lem_options = $orderDetails[0]->FinishTypePricePrintedLabels;
-                        ?>
-                        checkedSelectedLemOptions(<?=$lem_options?>);
-                    <?php } ?>
-                    // This is to show preselected label embellishment options
-                    
 
                     pre_load_apply_preferences(preferences);
 
@@ -1612,47 +1630,6 @@ if (isset($flag) and $flag = 'ediable') { ?>
                 }
             }
         });
-
-
-    }
-
-    function checkedSelectedLemOptions(lem_options){ // This is to show preselected label embellishment options
-
-        var selected_digital_process = $('#selected_digital_process').val();
-
-        $('.digital_process').each(function(i, obj){
-            var digital_process = $(this).parents().data("printing_process");
-
-            if (digital_process == 'Monochrome_Black_Only' && (selected_digital_process == 'Mono' || selected_digital_process == 'Monochrome – Black Only')) {
-                $(this).prop('checked', true);
-            } else if (digital_process == '4_Colour_Digital_Process' && (selected_digital_process == 'Fullcolour' || selected_digital_process == '4 Colour Digital Process')) {
-                $(this).prop('checked', true);
-            } else if (digital_process == '6_Colour_Digital_Process' && (selected_digital_process == 'Fullcolour' || selected_digital_process == '6 Colour Digital Process')) {
-                $(this).prop('checked', true);
-            } else if (digital_process == '6_Colour_Digital_Process_White' && (selected_digital_process == 'Fullcolour+white' || selected_digital_process == '6 Colour Digital Process + White')) {
-                $(this).prop('checked', true);
-            }
-        });
-
-       
-
-        $('.emb_option ').each(function (i, obj) {
-            var option_embellishment_id = $(this).data('embellishment_id');
-            var option_embellishment_selection_id = $(this).data('embellishment_selection_id');
-            var parsed_title = $(this).data('embellishment_parsed_title_child');
-            
-            $.each(lem_options, function( i, value ) {
-                var selected_parsed_title = value.finish_parsed_title;
-
-                if (selected_parsed_title == parsed_title) {
-                    $('#uncheck' + option_embellishment_selection_id).prop('checked', true);
-                }
-
-            }); 
-
-        }); 
-        combination_base = $('#selected_combination_base').val();  
-        
     }
 
 
@@ -1894,8 +1871,6 @@ if (isset($flag) and $flag = 'ediable') { ?>
 
         // selected_already_plates_composite_array.serializeArray()
         $('#cart_summery_loader').show();
-
-       
 
         $.ajax({
             url: mainUrl + 'ajax/material_continue_with_product_printed_labels',
@@ -2145,7 +2120,6 @@ if (isset($flag) and $flag = 'ediable') { ?>
         content += '    </label>';
         content += '<label class="  col-sm-2  "> <button data-seq-id="' + sequential_line_counter + '"   title="Delete Artwork" class="delete_sequential_line  btn btn-danger"> <i class="fa f-10 fa-trash "></i> </button></label> </div>';
         $('.add_line').append(content);
-
         ++sequential_line_counter;
 
         // $('#add_another_line').hide();
@@ -2153,6 +2127,7 @@ if (isset($flag) and $flag = 'ediable') { ?>
 
     $(document).on("click", ".delete_sequential_line", function (event) {
         var id = $(this).data('seq-id');
+
 
         swal({
                 title: "Are you sure you want to delete this line",
@@ -2204,9 +2179,7 @@ if (isset($flag) and $flag = 'ediable') { ?>
         $('.modal-body').css("height","88%");
 
     });
-
     $(document).on("keyup", "#user_entered_lines_qty", function (e) {
-
         var lines_to_enter = $('#user_entered_lines_qty').val();
         var upload_artwork_radio = $('.upload_artwork_radio:checked').val();
         var upload_artwork_option_radio = $('.upload_artwork_option_radio:checked').val();
