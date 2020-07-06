@@ -1633,13 +1633,20 @@
 
                                                                 <?php if ($permissions['qty'] == 1) { ?>
                                                                     <span>
-                          <button id="artworki_for_order<?= $key ?>"
+                            <button id="artworki_for_order<?= $key ?>"
                                   onclick="addToCart('<?= $detail->ManufactureID ?>','<?= $detail->SerialNumber ?>','<?= $detail->Printing ?>','<?= $detail->ProductID ?>','<?= $detail->OrderNumber ?>','<?= $product['ProductBrand'] ?>','order_detail_page',<?= $key ?>)"
                                   type="button"
                                   class="m-20 btn btn-secondarys btn-rounded waves-light waves-effect btn-upload-artwork"
                                   data-toggle="modal" data-target=".bs-example-modal-lga"> <i class="fa fa-cloud-upload"
                                                                                               aria-hidden="true"></i>&nbsp; View Artwork Spec </button>
-                          </span>
+                            </span>   
+                            
+
+                            <span style="margin-left: 10px;">
+
+                                <a id="edit_order_line" href="<?php echo main_url.'order_quotation/order/edit_order_line/'.$detail->OrderNumber.'/'.$detail->SerialNumber; ?>" class="m-20 btn btn-secondarys btn-rounded waves-light waves-effect btn-upload-artwork" >&nbsp; Edit Line Details </a>
+
+                            </span>
                                                                 <? }
                                                                 } ?>
                                                                 <input type="hidden" id="seril<?= $key ?>"
@@ -1992,7 +1999,6 @@
                                                         </tr>
                                                     <?php } ?>
 
-
                                                 <?php } ?>
                                             <?php } ?>
 
@@ -2030,38 +2036,39 @@
                                                     <td></td>
                                                 </tr>
                                             <? } ?>
+
                                             <?php if ($detail->Printing == 'Y' && $detail->regmark != 'Y') { ?>
                                                 <tr class="noneditable <?= $clr_class ?>">
                                                     <td class="text-center"></td>
                                                     <td><i class="mdi mdi-check"></i><span>
-                        <?php if ($detail->Print_Type == "Fullcolour") { ?>
-                            <?php $detail->Print_Type = "4 Colour Digital Process"; ?>
-                        <?php } ?>
+                                                        <?php if ($detail->Print_Type == "Fullcolour") { ?>
+                                                            <?php $detail->Print_Type = "4 Colour Digital Process"; ?>
+                                                        <?php } ?>
 
-                        <?php if ($detail->Print_Type == "Mono") { ?>
-                            <?php $detail->Print_Type = "Monochrome - Black Only"; ?>
-                        <?php } ?>
+                                                        <?php if ($detail->Print_Type == "Mono") { ?>
+                                                            <?php $detail->Print_Type = "Monochrome - Black Only"; ?>
+                                                        <?php } ?>
 
-                        <?= $detail->Print_Type ?>
-                        </span>
+                                                        <?= $detail->Print_Type ?>
+                                                        </span>
                                                         <?php if ($detail->Print_Qty > 0) { ?>
                                                             <i class="mdi mdi-check"></i> <span>
-                        <?= $detail->Print_Qty . '  Design' ?>
-                        </span>
+                                                            <?= $detail->Print_Qty . '  Design' ?>
+                                                            </span>
                                                         <?php } ?>
+
                                                         <?php if ($digitalCheck == 'roll') { ?>
                                                             <span class="invoice-bold"> <strong
                                                                         style="font-size:12px;;">Wound:</strong><?= $detail->Wound ?></span>
                                                             <span class="invoice-bold"><strong
                                                                         style="font-size:12px;;">Orientation:</strong>
-                        <?= $detail->Orientation ?>
-                        </span> 
-                        <?php if($detail->FinishType!=""){ ?>
-                        <span class="invoice-bold"><strong
-                                                                        style="font-size:12px;;">Finish :</strong>
-                        <?= $detail->FinishType ?>
-                        </span>
-                        <?php } ?>
+                                                            <?= $detail->Orientation ?>
+                                                            </span> 
+                                                            <?php if($detail->FinishType!=""){ ?>
+                                                            <span class="invoice-bold"><strong style="font-size:12px;;">Finish :</strong>
+                                                            <?= $detail->FinishType ?>
+                                                            </span>
+                                                            <?php } ?>
                                                         <?php } ?>
                                                     </td>
 
@@ -2106,6 +2113,91 @@
                                                     <td></td>
                                                 </tr>
                                                 <?php
+                                            }
+
+
+                                            //Labels Embelishment Conditions Start
+
+                                            if ($detail->Printing == 'Y' && $detail->FinishTypePricePrintedLabels != '') { 
+
+                                               
+                                                ?>
+
+                                                <tr>
+                                                    <td></td>
+                                                    <td colspan="5"><b> Finish </b></td>
+                                                    
+                                                </tr>
+
+                                                <?php 
+                                                $lem_options = json_decode($detail->FinishTypePricePrintedLabels);
+                                                $parent_title = '';
+                                               
+                                               /* echo count($lem_options)."------<br>";
+                                                echo "<pre>";
+                                                print_r($lem_options);
+                                                echo "</pre>";*/
+
+                                                $index = 0;
+                                                $parsed_child_title = '';
+                                                $parsed_title_price = 0;
+                                                foreach ($lem_options as $lem_option) {
+
+                                                    $parsed_title = ucwords(str_replace("_", " ", $lem_option->finish_parsed_title));
+                                                    $parsed_parent_title = $lem_option->parsed_parent_title;
+                                                    $use_old_plate = $lem_option->use_old_plate;
+                                                    
+                                                    ($use_old_plate == 1 ?  $plate_cost = 0 : $plate_cost = $lem_option->plate_cost);
+
+                                                    if ($parsed_parent_title == 'laminations_and_varnishes') { //For Lamination and varnish
+                                                        $parsed_child_title .= $parsed_title.", ";
+                                                        $parsed_title_price += $lem_option->finish_price; 
+
+
+                                                        if ($parsed_parent_title != $lem_options[$index+1]->parsed_parent_title || ($index+1) == count($lem_options)) {
+                                                            $parsed_parent_title = ucwords(str_replace("_", " ", $parsed_parent_title));
+                                                            ?>
+
+                                                            <tr>
+                                                                <td></td>
+                                                                <td><?= "<b>".$parsed_parent_title." : </b>".$parsed_child_title?></td>
+                                                                <td class="text-center"><?= $symbol." ".number_format((($parsed_title_price+$plate_cost) / $detail->labels) * $exchange_rate, 3, '.', '') ?></td>
+                                                                <td></td>
+                                                                <td class="text-center"><?= $symbol." ".number_format(($parsed_title_price * $exchange_rate), 2) ?></td>
+                                                                <td></td>
+                                                            </tr>
+
+                                                        <?php
+                                                        }
+
+                                                    } else if($parsed_parent_title != 'laminations_and_varnishes' && $parsed_parent_title != 'sequential_and_variable_data') { //For other than varnish and sequen
+                                                        $parsed_parent_title = ucwords(str_replace("_", " ", $parsed_parent_title)); 
+                                                        $parsed_child_title = $parsed_title;
+                                                        $parsed_title_price = $lem_option->finish_price+$plate_cost;
+                                                        ?>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td><?= "<b>".$parsed_parent_title." : </b>".$parsed_child_title?></td>
+                                                            <td class="text-center"><?= $symbol." ".number_format(($parsed_title_price / $detail->labels) * $exchange_rate, 3, '.', '') ?></td>
+                                                            <td></td>
+                                                            <td class="text-center"><?= $symbol." ".number_format(($parsed_title_price * $exchange_rate), 2) ?></td>
+                                                            <td></td>
+                                                        </tr>
+
+                                                    <?php } else { //For Sequential Data ?>
+
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>Sequential Variable Data</td>
+                                                            <td><?= $symbol." ".number_format(($sequential_price / $detail->labels) * $exchange_rate, 3, '.', '') ?></td>
+                                                            <td></td>
+                                                            <td><?= $symbol." ".number_format((sequential_price * $exchange_rate), 2) ?></td>
+                                                            <td></td>
+                                                        </tr>
+
+                                                   <?php  }
+                                                   $index++;
+                                                }
                                             }
                                         }
                                         $count++;
@@ -3164,7 +3256,6 @@
                 }
             }
         });
-
     }
 
     function makeZeroPrice(orderNumber) {

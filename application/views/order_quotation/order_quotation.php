@@ -21,10 +21,10 @@
     }
 
 .toolbar {
-float: right;
-margin-left: 1%;
-margin-top: -3px;
-display: inline-flex;
+  float: right;
+  margin-left: 1%;
+  margin-top: -3px;
+  display: inline-flex;
 }
 </style>
 

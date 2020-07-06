@@ -9453,6 +9453,15 @@ function unsave_checkout_data(){
         $data['embellishment_plate_price'] = $embellishment_plate_price;
 
         $session_id = $this->shopping_model->sessionid();
+
+
+        /*echo "<pre>";
+        print_r($this->session->all_userdata());
+        echo "</pre>";
+        die();*/
+
+
+
         if ($session_id != '') {
             $cartid = $this->home_model->get_db_column('temporaryshoppingbasket', 'id', 'SessionID', $session_id . '-PRJB');
             $data['cartid'] = $cartid;
@@ -9462,6 +9471,8 @@ function unsave_checkout_data(){
 
         /*echo '<pre>';
         print_r($preferences); exit;*/
+
+
         if (!empty($preferences)) {
 
 
@@ -9504,7 +9515,7 @@ function unsave_checkout_data(){
 //                $data['sheetdetails'] = $this->db->query($query)->row_array();
 //                $data['details'] = $this->db->query($query)->row_array();
 //                $data['sheetdetails'] = $this->db->query($query)->row_array();
-                $data['details'] = $dataProdu;
+                 $data['details'] = $dataProdu;
 
 //                echo"<pre>";print_r($data['rolldetails']);die;
                 /*echo '<pre>';

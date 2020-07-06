@@ -3966,9 +3966,27 @@ class order extends CI_Controller
         foreach ($shape_list as $shapee) {
             $shapes_plain[] = $shapee->Shapes;
         }
+
         $data['shapes_plain'] = $shapes_plain;
         $data['main_content'] = 'order_quotation/label_embellishment_print_service/material_print_service/index';
         $this->load->View('page', $data);
+    }
+
+    function edit_order_line($orderNumber, $serialNumber){
+        
+        $data['orderNumber'] = $orderNumber;
+        $data['serialNumber'] = $serialNumber;
+        $data['return_url'] = $_SERVER['HTTP_REFERER'];
+        $data['flag'] = 'editable';
+        $data['main_content'] = 'order_quotation/label_embellishment_print_service/label_emb_page/main';
+        $data['orderDetails'] = $this->orderModal->getOrderDetail($orderNumber);
+        
+        /*echo "<pre>";
+        print_r($data);
+        echo "</pre>";
+        die();*/
+            
+        $this->load->View('order_quotation/label_embellishment_print_service/page', $data);
     }
 
     /***************************************************/
