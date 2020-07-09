@@ -312,7 +312,9 @@ class quotationModal extends CI_Model
                 'design_service_charge'=>$cartdata->design_service_charge,
                 'design_file'=>$cartdata->design_file,
                 'regmark'=>$cartdata->regmark,
-                'sample'=>$cartdata->OrderData
+                'sample'=>$cartdata->OrderData,
+                'FinishTypePrintedLabels' => $cartdata->FinishTypePrintedLabels,
+                'FinishTypePricePrintedLabels' => $cartdata->FinishTypePricePrintedLabels
             );
 
 

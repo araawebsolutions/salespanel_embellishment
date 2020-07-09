@@ -1,5 +1,10 @@
 <?php //print_r($label_embellishments);die; ?>
-
+<style>
+    .sweet-alert {
+        left: 45% !important;
+        box-shadow: 0 0 20px;
+    }
+</style>
 
 <!-- Label Finishes & Embellishments & Cart Summary Starts -->
 
@@ -17,8 +22,8 @@
                                     foreach ($label_embellishments as $label_emb){
 
                                             ?>
-                                            <li><a href="#tab-<?= $count ?>"
-                                                   class="<?php if($count == 1){ echo "active";  }  ?>"><?= $label_emb['title']; ?></a></li>
+                                        <li><a href="#tab-<?= $count ?>" data-swal_msg=" <?php echo $count;?>"
+                                               class="tab-swal <?php if($count == 1){ echo "active";  }  ?>"><?= $label_emb['title']; ?></a></li>
 
 
 <!--                                    <li><a href="#tab-1" class="active">Laminations & Varnishes</a></li>-->
@@ -39,32 +44,30 @@
                             foreach ($label_embellishments as $label_emb){ ?>
                            <div id="tab-<?=$count;?>" class="<?php if($count == 1){ echo "active";  }  ?>">
                                <div class="row rowflex">
-                         <?php   foreach ($label_emb['child_options'] as $child_options){ ?>
+                                   <?php   foreach ($label_emb['child_options'] as $child_options){ ?>
 
-
-
-                                    <div class="col-1-5">
+                                       <div class="col-1-5">
                                                 <span>
                                                     <img onerror='imgError(this);' class="img-responsive" src="<?= Assets.$child_options['img'] ?>">
                                                 </span>
-                                        <label class="containerr left-no-margin"> <?= $child_options['title'] ?>
-                                            <?   if ($label_emb['parsed_title'] == 'laminations_and_varnishes') {
-                                            ?>
-                                            <input type="checkbox" data-combination_type="checkbox"  data-embellishment_id = "<?= $child_options['id'] ?>" data-embellishment_selection_id = "<?= $child_options['id'] ?>" id="uncheck<?= $child_options['id'] ?>" class="emb_option " data-embellishment_parsed_title_child="<?= $child_options['parsed_title']  ?>"  data-embellishment_parsed_title="<?= $child_options['parsed_title'] ?>"  data-embellishment_selected_title="<?= $child_options['title'] ?>"  name="label_embellishment['<?= $label_emb['parsed_title'] ?>'][]">
-                                                <?php
-                                            }else{ ?>
-                                            <input type="radio" data-combination_type="radio" data-embellishment_id = "<?= $label_emb['id'] ?>" data-embellishment_selection_id = "<?= $child_options['id'] ?>" id="uncheck<?= $child_options['id'] ?>" class="emb_option " data-embellishment_parsed_title_child="<?= $child_options['parsed_title']  ?>" data-embellishment_parsed_title="<?= $label_emb['parsed_title']  ?>"  data-embellishment_selected_title="<?= $child_options['title'] ?>"  name="label_embellishment['<?= $label_emb['parsed_title'] ?>'][]">
+                                           <label class="containerr left-no-margin"> <?= $child_options['title'] ?>
+                                               <?   if ($label_emb['parsed_title'] == 'laminations_and_varnishes') {
+                                                   ?>
+                                                   <input type="checkbox" data-combination_type="checkbox"  data-embellishment_id = "<?= $child_options['id'] ?>" data-embellishment_selection_id = "<?= $child_options['id'] ?>" id="uncheck<?= $child_options['id'] ?>" class="emb_option " data-embellishment_parsed_title_child="<?= $child_options['parsed_title']  ?>"  data-embellishment_parsed_title="<?= $child_options['parsed_title'] ?>"  data-embellishment_selected_title="<?= $child_options['title'] ?>"  name="label_embellishment['<?= $label_emb['parsed_title'] ?>'][]">
+                                                   <?php
+                                               }else{ ?>
+                                                   <input type="radio" data-combination_type="radio" data-embellishment_id = "<?= $label_emb['id'] ?>" data-embellishment_selection_id = "<?= $child_options['id'] ?>" id="uncheck<?= $child_options['id'] ?>" class="emb_option " data-embellishment_parsed_title_child="<?= $child_options['parsed_title']  ?>" data-embellishment_parsed_title="<?= $label_emb['parsed_title']  ?>"  data-embellishment_selected_title="<?= $child_options['title'] ?>"  name="label_embellishment['<?= $label_emb['parsed_title'] ?>'][]">
 
-                                            <?php     }
-                                            ?>
-                                            <span class="checkmark"></span>
+                                               <?php     }
+                                               ?>
+                                               <span class="checkmark"></span>
 
-                                        </label>
-                                    </div>
+                                           </label>
+                                       </div>
 
-                            <?php
+                                       <?php
 
-                            } ?>
+                                   } ?>
 
 
                                 </div>
@@ -302,9 +305,14 @@
                         </div>
 
 
-     <?php include('already_purchased_plates.php') ?>
+    <?php
 
-     <?php include('artwork_upload_section.php') ?>
+    //     echo"<pre>";print_r($details);
+
+
+    include('already_purchased_plates.php') ?>
+
+    <?php include('artwork_upload_section.php') ?>
 
 
 </div>
