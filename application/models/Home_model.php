@@ -9082,6 +9082,7 @@ class Home_model extends CI_Model
             $label_embellishment_table_row = $this->db->get('label_embellishment')->row_array();
 
             $label_finish_individual_cost = new stdClass();
+            $label_finish_individual_cost->parent_id = $label_finish_embellishment_parent_id;
             $label_finish_individual_cost->parsed_parent_title = $parsed_parent_title;
             $label_finish_individual_cost->finish_parsed_title = $finish_and_emb_val;
             $label_finish_individual_cost->finish_price = $label_finish;
@@ -9099,6 +9100,7 @@ class Home_model extends CI_Model
         $label_finish_total_all = number_format(($label_finish_total_all), 2, '.', '');
         return array('price' => $print_price,'label_finish' => $label_finish_total_all, 'desginprice' => $design_price, 'artworks' => $free_artwork,'label_finish_individual_cost_array'=>$label_finish_individual_cost_array);
     }
+
     function sheet_pricing_const_label_emb($label, $label_finsh_and_emb_main_id)
     {
         $qurey =  $this->db->where('label_finsh_and_emb_main_id',$label_finsh_and_emb_main_id)->get('sheet_label_finsh_and_emb_const')->result();
@@ -9513,6 +9515,388 @@ class Home_model extends CI_Model
 
         $result = $this->db->query($sql)->result();
         return  $result;    
+    }
+
+
+    // Label embellishment printed formula for premium quality
+    function calculate_printed_sheets_premium_label_embellishment($qty, $type, $design = NULL, $brand = NULL, $manufacture = NULL,$finish = array())
+    {
+//        print_r($brand);die;
+//        if (isset($brand) AND trim($brand) === 'A5 Labels') {
+//            $areaDifferenceSQM = 0.03267;
+//            $marginDifferenceCost = 0.223;
+//        }elseif(isset($brand) AND trim($brand) === 'A4 Labels'){
+//
+//        }
+
+        $qurey = $this->db->query("SELECT * FROM `print_price` ORDER BY Quantity ASC");
+        $result = $qurey->result();
+        $sheets = '';
+        $print_price = '';
+        foreach ($result as $key => $row) {
+            if ($qty <= 49) {
+                $sheets = $row->Quantity;
+                if ($type == 'Fullcolour') {
+                    $print_price = $row->Fullcolour;
+                } else {
+                    $print_price = $row->Mono;
+                }
+                $free_artwork = $row->Free;
+
+                break;
+            } else if ($qty == $row->Quantity) {
+                $sheets = $row->Quantity;
+                if ($type == 'Fullcolour') {
+                    $print_price = $row->Fullcolour;
+                } else {
+                    $print_price = $row->Mono;
+                }
+                $free_artwork = $row->Free;
+                break;
+            } else if (($qty > $row->Quantity and isset($result[$key + 1]->Quantity) and $qty < $result[$key + 1]->Quantity)) {
+                $sheets = $result[$key + 1]->Quantity;
+                if ($type == 'Fullcolour') {
+                    $print_price = $result[$key + 1]->Fullcolour;
+                } else {
+                    $print_price = $result[$key + 1]->Mono;
+                }
+                $free_artwork = $result[$key + 1]->Free;
+            } else if ($qty >= 40000) {
+                $sheets = $row->Quantity;
+                if ($type == 'Fullcolour') {
+                    $print_price = $row->Fullcolour;
+                } else {
+                    $print_price = $row->Mono;
+                }
+                $free_artwork = $row->Free;
+            }
+        }
+//
+//        $totalSQM = $areaDifferenceSQM * $qty;
+//        $marginCost = $totalSQM * $marginDifferenceCost;
+//        $marginCost = 0; //Bypass a5 price
+//        $print_price = ($qty * $print_price) - $marginCost;
+
+
+
+
+
+
+
+
+
+
+        $width = 0.297;
+        $height = 0.210;
+
+
+
+//        $across = $this->min_qty_roll($ManufactureID);
+
+
+        $sqr_meter = $width * $height;
+
+
+        //$total_sqr_meter	 = $total_sqr_meter/0.9;  // add 10% wasteage on actual sqr meter
+
+        $constants = $this->sheet_premium_pricing_const($qty);
+
+        $constants = json_decode(json_encode($constants), true);
+
+        $first_labels = $constants[0]['labels'];
+        $labour = $constants[0]['labour_mac'];
+        //$machine_hr_rate = $constants['machine_hr_rate'];
+        $margin = $constants[0]['margin'];
+
+        //$labels_per_frame 	= round((0.95/$height_sqr)*$across);
+
+        //$cmyk_cost_per_frame 		  = 0.0688;
+        //$cmyk_cost 	= ($cmyk_cost_per_frame/$labels_per_frame)*$Labels;
+
+        $second_labels = $qty - $first_labels;
+
+        $total_sqr_meter = $sqr_meter * $first_labels;
+
+        $cmyk_cost_per_label = $first_labels/3 * 0.0688;
+//        $cmyk_cost = $cmyk_cost_per_label * $total_sqr_meter;
+
+        //$print_cmyk_cost = $cmyk_cost+$labour+$machine_hr_rate;
+        $print_cmyk_cost = $cmyk_cost_per_label + $labour;
+//        print_r($print_cmyk_cost);die;
+
+        //$netsale  		 = $print_cmyk_cost/(100-$por)*100;
+        $netsale = ($print_cmyk_cost * $margin) + $print_cmyk_cost;
+//        print_r($netsale);die;
+
+        $netsale = number_format($netsale, 2, '.', '');
+
+        $total_netsale2 = 0;
+        if ($second_labels > 0) {
+
+            $labels2 = $constants[1]['labels'];
+            $labour2 = $constants[1]['labour_mac'];
+            $margin2 = $constants[1]['margin'];
+
+            $time2 = $constants[1]['time'];
+            $por2 = $constants[1]['por'];
+
+            $total_sqr_meter2 = $sqr_meter * $labels2;
+            //echo $sqr_meter.' * '.$labels2.' = '.$total_sqr_meter2.'<br>';
+//            $cmyk_cost2 = $cmyk_cost_per_label * $total_sqr_meter2;
+
+            //echo $cmyk_cost_per_label.' * '.$total_sqr_meter2.' = '.$cmyk_cost2.'<br>';
+//print_r($labels2);die;
+//            $print_cmyk_cost2 = $cmyk_cost2 + $labour2;
+            $cmyk_cost2 = $labels2/3 * 0.0688;
+//        $cmyk_cost = $cmyk_cost_per_label * $total_sqr_meter;
+
+            //$print_cmyk_cost = $cmyk_cost+$labour+$machine_hr_rate;
+            $print_cmyk_cost2 = $cmyk_cost2 + $labour2;
+            //echo $cmyk_cost2.' + '.$labour2.' = '.$print_cmyk_cost2.'<br>';
+
+            $netsale2 = ($print_cmyk_cost2 * $margin2) + $print_cmyk_cost2;
+//            $netsale2 = ($netsale2/$labels2) * $second_labels;
+            //echo '('.$print_cmyk_cost2.' * '.$margin2.')'.'+'.$print_cmyk_cost2.' = '.$netsale2.'<br>';
+            $netsale2 = number_format($netsale2, 2, '.', '');
+
+            $netsale2 = abs($netsale2 - $netsale);
+            $tlabels = $labels2 - $first_labels;
+
+            $total_netsale2 = $netsale2 / $tlabels;
+
+            $total_netsale2 = $total_netsale2 * $second_labels;
+
+
+        }
+
+
+        //echo 'BBBBB ===== '.$first_labels.' ================ '.$netsale.' ----------------------------- '.$second_labels.' ============== '.$netsale2.' =========== '.$total_netsale2;
+        $netsale = $netsale + $total_netsale2;
+//        print_r($type);die;
+        if ($type == 'Fullcolour+White') {
+            $netsale = (1.1) * $netsale;  // - Full Colour + White Increase 10%
+        }
+//        $netsale = number_format(($netsale * 2), 2, '.', '');  //Double the price for 50% promotion
+
+//        if (isset($manufacture) and $manufacture != '') {
+//            $labels = $this->home_model->get_db_column('products', 'LabelsPerSheet', 'ManufactureID', $manufacture);
+//            $condition = "   max_labels >= " . $labels . " AND  min_labels  <= " . $labels;
+//            $row = $this->db->query("SELECT percentage FROM `a4_printing_discounts` where   $condition LIMIT 1")->row_array();
+//            if (isset($row['percentage']) and $row['percentage'] > 0) {
+//                //$percentage = 1+($row['percentage']/100);
+//                //$print_price = $print_price*$percentage;
+//
+//                $percentage = (100 - $row['percentage']) / 100;
+//                $print_price = $print_price / $percentage;
+//            }
+//        }
+        $design_price = 0;
+
+        if (isset($design) and $design > $free_artwork) {
+            $design_price = ($design - $free_artwork) * 5;
+        }
+
+        /************* Prices Uplift by 6% Yearly ***********************************/
+//        $print_price = $this->check_price_uplift($print_price);
+//        $design_price = $this->check_price_uplift($design_price);
+        /**********************************    **************************************/
+
+        /********** 50% disocunt prices on printed A4 Labels ***********/
+//        if (preg_match("/A3 Label/is", $brand) || preg_match("/A5 Labels/is", $brand) || preg_match("/SRA3 Label/is", $brand) || preg_match("/A4 Labels/is", $brand)) {
+//            $print_price = $print_price / 2;
+//            //Bypass a5 price
+//            if (preg_match("/A5 Labels/is", $brand)) {
+//                $print_price = $print_price / 2;
+//            }
+//        }
+
+        /********** 50% disocunt prices on printed A4 Labels ***********/
+//        $print_price = number_format(($print_price), 2, '.', '');
+//        $design_price = number_format(($design_price), 2, '.', '');
+
+        /********** Add Finishes and Embellishments for sheets start***********/
+
+        $label_finish_total_all = 0;
+        $label_finish2_total_all = 0;
+        $label_finish_individual_cost_array = array();
+        foreach ($finish as $finish_and_emb_val){
+//            print_r($finish);die;
+            $label_finish = 0;
+//            $label_finish_embellishment_parent_id = $this->get_db_column("label_embellishment", "label_emb_parent_id", "parsed_title", $finish_and_emb_val);
+            $label_finish_embellishment_parent_id = $this->db->query("Select label_emb_parent_id from label_embellishment WHERE parsed_title = '$finish_and_emb_val' and  label_emb_parent_id != 0")->row_array();
+            $label_finish_embellishment_parent_id = $label_finish_embellishment_parent_id['label_emb_parent_id'];
+            if ($label_finish_embellishment_parent_id > 0) {
+                $parent_title = $this->get_db_column("label_embellishment", "parsed_title", "id", $label_finish_embellishment_parent_id);
+                $parsed_parent_title =  $parent_title;
+
+                if ($label_finish_embellishment_parent_id > 1) {
+                    $parsed_name = $parent_title;
+                    //print_r($parsed_name);
+                } else {
+                    $parsed_name = $finish_and_emb_val;
+                }
+            }
+//            print_r($finish_and_emb_val); echo "<br>";
+//            print_r($label_finish_embellishment_parent_id); echo "<br>";
+
+
+            $label_finish_embellishment_main_id = $this->get_db_column("label_finsh_and_emb_main", "id", "parsed_name", $parsed_name);
+//             $label_finish_embellishment_main_id = $this->get_db_column("label_finsh_and_emb_main", "id", "parsed_name", $finish_and_emb_val);
+//            $label_finish_embellishment_main_id = (int)$label_finish_embellishment_main_id;
+            $finish_and_emb_constants = $this->sheet_pricing_const_label_emb($qty,$label_finish_embellishment_main_id);
+
+            $finish_and_emb_labels1 = $finish_and_emb_constants[0]->labels;
+            $finish_and_emb_labour1 = $finish_and_emb_constants[0]->labour;
+            $finish_and_emb_cost1 = $finish_and_emb_constants[0]->finish_and_lamination_cost;
+            $finish_and_emb_time1 = $finish_and_emb_constants[0]->time;
+            $finish_and_emb_por1 = $finish_and_emb_constants[0]->por;
+
+
+            $second_labels_finish = $qty - $finish_and_emb_labels1;
+//                         print_r($second_labels_finish);die;
+
+            $width_sqr = 0.210;
+            $height_sqr = 0.297;
+            $sqr_meter = $width_sqr * $height_sqr;
+
+            $total_sqr_meter_finish = $sqr_meter * $finish_and_emb_labels1;
+//             print_r($total_sqr_meter_finish);die;
+
+            //1.04
+            //echo $sqr_meter .' ================== '.$total_sqr_meter;
+//            echo '<br>111111 ==== '.$finish_and_emb_por2;die;
+
+            $label_finish_cost = ($finish_and_emb_cost1 * $total_sqr_meter_finish);
+//             print_r($label_finish_cost);die;
+
+            //echo '<br>2222 ==== '.$label_finish_cost;
+
+            //echo '<br>33333 ==== '.$time;
+
+            $finish_labour = $finish_and_emb_time1 * $finish_and_emb_labour1;
+//             print_r($finish_labour);die;
+
+            //echo '<br>44444 ==== '.$finish_labour;
+
+            $finish_cost = $label_finish_cost + $finish_labour;
+//             print_r($finish_cost);die;
+
+            //echo '<br>5555 ==== '.$finish_cost;
+
+            $tpor = (100 - $finish_and_emb_por1) / 100;
+//             print_r($tpor);die;
+
+            $label_finish = $finish_cost / $tpor;
+//             print_r($label_finish);die;
+
+            $total_finish2 = 0;
+
+            //echo '<br>AAAAAAAA ==== '.$label_finish;
+
+            if ($second_labels_finish > 0) {
+                $finish_and_emb_labels2 = $finish_and_emb_constants[1]->labels;
+                $finish_and_emb_labour2 = $finish_and_emb_constants[1]->labour;
+                $finish_and_emb_cost2 = $finish_and_emb_constants[1]->finish_and_lamination_cost;
+                $finish_and_emb_time2 = $finish_and_emb_constants[1]->time;
+                $finish_and_emb_por2 = $finish_and_emb_constants[1]->por;
+
+                $total_sqr_meter2 = $sqr_meter * $finish_and_emb_labels2;
+//                echo '<br>AAAAAAAAAA.1 == '.$total_sqr_meter2; die;
+
+                $label_finish_cost2 = $total_sqr_meter2 * $finish_and_emb_cost2;
+
+//                 echo '<br>AAAAAAAAAA.1 == '.$label_finish_cost2;
+
+                $finish_labour2 = $finish_and_emb_time2 * $finish_and_emb_labour2;
+
+//                 echo '<br>AAAAAAAAAA.2 == '.$finish_labour2;
+
+                $finish_cost2 = $label_finish_cost2 + $finish_labour2;
+
+//                 echo '<br>AAAAAAAAAA.3 == '.$finish_cost2;
+
+                $tpor2 = (100 - $finish_and_emb_por2) / 100;
+
+                //echo '<br>AAAAAAAAAA.4 == '.$tpor2;
+
+                $label_finish2 = $finish_cost2 / $tpor2;
+
+//                 echo '<br>AAAAAAAAAA.5 == '.$label_finish2;
+
+                $label_finish2 = abs($label_finish2 - $label_finish);
+
+//                 echo '<br>AAAAAAAAAA.6 == '.$label_finish2;
+                $tlabels_finish = $finish_and_emb_labels2 - $finish_and_emb_labels1;
+
+                $total_finish2 = $label_finish2 / $tlabels_finish;
+
+//                 echo '<br>AAAAAAAAAA.7 == '.$total_finish2;
+
+                $total_finish2 = $total_finish2 * $second_labels_finish;
+
+//                echo '<br>AAAAAAAAAA.8 == '.$total_finish2;
+
+
+            }
+            //echo '<br>BBBBBBBBBBBBBB ==== '.$total_finish2;
+            $label_finish = $label_finish + $total_finish2;
+            $label_finish_total_all += $label_finish;
+
+            $this->db->where('parsed_title', $finish_and_emb_val);
+            $this->db->where('label_emb_parent_id !=', 0);
+            $label_embellishment_table_row = $this->db->get('label_embellishment')->row_array();
+
+            $label_finish_individual_cost = new stdClass();
+            $label_finish_individual_cost->parsed_parent_title = $parsed_parent_title;
+            $label_finish_individual_cost->parent_id = $label_finish_embellishment_parent_id;
+            $label_finish_individual_cost->finish_parsed_title = $finish_and_emb_val;
+            $label_finish_individual_cost->finish_price = $label_finish;
+            $label_finish_individual_cost->plate_cost = $label_embellishment_table_row['plate_cost'];
+            $label_finish_individual_cost_array[] = $label_finish_individual_cost;
+
+//            echo '<br>CCCCCCCCCCCCCCCC ==== '.$label_finish_total_all;
+
+            //if($label_finish < 10){$label_finish = 10;}
+//                       echo"<pre>"; print_r( $label_finish_individual_cost_array);echo"<br>";
+
+        }
+//print_r($netsale);die;
+        /********** Add Finishes and Embellishments for sheets end***********/
+        $label_finish_total_all = number_format(($label_finish_total_all), 2, '.', '');
+        return array('price' => $netsale,'label_finish' => $label_finish_total_all, 'desginprice' => $design_price, 'artworks' => $free_artwork,'label_finish_individual_cost_array'=>$label_finish_individual_cost_array);
+    }
+
+    function sheet_premium_pricing_const($label)
+    {
+        $qurey = $this->db->query(" SELECT * FROM `print_sheet_pricing_const` ORDER BY labels ASC ");
+        $result = $qurey->result();
+        $matched_row = array();
+
+        foreach ($result as $key => $row) {
+            if ($label == $row->labels) {
+                $matched_row[0] = $row;
+                //echo '111111';
+                break;
+            } else if (($label > $row->labels and isset($result[$key + 1]->labels) and $label < $result[$key + 1]->labels)) {
+                $matched_row[0] = $result[$key];
+                $matched_row[1] = $result[$key + 1];
+                //echo '22222';
+                break;
+            } else if (($label < $row->labels and isset($result[$key + 1]->labels) and $label < $result[$key + 1]->labels)) {
+                $matched_row[0] = $row;
+                //echo '33333';
+                break;
+            }
+        }
+        if (empty($matched_row)) {
+            if ($label > $result[$key]->labels) {
+                $matched_row[0] = $result[$key];
+                $matched_row[1] = $result[$key + 1];
+            } else {
+                $matched_row[0] = $result[0];
+            }
+        }
+        return $matched_row;
     }
 
         /***************************************************/

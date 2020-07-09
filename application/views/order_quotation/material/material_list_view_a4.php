@@ -808,7 +808,7 @@ foreach ($materials as $rec) {
                 if(data)
                 {
                     //document.location = "<?php //echo base_url();?>//material-printed-labels/";
-                    //document.location = "<?php echo base_url();?>new_print_service/";
+                    document.location = "<?php echo base_url();?>new_print_service/";
                 }
                 $(_this).parents('.mainContainer').find('.aa_loader').hide();
             }

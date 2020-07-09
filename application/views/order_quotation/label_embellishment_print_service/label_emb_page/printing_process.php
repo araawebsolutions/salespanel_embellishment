@@ -22,20 +22,16 @@
 </style>
 <div id="product_content">
 
-
     <?php
+    $assets = Assets;
 
-    /*echo '<pre>';
-    print_r($details);*/
 
     if (($preferences['available_in'] == "A4" || $preferences['available_in'] == "A3" || $preferences['available_in'] == "SRA3" || $preferences['available_in'] == "A5") and $preferences['categorycode_a4'] != '') {
         $product_details = $details;
         $product_details = $product_details[0];
         $product_type = 'sheet';
 
-
-
-        $label_size = str_replace("Label Size:", "", $product_details->specification3);
+        $label_size = str_replace("Label Size:", "", $product_details->specification3 );
         $label_size = ucwords($label_size);
         $label_size = str_replace("Mm", "mm", $label_size);
 
@@ -80,7 +76,9 @@
     $max_qty = $this->home_model->max_total_labels_on_rolls($product_details->LabelsPerSheet);
     $min_labels_per_roll = $this->home_model->min_labels_per_roll($min_qty); ?>
 
+        <!--        <input type="hidden" id="cartid" value="--><?//= $cartid ?><!--"/>-->
         <input type="hidden" id="cartproductid" value="<?= $product_details->ProductID ?>"/>
+
 
     <input type="hidden" id="labels_p_sheet<?= $product_details->ProductID ?>"
            value="<?= $product_details->LabelsPerSheet ?>"/>
@@ -123,13 +121,13 @@
                                 <?php if ($availabel_in == 'Roll') { ?>
                                     <?php foreach ($printing_process as $print_process) { ?>
 
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <?php if (preg_match("/Monochrome/i", $print_process->name)) { ?>
                                                 <span>
 
 
                                                     <img onerror='imgError(this);' class="img-responsive"
-                                                         src="<?= Assets ?>images/new-printed-labels/printing-process-black-thumbnail.jpg">
+                                                         src="<?= Assets ?>images/new-printed-labels/printing-process-black-thumbnail.jpg" style="height: 127px;">
 
                                             </span>
                                                 <label class="containerr" data-printing_process="Monochrome_Black_Only">Monochrome
@@ -138,34 +136,47 @@
                                                     <input type="radio" checked <?php if (($preferences['digital_proccess_roll']) == 'Monochrome_Black_Only') {
                                                         echo 'checked';
                                                     } else {
-                                                    } ?> class="digital_process" name="digital_printing_process">
+                                                    } ?> class="digital_process pre_select_for_white" name="digital_printing_process">
                                                     <span class="checkmark"></span>
                                                 </label>
-                                            <?php } elseif (preg_match("/ \+\ white/i", $print_process->name)) { ?>
+                                            <?php }elseif (preg_match("/Rich Black/i", $print_process->name)) { ?>
+                                                <span>
+                                                           <img onerror='imgError(this);' class="img-responsive"
+                                                                src="<?= Assets ?>images/new-printed-labels/rich-bl-thumbnail.jpg" style="height: 127px;">
+                                                          </span>
+                                                <label class="containerr"
+                                                       data-printing_process="Rich_Black">Rich Black
+                                                    <input type="radio" <?php if (($preferences['digital_proccess_roll']) == 'Rich_Black') {
+                                                        echo 'checked';
+                                                    } else {
+                                                    } ?> class="digital_process pre_select_for_white" name="digital_printing_process">
+                                                    <span class="checkmark"></span>
+                                                </label>
+                                            <? } elseif (preg_match("/ \+\ white/i", $print_process->name)) { ?>
                                                 <span>
                                                 <img onerror='imgError(this);' class="img-responsive"
                                                      src="<?= Assets ?>images/new-printed-labels/printing-process-white-thumbnail.jpg">
                                                     </span>
                                                 <label class="containerr"
                                                        data-printing_process="6_Colour_Digital_Process_White">Add White
-                                                    <input type="radio" <?php if ($preferences['digital_proccess_roll'] == '6_Colour_Digital_Process_White') {
+                                                    <input type="checkbox" <?php if ($preferences['digital_proccess_roll'] == '6_Colour_Digital_Process_White') {
                                                         echo 'checked';
                                                     } else {
-                                                    } ?> class="digital_process" name="digital_printing_process">
+                                                    } ?> class="digital_process digital_process_plus_white" data-add_white="add_white" name="digital_printing_process_add_white" >
                                                     <span class="checkmark"></span>
                                                 </label>
                                             <? } elseif (preg_match("/Colour Digital Process/i", $print_process->name)) { ?>
                                                 <span>
                                                            <img onerror='imgError(this);' class="img-responsive"
-                                                                src="<?= Assets ?>images/new-printed-labels/printing-process-full-color-thumbnail.jpg">
+                                                                src="<?= Assets ?>images/new-printed-labels/HP-pr-thumbnail.jpg" style="height: 127px;">
                                                           </span>
                                                 <label class="containerr"
                                                        data-printing_process="6_Colour_Digital_Process">6 Colour
-                                                    <br>Digital Process
+                                                    <br>HP Indigo
                                                     <input type="radio" <?php if (($preferences['digital_proccess_roll']) == '6_Colour_Digital_Process') {
                                                         echo 'checked';
                                                     } else {
-                                                    } ?> class="digital_process" name="digital_printing_process">
+                                                    } ?> class="digital_process pre_select_for_white" name="digital_printing_process">
                                                     <span class="checkmark"></span>
                                                 </label>
                                             <? } ?>
@@ -174,9 +185,7 @@
                                 <? }
 
                                 else{
-                                foreach ($printing_process
-
-                                as $print_process) { ?>
+                                foreach ($printing_process as $print_process) { ?>
 
 
                                 <?php if (preg_match("/Monochrome/i", $print_process->name)) { ?>
@@ -196,7 +205,20 @@
                                         } ?> class="digital_process" checked="checked" name="digital_printing_process">
                                         <span class="checkmark"></span>
                                     </label>
-                                    <?php }elseif (preg_match("/Colour Digital Process/i", $print_process->name)) { ?>
+                                    <?php }elseif (preg_match("/Rich Black/i", $print_process->name)) { ?>
+                                        <span>
+                                                           <img onerror='imgError(this);' class="img-responsive"
+                                                                src="<?= Assets ?>images/new-printed-labels/rich-bl-thumbnail.jpg" style="height: 127px;">
+                                                          </span>
+                                        <label class="containerr"
+                                               data-printing_process="Rich_Black">Rich Black
+                                            <input type="radio" <?php if (($preferences['digital_proccess_roll']) == 'Rich_Black') {
+                                                echo 'checked';
+                                            } else {
+                                            } ?> class="digital_process" name="digital_printing_process">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    <? }elseif (preg_match("/Colour Digital Process/i", $print_process->name)) { ?>
                                     <div class="col-md-4 col-md-offset-2">
                                                 <span>
                                                            <img onerror='imgError(this);' class="img-responsive"
@@ -386,133 +408,17 @@
                             </div>
                         </div>
                     <?php }
-//                    $assets = 'https://www.aalabels.com/theme/site/';
-                    $assets = Assets;
+                    //                    $assets = 'https://www.aalabels.com/theme/site/';
 
                     ?>
-                    <?php if ($availabel_in == 'Roll') { ?>
-
-                    <div class="mt-15 col-md-3 col-xs-6 rowflex matselector" id="roll_material_selection">
-                        <?php }else{ ?>
-                        <div class="mt-15 col-md-5 col-xs-6 rowflex matselector" id="a4_material_selection">
-                            <?php } ?>
-                            <div class="panel panel-default rowflexdiv">
-                                <div id="headingOne" class="panel-title_blue">
-                                    <div>Your Product(s) Detail</div>
-                                </div>
-                                <div class="row padding-20">
-                                    <?php if ($availabel_in == 'Roll') { ?>
-                                    <div class="col-md-5">
-                                        <?php }else{
-
-                                        if (preg_match("/a3/i", $availabel_in)) { ?>
-
-                                        <div class="col-md-5">
-                                            <?php }elseif (preg_match("/sra3/i", $availabel_in)) { ?>
-                                            <div class="col-md-5">
-
-                                                <?php }elseif (preg_match("/a5/i", $availabel_in)) { ?>
-                                                <div class="col-md-4">
-
-                                                    <?php } elseif (preg_match("/a4/i", $availabel_in)) { ?>
-                                                    <div class="col-md-3">
-
-                                                        <?php } ?>
-                                                        <?php } ?>
-                                                        <?php if (isset($product_details) and $product_details != '' && $product_type == "roll") {
-                                                            $image = explode('.', $product_details->CategoryImage);
-                                                            $img_chgr = $image[0];
-                                                            $imagename = $image[0];
-                                                            $imagecode = substr($product_details->ManufactureID, 0, -1);
-
-                                                            if (isset($preferences['coresize']) && !empty($preferences['coresize'] && !empty($preferences['wound_roll']))) {
-                                                                $core = substr($preferences['coresize'], -1, 1);
-                                                                $wound = strtolower($preferences['wound_roll']);
-                                                                $img_src = $assets . "images/categoryimages/RollLabels/" . $wound . "/" . $imagecode . $core . ".jpg";
-
-                                                            } else {
-                                                                $img_src = $assets . "images/categoryimages/RollLabels/outside/" . $imagecode . "4.jpg";
-
-                                                            }
-                                                            ?>
 
 
-                                                            <input type="hidden" id="product_code"
-                                                                   value="<?= $imagecode; ?>">
-                                                            <?php
-                                                            //$img_src = Assets."images/categoryimages/RollLabels/outside/".$product_details->ManufactureID.".jpg";
-
-                                                            if (!getimagesize($img_src)) {
-                                                                $img_src = $assets . "images/categoryimages/RollLabels/" . $imagename . ".jpg";
-                                                            }
-                                                            if (!getimagesize($img_src)) {
-                                                                $img_src = $assets . "images/categoryimages/roll_desc/" . $imagename . 'R4' . ".jpg";
-                                                            }
-                                                        } else {
-
-                                                            $img_src = $assets . "images/categoryimages/" . $availabel_in . "Sheets/colours/" . $preferences['productcode_a4'] . ".png";
-                                                        }
-
-                                                        ?>
-
-                                                        <img onerror='imgError(this);' src="<?= $img_src ?>"
-                                                             data-core="R1"
-                                                             data-imagename="<?= $imagename ?>"
-                                                             alt="AA Labels Printed Labels"
-                                                             id="wound_image" class="img-responsive">
-                                                        <div class="clear"></div>
 
 
-                                                        <!--                            <img onerror='imgError(this);' class="img-responsive"-->
-                                                        <!--                                 src="--><? //= Assets
-                                                        ?><!--images/new-printed-labels/sample-product-detail-image.jpg">-->
-                                                    </div>
-                                                    <?php if ($availabel_in == 'Roll') { ?>
-                                                    <div class="col-md-7 p-0">
-                                                        <?php }else{
 
 
-                                                        if (preg_match("/a3/i", $availabel_in)) { ?>
 
-                                                        <div class="col-md-7">
-                                                            <?php }elseif (preg_match("/sra3/i", $availabel_in)) { ?>
-                                                            <div class="col-md-7">
 
-                                                                <?php }elseif (preg_match("/a5/i", $availabel_in)) { ?>
-                                                                <div class="col-md-8">
-
-                                                                    <?php } elseif (preg_match("/a4/i", $availabel_in)) { ?>
-                                                                    <div class="col-md-9">
-
-                                                                        <?php } ?>
-
-                                                                        <?php } ?>
-                                                                        <span class="product-details-title"><span
-                                                                                    id="product_color"> <?php echo ($preferences['color_roll']) ? ($preferences['color_roll']) : ($preferences['color_a4']) ?></span> <span
-                                                                                    id="product_material"> </span><?php echo ($preferences['material_roll']) ? ($preferences['material_roll']) : ($preferences['material_a4']) ?> :</span><br>
-                                                                        <span class="product-details-description">Product Code: <span
-                                                                                    id="product_code"><?php echo ($preferences['categorycode_roll']) ? ($preferences['categorycode_roll']) : ($preferences['categorycode_a4']) ?></span>,<br>
-                                            Label Size (mm): <span id="label_size"><?php echo $label_size; ?> </span>,
-                                            <span id="product_shape"><?php echo $preferences['shape']; ?> </span>,
-                                            <span id="product_material_text"> <?php echo ($preferences['material_roll']) ? ($preferences['material_roll']) : ($preferences['material_a4']) ?></span>,
-                                            <span id="product_color_text"><?php echo ($preferences['color_roll']) ? ($preferences['color_roll']) : ($preferences['color_a4']) ?> </span>,
-                                        <span id="product_adhesive"><?php echo ($preferences['adhesive_roll']) ? ($preferences['adhesive_roll']) : ($preferences['adhesive_a4']) ?> </span> Adhesive.</span>
-
-                                                                        <!--                                        <span id="product_adhesive">-->
-                                                                        <?php //echo ($preferences['adhesive_roll']) ?   ($preferences['adhesive_roll']) :   ($preferences['adhesive_a4'])
-                                                                        ?><!-- </span> Adhesive.</span>-->
-                                                                        <!--                                        <span id="product_adhesive">-->
-                                                                        <?php //echo ($preferences['adhesive_roll']) ?   ($preferences['adhesive_roll']) :   ($preferences['adhesive_a4'])
-                                                                        ?><!-- </span> Adhesive.</span>-->
-                                                                        <!--                                        <span id="product_adhesive">-->
-                                                                        <?php //echo ($preferences['adhesive_roll']) ?   ($preferences['adhesive_roll']) :   ($preferences['adhesive_a4'])
-                                                                        ?><!-- </span> Adhesive.</span>-->
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
     </section>
 </div>
 <!-- Printing Process & Products Details End -->
-                                                   

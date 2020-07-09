@@ -1,16 +1,10 @@
 <link rel='stylesheet' href='<?= Assets ?>css/label_embellishment.css'>
-
-
-
-<!--<link rel='stylesheet' href='<?/*= Assets */?>css/main-unminify.css'>-->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.1.3/assets/owl.carousel.min.css'>
-
-
-<link rel='stylesheet' href='<?= Assets ?>css/11custom.css'>
 <script src="<?= Assets ?>labelfinder/js/jquery-ui.js"></script>
 
 <style>
+    /*.modal-body{*/
+    /*    height: auto !important;*/
+    /*}*/
     .sweet-alert {
         left: 35% !important;
         box-shadow: 0 0 20px;
@@ -89,146 +83,6 @@
     }
 
 
-
-
-    /********* LABEL EMBELLISHMENT SALESPANEL STYLING START *********/
-    .f12 {
-        font-size: 12px;
-        width: 210px;
-    }
-     .btn-block {
-         display: block;
-         width: 100%;
-     }
-
-     .btn {
-         display: inline-block;
-         margin-bottom: 0;
-         font-weight: 400;
-         text-align: center;
-         vertical-align: middle;
-         -ms-touch-action: manipulation;
-         touch-action: manipulation;
-         cursor: pointer;
-         border: 1px solid transparent;
-         white-space: nowrap;
-         padding: 6px 12px;
-         font-size: 14px;
-         line-height: 1.42857143;
-         border-radius: 4px;
-         -webkit-user-select: none;
-         -moz-user-select: none;
-         -ms-user-select: none;
-         user-select: none;
-     }
-    .blue2 {
-        border: #17b1e3 solid 1px!important;
-        background-color: transparent!important;
-        color: #17b1e3!important;
-    }
-    .blue2:hover {
-        border: #17b1e3 solid 1px !important;
-        background-color: #17b1e3 !important;
-        color: #fff !important;
-    }
-
-     .btn {
-         box-shadow: none;
-         padding: 8px 9px!important;
-     }
-
-     a {
-         background-color: transparent;
-         -webkit-text-decoration-skip: objects;
-     }
-
-     a {
-         color: #337ab7;
-         text-decoration: none;
-     }
-    .padding-20 {
-        padding: 20px;
-    }
-
-    .panel-default {
-        border-color: #ececec !important;
-    }
-
-     .margin-bottom {
-         margin-bottom: 0px !important;
-     }
-
-     .panel-default {
-         border-color: #ddd;
-     }
-
-     .panel {
-         margin-bottom: 20px;
-         background-color: #fff;
-         border: 1px solid transparent;
-         border-radius: 4px;
-         background: #FFF;
-         /* -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05); */
-         /* box-shadow: 0 1px 1px rgba(0,0,0,.05); */
-     }
-
-    .padding-15 {
-        padding: 15px !important;
-    }
-    .labels-form .button, .labels-form .checkbox, .labels-form .input, .labels-form .radio, .labels-form .select, .labels-form .textarea, .labels-form .toggle {
-        display: block;
-        position: relative;
-        font-weight: 400!important;
-    }
-    .labels-form label {
-        margin-bottom: 15px;
-    }
-
-    .labels-form * {
-        margin: 0;
-        padding: 0;
-    }
-
-    label {
-        display: inline-block;
-        max-width: 100%;
-        margin-bottom: 5px;
-    }
-
-
-
-
-
-
-    /*.modal-dialog {
-        width: 400px;
-    }
-    .modal-content {
-        width: 400px;
-    }*/
-
-    /*@media (min-width: 768px) {
-        .modal-content {
-            margin-left: -35px;
-        }
-        .modal-dialog {
-            width: 400px;
-        }
-        .modal-sm {
-            width: 300px;
-        }
-    }*/
-
-
-    .checkmark {
-        padding: 5px 0;
-    }
-
-
-
-    /********* LABEL EMBELLISHMENT SALESPANEL STYLING ENDS *********/
-
-
 </style>
 
 <?php $assets = 'https://www.aalabels.com/theme/site/'; ?>
@@ -253,7 +107,7 @@
     </div>
 </div>
 <div class="bgGray">
-    <div class="container" style="margin-top: 100px">
+    <div class="container">
         <!-- start -->
         <div class="row">
             <div class="bg-n-border-radius SpecialLabelContainer col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -274,11 +128,11 @@
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
                 <section>
                     <div class="row">
-                        <div id="finish_content" class="col-md-9 col-xs-12">
+                        <div id="finish_content">
                         </div>
                         <!--                        --><?php //include('label_finish_and_embellishment.php') ?>
 
-                        <div id="cart_summery" class="col-md-3 col-xs-6">
+                        <div id="cart_summery">
                         </div>
 
                         <!--                        --><?php //include('cart_summery.php') ?>
@@ -288,7 +142,8 @@
                     <div class="row padding-8">
                         <hr>
                         <div class="col-md-3 float-left no-padding">
-                            <a href="#" class="label-embellishment-cta"><i class="fa fa-chevron-left"></i> Back to
+                            <a href="#" class="label-embellishment-cta gotoMaterialPage"><i
+                                        class="fa fa-chevron-left"></i> Back to
                                 Material & Quantity</a>
                         </div>
                     </div>
@@ -297,9 +152,8 @@
             </div>
         </div>
         <!-- Sheets Superior Quality Starts -->
-        <div id="alternate_option">
-        </div>
-        <!--        --><?php //include('alternate_option.php') ?>
+
+        <?php include('alternate_option.php') ?>
 
         <!-- Sheets Superior Quality End -->
         <!-- end -->
@@ -591,7 +445,7 @@
                     // composite_array['already_used_plate_id'] = $(this).data('embellishment_selection_id') ;
 
                     var composite_obj = {already_used_plate_id:emb_selection_id, plate_order_no:plate_order_no_last};
-                    var lenght = selected_already_plates_composite_array.length;
+                       var lenght = selected_already_plates_composite_array.length;
                     selected_already_plates_composite_array[lenght] =  JSON.stringify(composite_obj) ;
 
 
@@ -634,14 +488,14 @@
 
                         $('#uncheck' + option_embellishment_selection_id).prop('checked', false);
                         $('#uncheck_purchased_plate' + option_embellishment_selection_id).prop('checked', false);
-                        selected_already_plates = [];
-                        selected_already_plates_composite_array = [];
+                         selected_already_plates = [];
+                         selected_already_plates_composite_array = [];
 
                         selected_already_plates.push(checked_id);
 
 
                         var composite_obj = {already_used_plate_id:checked_id, plate_order_no:plate_order_no_last};
-                        selected_already_plates_composite_array[0] =  JSON.stringify(composite_obj);
+                         selected_already_plates_composite_array[0] =  JSON.stringify(composite_obj);
 
                     }
 
@@ -684,8 +538,8 @@
                 });
                 //uncheck user option that is not selected from combination conflict modal
                 // when user selects same combination_base
-                $('#uncheck' + conflict_id_unchecked).prop('checked', false);
-                $('#uncheck_purchased_plate' + conflict_id_unchecked).prop('checked', false);
+                $('#uncheck' + conflict_id_unchecked).attr('checked', false);
+                $('#uncheck_purchased_plate' + conflict_id_unchecked).attr('checked', false);
                 //use to remove new selected value from global selected_already_plates array if user retain its selection from conflict combination modal
                 var index = selected_already_plates.indexOf(conflict_id_unchecked);
                 if (index !== -1) selected_already_plates.splice(index, 1);
@@ -697,12 +551,12 @@
                 // selected_already_plates = [];
                 selected_already_plates_composite_array = [];
                 $('.already_plates:checked').each(function () {
-                    var  id_uncheck =  $(this).data('embellishment_selection_id');
-                    //use t uncheck conflicted plate from purchased history modal if user has more then one plates of same type in different orders
-                    if(id_uncheck == conflict_id_unchecked){
-                        $(this).prop('checked', false);
+                  var  id_uncheck =  $(this).data('embellishment_selection_id');
+                  //use t uncheck conflicted plate from purchased history modal if user has more then one plates of same type in different orders
+                  if(id_uncheck == conflict_id_unchecked){
+                      $(this).attr('checked', false);
 
-                    }
+                  }
 
                     //maintain user selected option array
                     // selected[i++] = $(this).data('embellishment_selection_id')+'_plateHistory';
@@ -725,8 +579,8 @@
         $('#embellishment_plate_total_cost').html(total_emb_plate_price);
         //hide base change modal if showing
         $('.conflict_selection_remove_and_base_change_note').hide();
-        $('#uncheck' + conflict_id_unchecked).prop('checked', false);
-        $('#uncheck_purchased_plate' + conflict_id_unchecked).prop('checked', false);
+        $('#uncheck' + conflict_id_unchecked).attr('checked', false);
+        $('#uncheck_purchased_plate' + conflict_id_unchecked).attr('checked', false);
 
         // alert(checked_id);
         // alert(total_emb_plate_price);
@@ -756,8 +610,8 @@
     $(document).on("click", ".already_plates", function (e) {
 
         console.log(combination_base);
-        //use to get plate no  against order number in conflict pop up if user retain his previous selection (using at combination_conflict_modal function)
-        plate_order_no_last = $(this).data('plate_order_no');
+          //use to get plate no  against order number in conflict pop up if user retain his previous selection (using at combination_conflict_modal function)
+          plate_order_no_last = $(this).data('plate_order_no');
         var user_selected_id = $(this).data('embellishment_id');
         var user_selected_title = $(this).data('embellishment_selected_title');
         var user_selected_embellishment_actual_id = $(this).data('embellishment_selection_id');
@@ -766,64 +620,64 @@
 
         //will execute when select already purchased plate
         if (!$("#uncheck" + user_selected_embellishment_actual_id).is(":checked")) {
-            // alert("uncheck id if");
-            $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
+                alert("uncheck id if");
+                $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
             //will execute when base already selected from main embellishment & finishes and then select same base and same element from select already purchased plate
 
         }else{
             if (user_selected_id == 2 || user_selected_id == 3 || user_selected_id == 4 || user_selected_id == 5) {
-                // alert("base=2");
-                // alert(plate_order_no_last);
-                // alert($("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).data('plate_order_no'));
+                alert("base=2");
+                alert(plate_order_no_last);
+               alert($("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).data('plate_order_no'));
                 if ($("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).is(":checked") ) {
                     if ($("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).data('plate_order_no') == plate_order_no_last){
-                        // alert("above if");
+                        alert("above if");
 
                         $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
-                        $('#uncheck' + user_selected_embellishment_actual_id).prop('checked', false);
-                        $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).prop('checked', false);
+                        $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', false);
+                        $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', false);
                     }else{
-                        // alert("above else");
+                        alert("above else");
 
                         $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
-                        $('#uncheck' + user_selected_embellishment_actual_id).prop('checked', true);
-                        $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).prop('checked', true);
+                        $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', true);
+                        $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', true);
                     }
 
-                    // $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).prop('checked', true);
+                    // $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', true);
 
                 }else{
                     if ($("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).data('plate_order_no') == plate_order_no_last){
                         $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
-                        $('#uncheck' + user_selected_embellishment_actual_id).prop('checked', false);
-                        $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).prop('checked', false);
+                        $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', false);
+                        $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', false);
                     }else{
                         $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
-                        $('#uncheck' + user_selected_embellishment_actual_id).prop('checked', true);
-                        $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).prop('checked', true);
+                        $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', true);
+                        $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', true);
                     }
-                    // alert("gfdgfd");
+                    alert("gfdgfd");
                     // $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
-                    // $('#uncheck' + user_selected_embellishment_actual_id).prop('checked', false);
-                    // $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).prop('checked', false);
-                    // $('#uncheck' + user_selected_embellishment_actual_id).prop('checked', false);
-                    // $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).prop('checked', false);
-                }
+                    // $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', false);
+                    // $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', false);
+                    // $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', false);
+                    // $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', false);
+                } 
             }else{
                 if ($("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).is(":checked")) {
-                    // alert("above2");
+                    alert("above2");
                     // $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
-                    $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).prop('checked', true);
+                    $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', true);
                 }else{
-                    // alert("gfdgfd2");
+                    alert("gfdgfd2");
                     $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
-                    $('#uncheck' + user_selected_embellishment_actual_id).prop('checked', false);
-                    $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).prop('checked', false);
-                    // $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).prop('checked', true);
+                    $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', false);
+                    $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', false);
+                    // $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', true);
 
                 }
             }
-
+               
 
 
         }
@@ -833,30 +687,30 @@
         // } else if(!$("#uncheck" + user_selected_embellishment_actual_id).is(":checked") && $("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).is(":checked")) {
         //
         //     $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
-        //     $('#uncheck' + user_selected_embellishment_actual_id).prop('checked', false);
-        //     $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).prop('checked', false);
+        //     $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', false);
+        //     $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', false);
         // }else if ($("#uncheck" + user_selected_embellishment_actual_id).is(":checked") && $("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).is(":checked")) {
         //
-        //     $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).prop('checked', true);
+        //     $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', true);
         //
         // }
 
         //     if (!$("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).is(":checked")) {
         //
         //         $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
-        //         // $('#uncheck' + user_selected_embellishment_actual_id).prop('checked', false);
-        //         $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).prop('checked', true);
+        //         // $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', false);
+        //         $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', true);
         //     } else {
         //         if (!$("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).is(":checked")) {
         //             $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
-        //             $('#uncheck' + user_selected_embellishment_actual_id).prop('checked', false);
-        //             $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).prop('checked', false);
+        //             $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', false);
+        //             $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', false);
         //         } else {
         //             alert("2");
         //
         //             // $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
-        //             // $('#uncheck' + user_selected_embellishment_actual_id).prop('checked', false);
-        //             $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).prop('checked', true);
+        //             // $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', false);
+        //             $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', true);
         //         }
         //
         //     }
@@ -882,19 +736,19 @@
         //     if (!$("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).is(":checked")){
         //
         //         $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
-        //         // $('#uncheck' + user_selected_embellishment_actual_id).prop('checked', false);
-        //         $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).prop('checked', true);
+        //         // $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', false);
+        //         $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', true);
         //     }else{
         //         if (!$("#uncheck_purchased_plate" + user_selected_embellishment_actual_id).is(":checked")) {
         //             $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
-        //             $('#uncheck' + user_selected_embellishment_actual_id).prop('checked', false);
-        //             $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).prop('checked', false);
+        //             $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', false);
+        //             $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', false);
         //         }else{
         //             alert("2");
         //
         //             // $('#uncheck' + user_selected_embellishment_actual_id).trigger('click');
-        //             // $('#uncheck' + user_selected_embellishment_actual_id).prop('checked', false);
-        //             $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).prop('checked', true);
+        //             // $('#uncheck' + user_selected_embellishment_actual_id).attr('checked', false);
+        //             $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', true);
         //         }
         //
         //     }
@@ -911,7 +765,7 @@
         // as all options/childs under it have same base id according to each parent and all these are radio
         // so can be check just one option at a time from respected parent decesendent child options
         if (combination_base == 2 || combination_base == 3 || combination_base == 4 || combination_base == 5) {
-
+ 
             var emb_selection_id = $("#uncheck" + user_selected_embellishment_actual_id);
             var emb_id = $(emb_selection_id).data('embellishment_id');
 
@@ -920,13 +774,13 @@
 
                 // if( $("#uncheck" + user_selected_embellishment_actual_id).is(":checked")){
 
-                //     $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).prop('checked', true);
+                //     $('#uncheck_purchased_plate' + user_selected_embellishment_actual_id).attr('checked', true);
                 //     selected_already_plates.push(user_selected_embellishment_actual_id);
                 //
                 //
                 // }else
-                if (!$("#uncheck" + user_selected_embellishment_actual_id).is(":checked") && user_selected_embellishment_actual_id != '') {
-                    // alert("inside if");
+                    if (!$("#uncheck" + user_selected_embellishment_actual_id).is(":checked") && user_selected_embellishment_actual_id != '') {
+                    alert("inside if");
 
                     var conflict_selection_remove_and_base_change_note = '';
                     var conflict_modl_msg_container = '';
@@ -951,9 +805,9 @@
                     $('#conflict_modl_msg_container').html(conflict_modl_msg_container);
                     $('#base_conflict_footer').html(conflict_data_footer);
                     // add trigger event to click modal <a> to show modal
-                    if (!$('.emb_modal').hasClass('in')){
-                        $('.emb_modal').trigger("click");
-                    }
+                        if (!$('.emb_modal').hasClass('in')){
+                            $('.emb_modal').trigger("click");
+                        }
                     // $('.emb_modal').trigger("click");
 
                 }
@@ -1291,7 +1145,7 @@
 
         }
         if (selected.length > 1) {
-            // console.log(parent_child_global);
+             // console.log(parent_child_global);
             //combination array  with parent_id and title as key and its valid combination array as value according to
             // parent id and has valid combinations of every value against parent id
             $.each(combination_global, function (array_key_with_id_name, specific_comb_array) {
@@ -1506,6 +1360,7 @@
         check_prefs();
         $('.dm-selector').find('.dropdown-menu').find("[data-toggle=tooltip-orintation]").tooltip('destroy');
         $('.dm-selector').find('.dropdown-menu').find("[data-toggle=tooltip-orintation]").tooltip();
+
     });
 
     var preferences_global = "";
@@ -1523,7 +1378,7 @@
 
 
         $.ajax({
-            url: mainUrl + 'ajax/material_load_preferences',
+            url: base + 'ajax/material_load_preferences',
             type: "POST",
             async: "false",
             dataType: "html",
@@ -1571,9 +1426,8 @@
                     }
                     // $('.preferences').modal('show');
 
-                    //$(".gotoMaterialPage").attr("href", "../" + backtomaterial_ype + "/" + (preferences.shape).toLowerCase() + "/" + (preferences.selected_size).toLowerCase());
-                    $(".gotoMaterialPage").attr("href", "../order_quotation/order/index");
-                    //window.location.href = '<?php echo SAURL ?>order_quotation/order/index';
+                    $(".gotoMaterialPage").attr("href", "../" + backtomaterial_ype + "/" + (preferences.shape).toLowerCase() + "/" + (preferences.selected_size).toLowerCase());
+
                     contentbox.html(data.data.printing_process_content);
                     finish_content.html(data.data.finish_content);
                     cart_summery.html(data.data.cart_summery);
@@ -1582,21 +1436,8 @@
 
 
                     pre_load_apply_preferences(preferences);
-                    $('#standerd_inner_section_options').hide();
-                    $('#premium_inner_section_options').hide();
                     $('#premium_inner_section_description').hide();
                     $('.printing_process_selection_inner_container').hide();
-
-                    //disable click on page load on emb option tabs
-                    if (preferences.available_in != "Roll"){
-                        $('#tab-1').css('pointer-events','none');
-                        $('#tab-2').css('pointer-events','none');
-                        $('#tab-3').css('pointer-events','none');
-                        $('#tab-4').css('pointer-events','none');
-                        $('#purchased_plate_cta').css('pointer-events','none');
-
-                    }
-
 
 
                 } else {
@@ -1639,11 +1480,11 @@
                     }
                 } else {
                     if (data.wound_roll == 'Inside') {
-                        $('.roll_sheets_block').find('.dropdown-toggle').html('Orientation 05 <i class="fa fa-unsorted"></i>');
-                        $('#label_orientation').val("orientation5");
-                    } else {
                         $('.roll_sheets_block').find('.dropdown-toggle').html('Orientation 01 <i class="fa fa-unsorted"></i>');
-                        $('#label_orientation').val('orientation1');
+                        $('#label_orientation').val("orientation1");
+                    } else {
+                        $('.roll_sheets_block').find('.dropdown-toggle').html('Orientation 05 <i class="fa fa-unsorted"></i>');
+                        $('#label_orientation').val('orientation5');
                     }
 
                 }
@@ -1671,7 +1512,6 @@
 
     }
 
-    //use to disable finishes & laminations section and show error msg in case of sheet 'standerd selection' or empty digital process
     $(document).on("change", "#woundoption,#label_coresize", function (e) {
         var woundoption = $('#woundoption').val();
         var coreid = $('#label_coresize').val();
@@ -1791,7 +1631,6 @@
             i++;
         });
 
-
         var qty = allPreferences.labels_a4;
         if (type == 'roll') {
 
@@ -1805,11 +1644,9 @@
             var orientation = $('#label_orientation').val();
             var qty = allPreferences.labels_roll;
         }else{
-            var sheet_product_quality =  $('.sheet_inner_section_radio:checked').data('product_quality_selection_inner');
-
+          var sheet_product_quality =  $('.sheet_inner_section_radio:checked').data('product_quality_selection_inner');
         }
-        var digital_process_plus_white =  $('.digital_process_plus_white:checked').data('add_white');
-
+        // alert(sheet_product_quality);
 
         // var printing = $('#digital_printing_process' + id).val();
         var printing = $(".digital_process:checked").parents().data("printing_process");
@@ -1837,7 +1674,7 @@
                 history_selected_emb_id = $(this).data('embellishment_id');
                 history_emb_selection_id = $(this).data('embellishment_selection_id');
                 if(current_emb_id == history_selected_emb_id &&  current_emb_selection_id != history_emb_selection_id){
-                    $('#uncheck_purchased_plate' + history_emb_selection_id).prop('checked', false);
+                     $('#uncheck_purchased_plate' + history_emb_selection_id).attr('checked', false);
 
 
                     var index = selected_already_plates.indexOf(history_emb_selection_id);
@@ -1858,16 +1695,15 @@
             });
         });
 
-        // selected_already_plates_composite_array.serializeArray()
+         // selected_already_plates_composite_array.serializeArray()
         $('#cart_summery_loader').show();
 
         $.ajax({
-            url: mainUrl + 'ajax/material_continue_with_product_printed_labels',
+            url: base + 'ajax/material_continue_with_product_printed_labels',
             type: "POST",
             async: "false",
             dataType: "html",
             data: {
-                digital_process_plus_white: digital_process_plus_white,
                 sheet_product_quality: sheet_product_quality,
                 qty: qty,
                 menuid: menuid,
@@ -1906,8 +1742,6 @@
                         // $('#Printing_Step_4').find('.show_selected_product').html(data.content);
                         $('#cart_summery').html(data.data.content);
                         artwork_upload_view.html(data.data.artwork_upload_view);
-                        $('#alternate_option').html(data.data.alternate_option);
-
                         // $('#Printing_Step_2').find('#product_summary_overview_home').html(data.content_home);
 
                         $("[data-toggle=tooltip-orintation_popup]").tooltip('destroy');
@@ -1985,7 +1819,7 @@
         // var digital_printing_process = $('#label_orientation').val();
         $('#finish_process_loader').show();
         $.ajax({
-            url: mainUrl + 'ajax/update_embellishment_printing_options',
+            url: base + 'ajax/update_embellishment_printing_options',
             type: "POST",
             data: {
                 container: container,
@@ -2173,7 +2007,7 @@
             $('.artwork_inner_col').removeClass('col-md-6');
             $('.artwork_inner_col').addClass('col-md-3');
             product_type = 'sheet';
-        }else{
+        } else {
             product_type = 'roll';
         }
         $('.modal-body').css("height", "88%");
@@ -2255,7 +2089,7 @@
                 if (isConfirm) {
                     // update_cart_with_upload();
                     // if (upload_artwork_radio !== $(this).val() || upload_artwork_option_radio !==  $(this).val()){
-                    //     $(this).prop('checked','checked');
+                    //     $(this).attr('checked','checked');
                     upload_artwork_radio = $('input[name=upload_artwork_2]:checked').val();
                     upload_artwork_option_radio = $('input[name=upload_artwork_option_2]:checked').val();
                     // alert(upload_artwork_radio+'-'+upload_artwork_option_radio);
@@ -2264,7 +2098,7 @@
                     // }
                     return;
 
-                }else{
+                } else {
 
                     // $("input[name=background][value='some value']").prop("checked",true);
                     $("input[value='" + upload_artwork_radio + "']").prop("checked", true);
@@ -2279,176 +2113,177 @@
     var upload_artwork_radio = '';
     var upload_artwork_option_radio = '';
     var lines_to_populate = '';
-    /*$(document).on("click", "#proceed_artwork_btn", function (e) {
-// setup and run this function to clear artworks if user switch to other option after artwork upload option workflow
-        // if (upload_option !== 'upload_artwork') {
-        //     clear_uploaded_artworks();
-        // }
-        cartid = $('#cartid').val();
+    //     $(document).on("click", "#proceed_artwork_btn", function (e) {
+    // // setup and run this function to clear artworks if user switch to other option after artwork upload option workflow
+    //         // if (upload_option !== 'upload_artwork') {
+    //         //     clear_uploaded_artworks();
+    //         // }
+    //         cartid = $('#cartid').val();
+    //
+    //         //set height for inner moal to auto for full height with upload options
+    //         $('.modal-body').css("height","auto");
+    //
+    //         var lines_to_enter = $('#user_entered_lines_qty').val();
+    //           upload_artwork_radio = $('.upload_artwork_radio:checked').val();
+    //           upload_artwork_option_radio = $('.upload_artwork_option_radio:checked').val();
+    //         // $('#upload_artwork_table').empty();
+    //         var content = '';
+    //         if (product_type == 'roll'){
+    //
+    //             if (lines_to_enter && lines_to_enter > 0 && upload_artwork_radio && upload_artwork_radio !== 'undefined'
+    //                 && upload_artwork_radio !== '' && upload_artwork_option_radio && upload_artwork_option_radio !== 'undefined'
+    //                 && upload_artwork_option_radio !== '') {
+    //
+    //                 proceed_next_screen = 1;
+    //             }
+    //         }else{
+    //
+    //             if (lines_to_enter && lines_to_enter > 0 && upload_artwork_radio && upload_artwork_radio !== 'undefined'
+    //                 && upload_artwork_radio !== '' ) {
+    //
+    //                 proceed_next_screen = 1;
+    //             }
+    //
+    //         }
+    //         if (upload_artwork_radio !== "upload_artwork_now") {
+    //             $('.upload_artwork_loader').show();
+    //                  clear_uploaded_artworks();
+    //
+    //         }
+    //             //check radio on previous selection on proceed click to next modal
+    //         $('.artwork_option_inner').each(function (i, obj) {
+    //
+    //              if (upload_artwork_radio == $(this).val() || upload_artwork_option_radio ==  $(this).val()){
+    //                 $(this).attr('checked','checked');
+    //             }
+    //
+    //         });
+    //         //proceed to next (inner) modal if all checks fulfilled otherwise show error
+    //         if (proceed_next_screen == 1) {
+    //             $('#artworkuploadpopup').hide( );
+    //             $('#artwork-upload-popup').trigger('click');
+    //
+    //             if (lines_to_enter && lines_to_enter <= 50) {
+    //
+    //                 $('.upload_artwork').show();
+    //
+    //                 content += '<table class="table table-striped ">';
+    //                 content += ' <thead class="">';
+    //                 content += ' <tr>';
+    //                 content += ' <td align="center">No. of Designs</td>';
+    //                 if (upload_artwork_radio == "upload_artwork_now"){
+    //                     content += ' <td align="center">Artworks</td>';
+    //
+    //                 }
+    //                 content += '   <td align="center">Design Name</td>';
+    //                 content += ' <td align="center">No. Labels</td>';
+    //                 if (upload_artwork_option_radio == "custom_roll_and_label" && product_type == "roll"){
+    //                     content += '   <td align="center">Labels Per Roll</td>';
+    //                     content += '  <td align="center">No. Rolls</td>';
+    //
+    //                 }
+    //
+    //                 content += '    <td align="center">Action</td>';
+    //                 if ( product_type == "roll") {
+    //
+    //                     content += '     <td align="center">Additional Cost</td>';
+    //                 }
+    //                 content += '  </tr>';
+    //                 content += '   </thead>';
+    //                 content += '  <tbody>';
+    //
+    //                 for (var i = 1; i <= lines_to_enter; i++) {
+    //                     content += '  <tr class="upload_row uploadsavesection">';
+    //                     content += '   <td class="text-center" width="12.5%">6</td>';
+    //                     if (upload_artwork_radio == "upload_artwork_now"){
+    //
+    //                         content += ' <td width="12.5%" class="text-center">';
+    //                         content += '<img onerror="imgError(this);" width="20" class="img-circle preview_po_img preview_po_img_selected'+i+'"  data-artwork_id = "'+i+'" style="display:none;" title="Click here to remove this file" id="   " src="http://localhost/newlabels/theme/site/images/place-holder.jpg" height="0">';
+    //                         content += '   <input type="file" name="artwork_file" data-artwork-id="'+i+'" class="artwork_file  selected_artwork'+i+'" style="display:none;">';
+    //                         content += ' <button class=" btn btn-primary browse_btn browse_btn_selected'+i+'"> <i class="fa fa-cloud-upload"></i> Browse File</button></td>';
+    //
+    //                     }
+    //                     content += '  <td width="12.5%">';
+    //                     content += '   <input class="form-control artwork_name" placeholder="Artwork Name" type="text">';
+    //                     content += '  </td>';
+    //                     content += '   <td width="12.5%">';
+    //                     content += '   <input class="form-control roll_labels_input allownumeric" placeholder="Enter Labels" type="text">';
+    //                     content += '  </td>';
+    //                     if (upload_artwork_option_radio == "custom_roll_and_label" && product_type == "roll"){
+    //                         content += '  <td width="12.5%">';
+    //                         content += '  <input class="form-control artwork_name" placeholder="Enter LPR" type="text">';
+    //                         content += '  </td>';
+    //
+    //                         content += ' <td width="12.5%" align="center">';
+    //                         content += '  <input class="form-control artwork_name" placeholder="Enter No. of Rolls" type="text">';
+    //                         content += ' </td>';
+    //
+    //                     }
+    //                     content += '  <td width="12.5%" align="center">';
+    //                     content += '  <button data-value="roll" class=" btn btn-success save_artwork_file">';
+    //                     content += '  <i class="fa fa-save"></i> Save';
+    //                     content += '  </button>';
+    //                     content += '    </td>';
+    //                     if ( product_type == "roll") {
+    //
+    //                         content += '   <td width="12.5%" align="center">';
+    //                         content += '   </td>';
+    //                     }
+    //                     content += '    </tr>';
+    //
+    //                 }
+    //
+    //                 content += '   <tr>';
+    //                 content += '   <td colspan="6" class="text-left" style="vertical-align:middle;"> You have <b class="remaing_user_sheets">100 </b> labels remaining</td>';
+    //                 content += ' <td colspan="2" style="vertical-align:middle;" class="text-center" align="center">';
+    //                 content += '    1 Design , 150 Labels on 5 Rolls';
+    //                 content += ' </td>';
+    //                 content += ' </tr>';
+    //                 content += ' <tr style="background:none;">';
+    //                 content += '    <td colspan="8">';
+    //                 content += '   <p>In order to upload your artwork you must complete the line e.g. File name and the number of labels required. Upon which the file will be uploaded.</p>';
+    //                 content += '  </td>';
+    //                 content += '  </tr>';
+    //
+    //                 content += ' </tbody>';
+    //                 $("#proceed_artwork_btn").attr("data-target", "#artworkuploadpopup1");
+    //
+    //             } else {
+    //                 $("#proceed_artwork_btn").removeAttr("data-target");
+    //
+    //                 swal({
+    //                         title: "Maximum limit exceeded",
+    //                         text: "Would You Like To Amend It To 50?",
+    //                         type: "warning",
+    //                         showCancelButton: true,
+    //                         confirmButtonClass: "btn orangeBg",
+    //                         confirmButtonText: "Yes",
+    //                         cancelButtonClass: "btn blueBg m-r-10",
+    //                         cancelButtonText: "Cancel",
+    //                         closeOnConfirm: true,
+    //                         closeOnCancel: true
+    //                     },
+    //                     function (isConfirm) {
+    //                         if (isConfirm) {
+    //                             $('#user_entered_lines_qty').val('50');
+    //                             $("#proceed_artwork_btn").attr("data-target", "#artworkuploadpopup1");
+    //                             // $('#seq-line' + id).remove();
+    //                             return;
+    //
+    //                         }
+    //                     });
+    //             }
+    //         }else{
+    //             $("#proceed_artwork_btn").removeAttr("data-target");
+    //             swal("Something Missing", "Please Select Above Options To Continue", "error");
+    //
+    //         }
+    //
+    //         //$('#upload_artwork_table').append(content);
+    //         // alert(lines_to_enter);
+    //
+    //     });
 
-        //set height for inner modal to auto for full height with upload options
-        $('.modal-body').css("height","auto");
-
-        var lines_to_enter = $('#user_entered_lines_qty').val();
-        upload_artwork_radio = $('.upload_artwork_radio:checked').val();
-        upload_artwork_option_radio = $('.upload_artwork_option_radio:checked').val();
-        // $('#upload_artwork_table').empty();
-        var content = '';
-        if (product_type == 'roll'){
-
-            if (lines_to_enter && lines_to_enter > 0 && upload_artwork_radio && upload_artwork_radio !== 'undefined'
-                && upload_artwork_radio !== '' && upload_artwork_option_radio && upload_artwork_option_radio !== 'undefined'
-                && upload_artwork_option_radio !== '') {
-
-                proceed_next_screen = 1;
-            }
-        }else{
-
-            if (lines_to_enter && lines_to_enter > 0 && upload_artwork_radio && upload_artwork_radio !== 'undefined'
-                && upload_artwork_radio !== '' ) {
-
-                proceed_next_screen = 1;
-            }
-
-        }
-        if (upload_artwork_radio !== "upload_artwork_now") {
-            $('.upload_artwork_loader').show();
-            clear_uploaded_artworks();
-
-        }
-        //check radio on previous selection on proceed click to next modal
-        $('.artwork_option_inner').each(function (i, obj) {
-
-            if (upload_artwork_radio == $(this).val() || upload_artwork_option_radio ==  $(this).val()){
-                $(this).prop('checked','checked');
-            }
-
-        });
-        //proceed to next (inner) modal if all checks fulfilled otherwise show error
-        if (proceed_next_screen == 1) {
-            $('#artworkuploadpopup').hide( );
-            $('#artwork-upload-popup').trigger('click');
-
-            if (lines_to_enter && lines_to_enter <= 50) {
-
-                $('.upload_artwork').show();
-
-                content += '<table class="table table-striped ">';
-                content += ' <thead class="">';
-                content += ' <tr>';
-                content += ' <td align="center">No. of Designs</td>';
-                if (upload_artwork_radio == "upload_artwork_now"){
-                    content += ' <td align="center">Artworks</td>';
-
-                }
-                content += '   <td align="center">Design Name</td>';
-                content += ' <td align="center">No. Labels</td>';
-                if (upload_artwork_option_radio == "custom_roll_and_label" && product_type == "roll"){
-                    content += '   <td align="center">Labels Per Roll</td>';
-                    content += '  <td align="center">No. Rolls</td>';
-
-                }
-
-                content += '    <td align="center">Action</td>';
-                if ( product_type == "roll") {
-
-                    content += '     <td align="center">Additional Cost</td>';
-                }
-                content += '  </tr>';
-                content += '   </thead>';
-                content += '  <tbody>';
-
-                for (var i = 1; i <= lines_to_enter; i++) {
-                    content += '  <tr class="upload_row uploadsavesection">';
-                    content += '   <td class="text-center" width="12.5%">6</td>';
-                    if (upload_artwork_radio == "upload_artwork_now"){
-
-                        content += ' <td width="12.5%" class="text-center">';
-                        content += '<img onerror="imgError(this);" width="20" class="img-circle preview_po_img preview_po_img_selected'+i+'"  data-artwork_id = "'+i+'" style="display:none;" title="Click here to remove this file" id="   " src="http://localhost/newlabels/theme/site/images/place-holder.jpg" height="0">';
-                        content += '   <input type="file" name="artwork_file" data-artwork-id="'+i+'" class="artwork_file  selected_artwork'+i+'" style="display:none;">';
-                        content += ' <button class=" btn btn-primary browse_btn browse_btn_selected'+i+'"> <i class="fa fa-cloud-upload"></i> Browse File</button></td>';
-
-                    }
-                    content += '  <td width="12.5%">';
-                    content += '   <input class="form-control artwork_name" placeholder="Artwork Name" type="text">';
-                    content += '  </td>';
-                    content += '   <td width="12.5%">';
-                    content += '   <input class="form-control roll_labels_input allownumeric" placeholder="Enter Labels" type="text">';
-                    content += '  </td>';
-                    if (upload_artwork_option_radio == "custom_roll_and_label" && product_type == "roll"){
-                        content += '  <td width="12.5%">';
-                        content += '  <input class="form-control artwork_name" placeholder="Enter LPR" type="text">';
-                        content += '  </td>';
-
-                        content += ' <td width="12.5%" align="center">';
-                        content += '  <input class="form-control artwork_name" placeholder="Enter No. of Rolls" type="text">';
-                        content += ' </td>';
-
-                    }
-                    content += '  <td width="12.5%" align="center">';
-                    content += '  <button data-value="roll" class=" btn btn-success save_artwork_file">';
-                    content += '  <i class="fa fa-save"></i> Save';
-                    content += '  </button>';
-                    content += '    </td>';
-                    if ( product_type == "roll") {
-
-                        content += '   <td width="12.5%" align="center">';
-                        content += '   </td>';
-                    }
-                    content += '    </tr>';
-
-                }
-
-                content += '   <tr>';
-                content += '   <td colspan="6" class="text-left" style="vertical-align:middle;"> You have <b class="remaing_user_sheets">100 </b> labels remaining</td>';
-                content += ' <td colspan="2" style="vertical-align:middle;" class="text-center" align="center">';
-                content += '    1 Design , 150 Labels on 5 Rolls';
-                content += ' </td>';
-                content += ' </tr>';
-                content += ' <tr style="background:none;">';
-                content += '    <td colspan="8">';
-                content += '   <p>In order to upload your artwork you must complete the line e.g. File name and the number of labels required. Upon which the file will be uploaded.</p>';
-                content += '  </td>';
-                content += '  </tr>';
-
-                content += ' </tbody>';
-                $("#proceed_artwork_btn").attr("data-target", "#artworkuploadpopup1");
-
-            } else {
-                $("#proceed_artwork_btn").removeAttr("data-target");
-
-                swal({
-                        title: "Maximum limit exceeded",
-                        text: "Would You Like To Amend It To 50?",
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonClass: "btn orangeBg",
-                        confirmButtonText: "Yes",
-                        cancelButtonClass: "btn blueBg m-r-10",
-                        cancelButtonText: "Cancel",
-                        closeOnConfirm: true,
-                        closeOnCancel: true
-                    },
-                    function (isConfirm) {
-                        if (isConfirm) {
-                            $('#user_entered_lines_qty').val('50');
-                            $("#proceed_artwork_btn").attr("data-target", "#artworkuploadpopup1");
-                            // $('#seq-line' + id).remove();
-                            return;
-
-                        }
-                    });
-            }
-        }else{
-            $("#proceed_artwork_btn").removeAttr("data-target");
-            swal("Something Missing", "Please Select Above Options To Continue", "error");
-
-        }
-
-        //$('#upload_artwork_table').append(content);
-        // alert(lines_to_enter);
-
-    });*/
 
     $(document).on("click", "#proceed_artwork_btn", function (e) {
 // setup and run this function to clear artworks if user switch to other option after artwork upload option workflow
@@ -2475,7 +2310,7 @@
 
         var lines_to_enter = $('#user_entered_lines_qty').val();
 
-        lines_to_populate = lines_to_enter;
+        lines_to_populate = lines_to_enter
         upload_artwork_radio = $('.upload_artwork_radio:checked').val();
         upload_artwork_option_radio = $('.upload_artwork_option_radio:checked').val();
         // $('#upload_artwork_table').empty();
@@ -2505,10 +2340,10 @@
         //check radio on previous selection on proceed click to next modal
         $('.artwork_option_inner').each(function (i, obj) {
             if (upload_artwork_radio == $(this).val()) {
-                $(this).prop('checked', 'checked');
+                $(this).attr('checked', 'checked');
             }
             if (upload_artwork_option_radio == $(this).val()) {
-                $(this).prop('checked', 'checked');
+                $(this).attr('checked', 'checked');
             }
 
         });
@@ -2526,7 +2361,7 @@
                 $('.upload_artwork').show();
 
                 $.ajax({
-                    url: mainUrl + 'ajax/material_populate_artwork_upload_table_printed_labels',
+                    url: base + 'ajax/material_populate_artwork_upload_table_printed_labels',
                     type: "POST",
                     async: "false",
                     dataType: "html",
@@ -2556,7 +2391,7 @@
                                 //
                                 //     alert("fdgdfgdf");
                                 //     // change_btn_state(_this, 'enable', 'sample');
-                                //
+                                //   
                                 //
                                 // }, 2000);
 
@@ -2862,128 +2697,133 @@
             $('#upload_remaining_labels').val(reaming);
         }
     }
-    /*$(document).on("click", ".save_artwork_file", function (e) {
-        var _this = this;
-        // var cartid = $('#cartid').val();
-        // alert(cartid);
-        var prdid = $('#cartproductid').val();
-        var labelpersheets = $('#labels_p_sheet' + prdid).val();
-        var artworkname = $(_this).parents('.upload_row').find('.artwork_name').val();
-        var file = $(_this).parents('.upload_row').find('.artwork_file').val();
-        var uploadfile = $(_this).parents('.upload_row').find('.artwork_file')[0].files[0];
-        var type = $('#producttype' + prdid).val();
-        var cartunitqty = $('#cartunitqty').val();
-        var response = '';
-        alert(type);
-        if (type == 'roll') {
-            response = verify_labels_or_rolls_qty(_this);
-            if (response == false) {
-                return false;
-            }
-            var labels = $(_this).parents('.upload_row').find('.roll_labels_input').val();
-            var sheets = $(_this).parents('.upload_row').find('.input_rolls').val();
-            var lb_txt = 'labels';
-        } else {
-            if (cartunitqty == 'labels') {
-                var labels = $(_this).parents('.upload_row').find('.labels_input').val();
-                if (labels.length == 0) {
-                    var id = $(_this).parents('.upload_row').find('.labels_input');
-                    var popover = $(_this).parents('.upload_row').find('.popover').length;
-                    if (popover == 0) {
-                        show_faded_popover(id, "Minimum " + labelpersheets + " labels are required ");
-                    }
-                    return false;
-                }
-                var sheets = parseInt(labels / labelpersheets);
-                var lb_txt = 'labels';
-            } else {
-                var sheets = $(_this).parents('.upload_row').find('.labels_input').val();
-                if (sheets.length == 0) {
-                    var id = $(_this).parents('.upload_row').find('.labels_input');
-                    var popover = $(_this).parents('.upload_row').find('.popover').length;
-                    if (popover == 0) {
-                        show_faded_popover(id, "Minimum 1 sheet required ");
-                    }
-                    return false;
-                }
-                var labels = parseInt(sheets * labelpersheets);
-                var lb_txt = 'sheets';
-            }
-        }
-        if (file.length == 0) {
-            alert_box("Please upload a file before saving. ");
-        } else if (labels == 0 || labels == '') {
-            alert_box("Please complete line ");
-        } else if (artworkname.length == 0) {
-            alert_box("please enter artwork name! ");
-        } else {
-            var press_proof = 0;
-            if ($('#press_proof').is(":checked")) {
-                press_proof = 1;
-            }
-//get user selected element values
-            var laminations_and_varnishes = [];
-            var i = 0;
 
-            $('.emb_option:checked').each(function () {
-                //maintain user selected option array
-                laminations_and_varnishes[i++] = $(this).data('embellishment_parsed_title');
-            });
+    //     $(document).on("click", ".save_artwork_file", function (e) {
+    //         var _this = this;
+    //         // var cartid = $('#cartid').val();
+    //         // alert(cartid);
+    //         var prdid = $('#cartproductid').val();
+    //         var labelpersheets = $('#labels_p_sheet' + prdid).val();
+    //         var artworkname = $(_this).parents('.upload_row').find('.artwork_name').val();
+    //         var file = $(_this).parents('.upload_row').find('.artwork_file').val();
+    //         var uploadfile = $(_this).parents('.upload_row').find('.artwork_file')[0].files[0];
+    //         var type = $('#producttype' + prdid).val();
+    //         var cartunitqty = $('#cartunitqty').val();
+    //         var response = '';
+    //         if (type == 'roll') {
+    //             response = verify_labels_or_rolls_qty(_this);
+    //             if (response == false) {
+    //                 return false;
+    //             }
+    //             var labels = $(_this).parents('.upload_row').find('.roll_labels_input').val();
+    //             var sheets = $(_this).parents('.upload_row').find('.input_rolls').val();
+    //             var lb_txt = 'labels';
+    //         } else {
+    //             if (cartunitqty == 'labels') {
+    //                 var labels = $(_this).parents('.upload_row').find('.labels_input').val();
+    //                 if (labels.length == 0) {
+    //                     var id = $(_this).parents('.upload_row').find('.labels_input');
+    //                     var popover = $(_this).parents('.upload_row').find('.popover').length;
+    //                     if (popover == 0) {
+    //                         show_faded_popover(id, "Minimum " + labelpersheets + " labels are required ");
+    //                     }
+    //                     return false;
+    //                 }
+    //                 var sheets = parseInt(labels / labelpersheets);
+    //                 var lb_txt = 'labels';
+    //             } else {
+    //                 var sheets = $(_this).parents('.upload_row').find('.labels_input').val();
+    //                 if (sheets.length == 0) {
+    //                     var id = $(_this).parents('.upload_row').find('.labels_input');
+    //                     var popover = $(_this).parents('.upload_row').find('.popover').length;
+    //                     if (popover == 0) {
+    //                         show_faded_popover(id, "Minimum 1 sheet required ");
+    //                     }
+    //                     return false;
+    //                 }
+    //                 var labels = parseInt(sheets * labelpersheets);
+    //                 var lb_txt = 'sheets';
+    //             }
+    //         }
+    //         if (file.length == 0) {
+    //             alert_box("Please upload a file before saving. ");
+    //         } else if (labels == 0 || labels == '') {
+    //             alert_box("Please complete line ");
+    //         } else if (artworkname.length == 0) {
+    //             alert_box("please enter artwork name! ");
+    //         } else {
+    //             var press_proof = 0;
+    //             if ($('#press_proof').is(":checked")) {
+    //                 press_proof = 1;
+    //             }
+    // //get user selected element values
+    //             var laminations_and_varnishes = [];
+    //             var i = 0;
+    //
+    //             $('.emb_option:checked').each(function () {
+    //                 //maintain user selected option array
+    //                 laminations_and_varnishes[i++] = $(this).data('embellishment_parsed_title');
+    //             });
+    //
+    //             var uploadfile = $(this).parents('.upload_row').find('.artwork_file')[0].files[0];
+    //             var form_data = new FormData();
+    //             form_data.append("file", uploadfile);
+    //             form_data.append("cartid", cartid);
+    //             form_data.append("productid", prdid);
+    //             form_data.append("labels", labels);
+    //             form_data.append("sheets", sheets);
+    //             form_data.append("artworkname", artworkname);
+    //             form_data.append("persheet", labelpersheets);
+    //             form_data.append("type", type);
+    //             form_data.append("unitqty", cartunitqty);
+    //             form_data.append("total_emb_plate_price", total_emb_plate_price);
+    //             form_data.append("press_proof", press_proof);
+    //             form_data.append("laminations_and_varnishes", laminations_and_varnishes);
+    //
+    //             // console.log(type);
+    //             type = uploadfile.type;
+    //             if (type != 'image/png' && type != 'image/jpg' && type != 'image/gif' && type != 'image/jpeg' && type != 'application/pdf' && type != 'application/postscript') {
+    //                 swal("Not Allowed", "We apologise, because this file type cannot be uploaded. \n\n Please retry using one of the following file formats: EPS; GIF; JPEG; JPG; PDF & PNG", "warning");
+    //                 return false;
+    //             }
+    //             var type = $('#producttype' + prdid).val();
+    //             // console.log("qty 4");
+    //             var remaing = parseInt($('#upload_remaining_labels').val());
+    //             // console.log("1");
+    //             var designs_remain = parseInt($('#upload_remaining_designs').val());
+    //             if (designs_remain < 1) {
+    //                 form_data.append("limit_exceed_designs", 'yes');
+    //                 var msg = 'You have entered extra designs, click here to update your basket.';
+    //             }else{
+    //                 form_data.append("limit_exceed_designs", 'no');
+    //             }
+    //             if (remaing < 0) {
+    //                 form_data.append("limit_exceed_sheet", 'yes');
+    //                 var msg = 'You have entered extra ' + lb_txt + ', click here to update your basket.';
+    //             }
+    //             if (remaing < 0 || (designs_remain < 1 && type != 'roll')) {
+    //                 swal({
+    //                         title: msg,
+    //                         type: "warning",
+    //                         showCancelButton: true,
+    //                         confirmButtonClass: "btn orangeBg",
+    //                         confirmButtonText: "Update Basket",
+    //                         cancelButtonClass: "btn blueBg m-r-10",
+    //                         cancelButtonText: "Cancel",
+    //                         closeOnConfirm: true,
+    //                         closeOnCancel: true
+    //                     },
+    //                     function (isConfirm) {
+    //                         if (isConfirm) {
+    //                             upload_printing_artworks(form_data);
+    //                         }
+    //                     });
+    //             } else {
+    //                 upload_printing_artworks(form_data);
+    //             }
+    //         }
+    //     });
 
-            var uploadfile = $(this).parents('.upload_row').find('.artwork_file')[0].files[0];
-            var form_data = new FormData();
-            form_data.append("file", uploadfile);
-            form_data.append("cartid", cartid);
-            form_data.append("productid", prdid);
-            form_data.append("labels", labels);
-            form_data.append("sheets", sheets);
-            form_data.append("artworkname", artworkname);
-            form_data.append("persheet", labelpersheets);
-            form_data.append("type", type);
-            form_data.append("unitqty", cartunitqty);
-            form_data.append("total_emb_plate_price", total_emb_plate_price);
-            form_data.append("press_proof", press_proof);
-            form_data.append("laminations_and_varnishes", laminations_and_varnishes);
-
-            // console.log(type);
-            type = uploadfile.type;
-            if (type != 'image/png' && type != 'image/jpg' && type != 'image/gif' && type != 'image/jpeg' && type != 'application/pdf' && type != 'application/postscript') {
-                swal("Not Allowed", "We apologise, because this file type cannot be uploaded. \n\n Please retry using one of the following file formats: EPS; GIF; JPEG; JPG; PDF & PNG", "warning");
-                return false;
-            }
-            var type = $('#producttype' + prdid).val();
-            var remaing = parseInt($('#upload_remaining_labels').val());
-            var designs_remain = parseInt($('#upload_remaining_designs').val());
-            if (designs_remain < 1) {
-                form_data.append("limit_exceed_designs", 'yes');
-                var msg = 'You have entered extra designs, click here to update your basket.';
-            }
-            if (remaing < 0) {
-                form_data.append("limit_exceed_sheet", 'yes');
-                var msg = 'You have entered extra ' + lb_txt + ', click here to update your basket.';
-            }
-            if (remaing < 0 || (designs_remain < 1 && type != 'roll')) {
-                swal({
-                        title: msg,
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonClass: "btn orangeBg",
-                        confirmButtonText: "Update Basket",
-                        cancelButtonClass: "btn blueBg m-r-10",
-                        cancelButtonText: "Cancel",
-                        closeOnConfirm: true,
-                        closeOnCancel: true
-                    },
-                    function (isConfirm) {
-                        if (isConfirm) {
-                            upload_printing_artworks(form_data);
-                        }
-                    });
-            } else {
-                upload_printing_artworks(form_data);
-            }
-        }
-    });*/
 
     $(document).on("click", ".save_artwork_file", function (e) {
         var _this = this;
@@ -3022,8 +2862,6 @@
                 var sheets = parseInt(labels / labelpersheets);
                 var lb_txt = 'labels';
             } else {
-                var sheet_product_quality =  $('.sheet_inner_section_radio:checked').data('product_quality_selection_inner');
-
                 var sheets = $(_this).parents('.upload_row').find('.labels_input').val();
                 if (sheets.length == 0) {
                     var id = $(_this).parents('.upload_row').find('.labels_input');
@@ -3069,10 +2907,6 @@
 
                     form_data.append("file", uploadfile);
                 }
-                var digital_process_plus_white =  $('.digital_process_plus_white:checked').data('add_white');
-
-                form_data.append("digital_process_plus_white", digital_process_plus_white);
-                form_data.append("sheet_product_quality", sheet_product_quality);
                 form_data.append("cartid", cartid);
                 form_data.append("productid", prdid);
                 form_data.append("labels", labels);
@@ -3166,7 +3000,6 @@
 
                     form_data.append("file", uploadfile);
                 }
-                form_data.append("sheet_product_quality", sheet_product_quality);
                 form_data.append("upload_artwork_radio", upload_artwork_radio);
                 form_data.append("upload_artwork_option_radio", upload_artwork_option_radio);
                 form_data.append("lines_to_populate", lines_to_populate);
@@ -3271,7 +3104,7 @@
             function (isConfirm) {
                 if (isConfirm) {
                     $.ajax({
-                        url: mainUrl + 'ajax/delete_printing_artworks_label_emb',
+                        url: base + 'ajax/delete_printing_artworks_label_emb',
                         type: "POST",
                         async: "false",
                         dataType: "html",
@@ -3988,7 +3821,7 @@
         $('#cart_summery_loader').show();
 
         $.ajax({
-            url: mainUrl + 'ajax/material_upload_printing_artworks_label_emb',
+            url: base + 'ajax/material_upload_printing_artworks_label_emb',
             type: "POST",
             async: "false",
             dataType: "html",
@@ -4233,21 +4066,14 @@
             laminations_and_varnishes_childs[i] = $(this).data('embellishment_parsed_title_child');
             i++;
         });
-        if (type == 'sheet') {
-            var sheet_product_quality =  $('.sheet_inner_section_radio:checked').data('product_quality_selection_inner');
-
-        }
-        var digital_process_plus_white =  $('.digital_process_plus_white:checked').data('add_white');
 
         $('#cart_summery_loader').show();
         $.ajax({
-            url: mainUrl + 'ajax/material_update_cart_with_upload_label_emb',
+            url: base + 'ajax/material_update_cart_with_upload_label_emb',
             type: "POST",
             async: "false",
             dataType: "html",
             data: {
-                digital_process_plus_white: digital_process_plus_white,
-                sheet_product_quality: sheet_product_quality,
                 cartid: cartid,
                 prdid: prdid,
                 persheet: labelpersheets,
@@ -4296,10 +4122,10 @@
         var desingsservice = $('input[name=print_designservice]:checked').val();
         var comments = $('#comments').val();
         var uploadfile = $('#desingservice_artwork_file')[0].files[0];
-        if (upload_artwork_radio ==  "upload_artwork_now") {
+        if (upload_artwork_radio == "upload_artwork_now") {
             var upload_option = "upload_artwork";
-        } else if (upload_artwork_radio ==  "artwork_to_follow") {
-            var  upload_option = "email_artwork";
+        } else if (upload_artwork_radio == "artwork_to_follow") {
+            var upload_option = "email_artwork";
         }
         // var upload_option = $('input[name=upload_option]:checked').val();
         var form_data = new FormData();
@@ -4323,7 +4149,7 @@
         }
         show_loader('80', '27');
         $.ajax({
-            url: mainUrl + 'ajax/add_printing_tocart_label_emb',
+            url: base + 'ajax/add_printing_tocart_label_emb',
             type: "POST",
             async: "false",
             dataType: "html",
@@ -4336,7 +4162,7 @@
                 if (data.response == 'yes') {
                     ecommerce_add_to_cart();
                     checkoutconfirm = true;
-                    window.location.href = '<?php echo SAURL ?>order_quotation/order/index';
+                    window.location.href = '<?=SAURL?>transactionregistration.php';
                     $('#aa_loader').hide();
                 }
             }
@@ -4434,8 +4260,6 @@
             var labels = $(_this).parents('.upload_row').find('.roll_labels_input').val();
             var sheets = $(_this).parents('.upload_row').find('.input_rolls').val();
         } else {
-            var sheet_product_quality =  $('.sheet_inner_section_radio:checked').data('product_quality_selection_inner');
-
             if (cartunitqty == 'labels') {
                 var labels = $(_this).parents('.upload_row').find('.labels_input').val();
                 if (labels.length == 0 || labels == 0 || labels == '') {
@@ -4483,7 +4307,6 @@
             laminations_and_varnishes_childs[i] = $(this).data('embellishment_parsed_title_child');
             i++;
         });
-        var digital_process_plus_white =  $('.digital_process_plus_white:checked').data('add_white');
 
         // console.log("before qty 3");
 
@@ -4495,13 +4318,11 @@
         }
         $('#cart_summery_loader').show();
         $.ajax({
-            url: mainUrl + 'ajax/material_update_printing_artworks_label_emb',
+            url: base + 'ajax/material_update_printing_artworks_label_emb',
             type: "POST",
             async: "false",
             dataType: "html",
             data: {
-                digital_process_plus_white: digital_process_plus_white,
-                sheet_product_quality: sheet_product_quality,
                 id: id,
                 cartid: cartid,
                 productid: prdid,
@@ -4566,22 +4387,14 @@
             laminations_and_varnishes_childs[i] = $(this).data('embellishment_parsed_title_child');
             i++;
         });
-        if (type == 'sheet') {
-            var sheet_product_quality =  $('.sheet_inner_section_radio:checked').data('product_quality_selection_inner');
-
-        }
-        var digital_process_plus_white =  $('.digital_process_plus_white:checked').data('add_white');
-
         $('#cart_summery_loader').show();
 
         $.ajax({
-            url: mainUrl + 'ajax/material_update_printing_artworks_label_emb',
+            url: base + 'ajax/material_update_printing_artworks_label_emb',
             type: "POST",
             async: "false",
             dataType: "html",
             data: {
-                digital_process_plus_white: digital_process_plus_white,
-                sheet_product_quality: sheet_product_quality,
                 cartid: cartid,
                 productid: prdid,
                 persheet: labelpersheets,
@@ -4619,13 +4432,12 @@
     }
 
 
-
     $(document).on("click", ".proceed_to_checkout", function (e) {
         var prdid = $('#cartproductid').val();
         if (upload_artwork_radio == "upload_artwork_now") {
             var upload_option = "upload_artwork";
         } else if (upload_artwork_radio == "artwork_to_follow") {
-            var  upload_option = "email_artwork";
+            var upload_option = "email_artwork";
         }
         // var upload_option = $('input[name=upload_artwork_2]').data('upload_option');
         // var upload_option = $('input[name=upload_artwork_2]:checked').val();
@@ -4685,7 +4497,6 @@
                     closeOnCancel: true
                 },
                 function (isConfirm) {
-
                     if (isConfirm) {
                         return false;
                     } else {
@@ -4737,16 +4548,6 @@
                         closeOnCancel: true
                     },
                     function (isConfirm) {
-                        var count = 0;
-                        $('.upload_row').each(function () {
-                            if(!($(this).hasClass('uploadsavesection'))){
-                                // alert("inside if");
-                                count++;
-
-                            }
-                        });
-                        // alert(count);
-                        lines_to_populate = count;
                         if (isConfirm) {
                             update_cart_with_upload();
                         }
@@ -4780,9 +4581,6 @@
 
 
 
-
-
-
     $(document).on("click", "#purchased_plate_cta", function (event) {
         console.log(selected_already_plates);
 
@@ -4791,41 +4589,41 @@
 
         //get user selected element values
         $('.emb_option:checked').each(function () {
-            current_emb_id = $(this).data('embellishment_id');
+             current_emb_id = $(this).data('embellishment_id');
             current_emb_selection_id = $(this).data('embellishment_selection_id');
             $('.already_plates:checked').each(function () {
                 history_selected_emb_id = $(this).data('embellishment_id');
                 history_emb_selection_id = $(this).data('embellishment_selection_id');
-                if(current_emb_id == history_selected_emb_id &&  current_emb_selection_id != history_emb_selection_id){
-                    $('#uncheck_purchased_plate' + history_emb_selection_id).prop('checked', false);
+                  if(current_emb_id == history_selected_emb_id &&  current_emb_selection_id != history_emb_selection_id){
+                     $('#uncheck_purchased_plate' + history_emb_selection_id).attr('checked', false);
                     var index = selected_already_plates.indexOf(history_emb_selection_id);
                     if (index !== -1) selected_already_plates.splice(index, 1);
 
-                    //maintain composite array with order no to select purchased plate of exact order if user has same plate more then one in different order with different softproof.
+                      //maintain composite array with order no to select purchased plate of exact order if user has same plate more then one in different order with different softproof.
 
-                    $.each(selected_already_plates_composite_array,function (a,b) {
-                        //return string so convert it in object form
-                        var c =  JSON.parse(b);
+                      $.each(selected_already_plates_composite_array,function (a,b) {
+                          //return string so convert it in object form
+                          var c =  JSON.parse(b);
 
-                        if (c.already_used_plate_id == history_emb_selection_id ){
-                            //get index of obj after matching and delete it from objects of objects global 'selected_already_plates_composite_array'
-                            //splice function can't use as its for arrays only.
-                            delete selected_already_plates_composite_array[a];
-                        }
-                    });
+                          if (c.already_used_plate_id == history_emb_selection_id ){
+                              //get index of obj after matching and delete it from objects of objects global 'selected_already_plates_composite_array'
+                              //splice function can't use as its for arrays only.
+                              delete selected_already_plates_composite_array[a];
+                          }
+                      });
 
-                    // console.log(selected_already_plates_composite_array);
+                      // console.log(selected_already_plates_composite_array);
                 }
             });
         });
 
 
-        var user_id = $('#user_id').val();
+         var user_id = $('#user_id').val();
         $('#purchased_plate_history_loader').show();
         $('#purchased_plate_section').html('');
 
         $.ajax({
-            url: mainUrl + 'ajax/purchased_plate_history',
+            url: base + 'ajax/purchased_plate_history',
             type: "POST",
             async: "false",
             dataType: "html",
@@ -4863,65 +4661,16 @@
     $(document).on("click", ".sheet_section_radio_main", function (event) {
         // alert("radio_selection");
         var radio_selection =   $(this).data('product_quality_selection');
-        $('#a4_material_selection').css('margin-top','-220px');
 
         if (radio_selection == "standerd"){
-
-            // alert('uncheck yes');
-            //Reset embelisment & Finish selections And Arrays start
-            option_clicked = 1;
-            $('.emb_option , already_plates').each(function (i, obj) {
-                var option_embellishment_id = $(this).data('embellishment_id');
-                var option_embellishment_selection_id = $(this).data('embellishment_selection_id');
-                //uncheck all selected options from Label Finishes & Embellishments section
-
-                // $('#uncheck' + option_embellishment_selection_id).prop('checked', false);
-                $('#uncheck' + option_embellishment_selection_id).prop('checked', false);
-                //also add same functionality to purchased plate section
-                $('#uncheck_purchased_plate' + option_embellishment_selection_id).prop("checked", false);
-                //also reset plate cost price total val
-                total_emb_plate_price = 0;
-                //use to remove new selected value from global selected_already_plates array if user retain its selection from conflict combination modal
-
-
-            });
-            //reset selected and combination_base after uncheck all options from above loop
-            selected = [];
-            selected_already_plates = [];
-            selected_already_plates_composite_array = [];
-            combination_base = '';
-            //Reset embelisment & Finish selections And Arrays end
-
-            $('.alternate_option_section').show();
-
-            $('#standerd_inner_section_options').show();
-            $('#premium_inner_section_options').hide();
 
             $('#printing_process_default_check').prop("checked",true);
             $('#sheet_inner_section_radio_id_standerd').attr("checked",true);
             $('#sheet_inner_section_radio_id_premium').attr("checked",false);
-            $('#tab-1').css('pointer-events','none');
-            $('#tab-2').css('pointer-events','none');
-            $('#tab-3').css('pointer-events','none');
-            $('#tab-4').css('pointer-events','none');
-            $('#tab-4').css('pointer-events','none');
-            $('#purchased_plate_cta').css('pointer-events','none');
         }else if(radio_selection == "premium"){
-
-            $('.alternate_option_section').hide();
-            $('#standerd_inner_section_options').hide();
-            $('#premium_inner_section_options').show();
-
             $('#printing_process_default_check').prop("checked",true);
             $('#sheet_inner_section_radio_id_premium').attr("checked",true);
             $('#sheet_inner_section_radio_id_standerd').attr("checked",false);
-
-            $('#tab-1').css('pointer-events','unset');
-            $('#tab-2').css('pointer-events','unset');
-            $('#tab-3').css('pointer-events','unset');
-            $('#tab-4').css('pointer-events','unset');
-            $('#tab-4').css('pointer-events','unset');
-            $('#purchased_plate_cta').css('pointer-events','unset');
 
 
         }
@@ -4931,149 +4680,17 @@
 
     });
     $(document).on("click", ".sheet_inner_section_radio", function (event) {
-        var radio_selection =   $(this).data('product_quality_selection_inner');
-        if (radio_selection == "standerd"){
-
-
-
-
-            //Reset embelisment & Finish selections And Arrays start
-            option_clicked = 1;
-            $('.emb_option , already_plates').each(function (i, obj) {
-                var option_embellishment_id = $(this).data('embellishment_id');
-                var option_embellishment_selection_id = $(this).data('embellishment_selection_id');
-                //uncheck all selected options from Label Finishes & Embellishments section
-
-                // $('#uncheck' + option_embellishment_selection_id).prop('checked', false);
-                $('#uncheck' + option_embellishment_selection_id).prop('checked', false);
-                //also add same functionality to purchased plate section
-                $('#uncheck_purchased_plate' + option_embellishment_selection_id).prop("checked", false);
-                //also reset plate cost price total val
-                total_emb_plate_price = 0;
-                //use to remove new selected value from global selected_already_plates array if user retain its selection from conflict combination modal
-
-
-            });
-            //reset selected and combination_base after uncheck all options from above loop
-            selected = [];
-            selected_already_plates = [];
-            selected_already_plates_composite_array = [];
-            combination_base = '';
-            //Reset embelisment & Finish selections And Arrays start
-
-            $('.alternate_option_section').show();
-
-            $('#standerd_inner_section_options').show();
-            $('#premium_inner_section_options').hide();
-            $('#printing_process_default_check').trigger('click');
-
-
-            $('#standerd_inner_section_description').show();
-            $('#premium_inner_section_description').hide();
-            //Enable finishes & emb options for premium sheet selection
-            $('#tab-1').css('pointer-events','none');
-            $('#tab-2').css('pointer-events','none');
-            $('#tab-3').css('pointer-events','none');
-            $('#tab-4').css('pointer-events','none');
-            $('#tab-4').css('pointer-events','none');
-            $('#purchased_plate_cta').css('pointer-events','none');
-
-        }else if(radio_selection == "premium"){
-
-            $('#printing_process_default_check_premium').trigger('click');
-
-            $('.alternate_option_section').hide();
-
-            $('#standerd_inner_section_options').hide();
-            $('#premium_inner_section_options').show();
-
-            $('#premium_inner_section_description').show();
-            $('#standerd_inner_section_description').hide();
-            //Enable finishes & emb options for premium sheet selection
-            $('#tab-1').css('pointer-events','unset');
-            $('#tab-2').css('pointer-events','unset');
-            $('#tab-3').css('pointer-events','unset');
-            $('#tab-4').css('pointer-events','unset');
-            $('#tab-4').css('pointer-events','unset');
-            $('#purchased_plate_cta').css('pointer-events','unset');
-
-        }
-
-
-    });
-
-    $(document).on("click", ".digital_process_plus_white", function (e) {
-        if(!$('.pre_select_for_white').is(':checked')) {
-            var   msg= 'Check At Least one Option From Digital Process To Add White';
-
-            swal("Select Digital Printing Process First", msg, "error");
-            $('.digital_process_plus_white').prop('checked',false);
-
-        }
-
-
-    });
-    $(document).on("click", ".alternate_option_proceed_click", function (e) {
-        $('.sheet_section_radio_main').each(function (i,item) {
-            var sheet_section_radio_main_val =  $(this).data('product_quality_selection');
-            if(sheet_section_radio_main_val == 'premium'){
-                alert("inside if");
-                $(this).trigger('click');
-                $('#sheet_inner_section_radio_id_premium').trigger('click');
-                $('#printing_process_default_check_premium').trigger('click');
-                pre_load_add_item(preferences_global);
+          var radio_selection =   $(this).data('product_quality_selection_inner');
+            if (radio_selection == "standerd"){
+                $('#standerd_inner_section_description').show();
+                $('#premium_inner_section_description').hide();
+            }else if(radio_selection == "premium"){
+                $('#premium_inner_section_description').show();
+                $('#standerd_inner_section_description').hide();
 
             }
 
-        });
 
     });
-    $(document).on("click", ".tab-swal", function (e) {
-        var sheet_product_quality =  $('.sheet_inner_section_radio:checked').data('product_quality_selection_inner');
-        var msg_count = $(this).data('swal_msg');
-        var id = preferences_global.ProductID;
-
-        var type = $('#producttype' + id).val();
-
-        if(type == 'sheet'){
-
-
-            if (!sheet_product_quality ){
-                var   msg= 'Select Digital Printing Process First';
-
-                swal("Something Missing", msg, "error");
-
-            }else if (sheet_product_quality && sheet_product_quality == 'standerd'){
-                var msg = '';
-
-                if(msg_count == 1){
-                    msg= 'Finishes are not available from the Standard Quality Print option. Please select from the Premium Quality Print option.';
-                    msg_count = '';
-                    swal("Something Missing", msg, "error");
-
-                }else if(msg_count == 2){
-                    var msg= 'Foils are not available from the Standard Quality Print option. Please select from the Premium Quality Print option. ';
-                    msg_count = '';
-                    swal("Something Missing", msg, "error");
-
-                }else if(msg_count == 3){
-                    var msg= 'Debossing and embossing are not available from the Standard Quality Print option. Please select from the Premium Quality Print option.';
-                    msg_count = '';
-                    swal("Something Missing", msg, "error");
-
-                }else if(msg_count == 4){
-                    var msg= 'Silk-screen print is not available from the Standard Quality Print option. Please select from the Premium Quality Print option.';
-                    msg_count = '';
-                    swal("Something Missing", msg, "error");
-
-                }
-
-            }
-
-        }
-    });
-
-
 
 </script>
-
