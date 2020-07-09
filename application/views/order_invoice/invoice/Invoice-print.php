@@ -480,7 +480,7 @@ $segment2 = $this->uri->segment(2);
                         <div class="invoicetable_description divTableCell borderBottomN"style="width: 300px;">Description</div>
                         <div class="invoicetable_sml_headings divTableCell borderBottomN"style="width: 50px;">Unit Price</div>
                         <div class="invoicetable_Qty divTableCell borderBottomN" style="width: 50px;">Qty</div>
-                        <div class="invoicetable_sml_headings divTableCell borderBottomN" style="width: 50px;">Line total</div>
+                        <div class="invoicetable_sml_headings divTableCell borderBottomN" style="width: 50px;">Price</div>
                     </div>
                     <?php
 
@@ -571,8 +571,8 @@ $segment2 = $this->uri->segment(2);
 
 
                                 <div class="divTableCell borderRight borderLeft" >
-                                    <? $price = number_format($AccountDetail->Print_UnitPrice,3,'.',''); ?>
-                                    <?  echo $symbol."".(number_format($price*$exchange_rate,2));?>
+                                    <? //$price = number_format($AccountDetail->Print_UnitPrice,3,'.',''); ?>
+                                    <?  //echo $symbol." ".(number_format($price*$exchange_rate,2));?>
 
                                 </div>
                                 <div class="divTableCell borderRight" style="text-align: center;">
@@ -584,7 +584,14 @@ $segment2 = $this->uri->segment(2);
 
                                     <? $print_exvat = $AccountDetail->Print_Total;?>
                                     <? $print_incvat = $AccountDetail->Print_Total*1.2;?>
-                                    <?  echo $symbol."".(number_format($print_exvat*$exchange_rate,2));?>
+
+                                    <?php
+                                    if ($AccountDetail->FinishTypePricePrintedLabels != '' && $AccountDetail->total_emb_cost != 0){
+                                        echo $symbol."".(number_format(($print_exvat*$exchange_rate)-$AccountDetail->total_emb_cost,2));
+                                    } else {
+                                        echo $symbol."".(number_format($print_exvat*$exchange_rate,2));
+                                    }
+                                    ?>
 
                                 </div>
                             </div>
@@ -631,6 +638,113 @@ $segment2 = $this->uri->segment(2);
                                 <div class="divTableCell">&nbsp;</div>
                                 <div class="divTableCell">&nbsp;</div>
                             </div>
+
+                            <?php
+                            if ($AccountDetail->Printing == 'Y' && $AccountDetail->FinishTypePricePrintedLabels != '') { ?>
+
+                                <div class="divTableRow borderLeft" <?=$stylo?>>
+                                    <div class="divTableCell borderLeft borderBottom"  >&nbsp;</div>
+                                    <div class="divTableCell borderLeft borderBottom"  >Finish</div>
+                                    <div class="divTableCell borderRight borderLeft" ></div>
+                                    <div class="divTableCell borderRight" style="text-align: center;"></div>
+                                    <div class="divTableCell borderRight" style="text-align: center;"> </div>
+                                </div>
+
+
+                                <?php
+                                $lem_options = json_decode($AccountDetail->FinishTypePricePrintedLabels);
+                                $parent_title = '';
+
+                                /* echo count($lem_options)."------<br>";
+                                 echo "<pre>";
+                                 print_r($lem_options);
+                                 echo "</pre>";*/
+
+                                $index = 0;
+                                $parsed_child_title = '';
+                                $parsed_title_price = 0;
+                                foreach ($lem_options as $lem_option) {
+
+                                    $parsed_title = ucwords(str_replace("_", " ", $lem_option->finish_parsed_title));
+                                    $parsed_parent_title = $lem_option->parsed_parent_title;
+                                    $parent_id = $lem_option->parent_id;
+                                    $use_old_plate = $lem_option->use_old_plate;
+
+                                    ($use_old_plate == 1 ?  $plate_cost = 0 : $plate_cost = $lem_option->plate_cost);
+
+                                    if ($parent_id == 1) { //For Lamination and varnish
+                                        $parsed_child_title .= $parsed_title.", ";
+                                        $parsed_title_price += $lem_option->finish_price;
+
+
+                                        if ($parsed_parent_title != $lem_options[$index+1]->parsed_parent_title || ($index+1) == count($lem_options)) {
+                                            $parsed_parent_title = ucwords(str_replace("_", " ", $parsed_parent_title));
+                                            ?>
+
+                                            <div class="divTableRow borderLeft" <?=$stylo?>>
+                                                <div class="divTableCell borderLeft borderBottom"  >&nbsp;</div>
+                                                <div class="divTableCell borderLeft borderBottom"  ><?= "<b>".$parsed_parent_title." : </b>".$parsed_child_title?></div>
+                                                <div class="divTableCell borderRight borderLeft" >
+                                                    <?= $symbol." ".number_format((($parsed_title_price+$plate_cost) / $Quantity) * $exchange_rate, 2, '.', '') ?>
+                                                </div>
+                                                <div class="divTableCell borderRight" style="text-align: center;"></div>
+                                                <div class="divTableCell borderRight" style="text-align: center;">
+                                                    <?php echo $symbol." ".number_format(($parsed_title_price * $exchange_rate), 2) ;?>
+                                                </div>
+                                            </div>
+
+                                            <?php
+                                        }
+
+                                    } else if($parent_id != 1 && $parent_id != 5) { //For other than varnish and sequen
+                                        $parsed_parent_title = ucwords(str_replace("_", " ", $parsed_parent_title));
+                                        $parsed_child_title = $parsed_title;
+                                        $parsed_title_price = $lem_option->finish_price+$plate_cost;
+                                        ?>
+
+                                        <div class="divTableRow borderLeft" <?=$stylo?>>
+                                            <div class="divTableCell borderLeft borderBottom"  >&nbsp;</div>
+                                            <div class="divTableCell borderLeft borderBottom"  ><?= "<b>".$parsed_parent_title." : </b>".$parsed_child_title?></div>
+                                            <div class="divTableCell borderRight borderLeft" >
+                                                <?= $symbol." ".number_format((($parsed_title_price+$plate_cost) / $Quantity) * $exchange_rate, 2, '.', '') ?>
+                                            </div>
+                                            <div class="divTableCell borderRight" style="text-align: center;"></div>
+                                            <div class="divTableCell borderRight" style="text-align: center;">
+                                                <?php echo $symbol." ".number_format(($parsed_title_price * $exchange_rate), 2); ?>
+                                            </div>
+                                        </div>
+
+                                    <?php } else { //For Sequential Data ?>
+
+                                        <tr>
+                                            <td></td>
+                                            <td>Sequential Variable Data</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>
+                                                <?php
+                                                echo $symbol." ".number_format((sequential_price * $exchange_rate), 2) ;
+
+                                                ?>
+                                            </td>
+                                        </tr>
+
+                                        <div class="divTableRow borderLeft" <?=$stylo?>>
+                                            <div class="divTableCell borderLeft borderBottom"  >&nbsp;</div>
+                                            <div class="divTableCell borderLeft borderBottom"  >Sequential Variable Data</div>
+                                            <div class="divTableCell borderRight borderLeft" >
+                                                <?= $symbol." ".number_format((sequential_price / $Quantity) * $exchange_rate, 2, '.', '') ?>
+                                            </div>
+                                            <div class="divTableCell borderRight" style="text-align: center;"></div>
+                                            <div class="divTableCell borderRight" style="text-align: center;">
+                                                <?php echo $symbol." ".number_format((sequential_price * $exchange_rate), 2) ; ?>
+                                            </div>
+                                        </div>
+
+                                    <?php  }
+                                    $index++;
+                                } ?>
+                            <?php } ?>
 
 
                             <div class="divTableRow ">

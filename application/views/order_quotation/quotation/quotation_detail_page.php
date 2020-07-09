@@ -33,15 +33,15 @@ $UserTypeID = $this->session->userdata('UserTypeID');
   .margin-adjust-raw {
     margin-top: 30px !important;
   }
-  
+
     .c1{
     background-color: #fff !important;
   }
-  
+
   .c2{
     background-color: #f4fcff !important;
   }
- 
+
 </style>
 <!-- End Navigation Bar-->
 <div class="wrapper">
@@ -55,7 +55,7 @@ $UserTypeID = $this->session->userdata('UserTypeID');
                 <div class="card enquiry-card enquiry-card-bix-box-second" style="width: 100%">
                   <div class="card-header card-heading-text-two">QUOTATION INFORMATION</div>
                   <div class="card-body">
-										
+
                     Quotation Number : <?= $quotation->QuotationNumber ?></br>
                   <span>Source: <?= $quotation->Source.'-'.$quotation->ProcessedBy ?></span> </br>
                 Date :<?= date('jS F Y', $quotation->QuotationDate) ?> &
@@ -74,20 +74,20 @@ $UserTypeID = $this->session->userdata('UserTypeID');
                   <span style="margin-top: 7px;margin-right: 7px;">Status :</span>
                   <label class="select">
                     <?php
-	
+
                       $option = $this->quotationModal->statusdropdown($quotation->QuotationStatus);
-                                              
+
                       if ($quotation->QuotationStatus == 13) {
                     ?>
-                    
+
                     <select name="status">
                       <?php if ($quotation->QuotationStatus == 13) { ?>
                       <option value="">Completed</option>
                       <?php } ?>
                     </select>
-                    
+
                     <?php } else {?>
-											
+
                     <?php //echo '<pre>'; print_r($option); echo '</pre>'; ?>
                     <select name="status" id="status" onchange="chagestatus(this.value,<?= $quotation->QuotationID ?>)">
                       <?php foreach ($option as $key => $val) { ?>
@@ -96,27 +96,27 @@ $UserTypeID = $this->session->userdata('UserTypeID');
 
                     </select>
                     <?php } ?>
-                    
+
                     <i></i>
                   </label>
                 </p>
 
-									
+
                 <? } ?>
                 <br>
-                
-              
+
+
                  <?php   if(  ($is_custom_lines->sums <= 0  && $quotation->QuotationStatus != 13)){?>
                 <span>
                     <button type="button" class="btn btn-outline-info waves-light waves-effect small-details-cta m-t-10 copytoclip" style="margin-top: 1rem; margin-left: 3rem;" data-link="https://www.aalabels.com/quotation-confirmation/<?=md5($quotation->QuotationNumber)?>"> Quotation Approval Link </button>
                 </span>
-                
+
                 <?php } ?>
 
               </div>
             </div>
           </div>
-          
+
           <div class="col-md-4" style="display: flex">
             <div class="card enquiry-card enquiry-card-bix-box-second" style="width: 100%">
               <div class="card-header card-heading-text-two">BILLING ADDRESS</div>
@@ -202,7 +202,7 @@ $UserTypeID = $this->session->userdata('UserTypeID');
           <? $currency_options = $this->cartModal->get_currecy_options();
                 $currency = $quotation->currency;
                 $exchange_rate = $quotation->exchange_rate;
-                                   
+
                 $fetch_symbol = $this->db->query("select symbol from exchange_rates where currency_code LIKE '".$quotation->currency."'")->row_array();
                 $symbol = $fetch_symbol['symbol'];
           ?>
@@ -245,70 +245,71 @@ $UserTypeID = $this->session->userdata('UserTypeID');
             <?php
   //echo '<pre>'; print_r($quotationDetails); echo '</pre>';
   $extPrice = 0;
-                         
+  $emb_total_cost = 0;
+
                        $count = 1;
                        $clr_class = 'c1';
-                                     
+
             ?>
             <?php
             foreach ($quotationDetails as $key => $quotationDetail) {
-                                      
-              
+
+
               if($count%2){
                 $clr_class = 'c1';
               }else{
                 $clr_class = 'c2';
               }
-                                      
+
               $format = 'Sheets';
               $regex  = "/Roll/";
 
               if(preg_match($regex, $quotationDetail->ProductBrand, $match)){
                 $format =($quotationDetail->Quantity > 1)?'Rolls':'Roll';
-              } 
-                      
+              }
+
               /*$query = $this->db->query(" SELECT SUM(labels) AS total from quotation_attachments_integrated WHERE Serial LIKE '".$quotationDetail->SerialNumber."'  ");
-              $row = $query->row_array();	
+              $row = $query->row_array();
               $no_of_labels =  $row['total'];*/
-                      
+
               $Total_labels ='';
               $per_print = '';
-                      
+
              //$Total_labels = $quotationDetail->LabelsPerSheet * $quotationDetail->Quantity;
-               
-              
-              if($quotationDetail->ProductBrand=='Integrated Labels'){ 
+
+
+              if($quotationDetail->ProductBrand=='Integrated Labels'){
                 $Total_labels = $quotationDetail->Quantity;
               } else{
                 $Total_labels = $quotationDetail->orignalQty;
-              } 
-            
-              
+              }
+
+
               /*if(($quotationDetail->sample == 'Sample' || $quotationDetail->sample == 'sample') && $format=='Sheets'){
                 $Total_labels = $quotationDetail->LabelsPerSheet * $quotationDetail->Quantity;
               }*/
-              
-              
-            
-            
+
+
+
+
               /*if($quotationDetail->is_custom=="Yes"){
                 $Total_labels = $quotationDetail->LabelsPerRoll * $quotationDetail->Quantity;
               }
-                      
+
               if($quotationDetail->Printing=="Y" && $quotationDetail->regmark!="Y"){
                 $Total_labels = $no_of_labels;
-                                    
+
               }*/
-                                      
+
               $per_print = $Total_labels / $quotationDetail->Quantity;
-                                     
+
               $lbss = 'Label';
               if($Total_labels > 1){
                 $lbss = 'Labels';
               }
-                                      
+
               $row_total_line = 0;
-                                      
+
               if ($quotationDetail->ProductBrand == 'Roll Labels' && $quotationDetail->Printing == 'Y') {
                 $extPrice = $extPrice + ($quotationDetail->Price + $quotationDetail->Print_Total);
               } else if ($quotationDetail->ProductBrand != 'Roll Labels' && $quotationDetail->Printing == 'Y') {
@@ -316,22 +317,22 @@ $UserTypeID = $this->session->userdata('UserTypeID');
               } else {
                 $extPrice = $extPrice + ($quotationDetail->Price);
               }
-              
-              
-              
 
-              
+
+
+
+
             ?>
-            
-            
+
+
             <input type="hidden" id="brnds<?php echo $quotationDetail->SerialNumber ?>" value="<?=$quotationDetail->ProductBrand?>">
-            
+
             <?php		if($quotationDetail->ProductBrand == 'Integrated Labels'){
               $miso  = (preg_match('/250 Sheet Dispenser Packs/is',$quotationDetail->ProductName))?250:1000;
-            
+
             } else{
               $miso = $this->orderModal->min_qty_integrated($quotationDetail->ManufactureID);
-              
+
               if($quotationDetail->ProductBrand == 'A3 Label')
               {
                 $miso = '100';
@@ -340,18 +341,18 @@ $UserTypeID = $this->session->userdata('UserTypeID');
               }
             }
             ?>
-									
-                    
+
+
             <input type="hidden" data-min_qty_integrated="<?php echo $quotationDetail->SerialNumber ?>" value="<?=$miso?>"
                                                >
             <input type="hidden" data-max_qty_integrated="<?php echo $quotationDetail->SerialNumber ?>"
                                                value="<?php echo $this->orderModal->max_qty_integrated($quotationDetail->ManufactureID); ?>">
-            
-            
+
+
             <?php if ($quotationDetail->ManufactureID == 'SCO1') {
                 $carRes = $this->user_model->getCartQuotationData($quotationDetail->SerialNumber); ?>
-            
-            
+
+
             <tr id="line<?= $key ?>" class="<?=$clr_class?>">
               <td style="text-align: center;">
                 <div>
@@ -369,38 +370,38 @@ $UserTypeID = $this->session->userdata('UserTypeID');
 
               <td><?= $quotationDetail->ManufactureID ?>  </td>
               <td class="text-left">
-													 
+
                 <?php
                   $mm = '';
                 if($carRes[0]->height != null) {
                   $mm=' x';
                 }
-													
+
                 if($carRes[0]->shape!="Circle"){?>
-                <?php $carRes[0]->height = ($carRes[0]->height!=null)?($carRes[0]->height):($carRes[0]->width); 
+                <?php $carRes[0]->height = ($carRes[0]->height!=null)?($carRes[0]->height):($carRes[0]->width);
                                                 $mm=' x';
                 ?>
-														
+
                 <?php } ?>
-													 
-									 
+
+
                 <b>Shape: </b><?= (isset($carRes[0])) ? $carRes[0]->shape : '' ?>|
                 <b>Format: </b><?= (isset($carRes[0])) ? $carRes[0]->format : '' ?>|
                 <b>Size: </b>
                 <?= (isset($carRes[0])) ? $carRes[0]->width.'mm'.$mm  : '' .' x' ?>
                 <?= ((isset($carRes[0])) && $carRes[0]->height != null) ? (isset($carRes[0]) && $carRes[0]->width!="") ? $carRes[0]->width : '' : ($carRes[0]->height!="" && $carRes[0]->height!="NULL") ? $carRes[0]->height.'mm': '' ?>|
-													 
+
                 <b>No.labels/Die: </b><?= (isset($carRes[0])) ? $carRes[0]->labels : '' ?>|
                 <b>Across: </b><?= (isset($carRes[0])) ? $carRes[0]->across : '' ?>|
                 <b>Around: </b><?= (isset($carRes[0])) ? $carRes[0]->around : '' ?>
-													
+
                 <?php if(($carRes[0]->shape != 'Circle') && ($carRes[0]->shape !='Oval')){?>
                 |<b>Corner Radius: </b><?= (isset($carRes[0])) ? $carRes[0]->cornerradius : '' ?>
                 <?php } ?>
                 |<b>Perforation: </b><?= (isset($carRes[0])) ? $carRes[0]->perforation : '' ?>
-                
-                |<b>TempCode: </b><?= (isset($carRes[0])) ? $carRes[0]->tempcode : '' ?>				
-													
+
+                |<b>TempCode: </b><?= (isset($carRes[0])) ? $carRes[0]->tempcode : '' ?>
+
                 <br/><br/>
                 <button type="button" class="custom-die-cta"
                         onclick="editCustomDie(<?= $key ?>,<?= $quotationDetail->SerialNumber ?>,'quo')">
@@ -445,7 +446,7 @@ $UserTypeID = $this->session->userdata('UserTypeID');
                 <?= $symbol ?><?= number_format($quotationDetail->Price * $exchange_rate, 2,'.',''); ?>
                 <?php $row_total_line += ($quotationDetail->Price * $exchange_rate);?>
               </td>
-                                              
+
               <td class="padding-6 icon-tablee">
                 <?php if($quotation->QuotationStatus != 13){ ?>
                 <i class="fa fa-trash-o bt-delete"
@@ -461,7 +462,7 @@ $UserTypeID = $this->session->userdata('UserTypeID');
             <?php } elseif ($quotationDetail->ProductID == 0) { ?>
             <tr class="<?=$clr_class?>">
               <td style="text-align: center;">
-													
+
                 <? if ($quotationDetail->active == "c") { ?>
                 <img width="12" height="12"
                      src="<?= ASSETS ?>assets/images/blue-tick.png">
@@ -470,7 +471,7 @@ $UserTypeID = $this->session->userdata('UserTypeID');
                        checked="checked"
                        <?php } ?>onchange="if(this.checked){selector(<?= $quotationDetail->SerialNumber ?>,'Y');}else{selector('<?= $quotationDetail->SerialNumber ?>','N');}">
                 <? } ?>
-													 												
+
                 <br>
                 <?php echo $this->quoteModel->txt_for_plain_labels($quotation->Label); ?>
               </td>
@@ -500,12 +501,12 @@ $UserTypeID = $this->session->userdata('UserTypeID');
                 <i class="fa fa-trash-o bt-delete"
                    onclick="deletenode(<?= $quotationDetail->SerialNumber ?>,'<?= $quotationDetail->Prl_id ?>','<?= $quotationDetail->ManufactureID ?>')"
                    id="deletenode1"></i>
-                
+
                 <i class="fa fa-floppy-o bt-save"
                    onclick="updateQuotationNewLine(<?= $key ?>,<?= $quotationDetail->SerialNumber ?>,<?= $quotationDetail->CustomerID ?>)"></i>
                 <?php } ?>
               </td>
-              
+
             </tr>
 
             <?php
@@ -525,11 +526,11 @@ $UserTypeID = $this->session->userdata('UserTypeID');
                      value="<?= $calco['maxLabels'] ?>">
               <input type="hidden" id="totalLabels<?= $key ?>"
                      value="<?= $quotationDetail->orignalQty ?>">
-              <input type="hidden" id="totalQty<?= $key ?>" value="">           
-                                                             
+              <input type="hidden" id="totalQty<?= $key ?>" value="">
+
               <td style="text-align: center;">
                 <? if ($quotationDetail->active == "c") { ?>
-                
+
                 <img width="12" height="12"
                      src="<?= ASSETS ?>assets/images/blue-tick.png">
                 <? } else { ?>
@@ -537,17 +538,17 @@ $UserTypeID = $this->session->userdata('UserTypeID');
                        checked="checked"
                        <?php } ?>onchange="if(this.checked){selector(<?= $quotationDetail->SerialNumber ?>,'Y');}else{selector('<?= $quotationDetail->SerialNumber ?>','N');}">
                 <? } ?>
-																									
-																							
+
+
               </td>
               <td class="text-center labels-form "><?= $quotationDetail->ManufactureID ?>
                 <br>
-                                                     
+
                 <?php
               $totalPerSheet = $quotationDetail->LabelsPerSheet;
                 $perRoll 	   = $quotationDetail->LabelsPerRoll;
                 ?>
-											
+
                 <?php if ($quotationDetail->regmark != 'Y' && $quotation->QuotationStatus != 13) { ?>
                 <label class="select ">
                   <select name="printer" id="printer<?= $key ?>"
@@ -568,7 +569,7 @@ $UserTypeID = $this->session->userdata('UserTypeID');
               <td>
                 <?
                 if(preg_match('/Roll Labels/is',$quotationDetail->ProductBrand) && $quotationDetail->Printing=="Y" and $quotationDetail->regmark != 'Y'){
-                                       
+
                   if($quotationDetail->wound=='Y' || $quotationDetail->wound=='Inside'){ $wound_opt ='Inside Wound';}else{ $wound_opt ='Outside Wound';}
                   $labeltype = $this->home_model->get_printing_service_name($quotationDetail->Print_Type);
                   $productname1  = explode("-",$quotationDetail->ProductCategoryName);
@@ -577,69 +578,69 @@ $UserTypeID = $this->session->userdata('UserTypeID');
                   $productname1[0] = str_replace("rolls labels","",$productname1[0]);
                   $productname1[0] = str_replace("roll labels","",$productname1[0]);
                   $productname1[0] = str_replace("Roll Labels","",$productname1[0]);
-                                    	
+
                   $productname1  = "Printed Labels on Rolls - ".str_replace("roll label","",$productname1[0]).' - '.$productname1[1];
                   $completeName = ucfirst($productname1).' '.$wound_opt.' - Orientation '.$quotationDetail->Orientation.', ';
-                                    	
+
                   if($quotationDetail->FinishType == 'No Finish'){ $labelsfinish = ' With Label finish: None ';}
                   else{  $labelsfinish = ' With Label finish : '.$quotationDetail->FinishType; }
                   $completeName.= $labeltype.' '.$labelsfinish;
                   $quotationDetail->ProductName = $completeName;
-                                    	 
+
                   $this->db->where('SerialNumber',$quotationDetail->SerialNumber);
                   $this->db->update('quotationdetails',array('ProductName'=>$quotationDetail->ProductName));
                 }
                 ?>
-                                 
-     
-     
+
+
+
                 <?= $quotationDetail->ProductName.' '.$this->quoteModel->txt_for_plain_labels($quotation->Label); ?>
                 <br/>
 
                 <?php if ($quotationDetail->regmark == 'Y') { ?>
                 <b>Printing Service (Black Registration Mark on Reverse)</b>
                 <?php } ?>
-                
+
               </td>
               <td class="text-center" id="unit_price<?= $key ?>">
-                <?=$symbol?><?= number_format(($quotationDetail->Price / $Total_labels) * $exchange_rate, 3,'.','')?> 
+                <?=$symbol?><?= number_format(($quotationDetail->Price / $Total_labels) * $exchange_rate, 3,'.','')?>
                 <br>
                 Per Label
               </td>
               <input type="hidden" id="totalLabels<?= $key ?>" value="<?= $quotationDetail->orignalQty ?>">
               <td style="text-align:center">
-                                                    
+
                 <input type="hidden" id="ogbatch<?= $key ?>" value="<?= $quotationDetail->orignalQty ?>">
-                                                
+
                 <?php
-                  
+
                 $totalPerSheets = 0;
                 $totalPerSheets = $totalPerSheet = 	$quotationDetail->LabelsPerSheet;
                     $perRoll = $quotationDetail->LabelsPerRoll;
-								  						
-											
+
+
                 if($quotationDetail->is_custom!="No" && $quotationDetail->is_custom!=""){
                   $totalPerSheets =  $perRoll;
                 }
                 ?>
-													
+
                 <div>
-                  
-                  
-                  
+
+
+
                   <?=$quotationDetail->Quantity.' '.$format?><br>
-                  <?=$Total_labels.' '.$lbss?>              
-                                                    
-                                                    
-                  <input type="<?php if($quotationDetail->ProductBrand == 'Roll Labels' && $quotationDetail->Printing == 'Y'){ echo 'hidden';} ?>" onchange="updateTotalLabels(<?= $key ?>,this.value,<?= $totalPerSheets ?>)" id="qty<?= $key ?>" value="<?=$quotationDetail->Quantity ?>" 
-                         
+                  <?=$Total_labels.' '.$lbss?>
+
+
+                  <input type="<?php if($quotationDetail->ProductBrand == 'Roll Labels' && $quotationDetail->Printing == 'Y'){ echo 'hidden';} ?>" onchange="updateTotalLabels(<?= $key ?>,this.value,<?= $totalPerSheets ?>)" id="qty<?= $key ?>" value="<?=$quotationDetail->Quantity ?>"
+
                   <?php  if (
-                  ($quotationDetail->sample == 'Sample' || $quotationDetail->sample == 'sample') ||  
-                  ($quotationDetail->ProductBrand == 'Roll Labels' && $quotationDetail->Printing == 'Y') || 
+                  ($quotationDetail->sample == 'Sample' || $quotationDetail->sample == 'sample') ||
+                  ($quotationDetail->ProductBrand == 'Roll Labels' && $quotationDetail->Printing == 'Y') ||
                   ($quotationDetail->regmark != 'Y' && $quotationDetail->Printing == 'Y' ) ||
                   ($quotationDetail->active == "c")
                 ) { ?> readonly <?} ?>  class="form-control input-number text-center allownumeric" name="quant1">
-                                                    
+
 
                 </div>
                 <?php
@@ -656,42 +657,42 @@ $UserTypeID = $this->session->userdata('UserTypeID');
 
               <td class="padding-6 icon-tablee">
                 <?php if ($quotationDetail->active != "c") { ?>
-                                     <?php if($quotation->QuotationStatus != 13){ ?>               
+                                     <?php if($quotation->QuotationStatus != 13){ ?>
                 <i class="fa fa-trash-o bt-delete"
                    onclick="deletenode(<?= $quotationDetail->SerialNumber ?>,'<?= $quotationDetail->Prl_id ?>','<?= $quotationDetail->ManufactureID ?>')"
                    id="deletenode1"></i>
                 <?php } ?>
-                                                  
+
                 <?php if(($quotationDetail->sample != 'Sample' && $quotationDetail->sample != 'sample') && ($quotationDetail->regmark != 'Y')){ ?>
-                                                  
+
                 <i class="fa fa-floppy-o bt-save" id="content_save<?= $key ?>"
                    onclick="updateQuotationDetailPrice(<?= $key ?>,<?= $quotationDetail->SerialNumber ?>,'<?= $quotationDetail->ProductBrand ?>','<?= $quotationDetail->ManufactureID ?>',<?= $totalPerSheets ?>,'<?= $quotationDetail->pressproof ?>','<?= $quotation->UserID ?>','<?= $quotationDetail->ProductID ?>','<?= $quotationDetail->regmark ?>')"></i>
-                                                  
-                                                 
-                                                  
-                <?php } ?> 
-																									
+
+
+
+                <?php } ?>
+
                 <?php } ?>
               </td>
 
             </tr>
-                                           
-											
-            <?php 
-											 
+
+
+            <?php
+
                 $digitalCheck = ($quotationDetail->ProductBrand == 'Roll Labels') ? 'roll' : 'A4';
                 if($quotation->QuotationStatus == 13){ ?>
-                                            
+
             <?php if ($quotationDetail->Printing == 'Y' && $quotationDetail->regmark != 'Y') { ?>
             <tr class="noneditable <?=$clr_class?>">
               <td class="text-center"></td>
               <td class="text-center"></td>
               <td><i class="mdi mdi-check"></i><span>
-                
+
                 <?php if($quotationDetail->Print_Type=="Fullcolour"){ ?>
                 <?php $quotationDetail->Print_Type = "4 Colour Digital Process"; ?>
                 <?php } ?>
-						  
+
                 <?= $quotationDetail->Print_Type ?>
                 </span>
                 <?php if ($quotationDetail->Print_Qty > 0) { ?>
@@ -709,7 +710,7 @@ $UserTypeID = $this->session->userdata('UserTypeID');
                 </span> <span class="invoice-bold"><strong
                                                            style="font-size:12px;;">Finish:</strong>
                 <?= $quotationDetail->FinishType ?>
-                </span> 
+                </span>
                 <!--<span class="invoice-bold">
                   <strong style="font-size:12px;;">Press Proof:</strong>
                   <?= ($quotationDetail->pressproof == 1) ? 'Yes' : 'No' ?>
@@ -719,51 +720,57 @@ $UserTypeID = $this->session->userdata('UserTypeID');
               </td>
               <td class="text-center"></td>
               <td class="text-center">
-                
-               <?php 
-      $des_gn = '';                           
+
+               <?php
+      $des_gn = '';
       if($quotationDetail->Print_Qty > 1){
         $des_gn ='Designs';
       }else{
         $des_gn ='Design';
       }
-                                                             
-      $des_free = '';                           
+
+      $des_free = '';
       if($quotationDetail->Free > 1){
         $des_free ='Designs';
       }else{
         $des_free ='Design';
       }
           ?>
-        
+
         <?= $quotationDetail->Print_Qty.' '.$des_gn?> <br>
-                      
+
         <?php if($digitalCheck=="A4"){ ?>
         (<?= $quotationDetail->Free.' '.$des_free?> Free)
         <?php } ?>
-              
+
               </td>
               <td class="text-center">
-                <? echo $symbol . (number_format($quotationDetail->Print_Total * $quotation->exchange_rate, 2, '.', '')); ?>
-                <?php $row_total_line += ($quotationDetail->Print_Total * $quotation->exchange_rate);?>
-                        
+                  <?php
+                  if ($quotationDetail->FinishTypePricePrintedLabels != '' && $quotationDetail->total_emb_cost != 0){
+                      echo $symbol . (number_format(($quotationDetail->Print_Total * $quotation->exchange_rate)-$quotationDetail->total_emb_cost, 2, '.', ''));
+                      $row_total_line += ($quotationDetail->Print_Total * $quotation->exchange_rate)-$quotationDetail->total_emb_cost;
+                  } else {
+                      echo $symbol . (number_format($quotationDetail->Print_Total * $quotation->exchange_rate, 2, '.', ''));
+                      $row_total_line += ($quotationDetail->Print_Total * $quotation->exchange_rate);
+                  }
+                  ?>
               </td>
               <td class="text-center"></td>
             </tr>
-            
-            
-            <?php 
-                  if($quotationDetail->qp_proof=="Y"){                                      
+
+
+            <?php
+                  if($quotationDetail->qp_proof=="Y"){
                     include(APPPATH . 'views/order_quotation/quotation/pp_line_no_edit.php');
                   }
-            
+
             ?>
             <?php $row_total_line += number_format($quotationDetail->qp_price * $quotation->exchange_rate,2);
                   $extPrice += ($quotationDetail->qp_price);
             ?>
-            
-            
-            
+
+
+
             <?php } /*elseif ($quotationDetail->Printing == 'Y' && $quotationDetail->regmark == 'Y') {*/ ?>
             <!--<tr class="<?=$clr_class?>">
               <td></td>
@@ -774,35 +781,145 @@ $UserTypeID = $this->session->userdata('UserTypeID');
               <td></td>
             </tr>-->
             <?php  /*}*/ ?>
-												
-												
-            <?php } else{ ?> 
+
+
+            <?php } else{  ?>
             <?php include(APPPATH . 'views/order_quotation/checkout/die_material.php'); ?>
-                                      
-                                      
+
+
             <?php if($digitalCheck=='roll' && $quotationDetail->Printing == 'Y' && $quotationDetail->regmark == 'N'){ ?>
-                                      
+
             <?php include(APPPATH . 'views/order_quotation/quotation/pp_line.php'); ?>
-                                                   
-                                      
+
+
             <?php $row_total_line += number_format($quotationDetail->qp_price * $quotation->exchange_rate,2);
                   $extPrice += ($quotationDetail->qp_price);
             ?>
             <?php } ?>
             <?php } } ?>
-                                      
-                                      
+
+
+
+            <?php
+            if ($quotationDetail->Printing == 'Y' && $quotationDetail->FinishTypePricePrintedLabels != '') { ?>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td colspan="5"><b> Finish </b></td>
+                </tr>
+                <?php
+                    $lem_options = json_decode($quotationDetail->FinishTypePricePrintedLabels);
+                    $parent_title = '';
+
+                    /* echo count($lem_options)."------<br>";
+                     echo "<pre>";
+                     print_r($lem_options);
+                     echo "</pre>";*/
+
+                    $index = 0;
+                    $parsed_child_title = '';
+                    $parsed_title_price = 0;
+                    foreach ($lem_options as $lem_option) {
+
+                        $parsed_title = ucwords(str_replace("_", " ", $lem_option->finish_parsed_title));
+                        $parsed_parent_title = $lem_option->parsed_parent_title;
+                        $parent_id = $lem_option->parent_id;
+                        $use_old_plate = $lem_option->use_old_plate;
+
+                        ($use_old_plate == 1 ?  $plate_cost = 0 : $plate_cost = $lem_option->plate_cost);
+
+                        if ($parent_id == 1) { //For Lamination and varnish
+                            $parsed_child_title .= $parsed_title.", ";
+                            $parsed_title_price += $lem_option->finish_price;
+
+
+                            if ($parsed_parent_title != $lem_options[$index+1]->parsed_parent_title || ($index+1) == count($lem_options)) {
+                                $parsed_parent_title = ucwords(str_replace("_", " ", $parsed_parent_title));
+                                ?>
+
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td><?= "<b>".$parsed_parent_title." : </b>".$parsed_child_title?></td>
+                                    <td class="text-center">
+                                        <?= $symbol." ".number_format((($parsed_title_price+$plate_cost) / $Total_labels) * $exchange_rate, 2, '.', '') ?>
+                                        <br>Per Label
+                                    </td>
+                                    <td></td>
+                                    <td class="text-center">
+                                        <?php
+                                        echo $symbol." ".number_format(($parsed_title_price * $exchange_rate), 2) ;
+                                        $row_total_line += $parsed_title_price * $exchange_rate;
+                                        $emb_total_cost += $parsed_title_price * $exchange_rate;
+                                        ?>
+                                    </td>
+                                    <td></td>
+                                </tr>
+
+                                <?php
+                            }
+
+                        } else if($parent_id != 1 && $parent_id != 5) { //For other than varnish and sequen
+                            $parsed_parent_title = ucwords(str_replace("_", " ", $parsed_parent_title));
+                            $parsed_child_title = $parsed_title;
+                            $parsed_title_price = $lem_option->finish_price+$plate_cost;
+                            ?>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td><?= "<b>".$parsed_parent_title." : </b>".$parsed_child_title?></td>
+                                <td class="text-center">
+                                    <?= $symbol." ".number_format(($parsed_title_price / $Total_labels) * $exchange_rate, 2, '.', '') ?>
+                                    <br>Per Label
+                                </td>
+                                <td></td>
+                                <td class="text-center">
+                                    <?php
+                                    echo $symbol." ".number_format(($parsed_title_price * $exchange_rate), 2);
+                                    $row_total_line += $parsed_title_price * $exchange_rate;
+                                    $emb_total_cost += $parsed_title_price * $exchange_rate;
+                                    ?>
+                                </td>
+                                <td></td>
+                            </tr>
+
+                        <?php } else { //For Sequential Data ?>
+
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td>Sequential Variable Data</td>
+                                <td>
+                                    <?= $symbol." ".number_format((sequential_price / $Total_labels) * $exchange_rate, 2, '.', '') ?>
+                                    <br>Per Label
+                                </td>
+                                <td></td>
+                                <td>
+                                    <?php
+                                    echo $symbol." ".number_format((sequential_price * $exchange_rate), 2) ;
+                                    $row_total_line += sequential_price * $exchange_rate;
+                                    $emb_total_cost += sequential_price * $exchange_rate;
+
+                                    ?>
+                                </td>
+                                <td></td>
+                            </tr>
+
+                        <?php  }
+                        $index++;
+                    } ?>
+            <?php } ?>
+
+
             <tr class="<?=$clr_class?>">
               <td colspan="4"></td>
               <td class="text-center" colspan=""><b>Line Total</b></td>
               <td class="text-center" colspan=""><b><?=$symbol.number_format($row_total_line,2,'.','')?></b></td>
               <td colspan=""></td>
-            </tr>                                                          
-                                     
-                                      
-                                        
+            </tr>
+
             <?php  $count++; } ?>
-                                   
+
             <tr style="display: none" id="tr_for_nw_line" class="<?=$clr_class?>">
               <td></td>
               <td><input class="form-control input-number text-center"
@@ -817,13 +934,13 @@ $UserTypeID = $this->session->userdata('UserTypeID');
                          type="number" required id="new_line_qty" placeholder="quanity"></td>
               <td></td>
 
-              
+
               <td class="padding-6 icon-tablee">
                 <i class="fa fa-floppy-o bt-save"
                    onclick="quotationNewLine('<?= $quotationDetail->QuotationNumber ?>',<?= $quotation->UserID ?>,this)"></i>
               </td>
             </tr>
-                                      
+
           </tbody>
         </table>
       </div>
@@ -849,9 +966,11 @@ $UserTypeID = $this->session->userdata('UserTypeID');
         <table class="table table-bordered quote-price-details details-cart-table table-striped">
           <tr>
             <td>Total of Goods:</td>
-            <td><?= $symbol ?><?= number_format($extPrice * $exchange_rate, 2,'.',''); ?></td>
+            <td>
+                <?= $symbol ?><?= number_format($extPrice * $exchange_rate, 2,'.',''); ?>
+            </td>
           </tr>
-          <?php 
+          <?php
           $service = $quotation->ShippingServiceID;
           $county = $this->quotationModal->getShipingServiceName($service);
           $ShipingService = $this->quotationModal->getShipingService($county['CountryID']);
@@ -862,13 +981,13 @@ $UserTypeID = $this->session->userdata('UserTypeID');
 
 
               <?php include('Qshiping.php'); ?>
-              
+
 
             </td>
           </tr>
           <tr>
             <td>Delivery Service:</td>
-            <?php    
+            <?php
             $delive = 0;
             $delive =  number_format($quotation->QuotationShippingAmount / 1.2, 2,'.','');
             // AA21 STARTS
@@ -886,10 +1005,10 @@ $UserTypeID = $this->session->userdata('UserTypeID');
                  }
             // }
             // AA21 ENDS
-            
-            ?>  
-            
-            
+
+            ?>
+
+
           <td><?= $symbol ?><?= number_format( $delive * $exchange_rate, 2,'.','') ?></td>
           </tr>
           <tr>
@@ -897,21 +1016,21 @@ $UserTypeID = $this->session->userdata('UserTypeID');
             <td><?= $symbol ?><?php $grandPrice = $extPrice + $delive;
               echo number_format($grandPrice * $exchange_rate, 2,'.','') ?></td>
           </tr>
-                                        
+
           <?php if ($quotation->vat_exempt == 'yes') { ?>
           <tr>
             <td>VAT EXEMPT:</td>
             <td>-<?= $symbol ?><?php echo number_format((($grandPrice * vat_rate) - $grandPrice) * $exchange_rate, 2,'.','') ?></td>
           </tr>
           <?php } else { ?>
-																			
-																			
+
+
           <tr>
             <td>VAT @ 20%:</td>
             <td><?= $symbol ?><?php echo number_format((($grandPrice * vat_rate) - $grandPrice)  * $exchange_rate, 2,'.','');?>
-																						
+
               <?php $grandPrice = $grandPrice + number_format((($grandPrice * vat_rate) - $grandPrice)  , 2,'.','');?>
-																					
+
             </td>
           </tr>
           <?php } ?>
@@ -928,10 +1047,10 @@ $UserTypeID = $this->session->userdata('UserTypeID');
               $this->db->where('QuotationNumber', $quotation->QuotationNumber);
               $this->db->update('quotations', $subPrice);
           ?>
-          
+
           <?php   if(  ($is_custom_lines->sums > 0 && $is_normal_lines->sums > 0) || ($is_custom_lines->sums > 0) || $UserTypeID==50 || $uID=='653722'){?>
-          
-          
+
+
           <tr>
             <td>Print Quotation:</td>
             <td>
@@ -980,10 +1099,10 @@ $UserTypeID = $this->session->userdata('UserTypeID');
             </td>
 
           </tr>
-          
-          
+
+
           <?php  } ?>
-          
+
 
           </tbody>
         </table>
@@ -1169,9 +1288,9 @@ $UserTypeID = $this->session->userdata('UserTypeID');
                         <button id="up_nt" type="button" style="display: none;" onclick="updateNote()"
                                 class="btn btn-outline-dark waves-light waves-effect btn-countinue btn-print1" style="margin-right: 10px;">Update Note</button>
 
-                                
-                            
-                            
+
+
+
                     </span>
 
 
@@ -1346,7 +1465,7 @@ $UserTypeID = $this->session->userdata('UserTypeID');
                 }
             });
         }
-      
+
      // AA21 STARTS
     function updateCourier(QNumber)
     {
@@ -1368,8 +1487,8 @@ $UserTypeID = $this->session->userdata('UserTypeID');
         }
     }
     // AA21 ENDS
-    
-    
+
+
      $(document).on('click', '.copytoclip', (function (e) {
         var $temp = $("<input>");
         $("body").append($temp);
@@ -1378,7 +1497,7 @@ $UserTypeID = $this->session->userdata('UserTypeID');
         swal('', 'Quotation Approval Link  Copied to Clipboard', 'success');
         $temp.remove();
     }));
-         
-      
+
+
 
     </script>

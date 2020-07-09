@@ -289,7 +289,6 @@ foreach ($AccountInfo as $order)
                 $symbol = $this->orderModal->get_currecy_symbol($order->currency);
 
     foreach ($AccountDetails as $detail) {
-    
        
     $product_detail = $this->user_model->getproductdetail($detail->ProductID);
                                         $permissions = $this->settingmodel->checkpermissions($detail->SerialNumber, $product_detail, $order->OrderStatus, $order->editing);
@@ -408,13 +407,107 @@ foreach ($AccountInfo as $order)
                         <?php } ?></td>
                       <td class="text-center"></td>
                       <td class="text-center"><?= $detail->Print_Qty ?></td>
-                      <td class="text-center"><? echo $symbol . (number_format($detail->Print_Total * $order->exchange_rate, 2, '.', '')); ?></td>
+                      <td class="text-center">
+                          <?
+                        if ($detail->FinishTypePricePrintedLabels != '' && $detail->total_emb_cost != 0){
+                            echo $symbol . (number_format(($detail->Print_Total * $order->exchange_rate)-$detail->total_emb_cost, 2, '.', ''));
+                        } else {
+                            echo $symbol . (number_format($detail->Print_Total * $order->exchange_rate, 2, '.', ''));
+                        }
+                          ?>
+                      </td>
                       
                     </tr>
-                    <?php } 
+                    <?php } ?>
+
+                <?php
+                if ($detail->Printing == 'Y' && $detail->FinishTypePricePrintedLabels != '') { ?>
+                    <tr>
+                        <td></td>
+                        <td colspan="4"><b> Finish </b></td>
+                    </tr>
+                    <?php
+                    $lem_options = json_decode($detail->FinishTypePricePrintedLabels);
+                    $parent_title = '';
+
+                    /* echo count($lem_options)."------<br>";
+                     echo "<pre>";
+                     print_r($lem_options);
+                     echo "</pre>";*/
+
+                    $index = 0;
+                    $parsed_child_title = '';
+                    $parsed_title_price = 0;
+                    foreach ($lem_options as $lem_option) {
+
+                        $parsed_title = ucwords(str_replace("_", " ", $lem_option->finish_parsed_title));
+                        $parsed_parent_title = $lem_option->parsed_parent_title;
+                        $parent_id = $lem_option->parent_id;
+                        $use_old_plate = $lem_option->use_old_plate;
+
+                        ($use_old_plate == 1 ?  $plate_cost = 0 : $plate_cost = $lem_option->plate_cost);
+
+                        if ($parent_id == 1) { //For Lamination and varnish
+                            $parsed_child_title .= $parsed_title.", ";
+                            $parsed_title_price += $lem_option->finish_price;
+
+
+                            if ($parsed_parent_title != $lem_options[$index+1]->parsed_parent_title || ($index+1) == count($lem_options)) {
+                                $parsed_parent_title = ucwords(str_replace("_", " ", $parsed_parent_title));
+                                ?>
+
+                                <tr>
+                                    <td></td>
+                                    <td><?= "<b>".$parsed_parent_title." : </b>".$parsed_child_title?></td>
+                                    <td class="text-center"></td>
+                                    <td></td>
+                                    <td class="text-center">
+                                        <?php
+                                        echo $symbol." ".number_format(($parsed_title_price * $exchange_rate), 2) ;
+                                        ?>
+                                    </td>
+                                </tr>
+
+                                <?php
+                            }
+
+                        } else if($parent_id != 1 && $parent_id != 5) { //For other than varnish and sequen
+                            $parsed_parent_title = ucwords(str_replace("_", " ", $parsed_parent_title));
+                            $parsed_child_title = $parsed_title;
+                            $parsed_title_price = $lem_option->finish_price+$plate_cost;
+                            ?>
+                            <tr>
+                                <td></td>
+                                <td><?= "<b>".$parsed_parent_title." : </b>".$parsed_child_title?></td>
+                                <td class="text-center"></td>
+                                <td></td>
+                                <td class="text-center">
+                                    <?php
+                                    echo $symbol." ".number_format(($parsed_title_price * $exchange_rate), 2);
+                                    ?>
+                                </td>
+                            </tr>
+
+                        <?php } else { //For Sequential Data ?>
+
+                            <tr>
+                                <td></td>
+                                <td>Sequential Variable Data</td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <?php
+                                    echo $symbol." ".number_format((sequential_price * $exchange_rate), 2) ;
+                                    ?>
+                                </td>
+                            </tr>
+
+                        <?php  }
+                        $index++;
+                    } ?>
+                <?php } ?>
                     
-                   }
-                ?>
+            <?php } ?>
                   </tbody>
                 </table>
                 </div>
@@ -502,7 +595,7 @@ foreach ($AccountInfo as $order)
                   <tr>
                       <td><button type="button" onclick="printinvoice('<?= $invoice ?>');" class="btn btn-info waves-light waves-effect pull-right"> Print Invoice </button></td>
                       <br>
-                    </tr>
+                  </tr>
                 </div>
               </div>
               </div>

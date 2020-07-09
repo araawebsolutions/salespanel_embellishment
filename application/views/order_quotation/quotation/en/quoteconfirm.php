@@ -635,8 +635,14 @@ tr.table_white_bar {
       <?php }?>
     </td>
     <td class="invoicetable_tabel_border" align="center" width="">
-      <?  $print_exvat = $AccountDetail->Print_Total;
-          echo $symbol."".(number_format($print_exvat*$exchange_rate,2));
+      <?php
+        $print_exvat = $AccountDetail->Print_Total;
+        if ($AccountDetail->FinishTypePricePrintedLabels != '' && $AccountDetail->total_emb_cost != 0){
+            echo $symbol."".(number_format(($print_exvat*$exchange_rate)- $AccountDetail->total_emb_cost,2));
+        } else {
+            echo $symbol."".(number_format($print_exvat*$exchange_rate,2));
+        }
+
       ?>    
     </td>
 
@@ -730,9 +736,110 @@ tr.table_white_bar {
     </b>
   </td>
   </tr>-->
-  
-       
-      <?php
+
+          <?php
+
+          if ($AccountDetail->Printing == 'Y' && $AccountDetail->FinishTypePricePrintedLabels != '') { //Labels Embellishment Options Start
+              ?>
+              <tr>
+                  <td class="invoicetable_tabel_border"></td>
+                  <td class="invoicetable_tabel_border" colspan="5"><b> Finish </b></td>
+              </tr>
+              <?php
+              $lem_options = json_decode($AccountDetail->FinishTypePricePrintedLabels);
+              $parent_title = '';
+
+              /* echo count($lem_options)."------<br>";
+               echo "<pre>";
+               print_r($lem_options);
+               echo "</pre>";*/
+
+              $index = 0;
+              $parsed_child_title = '';
+              $parsed_title_price = 0;
+              foreach ($lem_options as $lem_option) {
+
+                  $parsed_title = ucwords(str_replace("_", " ", $lem_option->finish_parsed_title));
+                  $parsed_parent_title = $lem_option->parsed_parent_title;
+                  $parent_id = $lem_option->parent_id;
+                  $use_old_plate = $lem_option->use_old_plate;
+
+                  ($use_old_plate == 1 ?  $plate_cost = 0 : $plate_cost = $lem_option->plate_cost);
+
+                  if ($parent_id == 1) { //For Lamination and varnish
+                      $parsed_child_title .= $parsed_title.", ";
+                      $parsed_title_price += $lem_option->finish_price;
+
+
+                      if ($parsed_parent_title != $lem_options[$index+1]->parsed_parent_title || ($index+1) == count($lem_options)) {
+                          $parsed_parent_title = ucwords(str_replace("_", " ", $parsed_parent_title));
+                          ?>
+
+                          <tr>
+                              <td class="invoicetable_tabel_border"></td>
+                              <td class="invoicetable_tabel_border"><?= "<b>".$parsed_parent_title." : </b>".$parsed_child_title?></td>
+                              <td class="invoicetable_tabel_border"></td>
+                              <td class="invoicetable_tabel_border" align="center">
+                                  <?= $symbol." ".number_format((($parsed_title_price+$plate_cost) / $total_labels) * $exchange_rate, 2, '.', '') ?>
+                                  <br>Per Label
+                              </td>
+                              <td class="invoicetable_tabel_border"></td>
+                              <td class="invoicetable_tabel_border" align="center">
+                                  <?php
+                                  echo $symbol." ".number_format(($parsed_title_price * $exchange_rate), 2) ;
+                                  ?>
+                              </td>
+                          </tr>
+
+                          <?php
+                      }
+
+                  } else if($parent_id != 1 && $parent_id != 5) { //For other than varnish and sequen
+                      $parsed_parent_title = ucwords(str_replace("_", " ", $parsed_parent_title));
+                      $parsed_child_title = $parsed_title;
+                      $parsed_title_price = $lem_option->finish_price+$plate_cost;
+                      ?>
+                      <tr>
+                          <td class="invoicetable_tabel_border"></td>
+                          <td class="invoicetable_tabel_border"><?= "<b>".$parsed_parent_title." : </b>".$parsed_child_title?></td>
+                          <td class="invoicetable_tabel_border"></td>
+                          <td class="invoicetable_tabel_border" align="center">
+                              <?= $symbol." ".number_format(($parsed_title_price / $total_labels) * $exchange_rate, 2, '.', '') ?>
+                              <br>Per Label
+                          </td>
+                          <td class="invoicetable_tabel_border"></td>
+                          <td class="invoicetable_tabel_border" align="center">
+                              <?php
+                              echo $symbol." ".number_format(($parsed_title_price * $exchange_rate), 2);
+                              ?>
+                          </td>
+                      </tr>
+
+                  <?php } else { //For Sequential Data ?>
+
+                      <tr>
+                          <td class="invoicetable_tabel_border"></td>
+                          <td class="invoicetable_tabel_border">Sequential Variable Data</td>
+                          <td class="invoicetable_tabel_border"></td>
+                          <td class="invoicetable_tabel_border" align="center">
+                              <?= $symbol." ".number_format((sequential_price / $total_labels) * $exchange_rate, 2, '.', '') ?>
+                              <br>Per Label
+                          </td>
+                          <td class="invoicetable_tabel_border"></td>
+                          <td class="invoicetable_tabel_border" align="center">
+                              <?php
+                              echo $symbol." ".number_format((sequential_price * $exchange_rate), 2) ;
+                              ?>
+                          </td>
+                      </tr>
+
+                  <?php  }
+                  $index++;
+              } ?>
+
+              <?php
+          }  //Labels Embellishment Options Start
+
       $total_exvat += $linetotalexvat;
       $total_invat += $linetotalinvat;
       $i++;

@@ -2457,6 +2457,12 @@ class order extends CI_Controller
 
     function order_pdf($order, $language, $type)
     {
+
+       /* echo "Order: ".$order."<br>";
+        echo "Language: ".$language."<br>";
+        echo "Type: ".$type."<br>";
+        die();*/
+
         $CI =& get_instance();
         if ($type == 0) {
             $page = ($language == "en") ? "order_quotation/order_detail/en/orderconfirm.php" : "order_quotation/order_detail/fr/orderconfirm.php";
@@ -3646,6 +3652,7 @@ class order extends CI_Controller
 	 
 	
 	 function order_vat_validate(){
+
 	    $country     = $this->input->post('country');
         $vatNumber   = $this->input->post('vatNumber');
 		$OrderNumber = $this->input->post('OrderNumber');
@@ -3977,7 +3984,7 @@ class order extends CI_Controller
         $data['orderNumber'] = $orderNumber;
         $data['serialNumber'] = $serialNumber;
         $data['return_url'] = $_SERVER['HTTP_REFERER'];
-        $data['flag'] = 'editable';
+        $data['flag'] = 'editOrderline';
         $data['main_content'] = 'order_quotation/label_embellishment_print_service/label_emb_page/main';
         $data['orderDetails'] = $this->orderModal->getOrderDetail($orderNumber);
         
