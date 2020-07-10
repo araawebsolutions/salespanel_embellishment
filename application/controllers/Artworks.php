@@ -602,9 +602,120 @@ class Artworks extends CI_Controller {
 		   
 		     $this->output->set_content_type('application/json');	
 		     $this->output->set_output(json_encode($json_data));
-	 }	  
+	 }	
+
+	 // NAFEES LA WORK STARTS
+	 public function upload_printfile_LE(){ 
+
+	 	$parent_id = $_POST['parent_id'];
+		$file_number = $_POST['file_number'];
+	    $file_up  = $_FILES['file_up_'.$file_number];
+	    $directory_name = array("print/", "print/");
+		$db_col_name = "";
+		if(isset($file_up) and $file_up !=''){
+			$directory_name = $this->Home_model->getDirectoryName($parent_id);
+			if( $directory_name[0] != "error" ) {
+				$response = $this->upload_images('file_up_'.$file_number, $directory_name[0]);
+				$db_col_name = $directory_name[1];
+			} else {
+				$response['msg'] = "error";
+			}
+		}
+
+		if($response['msg']!='error'){
+			$json_data = array('attachment'=>$response['file'], 'db_col_name'=> $db_col_name);
+		}else{
+			$json_data = array('response'=>'error');
+		}
+		   
+		$this->output->set_content_type('application/json');	
+		$this->output->set_output(json_encode($json_data));
+	 }	
+	 // NAFEES LA WORK ENDS 
+
 	 
-	 public function add_artwork_comment(){
+
+	 /*
+	 public function upload_printfile(){ 
+
+
+	    $file_up  = $_FILES['file_up'];
+	 	if( isset($_POST['parse_title']) && $_POST['parse_title'] != '' ) {
+	 		$parse_title = $_POST['parse_title'];
+	 		$file_up  = $_FILES['file_up'.$parse_title];
+	 	}
+
+	 	
+	    $imagename = '';
+		if( (isset($file_up) and $file_up !='' ) && (!$LE_flag) ){
+			$response = $this->upload_images('file_up','print/');	
+		} else if( (isset($file_up) and $file_up !='' ) && ($LE_flag) ){
+			
+			if( is_dir( ARTPATH.'site/printing/chat/emb_plates' ) ) {
+				
+				mkdir(ARTPATH.'site/printing/chat/emb_plates');
+
+			}
+
+			$response = $this->upload_images('file_up','emb_plates/');	
+
+		}
+		 
+		 die();
+	    if($response['msg']!='error'){
+		 $json_data = array('attachment'=>$response['file']);
+	    }else{
+		 $json_data = array('response'=>'error');
+	    }
+		   
+		$this->output->set_content_type('application/json');	
+		$this->output->set_output(json_encode($json_data));
+	 }	
+	 */ 
+	 
+	 public function add_artwork_comment(){	
+
+	 // 	ini_set('display_errors', 1);
+		// ini_set('display_startup_errors', 1);
+		// error_reporting(E_ALL);
+
+
+	 	$LE_uploaded_file_name = $this->input->post('LE_uploaded_file_name');
+	 	$LE_db_col_name = $this->input->post('LE_db_col_name');
+	 	$LE_order_attachments_integrated_id = $this->input->post('LE_order_attachments_integrated_id');
+	 	$artwork_chat = array();
+	 	if( isset($LE_order_attachments_integrated_id) && $LE_order_attachments_integrated_id != '' ) {
+	 		if( isset($LE_uploaded_file_name) && count($LE_uploaded_file_name) > 0 ) {
+	 			$sql_temp = "";
+	 			foreach ($LE_uploaded_file_name as $key => $each_file_name) {
+	 				if( ($each_file_name != '') && ($LE_db_col_name[$key] != '') ) {
+		 				if( $key == 0 ) {
+		 					$sql_temp .= " $LE_db_col_name[$key] = '".$each_file_name."' " ;
+		 				} else {
+		 					$sql_temp .= ", $LE_db_col_name[$key] = '".$each_file_name."' " ;
+		 				}
+
+		 				if($LE_db_col_name[$key] == "laminations_and_varnishes") {
+		 					$artwork_chat['laminations_and_varnishes'] = $each_file_name;
+		 				} else if($LE_db_col_name[$key] == "hot_foil") { 
+		 					$artwork_chat['hot_foil'] = $each_file_name;
+		 				} else if($LE_db_col_name[$key] == "embossing_and_debossing") { 
+		 					$artwork_chat['embossing_and_debossing'] = $each_file_name;
+		 				} else if($LE_db_col_name[$key] == "silk_screen_print") { 
+		 					$artwork_chat['silk_screen_print'] = $each_file_name;
+		 				}
+		 			}
+	 			}
+
+	 			if( $sql_temp != '' ) {
+	 				$sql = "UPDATE order_attachments_integrated SET ";
+	 				$sql .= $sql_temp;
+	 				$sql .= " WHERE ID = '".$LE_order_attachments_integrated_id."' ";	
+	 				$this->db->query($sql);
+	 			}
+	 			
+	 		}
+	 	}
 	  
 		$jobno = $this->input->post('attach');
 		$comment = $this->input->post('comment');
@@ -613,10 +724,10 @@ class Artworks extends CI_Controller {
 		$pdfformat = $this->input->post('pdfformat');
 		$softproof = $this->input->post('softproof');
 	    
-		$jobdetail = $this->Artwork_model->fetch_one_artwork($jobno);
+	    $jobdetail = $this->Artwork_model->fetch_one_artwork($jobno);
 		$ver = $jobdetail['version'];
 		  
-		$latest = (isset($attachment) && $attachment!="" && $jobdetail['status']==70 && $jobdetail['rejected']==1)?1:0;
+			$latest = (isset($attachment) && $attachment!="" && $jobdetail['status']==70 && $jobdetail['rejected']==1)?1:0;
 			$array = array(
 				'attach_id'=>$jobno,
 				'operator'=>$this->session->userdata('UserID'),
@@ -627,6 +738,7 @@ class Artworks extends CI_Controller {
 				'softproof'=>$softproof,
 				'latest'=>$latest
 			);
+			$array = array_merge($array, $artwork_chat);
 		
 		  $this->db->insert('artwork_chat',$array);
 		  

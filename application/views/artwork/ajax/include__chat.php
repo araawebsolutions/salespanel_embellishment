@@ -1,5 +1,5 @@
     <style>
-        .input-upload-testing-adjustment{
+        /*.input-upload-testing-adjustment{
          border: 1px solid #49d0fe;
          border-radius: 4px;
          height: 35px;
@@ -7,10 +7,40 @@
          margin-bottom: 10px;
          margin-left: 7px;
          padding-top: 7px;
+        }*/
+
+        .input-upload-testing-adjustment{
+            border: 1px solid #49d0fe;
+            border-radius: 4px;
+            height: 35px;
+            width: 97%;
+            margin-bottom: 4px;
+            margin-left: 4px;
+            padding: 6px;
         }
+
          body{
             overflow: scroll !important;
 
+        }
+        .btn_styling
+        {
+            margin-bottom: 0px;
+            width: 98%;
+            margin: 3px auto;
+            transition: color 1s ease-in-out, background-color 1s ease-in-out, border-color 1s ease-in-out, box-shadow 1s ease-in-out;
+        }
+
+        p.LE_plate_name
+        {
+            margin: 2px;
+            padding: 0;
+            text-align: center;
+            color: #4eb7eb;
+        }
+        .btn_new
+        {
+            
         }
     </style>     
 
@@ -46,15 +76,19 @@
 
 
 
-            <div class="col-md-9">
+            <div class="col-md-11">
 
-            <div class="form-group">
+                <div class="form-group">
 
-            <textarea class="form-control" rows="5" name="comment"  id="comment"
+                <textarea class="form-control" rows="5" name="comment"  id="comment"
 
-            style="margin-top: 0px;margin-bottom: 0px;height: 140px;border-color: #d0effa;" required></textarea>
+                style="margin-top: 0px;margin-bottom: 0px;height: 140px;border-color: #d0effa;" required></textarea>
 
-            </div>
+                </div>
+
+
+
+
 
                 <input type="hidden" id="attach-id"  value="<?=$row['ID']?>"/>
 
@@ -68,26 +102,88 @@
 
             
 
-            <div class="form-group m-b-0">
 
-            <div class="text-right">
 
-           <button type="button" class="btn btn-outline-dark waves-light waves-effect btn-countinue box_commenthide">Cancel</button>
-            
-            <button type="button"
 
-            class="btn btn-outline-dark waves-light waves-effect btn-countinue btn-print1"  onclick="save_comment();">
-
-            Submit
-
-            </button>
 
             </div>
 
-            </div>
+            <? if($this->session->userdata('UserTypeID')==88 && $row['is_upload_print_file']==0 && ($row['status']==68 || $row['rejected']==1)){?>
+
+            <!-- NAFEES LA WORK STARTS -->
+
+              <!-- $orderinfo  === orders -->
+              <!-- $orderDetailsAttachement  === orderdetails -->
+              <!-- $row  === order_attachments_integrated -->
+
+                <div class="col-md-2" style="padding: 10px;">
+                    <form id="upload_printfile" enctype="multipart/form-data" action="<?=main_url?>Artworks/upload_printfile">
+                        <input type="file" name="file_up" id="file_up" value="" class="input-upload-testing-adjustment"></br>
+                        <div class="upload-btn-wrapper">
+                            <button class="btn btnn print_file btn_styling"><i class="fa fa-upload"></i> Upload PDF </button>
+                            <p class="LE_plate_name"> Print File </p>
+                        </div>
+                    </form> 
+                </div>
+
+               <?php
+                
+                $orderinfo;
+                $orderDetailsAttachement;
+                $row;
+                $total_files_uploaded = 0;
+                if (isset($orderDetailsAttachement['FinishTypePricePrintedLabels']) && $orderDetailsAttachement['FinishTypePricePrintedLabels'] != null ) {
+                    $LB_jsonDecode = json_decode($orderDetailsAttachement['FinishTypePricePrintedLabels']);
+                    if( gettype($LB_jsonDecode) == "array" ) {
+                        foreach ($LB_jsonDecode as $key => $each_LE) {
+                            
+                            if( ($each_LE->plate_cost > 0) && ($each_LE->use_old_plate == 0) && ($each_LE->parsed_parent_title != "sequential_and_variable_data" ) ) {
+                              $total_files_uploaded++;
+                            ?>
+                                  
+                                  <div class="col-md-2" style="padding: 10px;">
+                                      <form enctype="multipart/form-data" action="<?=main_url?>Artworks/upload_printfile_LE" class="each_file_form each_file_form_<?=$key?>">
+                                          <input type="hidden" class="parsed_parent_title" name="parsed_parent_title" value="<?php echo $each_LE->parsed_parent_title;?>">
+                                          <input type="hidden" class="parent_id" name="parent_id" value="<?php echo $each_LE->parent_id;?>">
+                                          <input type="hidden" class="order_attachments_integrated_id" name="order_attachments_integrated_id" value="<?=$row['ID']?>">
+                                          <input type="hidden" class="uploaded_file_name" name="uploaded_file_names[]" value="">
+                                          <input type="hidden" class="db_col_name" name="db_col_name[]" value="">
+                                          <input type="hidden" class="file_number" name="file_number" value="<?=$key?>">
+                                          <input type="file" name="file_up_<?=$key?>" id="file_up_<?=$key?>" value="" class="input-upload-testing-adjustment"></br>
+                                          <div class="upload-btn-wrapper">
+                                              <button type="button" onclick="upload_printfile_LE(this, '<?=$key?>' );" class="btn btnn LE_BTN btn_styling"> <i class="fa fa-upload"></i> Upload PDF</button>
+                                              <p class="LE_plate_name"><?php echo ucwords(str_replace("_", " ", $each_LE->parsed_parent_title) );?></p>
+                                          </div>
+                                      </form> 
+                                  </div>
+                            <?php
+                            }
+                        }
+
+                    }
+                }
+              ?>
+              <input type="hidden" class="total_files" name="total_files" value="<?=$total_files_uploaded;?>">
+            <!-- NAFEES LA WORK ENDS -->
+
+
+           
+
+           
+
+        <? } ?>
+
+            <div class="form-group m-b-0"  style="margin-left: 15px;">
+
+                <div class="text-right">
+
+                  <button type="button" class="btn btn-outline-dark waves-light waves-effect btn-countinue box_commenthide">Cancel</button>
+                
+                  <button type="button" class="btn btn-outline-dark waves-light waves-effect btn-countinue btn-print1" style="margin-left: 6px !important;" onclick="save_comment();"> Submit </button>
+
+                </div>
 
             </div>
-
      
 
         
@@ -122,27 +218,7 @@
 
         
 
-        <? if($this->session->userdata('UserTypeID')==88 && $row['is_upload_print_file']==0 && ($row['status']==68 || $row['rejected']==1)){?>
-
-           
-
-             <div class="col-md-3" style="padding: 10px;">
-
-              <form id="upload_printfile" enctype="multipart/form-data" action="<?=main_url?>Artworks/upload_printfile">
-
-              <input type="file" name="file_up" id="file_up" value="" class="input-upload-testing-adjustment"></br>
-
-               <div class="upload-btn-wrapper">
-
-                <button class="btn btnn"><i class="fa fa-upload"></i> Upload print pdf </button>
-
-             </form> 
-
-             </div>
-            </div>
-           
-
-        <? } ?>
+        
 
     </div>
  </div>
@@ -155,8 +231,6 @@
 
     <? 
     //echo $row['print_file']; 
-    
-  // echo '<pre>'; print_r($result);
     
     foreach($result as $rowp){
 
@@ -172,15 +246,19 @@
 
 		$print = FILEPATH.'print/'.$rowp->file;
 
-	    $soft  = FILEPATH.'softproof/'.$rowp->softproof;
+	  $soft  = FILEPATH.'softproof/'.$rowp->softproof;
 
-	    $pdfview  = FILEPATH.'pdf/'.$rowp->pdf;
+	  $pdfview  = FILEPATH.'pdf/'.$rowp->pdf;
 
 		$thumb  = FILEPATH.'thumb/'.$rowp->thumb;
 
-		
 
-		$softproof_selecter = ($row['softproof']  == $rowp->softproof)?'Y':'N';
+    $laminations_and_varnishes = FILEPATH.'laminations_varnishes/'.$rowp->laminations_and_varnishes;
+    $hot_foil = FILEPATH.'hot_foil/'.$rowp->hot_foil;
+    $embossing_and_debossing = FILEPATH.'embossing_debossing/'.$rowp->embossing_and_debossing;
+    $silk_screen_print = FILEPATH.'silkscreen_print/'.$rowp->silk_screen_print;
+
+    $softproof_selecter = ($row['softproof']  == $rowp->softproof)?'Y':'N';
 
 	    $printing_selecter  = ($row['print_file'] == $rowp->file)?'Y':'N';
 
@@ -214,7 +292,7 @@
 
        <span class="text-right col-md-6 p-t-6"><?php echo $time?></span></div>
 
-       <hr class="blue-hr"><div class="row"><div class="col-md-8"> <p class="m-h-100"><?=$rowp->comment?></p></div>
+       <hr class="blue-hr"><div class="row"><div class="col-md-11"> <p class="m-h-100"><?=$rowp->comment?></p></div>
 
         
 
@@ -324,21 +402,46 @@
 
 					 <? if(isset($rowp->file) && $rowp->file!=""){?>    
 
-                        <div class="col-md-3">
+                        <div class="col-md-12">
+                          <div class="row">
+                            <div class="col-md-2">
+                                <div class="upload-btn-wrapper"><button class="btn btnn btn_styling" onclick="window.open('<?=$print?>');"><i class="fa fa-file-pdf-o"></i> Download PDF </button></div>
+                                <div class="upload-btn-wrapper"><button class="btn btnn copytoclip btn_styling" data-link="<?=$print?>"><i class="fa  fa-link"></i> Share link</button></div>
+                                <p class="LE_plate_name"> Print file </p>
+                            </div>
+                            
+                            <?php if(isset($rowp->laminations_and_varnishes) && $rowp->laminations_and_varnishes!=""){ ?>
+                              <div class="col-md-2">
+                                <div class="upload-btn-wrapper"><button class="btn btnn btn_styling" onclick="window.open('<?=$laminations_and_varnishes?>');"><i class="fa fa-file-pdf-o"></i> Download PDF </button></div>
+                                <div class="upload-btn-wrapper"><button class="btn btnn copytoclip btn_styling" data-link="<?=$laminations_and_varnishes?>"><i class="fa  fa-link"></i> Share link</button></div>
+                                <p class="LE_plate_name"> Lamination & varnishe </p>
+                              </div>
+                            <?php } ?>
 
-                            <div class="upload-btn-wrapper">
+                            <?php if(isset($rowp->hot_foil) && $rowp->hot_foil!=""){ ?>
+                              <div class="col-md-2">
+                                <div class="upload-btn-wrapper"><button class="btn btnn btn_styling" onclick="window.open('<?=$hot_foil?>');"><i class="fa fa-file-pdf-o"></i> Download PDF </button></div>
+                                <div class="upload-btn-wrapper"><button class="btn btnn copytoclip btn_styling" data-link="<?=$hot_foil?>"><i class="fa  fa-link"></i> Share link</button></div>
+                                <p class="LE_plate_name"> Hot Foil </p>
+                              </div>
+                            <?php } ?>
 
-                                <button class="btn btnn" onclick="window.open('<?=$print?>');"><i class="fa fa-file-pdf-o"></i> Download
+                            <?php if(isset($rowp->embossing_and_debossing) && $rowp->embossing_and_debossing!=""){ ?>
+                              <div class="col-md-2">
+                                <div class="upload-btn-wrapper"><button class="btn btnn btn_styling" onclick="window.open('<?=$embossing_and_debossing?>');"><i class="fa fa-file-pdf-o"></i> Download PDF </button></div>
+                                <div class="upload-btn-wrapper"><button class="btn btnn copytoclip btn_styling" data-link="<?=$embossing_and_debossing?>"><i class="fa  fa-link"></i> Share link</button></div>
+                                <p class="LE_plate_name"> Embossing & Debossing </p>
+                              </div>
+                            <?php } ?>
 
-                                    Print file
-
-                                </button></div>
-
-                            <div class="upload-btn-wrapper">
-
-                                <button class="btn btnn copytoclip" data-link="<?=$print?>"><i class="fa  fa-link"></i> Share link
-
-                                </button></div>
+                            <?php if(isset($rowp->silk_screen_print) && $rowp->silk_screen_print!=""){ ?>
+                              <div class="col-md-2">
+                                <div class="upload-btn-wrapper"><button class="btn btnn btn_styling" onclick="window.open('<?=$silk_screen_print?>');"><i class="fa fa-file-pdf-o"></i> Download PDF </button></div>
+                                <div class="upload-btn-wrapper"><button class="btn btnn copytoclip btn_styling" data-link="<?=$silk_screen_print?>"><i class="fa  fa-link"></i> Share link</button></div>
+                                <p class="LE_plate_name"> Silk Screen </p>
+                              </div>
+                            <?php } ?>
+                          </div>
 
                            
 
@@ -360,45 +463,45 @@
 
                         
 
-				<? if($this->session->userdata('UserTypeID')!=88 && $row['status']==70 && $row['is_upload_print_file']==1 && $rowp->latest==1){?> 
+  				            <? if($this->session->userdata('UserTypeID')!=88 && $row['status']==70 && $row['is_upload_print_file']==1 && $rowp->latest==1){?> 
 
-                      <div class="upload-btn-wrapper">
+                        <div class="upload-btn-wrapper">
 
-                        <a href="<?=main_url?>Artworks/decision/<?=$row['OrderNumber']?>/<?=$row['ID']?>/rejected">
+                          <a href="<?=main_url?>Artworks/decision/<?=$row['OrderNumber']?>/<?=$row['ID']?>/rejected">
 
-                        <button class="btn btnn"><i class="fa  fa-file-image-o"></i>
+                          <button class="btn btnn"><i class="fa  fa-file-image-o"></i>
 
-                           Approve / Decline
+                             Approve / Decline
 
-                        </button></a></div>
+                          </button></a></div>
 
-                    <? } ?>
+                      <? } ?>
 
                                 
 
                             
 
-                                 <? if($printing_selecter=="Y"){?>
+                       <? if($printing_selecter=="Y"){?>
 
-                                      <div class="upload-btn-wrapper">
+                            <div class="upload-btn-wrapper">
 
-                                       <button class="btn btnn" style="background-color: #fd4913;border-color: #fd4913;color: #fff;"><i class="fa  fa-file-image-o"></i>
+                             <button class="btn btnn" style="background-color: #fd4913;border-color: #fd4913;color: #fff;"><i class="fa  fa-file-image-o"></i>
 
-                                        Approved</button></div>
+                              Approved</button></div>
 
-                                    <? } ?> 
+                          <? } ?> 
 
-                                    
+                          
 
-                                     <? if($rowp->rejected==1){?>
+                           <? if($rowp->rejected==1){?>
 
-                                      <div class="upload-btn-wrapper">
+                            <div class="upload-btn-wrapper">
 
-                                       <button class="btn btnn">
+                             <button class="btn btnn">
 
-                                        Rejected</button></div>
+                              Rejected</button></div>
 
-                                    <? } ?>
+                          <? } ?>
 
                           
 

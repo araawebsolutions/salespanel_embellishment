@@ -3,6 +3,41 @@
         margin-top: 0;
         margin-bottom: 0rem !important;
     }
+    .tabs-vertical-env .nav.tabs-vertical li>a
+    {
+        padding: 3px 20px 5px 15px;
+    }
+    .badge-blue-first {
+        font-size: 12px;
+        background: #00b7f1;
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+        border-top-left-radius: 11px;
+        border-bottom-left-radius: 11px;
+        padding-left: 12px;
+        padding-right: 15px;
+        float: right;
+        border-left-color: white;
+        border-left: 2px solid;
+        color: #fff;
+        position: relative;
+        top: 0px;
+        right: 0px;
+        z-index: 1;
+    }
+    .uploaded_attachment_class
+    {
+        background: green;
+        color: #FFF;
+        border: 1px solid white;
+    }
+    .not_uploaded_attachment_class
+    {
+        background: red;
+        color: #FFF;
+        border: 1px solid white;
+    }
+    
 </style>
 <!-- End Navigation Bar-->
 <div class="wrapper">
@@ -128,17 +163,28 @@
 
                     <div class="card-body p-7">
                         <div class="tabs-vertical-env row artwork-row-margin-adjst ">
+
                             <ul class="nav tabs-vertical ">
                                 <? foreach ($printjobs as $job) {
-                                    $status = $this->Artwork_model->fetch_status_action($job->status); ?>
+                                    $status = $this->Artwork_model->fetch_status_action($job->status);
 
-                                    <? if (isset($job->softproof) && $job->softproof != "" && $this->session->userdata('UserTypeID') != 88 && $job->status == 66) { ?>
-                                        <span class="checkbox_container_align">
-                                                        <input type="checkbox" class="pjcheckbox" value="<?= $job->ID ?>"/>
-                                        </span>
-                                    <? } ?>
-                                    <li class="nav-item artwork-detail-li siderbarlist openprintjob"
-                                        id="active_<?= $job->ID ?>" data-id="<?= $job->ID ?>">
+                                    
+                                ?>
+
+                                    
+                                    <li class="nav-item artwork-detail-li siderbarlist openprintjob" id="active_<?= $job->ID ?>" data-id="<?= $job->ID ?>">
+                                        <?php
+                                        // NAFEES LA WORK STARTS
+                                            if( ($job->Serial && $job->Serial != '') ) {
+                                                $getOrderDetailsBySerial = $this->Artwork_model->getOrderDetailsBySerial($job->Serial);
+                                                if (isset($getOrderDetailsBySerial['FinishTypePricePrintedLabels']) && $getOrderDetailsBySerial['FinishTypePricePrintedLabels'] != null ) {
+                                                    $data["jsonData"] = $getOrderDetailsBySerial['FinishTypePricePrintedLabels'];
+                                                    $theHTMLResponse = $this->load->view('artwork/print_jobs_badges', $data , true);
+                                                    echo $theHTMLResponse;
+                                                }
+                                            }
+                                        // NAFEES LA WORK ENDS
+                                        ?>
                                         <a aria-expanded="false" class="nav-link nav-link" id="lighter_<?= $job->ID ?>">
                                             <? if ($job->action == 0) {
                                                 $light = "red-artwork-pulse";
@@ -158,7 +204,13 @@
                                             <? if ($job->variable_data == 1) { ?> <b style="color:red"> -
                                                 Sequential</b> <? } ?>
                                         </a>
+                                        
+                                        <? if (isset($job->softproof) && $job->softproof != "" && $this->session->userdata('UserTypeID') != 88 && $job->status == 66) { ?>
+                                            <span class="checkbox_container_align" style="top: 4px;"> <input type="checkbox" class="pjcheckbox" value="<?= $job->ID ?>"/> </span>
+                                        <? } ?>
+                                        
                                         <a><b>Name:</b> <?= $job->name ?></a>
+
                                         <hr>
                                         <ul class="artwork-detail-ul">
                                             <li class="artwork-sub-text-li">Product Code <p><b><?= $job->diecode ?></b>
@@ -332,6 +384,55 @@
         });
     });
 
+
+    // NAFEES LA WORK STARTS
+    function upload_printfile_LE(_this, fileNumber) {
+    
+        var form_element = $(_this).parents(".each_file_form");
+        
+        printfile = $(_this).parents(".each_file_form").find("#file_up_"+fileNumber).val();
+        
+        if(!printfile) {
+            swal('', 'Choose File First', 'warning');
+            return;
+        }
+
+        var formData = new FormData(form_element[0]);
+        $('#aa_loader').show();
+        $.ajax({
+            type: 'POST',
+            url: $(form_element[0]).attr('action'),
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType: 'json',
+            success: function (data) {
+                
+                if (data.response == 'error') {
+                    $('#aa_loader').hide();
+                    swal('', 'Error While uploading files', 'warning');
+                    $(_this).parents(".each_file_form").find(".LE_BTN").removeClass("uploaded_attachment_class");
+                    $(_this).parents(".each_file_form").find(".LE_BTN").addClass("not_uploaded_attachment_class");
+                } else {
+                    $('#aa_loader').hide();
+                    $(_this).parents(".each_file_form").find(".uploaded_file_name").val(data.attachment);
+                    $(_this).parents(".each_file_form").find(".db_col_name").val(data.db_col_name);
+                    $(_this).parents(".each_file_form").find(".LE_BTN").removeClass("not_uploaded_attachment_class");
+                    $(_this).parents(".each_file_form").find(".LE_BTN").addClass("uploaded_attachment_class");
+                    
+                    swal('', 'Print File Attached', 'success');
+                }
+            },
+            error: function (data) {
+                console.log("error");
+                $(_this).parents(".each_file_form").find(".LE_BTN").removeClass("uploaded_attachment_class");
+                $(_this).parents(".each_file_form").find(".LE_BTN").addClass("not_uploaded_attachment_class");
+            }
+        });
+    }
+    // NAFEES LA WORK ENDS
+
     function save_comment() {
         var attachment = $('#attachment').val();
         var softproof = $('#softproof').val();
@@ -345,6 +446,65 @@
             return false;
         }
 
+
+        if( $("#file_up").is(":visible") ) {
+            if (attachment == "") {
+                $("#comment_box").find(".print_file").removeClass("uploaded_attachment_class");
+                $("#comment_box").find(".print_file").addClass("not_uploaded_attachment_class");
+                swal('', 'Upload Print File', 'warning');
+                return false;
+            } else {
+                $("#comment_box").find(".print_file").removeClass("not_uploaded_attachment_class");
+                $("#comment_box").find(".print_file").addClass("uploaded_attachment_class");
+            }
+        }
+
+        
+        
+
+        var parent_id = $("#comment_box").find(".parent_id").val();
+        var total_files = $("#comment_box").find(".total_files").val();
+        if( (parent_id && parent_id != '') && (total_files && total_files > 0) ) {
+            var flag_not_uploaded_files = false;
+            $("#comment_box").find(".uploaded_file_name").each(function( index ) {
+                
+                each_uploaded_file_name = $(this).val();
+                if( each_uploaded_file_name == '' ) {
+                    each_not_uploaded_tital = $(".parsed_parent_title").eq( index ).val().replace(/_/g, " ");
+
+                    var str = each_not_uploaded_tital;
+                    each_not_uploaded_tital = str.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+                        return letter.toUpperCase();
+                    });
+                    swal('', 'Upload '+each_not_uploaded_tital+' File ', 'warning');
+
+                    $(".LE_BTN").eq( index ).removeClass("uploaded_attachment_class");
+                    $(".LE_BTN").eq( index ).addClass("not_uploaded_attachment_class");
+                    flag_not_uploaded_files = true;
+                    return false;
+
+                } else {
+                    $(".LE_BTN").eq( index ).removeClass("not_uploaded_attachment_class");
+                    $(".LE_BTN").eq( index ).addClass("uploaded_attachment_class");
+                }
+
+            });
+        }
+
+        if( flag_not_uploaded_files ) {
+            return false;
+            return;
+        }
+
+        var LE_uploaded_file_name = [];
+        var LE_db_col_name = [];
+        var LE_order_attachments_integrated_id = [];
+
+        LE_uploaded_file_name = makeArrayOfValues("uploaded_file_name");
+        LE_db_col_name = makeArrayOfValues("db_col_name");
+        LE_order_attachments_integrated_id = $('.order_attachments_integrated_id').val();
+
+
         $('#aa_loader').show();
         $.ajax({
             type: 'POST',
@@ -353,6 +513,13 @@
                 attachment: attachment,
                 comment: comment,
                 attach: attach,
+
+                
+
+                LE_uploaded_file_name: LE_uploaded_file_name,
+                LE_db_col_name: LE_db_col_name,
+                LE_order_attachments_integrated_id:LE_order_attachments_integrated_id,
+
                 softproof: softproof,
                 thumbnail: thumbnail,
                 pdfformat: pdfformat
@@ -371,6 +538,15 @@
             }
         });
     }
+
+    function makeArrayOfValues(fieldName) {
+        var values_array = [];
+        $("."+fieldName).each(function( index ) {
+            values_array.push( $(this).val() );
+        });
+        return values_array;
+    }
+
 
 
     $(document).on("submit", "#upload_printfile", function (e) {
@@ -394,18 +570,28 @@
             success: function (data) {
                 if (data.response == 'error') {
                     $('#aa_loader').hide();
+                    $(".print_file").removeClass("uploaded_attachment_class");
+                    $(".print_file").addClass("not_uploaded_attachment_class");
                     swal('', 'Error While uploading files', 'warning');
                 } else {
                     $('#aa_loader').hide();
                     $('#attachment').val(data.attachment);
+                    $(".print_file").removeClass("not_uploaded_attachment_class");
+                    $(".print_file").addClass("uploaded_attachment_class");
                     swal('', 'Print File Attached', 'success');
                 }
             },
             error: function (data) {
+                $(".print_file").removeClass("uploaded_attachment_class");
+                $(".print_file").addClass("not_uploaded_attachment_class");
                 console.log("error");
             }
         });
     });
+
+
+    
+
 
     $(document).on("click", ".customerfeedback", function (e) {
         var jobno = $(this).attr('data-id');

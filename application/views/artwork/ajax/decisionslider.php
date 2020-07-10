@@ -1,4 +1,22 @@
      
+<style>
+	.newItem_LE
+	{
+		    width: 25% !important;
+	}
+	.item1 .hoverfx.newItem_LE_link{
+		padding-top: 0px;
+	}
+	.hoverfx.newItem_LE_link:before
+	{
+		padding-top: 30%;
+	}
+	.dummyPDF {
+		width: 18% !important;
+	    left: 39% !important;
+	    top: 37% !important;
+	}
+</style>
 <? if(empty($row)){?>
 <h1 style="text-align:center">No More Artworks to Approve</h1>  
 <a  href="<?=main_url?>Artworks"><b style="text-align:center">
@@ -18,8 +36,21 @@
 	$softproofpath = FILEPATH.'softproof/'.$row['softproof'];
 	$printfilepath = FILEPATH.'print/'.$chatdetails['file'];
 	$type = 'print';
-	$buttondeclinetext = "Decline Print File"; $buttonapprovetext = "Approve Print File";
+	$buttondeclinetext = "Decline Print + Label Embellishments File"; $buttonapprovetext = "Approve Print + Label Embellishments File";
+
+
+	$laminations_and_varnishes_flag = $chatdetails['laminations_and_varnishes'];
+	$hot_foil_flag = $chatdetails['hot_foil'];
+	$embossing_and_debossing_flag = $chatdetails['embossing_and_debossing'];
+	$silk_screen_print_flag = $chatdetails['silk_screen_print'];
+
+	$laminations_and_varnishes_path = FILEPATH.'laminations_varnishes/'.$chatdetails['laminations_and_varnishes'];
+	$hot_foil_path = FILEPATH.'hot_foil/'.$chatdetails['hot_foil'];
+	$embossing_and_debossing_path = FILEPATH.'embossing_debossing/'.$chatdetails['embossing_and_debossing'];
+	$silk_screen_print_path = FILEPATH.'silkscreen_print/'.$chatdetails['silk_screen_print'];	
 }
+
+
 ?>
                        
 <input type="hidden" id="prejob" value="<?=$previous?>"/>  
@@ -73,12 +104,114 @@
 				<i class="fa fa-search-plus f-s-75"></i>
 			</div>
 			<div class="overlay"></div>
-			<img src="<?=ARTWORKS.'theme/integrated_attach/print-file.png'?>" style="width:60%; left:22%">
+			<?php
+				$ext = pathinfo( parse_url($printfilepath, PHP_URL_PATH), PATHINFO_EXTENSION );
+				if( $ext == "pdf" ) {?>
+					<img src="<?=ARTWORKS.'theme/site/images/pdfdummy.png';?>" class="dummyPDF">
+				<?php } else {?>
+					<img src="<?=$printfilepath?>" style="width:60%; left:22%">
+				<?php
+				}
+			?>
+			
 		</a>
 		<a href="<?=$printfilepath?>" target="_blank"><h4><span>Download</span> Print-File</h4></a>
 		<span ><h3 style="color:#fff">&nbsp;</h3></span>
 	</div>
+
+
+	<?php if ($laminations_and_varnishes_flag && $laminations_and_varnishes_flag != '') {?>
+		<div class="item1 newItem_LE">
+			<a class="hoverfx newItem_LE_link" href="<?=$laminations_and_varnishes_path?>" target="_blank">
+				<div class="figure" data-toggle="modal" data-target="#myModal">
+					<i class="fa fa-search-plus f-s-75"></i>
+				</div>
+				<div class="overlay"></div>
+				<?php
+					$ext = pathinfo( parse_url($laminations_and_varnishes_path, PHP_URL_PATH), PATHINFO_EXTENSION );
+					if( $ext == "pdf" ) {?>
+						<img src="<?=ARTWORKS.'theme/site/images/pdfdummy.png';?>"  class="dummyPDF">
+					<?php } else {?>
+						<img src="<?=$laminations_and_varnishes_path?>" style="width:60%; left:22%">
+					<?php
+					}
+				?>
+			</a>
+			<a href="<?=$laminations_and_varnishes_path?>" target="_blank"><h4><span>Download</span> Lamination & Varnishes PDF</h4></a>
+			<span ><h3 style="color:#fff">&nbsp;</h3></span>
+		</div>
+	<?php } ?>
+
+	<?php if ($hot_foil_flag && $hot_foil_flag != '') {?>
+		<div class="item1 newItem_LE">
+			<a class="hoverfx newItem_LE_link" href="<?=$hot_foil_path?>" target="_blank">
+				<div class="figure" data-toggle="modal" data-target="#myModal">
+					<i class="fa fa-search-plus f-s-75"></i>
+				</div>
+				<div class="overlay"></div>
+				<?php
+					$ext = pathinfo( parse_url($hot_foil_path, PHP_URL_PATH), PATHINFO_EXTENSION );
+					if( $ext == "pdf" ) {?>
+						<img src="<?=ARTWORKS.'theme/site/images/pdfdummy.png';?>"  class="dummyPDF">
+					<?php } else {?>
+						<img src="<?=$hot_foil_path?>" style="width:60%; left:22%">
+					<?php
+					}
+				?>
+			</a>
+			<a href="<?=$hot_foil_path?>" target="_blank"><h4><span>Download</span> Hot Foil PDF</h4></a>
+			<span ><h3 style="color:#fff">&nbsp;</h3></span>
+		</div>
+	<?php } ?>
+
+	<?php if ($embossing_and_debossing_flag && $embossing_and_debossing_flag != '') {?>
+		<div class="item1 newItem_LE">
+			<a class="hoverfx newItem_LE_link" href="<?=$embossing_and_debossing_path?>" target="_blank">
+				<div class="figure" data-toggle="modal" data-target="#myModal">
+					<i class="fa fa-search-plus f-s-75"></i>
+				</div>
+				<div class="overlay"></div>
+				<?php
+					$ext = pathinfo( parse_url($embossing_and_debossing_path, PHP_URL_PATH), PATHINFO_EXTENSION );
+					if( $ext == "pdf" ) {?>
+						<img src="<?=ARTWORKS.'theme/site/images/pdfdummy.png';?>" class="dummyPDF">
+					<?php } else {?>
+						<img src="<?=$embossing_and_debossing_path?>" style="width:60%; left:22%">
+					<?php
+					}
+				?>
+			</a>
+			<a href="<?=$embossing_and_debossing_path?>" target="_blank"><h4><span>Download</span> Embossing & Debossing PDF</h4></a>
+			<span ><h3 style="color:#fff">&nbsp;</h3></span>
+		</div>
+	<?php } ?>
+
+	<?php if ($silk_screen_print_flag && $silk_screen_print_flag != '') {?>
+		<div class="item1 newItem_LE">
+			<a class="hoverfx newItem_LE_link" href="<?=$silk_screen_print_path?>" target="_blank">
+				<div class="figure" data-toggle="modal" data-target="#myModal">
+					<i class="fa fa-search-plus f-s-75"></i>
+				</div>
+				<div class="overlay"></div>
+				<?php
+					$ext = pathinfo( parse_url($silk_screen_print_path, PHP_URL_PATH), PATHINFO_EXTENSION );
+					if( $ext == "pdf" ) {?>
+						<img src="<?=ARTWORKS.'theme/site/images/pdfdummy.png';?>" class="dummyPDF">
+					<?php } else {?>
+						<img src="<?=$silk_screen_print_path?>" style="width:60%; left:22%">
+					<?php
+					}
+				?>
+			</a>
+			<a href="<?=$silk_screen_print_path?>" target="_blank"><h4><span>Download</span> Silk Screen Printing PDF</h4></a>
+			<span ><h3 style="color:#fff">&nbsp;</h3></span>
+		</div>
+	<?php } ?>
+	
+
 </div>
+
+<div style="clear:both"></div>
                     
                   
 <div class="customNavigation">
