@@ -312,7 +312,10 @@ class quotationModal extends CI_Model
                 'design_service_charge'=>$cartdata->design_service_charge,
                 'design_file'=>$cartdata->design_file,
                 'regmark'=>$cartdata->regmark,
-                'sample'=>$cartdata->OrderData
+                'sample'=>$cartdata->OrderData,
+                'FinishTypePrintedLabels' => $cartdata->FinishTypePrintedLabels,
+                'FinishTypePricePrintedLabels' => $cartdata->FinishTypePricePrintedLabels,
+                'total_emb_cost' => $cartdata->total_emb_cost
             );
 
 
@@ -1422,6 +1425,9 @@ class quotationModal extends CI_Model
               'odp_qty'=>$order_detail->qp_qty,
               'odp_price'=>$order_detail->qp_price,
               'odp_foc'=>$order_detail->qp_foc,
+            'FinishTypePrintedLabels' => $order_detail->FinishTypePrintedLabels,
+            'FinishTypePricePrintedLabels' => $order_detail->FinishTypePricePrintedLabels,
+            'total_emb_cost' => $order_detail->total_emb_cost
 
             );
 

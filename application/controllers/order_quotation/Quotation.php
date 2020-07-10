@@ -572,6 +572,11 @@ class quotation extends CI_Controller {
 	
 	function quotation_pdf($QuotationNo,$language,$type){
 
+	    /*echo "Quotation:".$QuotationNo."<br>";
+	    echo "Language:".$language."<br>";
+	    echo "Type:".$type."<br>";
+	    exit;*/
+
 		$CI =& get_instance();
 		if($type=="show"){
 			$page = ($language=="en")?"order_quotation/quotation/en/quoteconfirm.php":"order_quotation/quotation/fr/quoteconfirm.php"; }

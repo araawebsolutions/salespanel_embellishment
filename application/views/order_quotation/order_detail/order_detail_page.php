@@ -1381,7 +1381,6 @@
                                                         id="labels<?= $key ?>"><?= ($detail->sample == 'sample' || $detail->sample == 'Sample') ? 0.00 : $symbol . @number_format(($detail->Price / $detail->labels) * $exchange_rate, 3, '.', ''); ?>
                                                         <br>
                                                         Per Label
-
                                                     </td>
 
                                                     <input type="hidden" id="label_for_orders<?= $key ?>"
@@ -1644,7 +1643,7 @@
 
                             <span style="margin-left: 10px;">
 
-                                <a id="edit_order_line" href="<?php echo main_url.'order_quotation/order/edit_order_line/'.$detail->OrderNumber.'/'.$detail->SerialNumber; ?>" class="m-20 btn btn-secondarys btn-rounded waves-light waves-effect btn-upload-artwork" >&nbsp; Edit Line Details </a>
+                                <a id="edit_order_line" href="<?php echo main_url.'order_quotation/order/edit_order_line/'.$detail->OrderNumber.'/'.$detail->SerialNumber; ?>" class="m-20 btn btn-secondarys btn-rounded waves-light waves-effect btn-upload-artwork" >&nbsp; Embilishment </a>
 
                             </span>
                                                                 <? }
@@ -2090,7 +2089,15 @@
                                                             (<?= $detail->Free . ' ' . $des_free ?> Free)
                                                         <?php } ?>
                                                     </td>
-                                                    <td class="text-center"><? echo $symbol . (number_format($detail->Print_Total * $order->exchange_rate, 2, '.', '')); ?></td>
+                                                    <td class="text-center">
+                                                        <?php
+                                                        if ($detail->FinishTypePricePrintedLabels != '' && $detail->total_emb_cost != 0){
+                                                            echo $symbol . (number_format(($detail->Print_Total * $order->exchange_rate)-$detail->total_emb_cost, 2, '.', ''));
+                                                        } else {
+                                                            echo $symbol . (number_format($detail->Print_Total * $order->exchange_rate, 2, '.', ''));
+                                                        }
+                                                        ?>
+                                                    </td>
                                                     <td class="text-center"></td>
                                                 </tr>
 
@@ -2126,7 +2133,6 @@
                                                 <tr>
                                                     <td></td>
                                                     <td colspan="5"><b> Finish </b></td>
-                                                    
                                                 </tr>
 
                                                 <?php 
@@ -2145,11 +2151,12 @@
 
                                                     $parsed_title = ucwords(str_replace("_", " ", $lem_option->finish_parsed_title));
                                                     $parsed_parent_title = $lem_option->parsed_parent_title;
+                                                    $parent_id = $lem_option->parent_id;
                                                     $use_old_plate = $lem_option->use_old_plate;
-                                                    
+
                                                     ($use_old_plate == 1 ?  $plate_cost = 0 : $plate_cost = $lem_option->plate_cost);
 
-                                                    if ($parsed_parent_title == 'laminations_and_varnishes') { //For Lamination and varnish
+                                                    if ($parent_id == 1) { //For Lamination and varnish
                                                         $parsed_child_title .= $parsed_title.", ";
                                                         $parsed_title_price += $lem_option->finish_price; 
 
@@ -2161,7 +2168,11 @@
                                                             <tr>
                                                                 <td></td>
                                                                 <td><?= "<b>".$parsed_parent_title." : </b>".$parsed_child_title?></td>
-                                                                <td class="text-center"><?= $symbol." ".number_format((($parsed_title_price+$plate_cost) / $detail->labels) * $exchange_rate, 3, '.', '') ?></td>
+                                                                <td class="text-center">
+                                                                    <?= $symbol." ".number_format((($parsed_title_price+$plate_cost) / $detail->labels) * $exchange_rate, 2, '.', '') ?>
+                                                                    <br>
+                                                                    Per Label
+                                                                </td>
                                                                 <td></td>
                                                                 <td class="text-center"><?= $symbol." ".number_format(($parsed_title_price * $exchange_rate), 2) ?></td>
                                                                 <td></td>
@@ -2170,7 +2181,7 @@
                                                         <?php
                                                         }
 
-                                                    } else if($parsed_parent_title != 'laminations_and_varnishes' && $parsed_parent_title != 'sequential_and_variable_data') { //For other than varnish and sequen
+                                                    } else if($parent_id != 1 && $parent_id != 5) { //For other than varnish and sequen
                                                         $parsed_parent_title = ucwords(str_replace("_", " ", $parsed_parent_title)); 
                                                         $parsed_child_title = $parsed_title;
                                                         $parsed_title_price = $lem_option->finish_price+$plate_cost;
@@ -2178,7 +2189,11 @@
                                                         <tr>
                                                             <td></td>
                                                             <td><?= "<b>".$parsed_parent_title." : </b>".$parsed_child_title?></td>
-                                                            <td class="text-center"><?= $symbol." ".number_format(($parsed_title_price / $detail->labels) * $exchange_rate, 3, '.', '') ?></td>
+                                                            <td class="text-center">
+                                                                <?= $symbol." ".number_format(($parsed_title_price / $detail->labels) * $exchange_rate, 2, '.', '') ?>
+                                                                <br>
+                                                                Per Label
+                                                            </td>
                                                             <td></td>
                                                             <td class="text-center"><?= $symbol." ".number_format(($parsed_title_price * $exchange_rate), 2) ?></td>
                                                             <td></td>
@@ -2189,7 +2204,11 @@
                                                         <tr>
                                                             <td></td>
                                                             <td>Sequential Variable Data</td>
-                                                            <td><?= $symbol." ".number_format(($sequential_price / $detail->labels) * $exchange_rate, 3, '.', '') ?></td>
+                                                            <td>
+                                                                <?= $symbol." ".number_format((sequential_price / $detail->labels) * $exchange_rate, 2, '.', '') ?>
+                                                                <br>
+                                                                Per Label
+                                                            </td>
                                                             <td></td>
                                                             <td><?= $symbol." ".number_format((sequential_price * $exchange_rate), 2) ?></td>
                                                             <td></td>

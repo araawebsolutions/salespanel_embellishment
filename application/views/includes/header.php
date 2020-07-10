@@ -17,28 +17,28 @@ $cd = 2;
 
 
 if( $this->session->userdata('login_ip') != $_SERVER['REMOTE_ADDR'] && $segment1!='Auth' && $segment2!='AuthenticateUser' ){
-   
-      $this->session->set_userdata('login_ip',$_SERVER['REMOTE_ADDR']); 
-    
-      $this->session->set_userdata('ip_address',$_SERVER['REMOTE_ADDR']);
-    
-      $this->session->unset_userdata('UserName');
 
-      $this->session->unset_userdata('UserID');
+    $this->session->set_userdata('login_ip',$_SERVER['REMOTE_ADDR']);
 
-      $this->session->unset_userdata('OPERATOR_AA');
+    $this->session->set_userdata('ip_address',$_SERVER['REMOTE_ADDR']);
 
-      $this->session->unset_userdata('SALE_ID');
+    $this->session->unset_userdata('UserName');
 
-      $this->session->unset_userdata('UserTypeID');
+    $this->session->unset_userdata('UserID');
 
-      $this->session->unset_userdata('login_user_id');
-      
-       return redirect('index.php/Auth');
- }
+    $this->session->unset_userdata('OPERATOR_AA');
 
- if ($this->session->userdata('login_user_id') == null || $this->session->userdata('login_user_id') == "") {
-     return redirect('index.php/Auth');
+    $this->session->unset_userdata('SALE_ID');
+
+    $this->session->unset_userdata('UserTypeID');
+
+    $this->session->unset_userdata('login_user_id');
+
+    return redirect('index.php/Auth');
+}
+
+if ($this->session->userdata('login_user_id') == null || $this->session->userdata('login_user_id') == "") {
+    return redirect('index.php/Auth');
 }
 
 
@@ -54,7 +54,7 @@ if( $this->session->userdata('login_ip') != $_SERVER['REMOTE_ADDR'] && $segment1
 <!DOCTYPE html>
 <html>
 <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    
+
     <title>AA Back Office | Plain and Printed Labels to Buy Online</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -77,7 +77,7 @@ if( $this->session->userdata('login_ip') != $_SERVER['REMOTE_ADDR'] && $segment1
     <link href="<?= ASSETS ?>assets/css/label-finder.css" rel="stylesheet">
     <script src="<?= ASSETS ?>assets/js/jquery-ui.js"></script>
     <link href="<?= ASSETS ?>assets/css/datepicker.css" rel="stylesheet" type="text/css"/>
-	
+
 
 
 </head>
@@ -115,12 +115,12 @@ if( $this->session->userdata('login_ip') != $_SERVER['REMOTE_ADDR'] && $segment1
     <div class="dot"></div>
 </div>
 <!-- Loader End -->
-	
-	
-	<div id="aa_loader" class="white-screen" style="display:none ;position: fixed;  z-index: 2; left: 42%; right: 40%; top:50%">
-		<div class="loading-gif text-center" style="z-index: 1;padding-top: 0;">
-		<img src="https://www.aalabels.com/theme/site/images/loader.gif" class="image" style="width:160px; height:43px; "></div>
-   </div>
+
+
+<div id="aa_loader" class="white-screen" style="display:none ;position: fixed;  z-index: 2; left: 42%; right: 40%; top:50%">
+    <div class="loading-gif text-center" style="z-index: 1;padding-top: 0;">
+        <img src="https://www.aalabels.com/theme/site/images/loader.gif" class="image" style="width:160px; height:43px; "></div>
+</div>
 
 <!--<script>-->
 <!--    $(window).on("load", function() {-->
@@ -176,7 +176,7 @@ if (strpos($actual_link, 'follow') !== false) {
 
 if (strpos($actual_link, 'followups') !== false) {
     $is_new_follow = true;
-    
+
     $is_follow = false;
 }
 
@@ -242,9 +242,9 @@ if (@end(@$this->uri->segment_array()) == "process_dies") {
 
 $is_invoice = false;
 
-  if (strpos($actual_link, 'invoice') !== false) {
+if (strpos($actual_link, 'invoice') !== false) {
     $is_invoice = true;
-  }
+}
 
 ?>
 
@@ -456,34 +456,34 @@ $is_invoice = false;
                 <!-- Navigation Menu-->
 
 
-        
 
 
 
 
-                   <? if($this->session->userdata('UserTypeID') == 23){?>
-                   
-                   
-                   
-                      <ul class="navigation-menu">
+
+                <? if($this->session->userdata('UserTypeID') == 23){?>
+
+
+
+                    <ul class="navigation-menu">
                         <li class="has-submenu text-center main-menu-text active">
                             <a href="<?= main_url ?>Artworks"><i class=" mdi mdi-grease-pencil"></i>
                                 <p>ARTWORK</p>
                             </a>
                         </li>
-                          <li class="has-submenu text-center main-menu-text <?php if ($is_active_dies == true) {
+                        <li class="has-submenu text-center main-menu-text <?php if ($is_active_dies == true) {
                             echo 'active';
                         } ?>">
                             <a href="<?= main_url ?>orderDetailList"><i class="fa fa-dot-circle-o fa-2x"></i>
                                 <p>ORDERS</p>
                             </a>
                         </li>
-                        
+
                     </ul>
-                   
-                   
-                   
-        
+
+
+
+
 
 
                 <? } else if ($this->session->userdata('UserTypeID') == 88) { ?>
@@ -494,34 +494,34 @@ $is_invoice = false;
                                 <p>ARTWORK</p>
                             </a>
                         </li>
-                          <li class="has-submenu text-center main-menu-text <?php if ($is_active_dies == true) {
+                        <li class="has-submenu text-center main-menu-text <?php if ($is_active_dies == true) {
                             echo 'active';
                         } ?>">
                             <a href="<?= main_url ?>dies"><i class="fa fa-dot-circle-o fa-2x"></i>
                                 <p>ACTIVE DIES</p>
                             </a>
                         </li>
-                        
-                    </ul>
-                    
-                    
 
-                
+                    </ul>
+
+
+
+
                 <? } else if ($this->session->userdata('UserTypeID') == 22) { ?>
 
                     <ul class="navigation-menu">
-                       
-                          <li class="has-submenu text-center main-menu-text <?php if ($is_active_dies == true) {
+
+                        <li class="has-submenu text-center main-menu-text <?php if ($is_active_dies == true) {
                             echo 'active';
                         } ?>">
                             <a href="<?= main_url ?>dies"><i class="fa fa-dot-circle-o fa-2x"></i>
                                 <p>ACTIVE DIES</p>
                             </a>
                         </li>
-                        
+
                     </ul>
-                    
-                    
+
+
 
                 <?php } else { ?>
 
@@ -562,18 +562,18 @@ $is_invoice = false;
                                     } else {
                                         echo 'bunset';
                                     } ?>" href="<?= main_url ?>orderSetting">Amendment Setting </a></li>
-                                    
-                                 <li><a class="<?php if ($is_invoice  == true) {
+
+                                <li><a class="<?php if ($is_invoice  == true) {
                                         echo 'bset';
                                     } else {
                                         echo 'bunset';
-                                    } ?>" href="<?= main_url ?>invoice">INVOICES</a></li>    
-                                    
+                                    } ?>" href="<?= main_url ?>invoice">INVOICES</a></li>
+
                             </ul>
                         </li>
-                        
-                        
-                        
+
+
+
                         <li class="has-submenu text-center main-menu-text <?php if ($is_add_order == true) {
                             echo 'active';
                         } ?>">
@@ -670,19 +670,19 @@ $is_invoice = false;
                                 <p>PROCESS DIES</p>
                             </a>
                         </li>
-                        
-                       <!-- <li class="has-submenu text-center main-menu-text <?php if ($is_new_follow == true) {
+
+                        <!-- <li class="has-submenu text-center main-menu-text <?php if ($is_new_follow == true) {
                             echo 'active';
                         } ?>">
                             <a href="<?= main_url ?>follow/followups"><i class="mdi mdi-account"></i>
                                 <p>Follow Up Quote</p>
                             </a>
                         </li>-->
-                        
+
                     </ul>
-                    
-                    
-                     
+
+
+
 
                 <?php } ?>
                 <!-- End navigation menu -->

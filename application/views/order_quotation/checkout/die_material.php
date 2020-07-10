@@ -263,9 +263,17 @@ if ($quotationDetail->regmark != 'Y') {
         <!--<td><?php /*echo ($digitalCheck == 'roll')?$quotationDetail->Price:$quotationDetail->Print_Total*/ ?></td>-->
 
         <td class="text-center">
-          <?= $symbol ?><?php echo number_format($quotationDetail->Print_Total * $exchange_rate, 2) ?>
-       <?php $row_total_line += ($quotationDetail->Print_Total * $quotation->exchange_rate);?>
-      </td>
+
+            <?php
+            if ($quotationDetail->FinishTypePricePrintedLabels != '' && $quotationDetail->total_emb_cost != 0){
+                echo $symbol . (number_format(($quotationDetail->Print_Total * $quotation->exchange_rate)-$quotationDetail->total_emb_cost, 2, '.', ''));
+                $row_total_line += ($quotationDetail->Print_Total * $quotation->exchange_rate)-$quotationDetail->total_emb_cost;
+            } else {
+                echo $symbol . (number_format($quotationDetail->Print_Total * $exchange_rate, 2, '.', ''));
+                $row_total_line += ($quotationDetail->Print_Total * $quotation->exchange_rate);
+            }
+            ?>
+        </td>
 
         <td>
 
