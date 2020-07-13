@@ -9523,13 +9523,13 @@ class Home_model extends CI_Model
 
             if( isset($parent_id) && $parent_id != '' ) {
                 if( $parent_id == 1 ) {
-                    return array("laminations_varnishes/", "laminations_and_varnishes");
+                    return array("laminations_varnishes/", "laminations_varnishes");
                 } else if( $parent_id == 2 ) {
                     return array("hot_foil/", "hot_foil");
                 } else if( $parent_id == 3 ) {
-                    return array("embossing_debossing/", "embossing_and_debossing");
+                    return array("embossing_debossing/", "embossing_debossing");
                 } else if( $parent_id == 4 ) {
-                    return array("silkscreen_print/", "silk_screen_print");
+                    return array("silkscreen_print/", "silkscreen_print");
                 } else if( $parent_id == 5 ) {
                     return array("sequential_and_variable_data/", "sequential_and_variable_data");
                 }

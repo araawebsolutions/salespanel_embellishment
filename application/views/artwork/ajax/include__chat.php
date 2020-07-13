@@ -137,7 +137,7 @@
                     if( gettype($LB_jsonDecode) == "array" ) {
                         foreach ($LB_jsonDecode as $key => $each_LE) {
                             
-                            if( ($each_LE->plate_cost > 0) && ($each_LE->use_old_plate == 0) && ($each_LE->parsed_parent_title != "sequential_and_variable_data" ) ) {
+                            if( ($each_LE->plate_cost > 0) && ($each_LE->use_old_plate == 0) ) {
                               $total_files_uploaded++;
                             ?>
                                   
@@ -152,7 +152,17 @@
                                           <input type="file" name="file_up_<?=$key?>" id="file_up_<?=$key?>" value="" class="input-upload-testing-adjustment"></br>
                                           <div class="upload-btn-wrapper">
                                               <button type="button" onclick="upload_printfile_LE(this, '<?=$key?>' );" class="btn btnn LE_BTN btn_styling"> <i class="fa fa-upload"></i> Upload PDF</button>
-                                              <p class="LE_plate_name"><?php echo ucwords(str_replace("_", " ", $each_LE->parsed_parent_title) );?></p>
+                                              <p class="LE_plate_name">
+                                                <?php
+
+                                                    if( $each_LE->parent_id == "2" ) {
+                                                        echo "Hot Foil (". ucwords( str_replace("_", " ", $each_LE->finish_parsed_title)).")";
+                                                    } else {
+                                                        echo ucwords( str_replace("_", " ", $each_LE->parsed_parent_title));
+                                                    }
+
+                                                ?>
+                                              </p>
                                           </div>
                                       </form> 
                                   </div>
@@ -253,10 +263,10 @@
 		$thumb  = FILEPATH.'thumb/'.$rowp->thumb;
 
 
-    $laminations_and_varnishes = FILEPATH.'laminations_varnishes/'.$rowp->laminations_and_varnishes;
+    $laminations_varnishes = FILEPATH.'laminations_varnishes/'.$rowp->laminations_varnishes;
     $hot_foil = FILEPATH.'hot_foil/'.$rowp->hot_foil;
-    $embossing_and_debossing = FILEPATH.'embossing_debossing/'.$rowp->embossing_and_debossing;
-    $silk_screen_print = FILEPATH.'silkscreen_print/'.$rowp->silk_screen_print;
+    $embossing_debossing = FILEPATH.'embossing_debossing/'.$rowp->embossing_debossing;
+    $silkscreen_print = FILEPATH.'silkscreen_print/'.$rowp->silkscreen_print;
 
     $softproof_selecter = ($row['softproof']  == $rowp->softproof)?'Y':'N';
 
@@ -410,10 +420,10 @@
                                 <p class="LE_plate_name"> Print file </p>
                             </div>
                             
-                            <?php if(isset($rowp->laminations_and_varnishes) && $rowp->laminations_and_varnishes!=""){ ?>
+                            <?php if(isset($rowp->laminations_varnishes) && $rowp->laminations_varnishes!=""){ ?>
                               <div class="col-md-2">
-                                <div class="upload-btn-wrapper"><button class="btn btnn btn_styling" onclick="window.open('<?=$laminations_and_varnishes?>');"><i class="fa fa-file-pdf-o"></i> Download PDF </button></div>
-                                <div class="upload-btn-wrapper"><button class="btn btnn copytoclip btn_styling" data-link="<?=$laminations_and_varnishes?>"><i class="fa  fa-link"></i> Share link</button></div>
+                                <div class="upload-btn-wrapper"><button class="btn btnn btn_styling" onclick="window.open('<?=$laminations_varnishes?>');"><i class="fa fa-file-pdf-o"></i> Download PDF </button></div>
+                                <div class="upload-btn-wrapper"><button class="btn btnn copytoclip btn_styling" data-link="<?=$laminations_varnishes?>"><i class="fa  fa-link"></i> Share link</button></div>
                                 <p class="LE_plate_name"> Lamination & varnishe </p>
                               </div>
                             <?php } ?>
@@ -426,18 +436,18 @@
                               </div>
                             <?php } ?>
 
-                            <?php if(isset($rowp->embossing_and_debossing) && $rowp->embossing_and_debossing!=""){ ?>
+                            <?php if(isset($rowp->embossing_debossing) && $rowp->embossing_debossing!=""){ ?>
                               <div class="col-md-2">
-                                <div class="upload-btn-wrapper"><button class="btn btnn btn_styling" onclick="window.open('<?=$embossing_and_debossing?>');"><i class="fa fa-file-pdf-o"></i> Download PDF </button></div>
-                                <div class="upload-btn-wrapper"><button class="btn btnn copytoclip btn_styling" data-link="<?=$embossing_and_debossing?>"><i class="fa  fa-link"></i> Share link</button></div>
+                                <div class="upload-btn-wrapper"><button class="btn btnn btn_styling" onclick="window.open('<?=$embossing_debossing?>');"><i class="fa fa-file-pdf-o"></i> Download PDF </button></div>
+                                <div class="upload-btn-wrapper"><button class="btn btnn copytoclip btn_styling" data-link="<?=$embossing_debossing?>"><i class="fa  fa-link"></i> Share link</button></div>
                                 <p class="LE_plate_name"> Embossing & Debossing </p>
                               </div>
                             <?php } ?>
 
-                            <?php if(isset($rowp->silk_screen_print) && $rowp->silk_screen_print!=""){ ?>
+                            <?php if(isset($rowp->silkscreen_print) && $rowp->silkscreen_print!=""){ ?>
                               <div class="col-md-2">
-                                <div class="upload-btn-wrapper"><button class="btn btnn btn_styling" onclick="window.open('<?=$silk_screen_print?>');"><i class="fa fa-file-pdf-o"></i> Download PDF </button></div>
-                                <div class="upload-btn-wrapper"><button class="btn btnn copytoclip btn_styling" data-link="<?=$silk_screen_print?>"><i class="fa  fa-link"></i> Share link</button></div>
+                                <div class="upload-btn-wrapper"><button class="btn btnn btn_styling" onclick="window.open('<?=$silkscreen_print?>');"><i class="fa fa-file-pdf-o"></i> Download PDF </button></div>
+                                <div class="upload-btn-wrapper"><button class="btn btnn copytoclip btn_styling" data-link="<?=$silkscreen_print?>"><i class="fa  fa-link"></i> Share link</button></div>
                                 <p class="LE_plate_name"> Silk Screen </p>
                               </div>
                             <?php } ?>
