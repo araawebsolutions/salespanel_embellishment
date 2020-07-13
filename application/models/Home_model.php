@@ -9433,6 +9433,7 @@ class Home_model extends CI_Model
             $label_embellishment_table_row = $this->db->get('label_embellishment')->row_array();
 
             $label_finish_individual_cost = new stdClass();
+            $label_finish_individual_cost->parent_id = $label_finish_embellishment_parent_id;
             $label_finish_individual_cost->parsed_parent_title = $parsed_parent_title;
             $label_finish_individual_cost->finish_parsed_title = $finish_and_emb_val;
             $label_finish_individual_cost->finish_price = $label_finish;
