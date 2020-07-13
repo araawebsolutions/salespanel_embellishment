@@ -1886,7 +1886,8 @@
                 laminations_and_varnishes: laminations_and_varnishes,
                 laminations_and_varnishes_childs: laminations_and_varnishes_childs,
                 selected_already_plates: selected_already_plates,
-                selected_already_plates_composite_array: selected_already_plates_composite_array
+                selected_already_plates_composite_array: selected_already_plates_composite_array,
+                'product_preferences': allPreferences
 
 
             },
