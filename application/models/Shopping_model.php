@@ -1109,7 +1109,9 @@ function show_quotation_basket(){
                     'FinishTypePrintedLabels' => $c->FinishTypePrintedLabels,
                     'FinishTypePricePrintedLabels' => $c->FinishTypePricePrintedLabels,
                     'total_emb_cost' => $c->total_emb_cost,
-                    'page_location'=>$c->page_location);
+                    'page_location'=>$c->page_location,
+                    'product_preferences'=>$c->product_preferences
+                );
 				
 				if($c->regmark == "Y")
 				{

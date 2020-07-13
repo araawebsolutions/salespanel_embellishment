@@ -6493,6 +6493,8 @@ function unsave_checkout_data(){
             $LabelsPerRoll = $persheets;
         }
 
+/*echo '<pre>';
+        print_r($this->input->post('product_preferences')); exit;*/
 
         $items = array('SessionID' => $SID,
             'ProductID' => $productid,
@@ -6508,7 +6510,9 @@ function unsave_checkout_data(){
             'pressproof' => $pressproof,
             'FinishTypePrintedLabels' => json_encode($rollfinish_child_array),
             'FinishTypePricePrintedLabels' => json_encode( $data['prices']['label_finish_individual_cost_array']),
-            'use_old_plate' => json_encode($use_old_plate));
+            'use_old_plate' => json_encode($use_old_plate),
+            'product_preferences' => json_encode($this->input->post('product_preferences'))
+        );
 
         $items = array_merge($items, $printing_options);
 
@@ -7064,6 +7068,8 @@ function unsave_checkout_data(){
         $data['upload_artwork_radio'] = $upload_artwork_radio;
         $data['upload_artwork_option_radio'] = $upload_artwork_option_radio;
         $data['lines_to_populate'] = $this->input->post('lines_to_populate');
+        $session_id = $this->shopping_model->sessionid();
+        $preferences = $this->orderModal->material_load_preferences($session_id);
 
         if ($upload_artwork_radio == "upload_artwork_now") {
             if (!empty($_FILES)) {
@@ -7421,13 +7427,17 @@ function unsave_checkout_data(){
 //                    $plain_price_and_emb_plate_sum = $prices['plainprice'] + $this->input->post('total_emb_plate_price');
                         $unit_price =  $prices['plainprice']/ $qty;
 
+                        /*echo '<pre>';
+                        print_r($preferences); exit;*/
                         $items = array('Quantity' => $qty,
                             'orignalQty' => $labels,
                             'UnitPrice' => $unit_price,
                             'TotalPrice' => $prices['plainprice'],
                             'FinishTypePrintedLabels' => json_encode($rollfinish_child_array),
                             'FinishTypePricePrintedLabels' => json_encode( $prices['label_finish_individual_cost_array']),
-                            'use_old_plate' => json_encode($use_old_plate));
+                            'use_old_plate' => json_encode($use_old_plate),
+                            'product_preferences' => json_encode($preferences)
+                        );
 
 
                         $items = array_merge($items, $printing_items);

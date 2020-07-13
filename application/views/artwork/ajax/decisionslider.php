@@ -39,15 +39,15 @@
 	$buttondeclinetext = "Decline Print + Label Embellishments File"; $buttonapprovetext = "Approve Print + Label Embellishments File";
 
 
-	$laminations_and_varnishes_flag = $chatdetails['laminations_and_varnishes'];
+	$laminations_and_varnishes_flag = $chatdetails['laminations_varnishes'];
 	$hot_foil_flag = $chatdetails['hot_foil'];
-	$embossing_and_debossing_flag = $chatdetails['embossing_and_debossing'];
-	$silk_screen_print_flag = $chatdetails['silk_screen_print'];
+	$embossing_and_debossing_flag = $chatdetails['embossing_debossing'];
+	$silk_screen_print_flag = $chatdetails['silkscreen_print'];
 
-	$laminations_and_varnishes_path = FILEPATH.'laminations_varnishes/'.$chatdetails['laminations_and_varnishes'];
+	$laminations_and_varnishes_path = FILEPATH.'laminations_varnishes/'.$chatdetails['laminations_varnishes'];
 	$hot_foil_path = FILEPATH.'hot_foil/'.$chatdetails['hot_foil'];
-	$embossing_and_debossing_path = FILEPATH.'embossing_debossing/'.$chatdetails['embossing_and_debossing'];
-	$silk_screen_print_path = FILEPATH.'silkscreen_print/'.$chatdetails['silk_screen_print'];	
+	$embossing_and_debossing_path = FILEPATH.'embossing_debossing/'.$chatdetails['embossing_debossing'];
+	$silk_screen_print_path = FILEPATH.'silkscreen_print/'.$chatdetails['silkscreen_print'];	
 }
 
 

@@ -9,7 +9,7 @@ if( gettype($LB_jsonDecode) == "array" ) {
         <span>
             <span class="badge badge-purple badge-blue-first" style="margin-left: -8px; z-index:<?php echo $loop_counter--;?>; background-color: <?php echo $colorsArray[$key]; ?> ">
                 <?php 
-                    if( $eachLE->parsed_parent_title == "hot_foil" ) {
+                    if( $eachLE->parent_id == "2" ) {
                         echo "Hot Foil (". ucwords( str_replace("_", " ", $eachLE->finish_parsed_title)).")";
                     } else {
                         echo ucwords( str_replace("_", " ", $eachLE->finish_parsed_title));

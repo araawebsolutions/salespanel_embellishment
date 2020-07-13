@@ -695,14 +695,14 @@ class Artworks extends CI_Controller {
 		 					$sql_temp .= ", $LE_db_col_name[$key] = '".$each_file_name."' " ;
 		 				}
 
-		 				if($LE_db_col_name[$key] == "laminations_and_varnishes") {
-		 					$artwork_chat['laminations_and_varnishes'] = $each_file_name;
+		 				if($LE_db_col_name[$key] == "laminations_varnishes") {
+		 					$artwork_chat['laminations_varnishes'] = $each_file_name;
 		 				} else if($LE_db_col_name[$key] == "hot_foil") { 
 		 					$artwork_chat['hot_foil'] = $each_file_name;
-		 				} else if($LE_db_col_name[$key] == "embossing_and_debossing") { 
-		 					$artwork_chat['embossing_and_debossing'] = $each_file_name;
-		 				} else if($LE_db_col_name[$key] == "silk_screen_print") { 
-		 					$artwork_chat['silk_screen_print'] = $each_file_name;
+		 				} else if($LE_db_col_name[$key] == "embossing_debossing") { 
+		 					$artwork_chat['embossing_debossing'] = $each_file_name;
+		 				} else if($LE_db_col_name[$key] == "silkscreen_print") { 
+		 					$artwork_chat['silkscreen_print'] = $each_file_name;
 		 				}
 		 			}
 	 			}
@@ -716,7 +716,8 @@ class Artworks extends CI_Controller {
 	 			
 	 		}
 	 	}
-	  
+	 	
+
 		$jobno = $this->input->post('attach');
 		$comment = $this->input->post('comment');
 		$attachment = $this->input->post('attachment');
