@@ -1643,7 +1643,7 @@
 
                             <span style="margin-left: 10px;">
 
-                                <a id="edit_order_line" href="<?php echo main_url.'order_quotation/order/edit_order_line/'.$detail->OrderNumber.'/'.$detail->SerialNumber; ?>" class="m-20 btn btn-secondarys btn-rounded waves-light waves-effect btn-upload-artwork" >&nbsp; Embilishment </a>
+                                <a id="edit_order_line" href="<?php echo main_url.'order_quotation/order/edit_emb_options/order_detail/'.$detail->OrderNumber.'/'.$detail->SerialNumber; ?>" class="m-20 btn btn-secondarys btn-rounded waves-light waves-effect btn-upload-artwork" >&nbsp; Embellishment </a>
 
                             </span>
                                                                 <? }

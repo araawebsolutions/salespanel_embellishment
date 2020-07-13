@@ -57,7 +57,6 @@ $assets = Assets;?>
 
                                         } else {
                                             $img_src = $assets . "images/categoryimages/RollLabels/outside/" . $imagecode . "4.jpg";
-
                                         }
                                         ?>
 
@@ -131,6 +130,7 @@ $assets = Assets;?>
 
                                                 <!--                                    plain print price section start-->
                                                 <?php
+
                                                 //
                                                 $SID = $this->shopping_model->sessionid() . '-PRJB';
                                                 $cartid = $this->home_model->get_db_column('temporaryshoppingbasket', 'id', 'SessionID', $SID);
