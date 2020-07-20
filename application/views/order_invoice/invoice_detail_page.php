@@ -421,7 +421,8 @@ foreach ($AccountInfo as $order)
                     <?php } ?>
 
                 <?php
-                if ($detail->Printing == 'Y' && $detail->FinishTypePricePrintedLabels != '') { ?>
+                if ($detail->Printing == 'Y' && $detail->FinishTypePricePrintedLabels != '') { 
+                ?>
                     <tr>
                         <td></td>
                         <td colspan="4"><b> Finish </b></td>
@@ -438,6 +439,7 @@ foreach ($AccountInfo as $order)
                     $index = 0;
                     $parsed_child_title = '';
                     $parsed_title_price = 0;
+                    $plate_cost1 = 0;
                     foreach ($lem_options as $lem_option) {
 
                         $parsed_title = ucwords(str_replace("_", " ", $lem_option->finish_parsed_title));
@@ -448,6 +450,7 @@ foreach ($AccountInfo as $order)
                         ($use_old_plate == 1 ?  $plate_cost = 0 : $plate_cost = $lem_option->plate_cost);
 
                         if ($parent_id == 1) { //For Lamination and varnish
+                            $plate_cost1 += $plate_cost;
                             $parsed_child_title .= $parsed_title.", ";
                             $parsed_title_price += $lem_option->finish_price;
 
@@ -463,7 +466,7 @@ foreach ($AccountInfo as $order)
                                     <td></td>
                                     <td class="text-center">
                                         <?php
-                                        echo $symbol." ".number_format(($parsed_title_price * $exchange_rate), 2) ;
+                                        echo $symbol." ".number_format(($parsed_title_price+$plate_cost1 * $exchange_rate), 2) ;
                                         ?>
                                     </td>
                                 </tr>
@@ -492,13 +495,29 @@ foreach ($AccountInfo as $order)
 
                             <tr>
                                 <td></td>
-                                <td>Sequential Variable Data</td>
-                                <td></td>
-                                <td></td>
                                 <td>
-                                    <?php
-                                    echo $symbol." ".number_format((sequential_price * $exchange_rate), 2) ;
-                                    ?>
+                                  <?php
+                                      echo "<b>".$parsed_parent_title." : </b>";
+                                      
+                                      if( isset($detail->sequential_and_variable_data) && $detail->sequential_and_variable_data != '' ) {
+                                        $json_data = json_decode($detail->sequential_and_variable_data);
+                                        if( gettype($json_data) == "array" ) {
+                                            foreach ($json_data as $key => $eachData) {
+                                              if( $key == 0 ) {
+                                                  echo "<b>(Start #: </b>".$eachData->starting_data."<b> -  End #: </b>".$eachData->ending_data."<b>)</b>";
+                                              } else {
+                                                  echo "<b>,&nbsp; (Start #: </b>".$eachData->starting_data."<b> -  End #: </b>".$eachData->ending_data."<b>)</b>&nbsp;&nbsp;";
+                                              }
+                                            }
+                                        }
+                                      }
+                                      $parsed_title_price = count($json_data) * sequential_price;
+                                  ?>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-center">
+                                    <?= $symbol." ".number_format(($parsed_title_price * $exchange_rate), 2) ?>
                                 </td>
                             </tr>
 
