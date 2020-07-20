@@ -73,6 +73,7 @@ class cart extends CI_Controller
             }
             //print_r($data['statics']); exit;
 
+
             if ($data['checkoutArtwork'] == 'yes') {
                 echo $this->updateInCart($data);
             } else {
@@ -100,65 +101,17 @@ class cart extends CI_Controller
         return $response;
     }
 
-    public function getCartPrice()
-    {
-        $response = json_encode(array('response' => 'true', 'price' => $this->cartModal->getCarTotalPrice()));
-        echo $response;
-    }
-
-    public function makePlainData($records, $data)
-    {
-
-        $dataArray = '';
-
-        try {
-
-            if ($records->ProductBrand == 'A4 Labels' || $records->ProductBrand == 'A3 Label' || $records->ProductBrand == 'SRA3 Label' || $records->ProductBrand == 'Integrated Labels' || $records->ProductBrand == 'A5 Labels') {
-
-                $data['price'] = $this->myPriceModel->getPrice($data['serialNumber'], $data['orderNumber'], $data['manfactureId'], $data)['totalPrice'];
-
-                //print_r($data['price']);
-
-                $dataArray = $this->makePlainArray($records, $data);
-            } elseif ($records->ProductBrand == 'Roll Labels') {
-                // print_r($this->myPriceModel->getPrice($data['orderNumber'],$data['manfactureId'],$data));exit;
-                $data['price'] = $this->myPriceModel->getPrice($data['serialNumber'], $data['orderNumber'], $data['manfactureId'], $data)['totalPrice'];
-                $dataArray = $this->makePlainArray($records, $data);
-                $dataArray['wound'] = ($records->Wound == null) ? '' : $records->Wound;
-                //$data['is_custom'] = ($records->LabelsPerRoll == $records->LabelsPerSheet) ? 'N' : 'Y';
-                $dataArray['is_custom'] = ($records->LabelsPerRoll == $records->LabelsPerSheet) ? 'No' : 'Yes';
-
-            }
-
-            //print_r($dataArray);exit;
-
-
-            $respo = '';
-
-            if ($data['reorder_type'] == "") {
-                //echo 'sds';
-                $this->insertRecord($dataArray);
-                $respo = $this->sendResponse($records);
-            } else {
-                //echo 'ele';
-                $respo = $this->sendResponse($dataArray);
-            }
-            //print_r($respo);exit;
-
-            return $respo;
-
-        } catch (Exception $e) {
-            var_dump($e->getMessage());
-        }
-
-    }
-
     public function makePrintingData($record, $data)
     {
 
         try {
-
             $printArray = $this->makePrintedArray($record, $data);
+
+            // echo "<pre>";
+            //     print_r($printArray);
+            // echo "</pre>";
+            // die();
+
             $data['originalCartId'] = $this->insertRecord($printArray);
 
 
@@ -174,7 +127,6 @@ class cart extends CI_Controller
             var_dump($e->getMessage());
         }
     }
-
 
     public function makePrintedArray($record, $data)
     {
@@ -244,7 +196,30 @@ class cart extends CI_Controller
         } else {
             $des = '1 Designs';
         }
+        
+        $total_emb_cost = 0;
+        $FinishTypePrintedLabels = NULL;
+        $FinishTypePricePrintedLabels = NULL;
 
+        if( $record->FinishTypePricePrintedLabels != "" ) {
+            $LB_jsonDecode = json_decode($record->FinishTypePricePrintedLabels);
+            if( gettype($LB_jsonDecode) == "array" ) {
+                $FinishTypePricePrintedLabels = array();
+                $total_emb_cost = $record->total_emb_cost;
+                $FinishTypePrintedLabels = $record->FinishTypePrintedLabels;
+                
+                foreach ($LB_jsonDecode as $key => $eachLE) {
+
+                    if( $eachLE->use_old_plate == 0 && $eachLE->plate_cost > 0 ) {
+                        $eachLE->use_old_plate = 1;
+                        $total_emb_cost -= $eachLE->plate_cost;
+                    }
+                    array_push($FinishTypePricePrintedLabels, $eachLE);
+
+                }
+                $FinishTypePricePrintedLabels = json_encode($FinishTypePricePrintedLabels);
+            }
+        }
 
         $printedArray = array(
             'SessionID' => $this->session->userdata('session_id'),
@@ -261,13 +236,17 @@ class cart extends CI_Controller
             'is_custom' => $record->is_custom,
             'wound' => $record->Wound,
             'Printing' => 'Y',
-            'Print_Total' => ($calculation['printPrice'] <= 0) ? '0.00' : $calculation['printPrice'],
+            'Print_Total' => ($calculation['printPrice'] <= 0) ? '0.00' : $calculation['printPrice']+$total_emb_cost,
             'Print_Type' => $record->Print_Type,
             'FinishType' => $record->FinishType,
             'Print_Design' => $des,
             'Print_Qty' => $data['statics']->count,
             //'Free'=>(isset($calculation['record']['artworks']))?$calculation['record']['artworks']:0,
             'Free' => $record->Free,
+
+            'total_emb_cost' => $total_emb_cost,
+            'FinishTypePrintedLabels' => $FinishTypePrintedLabels,
+            'FinishTypePricePrintedLabels' => $FinishTypePricePrintedLabels,
 
             'source' => $record->source,
             'orientation' => $record->Orientation,
@@ -277,6 +256,64 @@ class cart extends CI_Controller
         //print_r($printedArray);exit;
         return $printedArray;
     }
+
+    public function getCartPrice()
+    {
+        $response = json_encode(array('response' => 'true', 'price' => $this->cartModal->getCarTotalPrice()));
+        echo $response;
+    }
+
+    public function makePlainData($records, $data)
+    {
+
+        $dataArray = '';
+
+        try {
+
+            if ($records->ProductBrand == 'A4 Labels' || $records->ProductBrand == 'A3 Label' || $records->ProductBrand == 'SRA3 Label' || $records->ProductBrand == 'Integrated Labels' || $records->ProductBrand == 'A5 Labels') {
+
+                $data['price'] = $this->myPriceModel->getPrice($data['serialNumber'], $data['orderNumber'], $data['manfactureId'], $data)['totalPrice'];
+
+                //print_r($data['price']);
+
+                $dataArray = $this->makePlainArray($records, $data);
+            } elseif ($records->ProductBrand == 'Roll Labels') {
+                // print_r($this->myPriceModel->getPrice($data['orderNumber'],$data['manfactureId'],$data));exit;
+                $data['price'] = $this->myPriceModel->getPrice($data['serialNumber'], $data['orderNumber'], $data['manfactureId'], $data)['totalPrice'];
+                $dataArray = $this->makePlainArray($records, $data);
+                $dataArray['wound'] = ($records->Wound == null) ? '' : $records->Wound;
+                //$data['is_custom'] = ($records->LabelsPerRoll == $records->LabelsPerSheet) ? 'N' : 'Y';
+                $dataArray['is_custom'] = ($records->LabelsPerRoll == $records->LabelsPerSheet) ? 'No' : 'Yes';
+
+            }
+
+            //print_r($dataArray);exit;
+
+
+            $respo = '';
+
+            if ($data['reorder_type'] == "") {
+                //echo 'sds';
+                $this->insertRecord($dataArray);
+                $respo = $this->sendResponse($records);
+            } else {
+                //echo 'ele';
+                $respo = $this->sendResponse($dataArray);
+            }
+            //print_r($respo);exit;
+
+            return $respo;
+
+        } catch (Exception $e) {
+            var_dump($e->getMessage());
+        }
+
+    }
+
+   
+
+
+    
 
     public function makePlainArray($records, $data)
     {
