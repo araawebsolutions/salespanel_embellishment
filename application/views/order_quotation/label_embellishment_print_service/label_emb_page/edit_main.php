@@ -1503,7 +1503,8 @@
 
     $(document).ready(function (e) {
 
-        check_prefs();
+        //check_prefs();
+        generate_emb_page();
         $('.dm-selector').find('.dropdown-menu').find("[data-toggle=tooltip-orintation]").tooltip('destroy');
         $('.dm-selector').find('.dropdown-menu').find("[data-toggle=tooltip-orintation]").tooltip();
     });
@@ -1602,6 +1603,103 @@
                 } else {
                     document.location = "<?php echo base_url() . 'printed-labels/';?>";
                 }
+            }
+        });
+    }
+
+    function generate_emb_page() {
+        $("#full_page_loader").show();
+        var contentbox = $('#product_content');
+        var finish_content = $('#finish_content');
+        var cart_summery = $('#cart_summery');
+
+        var flag = '<?=$flag?>';
+        var refNumber = '<?=$refNumber?>';
+        var lineNumber = '<?=$lineNumber?>';
+
+        $.ajax({
+            url: mainUrl + 'ajax/generate_emb_page',
+            type: "POST",
+            async: "false",
+            dataType: "html",
+            data: {
+                flag : flag,
+                refNumber : refNumber,
+                lineNumber : lineNumber,
+            },
+            success: function (data) {
+                data = $.parseJSON(data);
+                console.log(data);
+                return false;
+                /*if (data.response == 'yes') {
+
+
+                    if (data.preferences.source != "material_page") {
+                        document.location = "<?php echo base_url() . 'printed-labels/';?>";
+                    }
+
+                    preferences = data.preferences;
+                    preferences_global = preferences;
+                    combination_global = data.data.combination_array;
+                    parent_child_global = data.data.label_embellishments;
+                    embellishment_plate_price_global = data.data.embellishment_plate_price;
+
+
+                    if (preferences.available_in == 'A4') {
+                        $(".name_print_type").html("sheets");
+                        backtomaterial_ype = "a4-sheets-printed";
+
+                    } else if (preferences.available_in == 'A3') {
+                        $(".name_print_type").html("sheets");
+                        backtomaterial_ype = "a3-sheets-printed";
+                    } else if (preferences.available_in == 'SRA3') {
+                        $(".name_print_type").html("sheets");
+                        backtomaterial_ype = "sra3-sheets-printed";
+                    } else if (preferences.available_in == 'A5') {
+                        $(".name_print_type").html("sheets");
+                        backtomaterial_ype = "a5-sheets-printed";
+                    } else {
+                        $(".name_print_type").html("rolls");
+                        backtomaterial_ype = "roll-labels-printed";
+                    }
+
+
+                    if (data.preferences.selected_size == null) {
+                        return false;
+                    }
+                    // $('.preferences').modal('show');
+
+                    //$(".gotoMaterialPage").attr("href", "../" + backtomaterial_ype + "/" + (preferences.shape).toLowerCase() + "/" + (preferences.selected_size).toLowerCase());
+                    $(".gotoMaterialPage").attr("href", "../order_quotation/order/index");
+                    //window.location.href = '<?php echo SAURL ?>order_quotation/order/index';
+                    contentbox.html(data.data.printing_process_content);
+                    finish_content.html(data.data.finish_content);
+                    cart_summery.html(data.data.cart_summery);
+                    // $('#label_coresize').html(data.data.roll_cores);
+                    $("#brandName").text(preferences.available_in);
+
+
+                    pre_load_apply_preferences(preferences);
+                    $('#standerd_inner_section_options').hide();
+                    $('#premium_inner_section_options').hide();
+                    $('#premium_inner_section_description').hide();
+                    $('.printing_process_selection_inner_container').hide();
+
+                    //disable click on page load on emb option tabs
+                    if (preferences.available_in != "Roll"){
+                        $('#tab-1').css('pointer-events','none');
+                        $('#tab-2').css('pointer-events','none');
+                        $('#tab-3').css('pointer-events','none');
+                        $('#tab-4').css('pointer-events','none');
+                        $('#purchased_plate_cta').css('pointer-events','none');
+
+                    }
+
+
+
+                } else {
+                    document.location = "<?php echo base_url() . 'printed-labels/';?>";
+                }*/
             }
         });
     }
@@ -1886,8 +1984,7 @@
                 laminations_and_varnishes: laminations_and_varnishes,
                 laminations_and_varnishes_childs: laminations_and_varnishes_childs,
                 selected_already_plates: selected_already_plates,
-                selected_already_plates_composite_array: selected_already_plates_composite_array,
-                'product_preferences': allPreferences
+                selected_already_plates_composite_array: selected_already_plates_composite_array
 
 
             },

@@ -3979,20 +3979,25 @@ class order extends CI_Controller
         $this->load->View('page', $data);
     }
 
-    function edit_order_line($orderNumber, $serialNumber){
-        
-        $data['orderNumber'] = $orderNumber;
-        $data['serialNumber'] = $serialNumber;
+    function edit_emb_options($flag=NULL,$orderNumber=NULL, $serialNumber=NULL){
+
+        if (isset($flag) && $flag =='order_detail'){
+            $data['lineDetail'] = $this->orderModal->getOrderDetailBySerialNumber($serialNumber);
+        } elseif (isset($flag) && $flag=='quotation_detail'){
+            $data['lineDetail'] = $this->orderModal->getQuotationDetailBySerialNumber($serialNumber);
+        }
+
+        $data['refNumber'] = $orderNumber;
+        $data['lineNumber'] = $serialNumber;
+        $data['flag'] = $flag;
         $data['return_url'] = $_SERVER['HTTP_REFERER'];
-        $data['flag'] = 'editOrderline';
-        $data['main_content'] = 'order_quotation/label_embellishment_print_service/label_emb_page/main';
-        $data['orderDetails'] = $this->orderModal->getOrderDetail($orderNumber);
-        
-        /*echo "<pre>";
+        $data['main_content'] = 'order_quotation/label_embellishment_print_service/label_emb_page/edit_main';
+
+       /* echo "<pre>";
         print_r($data);
         echo "</pre>";
         die();*/
-            
+
         $this->load->View('order_quotation/label_embellishment_print_service/page', $data);
     }
 

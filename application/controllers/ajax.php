@@ -6493,6 +6493,8 @@ function unsave_checkout_data(){
             $LabelsPerRoll = $persheets;
         }
 
+/*echo '<pre>';
+        print_r($this->input->post('product_preferences')); exit;*/
 
         $items = array('SessionID' => $SID,
             'ProductID' => $productid,
@@ -6508,7 +6510,9 @@ function unsave_checkout_data(){
             'pressproof' => $pressproof,
             'FinishTypePrintedLabels' => json_encode($rollfinish_child_array),
             'FinishTypePricePrintedLabels' => json_encode( $data['prices']['label_finish_individual_cost_array']),
-            'use_old_plate' => json_encode($use_old_plate));
+            'use_old_plate' => json_encode($use_old_plate),
+            'product_preferences' => json_encode($this->input->post('product_preferences'))
+        );
 
         $items = array_merge($items, $printing_options);
 
@@ -7064,6 +7068,8 @@ function unsave_checkout_data(){
         $data['upload_artwork_radio'] = $upload_artwork_radio;
         $data['upload_artwork_option_radio'] = $upload_artwork_option_radio;
         $data['lines_to_populate'] = $this->input->post('lines_to_populate');
+        $session_id = $this->shopping_model->sessionid();
+        $preferences = $this->orderModal->material_load_preferences($session_id);
 
         if ($upload_artwork_radio == "upload_artwork_now") {
             if (!empty($_FILES)) {
@@ -7421,13 +7427,17 @@ function unsave_checkout_data(){
 //                    $plain_price_and_emb_plate_sum = $prices['plainprice'] + $this->input->post('total_emb_plate_price');
                         $unit_price =  $prices['plainprice']/ $qty;
 
+                        /*echo '<pre>';
+                        print_r($preferences); exit;*/
                         $items = array('Quantity' => $qty,
                             'orignalQty' => $labels,
                             'UnitPrice' => $unit_price,
                             'TotalPrice' => $prices['plainprice'],
                             'FinishTypePrintedLabels' => json_encode($rollfinish_child_array),
                             'FinishTypePricePrintedLabels' => json_encode( $prices['label_finish_individual_cost_array']),
-                            'use_old_plate' => json_encode($use_old_plate));
+                            'use_old_plate' => json_encode($use_old_plate),
+                            'product_preferences' => json_encode($preferences)
+                        );
 
 
                         $items = array_merge($items, $printing_items);
@@ -12903,6 +12913,214 @@ function unsave_checkout_data(){
                 }
             }
         }
+    }
+
+    public function generate_emb_page()
+    {
+
+        $flag = $this->input->post('flag');
+        $refNumber = $this->input->post('refNumber');
+        $lineNumber = $this->input->post('lineNumber');
+
+        $combination_array = array();
+        $label_embellishments = $this->orderModal->get_label_embellishment_and_combinations();
+
+        /*echo "<pre>";
+        print_r($label_embellishments);
+        die;*/
+        $embellishment_plate_price = array();
+        foreach ($label_embellishments['label_embellishment'] as $key1 => $label_emb) {
+            $plate_price = new stdClass();
+            $plate_price->id = $label_emb['id'];
+            $plate_price->parsed_title = $label_emb['parsed_title'];
+            $plate_price->title = $label_emb['title'];
+            $plate_price->plate_cost = $label_emb['plate_cost'];
+            $embellishment_plate_price[] = $plate_price;
+            foreach ($label_embellishments['label_embellishment_cond'] as $key => $label_emb_cond) {
+
+                if ($label_emb['id'] == $label_emb_cond['label_embellishment_id']) {
+                    $label_embellishment_details = $this->orderModal->get_label_embellishment_details_by_id($label_emb_cond['label_embellishment_agianst_id']);
+
+                    $data = new stdClass();
+                    $data->label_embellishment_agianst_id = $label_emb_cond['label_embellishment_agianst_id'];
+                    $data->label_condition = $label_emb_cond['label_condition'];
+//                    $data->label_embellishment_title = $label_emb['parsed_title'];
+                    $data->label_embellishment_title = $label_embellishment_details['label_embellishment_details']['title'];
+                    $combination_array[$label_emb['id'] . '_' . $label_emb['title']][] = $data;
+
+                }
+            }
+        }
+
+
+        // if ($_POST) {
+        $email = $preferences = '';
+        $data = array();
+        $data['combination_array'] = $combination_array;
+        $data['label_embellishments'] = $label_embellishments['label_embellishment_parent'];
+        $data['embellishment_plate_price'] = $embellishment_plate_price;
+
+
+       /* $session_id = $this->shopping_model->sessionid();
+        if ($session_id != '') {
+            $cartid = $this->home_model->get_db_column('temporaryshoppingbasket', 'id', 'SessionID', $session_id . '-PRJB');
+            $data['cartid'] = $cartid;
+
+            $preferences = $this->orderModal->material_load_preferences($session_id);
+        }*/
+
+       if(isset($flag) && $flag == 'order_detail'){
+           $line_detail = $this->orderModal->getOrderDetailBySerialNumber($lineNumber);
+       }
+
+        echo "<pre>";
+        print_r($line_detail);
+        echo "</pre>";
+        die();
+
+        if (!empty($preferences)) {
+
+            if (($preferences['available_in'] == "A4" || $preferences['available_in'] == "A3" || $preferences['available_in'] == "SRA3" || $preferences['available_in'] == "A5") and $preferences['categorycode_a4'] != '') {
+                $cat_desc = $this->home_model->get_db_column("category", "CategoryDescription", "CategoryID", $preferences['selected_size']);
+                $cat_desc = explode("-", $cat_desc);
+                $preferences['cat_desc_a4'] = $cat_desc[0];
+                $preferences['cat_desc_roll'] = '';
+
+                $dataProdu = $this->orderModal->getProductData($preferences['productcode_a4']);
+                $preferences['ProductID'] = $dataProdu[0]->ProductID;
+                $preferences['ManufactureID'] = $dataProdu[0]->ManufactureID;
+
+                $category_id = $preferences['selected_size'];
+
+
+                $row = $this->db->query(" Select * from category WHERE CategoryID LIKE '" . $category_id . "' ")->row_array();
+
+                if ($row['Shape_upd'] == "Circular") {
+                    $label_size = ucwords(str_replace("Label Size:", "", $row['specification3']));
+                    $label_size = str_replace("Mm", "", $label_size);
+                } else {
+                    $label_size = $row['LabelWidth'] . " x " . $row['LabelHeight'];
+                    $label_size = str_replace("mm", "", $label_size);
+
+                }
+                $data['label_size'] = $label_size;
+
+                $printing_process = $this->orderModal->get_digital_printing_process('a4');
+                $data['printing_process'] = $printing_process;
+                $data['availabel_in'] = $preferences['available_in'];
+                $data['preferences'] = $preferences;
+
+//                $condition = " p.CategoryID LIKE '" . $preferences['selected_size'] . "' AND p.Activate LIKE 'Y'  AND p.Printable LIKE 'Y' ";
+//                $condition .= " AND Adhesive LIKE '" . $preferences['adhesive_a4'] . "'";
+//                $condition .= " AND Material1 LIKE '" . $preferences['color_a4'] . "'";
+//                $condition .= " AND ColourMaterial_upd LIKE '" . $preferences['material_a4'] . "'";
+//
+//                $query = " Select * from products p,category c WHERE $condition AND SUBSTRING_INDEX(p.CategoryID,'R',1) = c.CategoryID";
+//                $data['sheetdetails'] = $this->db->query($query)->row_array();
+//                $data['details'] = $this->db->query($query)->row_array();
+//                $data['sheetdetails'] = $this->db->query($query)->row_array();
+                $data['details'] = $dataProdu;
+
+//                echo"<pre>";print_r($data['rolldetails']);die;
+
+
+                $theHTMLResponse = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/printing_process_sheet', $data, true);
+//                $json_data = array('content' => $theHTMLResponse);
+                $data['printing_process_content'] = $theHTMLResponse;
+                $finishHTMLResponse = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/label_finish_and_embellishment', $data, true);
+//                $json_data = array('content' => $theHTMLResponse);
+                $data['finish_content'] = $finishHTMLResponse;
+
+                $cartSummeryHTMLResponse = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/cart_summery', $data, true);
+//                $json_data = array('content' => $theHTMLResponse);
+                $data['cart_summery'] = $cartSummeryHTMLResponse;
+
+//                $artworkUploadHTMLResponse = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/artwork_upload', $data, true);
+//                $json_data = array('content' => $theHTMLResponse);
+//                $data['artwork_upload_view'] = $artworkUploadHTMLResponse;
+            }
+            if ($preferences['available_in'] == "Roll" and $preferences['categorycode_roll'] != '') {
+                $catID = explode("R", $preferences['selected_size']);
+                $preferences['cat_desc_a4'] = '';
+                $preferences['cat_desc_roll'] = $this->home_model->get_db_column("category", "CategoryDescription", "CategoryID", $catID[0]);
+
+                $dataProdu = $this->orderModal->getProductData($preferences['productcode_roll']);
+
+                $preferences['ProductID'] = $dataProdu[0]->ProductID;
+                $preferences['ManufactureID'] = $dataProdu[0]->ManufactureID;
+                $category_id = explode('R', $preferences['selected_size']);
+                $category_id = $category_id[0];
+                $rollcores = $this->orderModal->roll_core_sizes($category_id, $preferences['coresize']);
+                $data['roll_cores'] = $rollcores;
+
+
+//                $condition = " p.CategoryID LIKE '" . $preferences['selected_size'] . "' AND p.Activate LIKE 'Y'  AND p.Printable LIKE 'Y' ";
+//                $condition .= " AND Adhesive LIKE '" . $preferences['adhesive_roll'] . "'";
+//                $condition .= " AND Material1 LIKE '" . $preferences['color_roll'] . "'";
+//                $condition .= " AND ColourMaterial_upd LIKE '" . $preferences['material_roll'] . "'";
+//
+//                $query = " Select * from products p,category c WHERE $condition AND SUBSTRING_INDEX(p.CategoryID,'R',1) = c.CategoryID";
+//                $data['rolldetails'] = $this->db->query($query)->row_array();
+//                $data['details'] = $this->db->query($query)->row_array();
+                $data['details'] = $dataProdu;
+                //echo"<pre>";print_r($data['details'][0]->ProductID);die;
+
+                $row = $this->db->query(" Select * from category WHERE CategoryID LIKE '" . $category_id . "' ")->row_array();
+
+                if ($row['Shape_upd'] == "Circular") {
+                    $label_size = ucwords(str_replace("Label Size:", "", $row['specification3']));
+                    $label_size = str_replace("Mm", "", $label_size);
+                } else {
+                    $label_size = $row['LabelWidth'] . " x " . $row['LabelHeight'];
+                    $label_size = str_replace("mm", "", $label_size);
+
+                }
+                $data['label_size'] = $label_size;
+
+                $printing_process = $this->orderModal->get_digital_printing_process('roll');
+                $data['printing_process'] = $printing_process;
+                $data['availabel_in'] = $preferences['available_in'];
+                $data['preferences'] = $preferences;
+
+                $theHTMLResponse = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/printing_process', $data, true);
+//                $json_data = array('content' => $theHTMLResponse);
+                $data['printing_process_content'] = $theHTMLResponse;
+
+                $finishHTMLResponse = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/label_finish_and_embellishment', $data, true);
+//                $json_data = array('content' => $theHTMLResponse);
+                $data['finish_content'] = $finishHTMLResponse;
+
+                $cartSummeryHTMLResponse = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/cart_summery', $data, true);
+//                $json_data = array('content' => $theHTMLResponse);
+                $data['cart_summery'] = $cartSummeryHTMLResponse;
+
+//                $artworkUploadHTMLResponse = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/artwork_upload', $data, true);
+//                $json_data = array('content' => $theHTMLResponse);
+//                $data['artwork_upload_view'] = $artworkUploadHTMLResponse;
+
+//                $data['main_content'] = 'order_quotation/label_embellishment_Print_service/label_emb_page/printing_process_and_product';
+//                $this->load->View('page', $data);
+
+            }
+
+            if ($preferences['available_in'] == "both" and ($preferences['categorycode_roll'] != '' || $preferences['categorycode_a4'] != '')) {
+                $catID = explode(",", $preferences['selected_size']);
+
+                $cat_desc = $this->home_model->get_db_column("category", "CategoryDescription", "CategoryID", $catID[0]);
+                $cat_desc = explode("-", $cat_desc);
+                $preferences['cat_desc_a4'] = $cat_desc[0];
+
+                $preferences['cat_desc_roll'] = $this->home_model->get_db_column("category", "CategoryDescription", "CategoryID", substr($catID[1], 0, -2));
+            }
+
+            $this->output->set_content_type('application/json');
+            $this->output->set_output(json_encode(array('response' => 'yes', 'preferences' => $preferences, 'data' => $data)));
+        } else {
+
+            $this->output->set_content_type('application/json');
+            $this->output->set_output(json_encode(array('response' => 'no')));
+        }
+        // }
     }
 
 

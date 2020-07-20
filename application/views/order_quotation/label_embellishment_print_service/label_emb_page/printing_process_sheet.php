@@ -28,7 +28,7 @@
         //$pname=str_replace('-','',$a4details['ProductName']).' Adhesive '.' '.$label_size.' '.ucfirst($a4details['Shape']);
         $pname = str_replace('-', '', $product_details->ProductName ) . ' Adhesive '; ?>
 
-                             <input type="hidden" id="labels_p_sheet<?= $product_details->ProductID  ?>"
+                        <input type="hidden" id="labels_p_sheet<?= $product_details->ProductID  ?>"
                                value="<?= $product_details->LabelsPerSheet  ?>"/>
                         <input type="hidden" id="min_qty<?= $product_details->ProductID  ?>" value="<?= $min_qty ?>"/>
                         <input type="hidden" id="max_qty<?= $product_details->ProductID  ?>" value="<?= $max_qty ?>"/>
