@@ -37,25 +37,40 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
     $uploaded_designs = 0;
 } else {
 
-    $minroll = $this->home_model->min_qty_roll($details['ManufactureID']);
     $ProductID = $details['ProductID'];
     $cartid = $details['cartid'];
+    $upload_path = base_url().'theme/assets/images/artworks/';
+    $uploaded_designs = 0;
 
-    if(isset($cartid) && !empty($cartid)){
-        $files = $this->home_model->fetch_uploaded_artworks($cartid, $ProductID);
+    $total = $this->home_model->get_db_column('temporaryshoppingbasket', 'Quantity', 'ID', $cartid);
+    $labels = $this->home_model->get_db_column('temporaryshoppingbasket', 'orignalQty', 'ID', $cartid);
+    $designs = $this->home_model->get_db_column('temporaryshoppingbasket', 'Print_Qty', 'ID', $cartid);
+    $minroll = $this->home_model->min_qty_roll($details['ManufactureID']);
+    $min_labels_per_roll = $this->home_model->min_labels_per_roll($minroll);
+    
+
+    if( isset($edit_cart_flag) && $edit_cart_flag != '' ) {
+        $files = $this->home_model->fetch_uploaded_artworks_edit_cart($cartid, $ProductID);
         if (count($files) > 0){
-            $total_uploaded_rolls = $this->home_model->fetch_uploaded_artworks_total_qty($cartid, $ProductID);
+            $total_uploaded_rolls = $this->home_model->fetch_uploaded_artworks_total_qty_edit_cart($cartid, $ProductID);
             if (isset($total_uploaded_rolls) && !empty($total_uploaded_rolls)   ){
                 $additional_cost_per_roll = $prices['additional_cost']/($total_uploaded_rolls[0]->total_roll-$minroll);
             }
         }
+        $flag_minus = false;
+    } else {
+        if(isset($cartid) && !empty($cartid)){
+            $files = $this->home_model->fetch_uploaded_artworks($cartid, $ProductID);
+            if (count($files) > 0){
+                $total_uploaded_rolls = $this->home_model->fetch_uploaded_artworks_total_qty($cartid, $ProductID);
+                if (isset($total_uploaded_rolls) && !empty($total_uploaded_rolls)   ){
+                    $additional_cost_per_roll = $prices['additional_cost']/($total_uploaded_rolls[0]->total_roll-$minroll);
+                }
+            }
+        }
     }
-    $total = $this->home_model->get_db_column('temporaryshoppingbasket', 'Quantity', 'ID', $cartid);
-    $labels = $this->home_model->get_db_column('temporaryshoppingbasket', 'orignalQty', 'ID', $cartid);
-    $designs = $this->home_model->get_db_column('temporaryshoppingbasket', 'Print_Qty', 'ID', $cartid);
-    $min_labels_per_roll = $this->home_model->min_labels_per_roll($minroll);
-    $upload_path = base_url().'theme/assets/images/artworks/';
-    $uploaded_designs = 0;
+
+    
 
 }
 
@@ -161,7 +176,6 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
                 <?php  if (isset($details['labelCategory']) && $details['labelCategory'] =='Roll Labels'){  ?>
                     <td class="text-center">
                         <?php
-
                         if ($files[0]->qty < $minroll){
                             if ($total_rolls > $minroll){
                                 $remaining_roll_for_addtional_charges = $total_rolls-$minroll;
@@ -182,16 +196,19 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
 
 
                         }else{
-                            $additional_roll =$total_rolls - $minroll;
+                            $additional_roll = $total_rolls - $minroll;
                             if ($additional_roll>0){
-                                $additional_cost =   $additional_cost_per_roll * $row->qty;
-
-//                            $additional_cost = round(($additional_cost), 2);
+                                if( $flag_minus ) {
+                                    $additional_cost =   $additional_cost_per_roll * $row->qty;
+                                } else {
+                                    $additional_cost =   $additional_cost_per_roll * $additional_roll;
+                                }
+                                $flag_minus = true;
                                 $additional_cost = number_format($additional_cost, 2, '.', '');
-
                                 echo '<h6>+'.symbol.$additional_cost. ' <i class="fa fa-info-circle text-info" aria-hidden="true"></i></h6>';
                             }
-                        } ?>
+                        } 
+                        ?>
 
                     </td>
                 <?php  } ?>

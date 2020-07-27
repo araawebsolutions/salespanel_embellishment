@@ -13,9 +13,9 @@
                     include(APPPATH.'/views/order_quotation/label_embellishment_print_service/upload/a4_artwork_files.php');
                 }
                 else if($details['labelCategory'] =='Roll Labels'){
-
                     include(APPPATH.'/views/order_quotation/label_embellishment_print_service/upload/roll_artwork_files.php');
-                } ?>
+                }
+                ?>
 
             </div>
 

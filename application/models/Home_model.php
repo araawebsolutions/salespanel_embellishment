@@ -6702,10 +6702,23 @@ class Home_model extends CI_Model
         $q = $this->db->query(" select * from integrated_attachments WHERE SessionID LIKE '" . $sid . "' AND ProductID =$ProductID AND CartID=$cartid ORDER BY ID ASC ");
         return $q->result();
     }
+
+    function fetch_uploaded_artworks_edit_cart($cartid, $ProductID)
+    {
+        $q = $this->db->query(" select * from integrated_attachments WHERE ProductID =$ProductID AND CartID=$cartid ORDER BY ID ASC ");
+        return $q->result();
+    }
+
     function fetch_uploaded_artworks_total_qty($cartid, $ProductID)
     {
         $sid = $this->session->userdata('session_id') . '-PRJB';
         $q = $this->db->query(" select sum(qty) as total_roll from integrated_attachments WHERE SessionID LIKE '" . $sid . "' AND ProductID = '" . $ProductID. "'  AND CartID= '" .$cartid. "'");
+        return $q->result();
+    }
+
+    function fetch_uploaded_artworks_total_qty_edit_cart($cartid, $ProductID)
+    {
+        $q = $this->db->query(" select sum(qty) as total_roll from integrated_attachments WHERE ProductID = '" . $ProductID. "'  AND CartID= '" .$cartid. "'");
         return $q->result();
     }
 
@@ -7685,7 +7698,7 @@ class Home_model extends CI_Model
 
 
         /************* Prices Uplift by 6% Yearly **************/
-
+        
 
         $price = $this->check_price_uplift($price);
 
@@ -9921,6 +9934,18 @@ class Home_model extends CI_Model
         }
         return $matched_row;
     }
+
+
+    // NAFEES CART PAGE EDIT STARTS
+        function get_material_data_cart_page($material_code,$type){
+
+            $qry = $this->db->query("select * from material_tooltip_info WHERE material_code LIKE '%".$material_code."%' AND type LIKE '%".$type."%' ");
+            return $qry->row_array();
+        }
+    // NAFEES CART PAGE EDIT ENDS
+
+
+
 
     function get_material_data($material_code,$type){
 

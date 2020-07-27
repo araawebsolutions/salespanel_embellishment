@@ -33,9 +33,9 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
     $dividefactor   = ($unitqty=='labels')?1:$details['LabelsPerSheet'];
 
 } else {
+    
     $cartid = $details['cartid'];
     $ProductID = $details['ProductID'];
-    $files = $this->home_model->fetch_uploaded_artworks($cartid, $ProductID);
 
     $total = $this->home_model->get_db_column('temporaryshoppingbasket', 'Quantity', 'ID', $cartid);
     $designs = $this->home_model->get_db_column('temporaryshoppingbasket', 'Print_Qty', 'ID', $cartid);
@@ -48,11 +48,11 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
     $multiplyfactor = ($unitqty=='labels')?$details['LabelsPerSheet']:1;
     $dividefactor   = ($unitqty=='labels')?1:$details['LabelsPerSheet'];
 
-    //print_r($prices);echo"<br>";
-    //print_r($labels);echo"<br>";
-    //print_r($qty);echo"<br>";
-    //print_r($design);die;
-
+    if( isset($edit_cart_flag) && $edit_cart_flag != '' ) {
+        $files = $this->home_model->fetch_uploaded_artworks_edit_cart($cartid, $ProductID);
+    } else {
+        $files = $this->home_model->fetch_uploaded_artworks($cartid, $ProductID);
+    }
 }
 ?>
 
@@ -180,7 +180,11 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
         <?php }
 
         $lines_to_populate = 0;
-        $remaingsheets = $total-$total_sheets;
+        if( $total > 0 ) {
+            $remaingsheets = $total-$total_sheets;
+        }
+        // $remaingsheets = $total-$total_sheets;
+        
 
     }
 

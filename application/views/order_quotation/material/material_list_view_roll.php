@@ -192,7 +192,7 @@ foreach ($materials as $rec) {
 
         <input type="hidden" value="<?php echo $min_qty * $min_labels_per_roll;?>" class="qty allownumeric plainsheet_input">
 
-
+        <input type="hidden" name="dieCode" class="dieCode" value="<?= ltrim($details['DieCode'], "1-") ?>">
         <input type="hidden" name="selected_size" class="selected_size" value="<?php echo $selected_size;?>">
 
 
@@ -821,10 +821,10 @@ foreach ($materials as $rec) {
         var woundoption = $("#woundoption").val();
 
         dieCode = dieCode+coresize;
-        selected_size = selected_size+coresize;
+        selected_size = selected_size;
 
         $.ajax({
-            url: mainUrl + 'ajax/addPrintingPreferences',
+            url: mainUrl + 'ajax/addPrintingPreferences_cart_page',
             type: "POST",
             async: "false",
             dataType: "html",
