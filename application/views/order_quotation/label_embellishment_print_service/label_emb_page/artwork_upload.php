@@ -1,3 +1,6 @@
+<?php
+
+?>
 <!-- Popup For Artwork Upload & Artwork to follow Start -->
 <div   id="" class="white-screen upload_artwork_loader"
        style="    position: absolute;
@@ -34,16 +37,40 @@
                     <div id="headingOne" class="panel-title_blue">
                         <div>UPLOAD PRINT FILES</div>
                     </div>
+
+                    <?php
+                    if( isset($edit_cart_flag) && $edit_cart_flag != '' ) {
+                            
+                            $attachments_count = count($IA_data);
+                            $attachments_count_all = count($IA_all_data);
+                            $cost_effective = "";
+                            $custom_roll_and_label = "";
+                            if( $cart_and_product_data['custom_roll_and_label'] == "cost_effective" ) {
+                                $cost_effective = true;
+                            } else if( $cart_and_product_data['custom_roll_and_label'] == "custom_roll_and_label" ) {
+                                $custom_roll_and_label = true;
+                            }
+                    }
+                    ?>
+
                     <div class="row padding-20">
                         <p class="text-details-artwork-upload">Please upload and attach your artwork for this order. You can include up to 50 separate artworks. If the number of artworks exceeds this, then amend the number of designs to be printed on the next page to include these in your order and send the additional files, not uploaded, via email to: customercare@aalabels.com and these will be assigned to your order for production.</p>
                         <div class="col-md-4 float-left modal-checkbox-option-bg artwork_container">
                             <p class="bold-checbox-text">Would you like to upload all your artwork now, or email them to our Customer Care Team after placing your order?
                             </p>
 
+                            <?php
+                                $disabled_checkboxes = "";
+                                if( isset($edit_cart_flag) && $edit_cart_flag != '' ) {
+                                    $disabled_checkboxes = "disabled";
+                                }
+
+                            ?>
+
                             <div class="row artwork_row">
                                 <div class="bold-checbox-text label-text-adjustemnts col-md-6  artwork_inner_col">Upload Artwork now</div>
                                 <div class="col-md-6 artwork_inner_col">
-                                    <input type="radio" id="test2" class="upload_artwork_radio artwork_option" value="upload_artwork_now" name="upload_artwork">
+                                    <input type="radio" id="test2" class="upload_artwork_radio artwork_option" value="upload_artwork_now" name="upload_artwork" <?php if( isset($attachments_count) && ($attachments_count > 0) ){ echo "checked";} ?>  <?=$disabled_checkboxes?> >
                                     <label for="test2" class="margin-left-20"></label>
                                 </div>
                             </div>
@@ -51,7 +78,7 @@
                             <div class="row mt-10 artwork_row">
                                 <div class="bold-checbox-text label-text-adjustemnts col-md-6 artwork_inner_col">Artwork to follow</div>
                                 <div class="col-md-6 artwork_inner_col">
-                                    <input type="radio" class="upload_artwork_radio artwork_option" value="artwork_to_follow" name="upload_artwork" id="test3">
+                                    <input type="radio" class="upload_artwork_radio artwork_option" value="artwork_to_follow" name="upload_artwork" id="test3" <?php if( isset($attachments_count) && ($attachments_count == 0)){ echo "checked";} ?>    <?=$disabled_checkboxes?>>
                                     <label for="test3" class="margin-left-20"></label>
                                 </div>
                             </div>
@@ -66,7 +93,7 @@
                             <div class="row">
                                 <div class="bold-checbox-text label-text-adjustemnts col-md-9">Produce my order with the most cost effective number of rolls and labels per roll.</div>
                                 <div class="col-md-1">
-                                    <input type="radio" name="upload_artwork_option" value="cost_effective" class="upload_artwork_option_radio artwork_option" id="test4">
+                                    <input type="radio" name="upload_artwork_option" value="cost_effective" class="upload_artwork_option_radio artwork_option" id="test4" <?php if( isset($cost_effective) && ($cost_effective) ){ echo "checked";} ?>    <?=$disabled_checkboxes?>>
                                     <label for="test4" class="margin-left-20"></label>
                                 </div>
                                 <div class="bold-checbox-text label-text-adjustemnts col-md-2">
@@ -78,7 +105,7 @@
                             <div class="row mt-10">
                                 <div class="bold-checbox-text label-text-adjustemnts col-md-9">I would like to specify the number of rolls and labels per roll for my order.</div>
                                 <div class="col-md-1">
-                                    <input type="radio" name="upload_artwork_option" value="custom_roll_and_label" class="upload_artwork_option_radio artwork_option" id="test5">
+                                    <input type="radio" name="upload_artwork_option" value="custom_roll_and_label" class="upload_artwork_option_radio artwork_option" id="test5" <?php if( isset($custom_roll_and_label) && ($custom_roll_and_label) ){ echo "checked";} ?>    <?=$disabled_checkboxes?>>
                                     <label for="test5" class="margin-left-20"></label>
                                 </div>
                                 <div class="bold-checbox-text label-text-adjustemnts col-md-2">
@@ -91,7 +118,7 @@
                         <p class="number-design-template-text">Please enter number of designs</p>
                         <div class="col-md-4"></div>
                         <div class="col-md-4 text-center">
-                            <input type="number" name="quantity" id="user_entered_lines_qty" class="required numeric numbr-design-template-input " aria-required="true">
+                            <input type="number" name="quantity" id="user_entered_lines_qty" class="required numeric numbr-design-template-input " aria-required="true" value="<?php if( isset($attachments_count_all) && ($attachments_count_all > 0) ){ echo $attachments_count_all;} ?>">
                         </div>
                         <div class="col-md-4"></div>
                     </div>

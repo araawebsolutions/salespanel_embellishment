@@ -1502,7 +1502,6 @@
     });
 
     $(document).ready(function (e) {
-
         check_prefs();
         $('.dm-selector').find('.dropdown-menu').find("[data-toggle=tooltip-orintation]").tooltip('destroy');
         $('.dm-selector').find('.dropdown-menu').find("[data-toggle=tooltip-orintation]").tooltip();

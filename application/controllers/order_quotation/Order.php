@@ -3932,9 +3932,11 @@ class order extends CI_Controller
         $this->load->View('order_quotation/label_embellishment_print_service/page', $data);
     }
 
-    function order_emb_details()
+    function edit_cart_main( $edit_cart_flag = NULL, $temp_basket_id = NULL )
     {
-        $data['main_content'] = 'order_quotation/order_emb_details/label_emb_page/main';
+        $data['main_content'] = 'order_quotation/label_embellishment_print_service/label_emb_page/edit_cart_main';
+        $data['edit_cart_flag'] = $edit_cart_flag;
+        $data['temp_basket_id'] = $temp_basket_id;
         $this->load->View('order_quotation/order_emb_details/page', $data);
     }
 

@@ -1,5 +1,33 @@
 <!--  Cart Summary Starts -->
 <?php
+
+if( isset($edit_cart_flag) && $edit_cart_flag != '' ) {
+        
+    $attachments_count = count($IA_data);
+    if( $attachments_count > 0 ) {
+        $artwork_now_or_follow = "upload_artwork_now";
+    } else {
+        $artwork_now_or_follow = "artwork_to_follow";
+    }
+
+
+    $cost_effective = "";
+    $custom_roll_and_label = "";
+
+    $cost_effective_custom_rolls = "";
+
+    if( $cart_and_product_data['custom_roll_and_label'] == "cost_effective" ) {
+        $cost_effective = true;
+        $cost_effective_custom_rolls = "cost_effective";
+    } else if( $cart_and_product_data['custom_roll_and_label'] == "custom_roll_and_label" ) {
+        $custom_roll_and_label = true;
+        $cost_effective_custom_rolls = "custom_roll_and_label";
+    } else {
+        $cost_effective_custom_rolls = "cost_effective";
+    }
+
+}
+
 $assets = Assets;?>
 <div   id="cart_summery_loader" class="white-screen"
        style="position: absolute;top: 7%;right: 0;width: 25%;z-index: 999;height: 49%;display: none;background: #FFF;opacity: 0.8;">
@@ -132,8 +160,21 @@ $assets = Assets;?>
                                                 <?php
 
                                                 //
-                                                $SID = $this->shopping_model->sessionid() . '-PRJB';
-                                                $cartid = $this->home_model->get_db_column('temporaryshoppingbasket', 'id', 'SessionID', $SID);
+                                                if( $edit_cart_flag ) {
+                                                    ?>
+                                                    <input type="text" id="selected_digital_process" value="<?= $cart_and_product_data['Print_Type'];?>" />
+                                                    <input type="text" id="selected_line_type" value="<?= $cart_and_product_data['ProductBrand'];?>" />
+                                                    <input type="text" id="selected_combination_base" value="<?= $cart_and_product_data['combination_base'];?>" />
+                                                    <input type="text" id="custom_roll_and_label" value="<?= $cost_effective_custom_rolls;?>" />
+                                                    <input type="text" id="artwork_now_or_follow" value="<?= $artwork_now_or_follow;?>" />
+                                                    
+                                                    <?php $cartid = $cart_and_product_data['ID'];
+                                                } else {
+                                                    $SID = $this->shopping_model->sessionid() . '-PRJB';
+                                                    $cartid = $this->home_model->get_db_column('temporaryshoppingbasket', 'id', 'SessionID', $SID);    
+                                                }
+
+                                                
 
                                                 $acutal_labels = $this->home_model->get_db_column('temporaryshoppingbasket', 'orignalQty', 'ID', $cartid);
                                                 $acutal_sheets = $this->home_model->get_db_column('temporaryshoppingbasket', 'Quantity', 'ID', $cartid);
@@ -141,7 +182,7 @@ $assets = Assets;?>
                                                 $total_emb_and_plate_cost =  $prices['label_finish'] + $total_emb_plate_price;
 
                                                 ?>
-                                                <input type="hidden" id="cartid" value="<?= $cartid ?>"/>
+                                                <input type="text" id="cartid" value="<?= $cartid ?>"/>
                                                 <!--    <input type="hidden" id="cartproductid" value="--><?//= $rolldetails['ProductID'] ?><!--"/>-->
                                                 <input type="hidden" id="cartunitqty" value="<?= $unitqty ?>"/>
                                                 <!--    <div class="panel panel-default">-->

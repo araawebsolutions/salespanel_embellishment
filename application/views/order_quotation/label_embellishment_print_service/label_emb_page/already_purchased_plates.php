@@ -23,7 +23,7 @@
     <div class="row">
         <?php
 
-        $usrid = $this->session->userdata('userid');
+        $usrid = $this->session->userdata('customer_id');
         //        $UserName = ucfirst($this->session->userdata('UserName'));
 
         if (isset($usrid) and $usrid != '') { ?>

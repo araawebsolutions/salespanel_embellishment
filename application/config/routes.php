@@ -1,3 +1,4 @@
+
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
@@ -86,7 +87,6 @@ $route['credit-notes/detail/(:any)'] = 'credits/Credits/getTicketDetails';
 
 /* ----- LABEL EMBELLISHMENT routes  */
 $route['new_print_service'] = 'order_quotation/Order/new_print_service';
-$route['order_emb_details'] = 'order_quotation/Order/order_emb_details';
 $route['printed-labels'] = 'order_quotation/Order/print_service';
 
 $route['material-printed-labels'] = 'order_quotation/Order/material_print_service';

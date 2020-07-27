@@ -6111,7 +6111,7 @@ function unsave_checkout_data(){
     //using this function to calculate cart price on values update/change in cart summery section of printed-labels start
     function material_continue_with_product_printed_labels()
     {
-//        print_r($this->input->post('selected_already_plates_composite_array'));die;
+		//        print_r($this->input->post('selected_already_plates_composite_array'));die;
         $pressproof = 0;
         $orientation = '';
         $rollfinish = '';
@@ -6119,7 +6119,8 @@ function unsave_checkout_data(){
 
         $labels = $this->input->post('qty');
         $persheets = $this->input->post('labelspersheets');
-
+        $upload_artwork_option_radio = $this->input->post('upload_artwork_option_radio');
+        
         $digital_process_plus_white = $this->input->post('digital_process_plus_white');
         $labeltype = $this->input->post('labeltype');
         $menu = $this->input->post('menuid');
@@ -6132,16 +6133,17 @@ function unsave_checkout_data(){
         $orientation = $this->input->post('orientation');
         $producttype = $this->input->post('producttype');
         $pressproof = $this->input->post('press_proof');
+
         $unitqty = $this->input->post('unitqty');
         $total_emb_plate_price = $this->input->post('total_emb_plate_price');
-//        using this array for price calculation of embellishment and finishes options
-//        $laminations_and_varnishes_array = $this->input->post('laminations_and_varnishes');
-//        $laminations_and_varnishes_array = $this->input->post('laminations_and_varnishes_childs');
-//       using this array to save embellishment & finshes options in temporaryShoppingBasket table
+		//        using this array for price calculation of embellishment and finishes options
+		//        $laminations_and_varnishes_array = $this->input->post('laminations_and_varnishes');
+		//        $laminations_and_varnishes_array = $this->input->post('laminations_and_varnishes_childs');
+		//       using this array to save embellishment & finshes options in temporaryShoppingBasket table
 
-        //    bypass 'total_emb_plate_price' variable from $this->input->post('total_emb_plate_price') and calculate
-//            it from backend on the basis of laminations_and_varnishes_childs array passed in post param.
-//            to prevent plate price wrong total due to already purchased module
+		        //    bypass 'total_emb_plate_price' variable from $this->input->post('total_emb_plate_price') and calculate
+		//            it from backend on the basis of laminations_and_varnishes_childs array passed in post param.
+		//            to prevent plate price wrong total due to already purchased module
         $laminations_and_varnishes_childs_array = $this->input->post('laminations_and_varnishes_childs');
         $rollfinish = $laminations_and_varnishes_childs_array;
         $rollfinish_child_array = $laminations_and_varnishes_childs_array;
@@ -6150,13 +6152,13 @@ function unsave_checkout_data(){
         $minus_plate_cost = array();
         $use_old_plate = array();
         foreach ($rollfinish_child_array as $finish_child){
-//            print_r($finish_child); echo '<br>';
+		//            print_r($finish_child); echo '<br>';
             $this->db->where('parsed_title', $finish_child);
             $this->db->where('label_emb_parent_id !=', 0);
 
             $cost_result = $this->db->get('label_embellishment')->row_array();
 
-//            use to calculate already purchased plate cost for minus plate price purpose
+		//            use to calculate already purchased plate cost for minus plate price purpose
             foreach ($selected_already_plates_composite_array as $selected_already_plate_composite){
                 $selected_already_plate_composite = json_decode($selected_already_plate_composite);
 
@@ -6194,7 +6196,7 @@ function unsave_checkout_data(){
             $query = " Select * from printing_preferences where sessionID = '" . $this->shopping_model->sessionid() . "' LIMIT 1 ";
             $data_preferences = $this->db->query($query)->row_array();
             $sheets = $data_preferences['no_of_rolls'];
-//            var_dump($this->shopping_model->sessionid());
+		//            var_dump($this->shopping_model->sessionid());
             // $sheets = ceil($labels / $persheets);
         } else {
             $sheets = $this->input->post('qty');
@@ -6219,12 +6221,27 @@ function unsave_checkout_data(){
         }
         $data['label_size'] = $label_size;
 
-        $session_id = $this->shopping_model->sessionid();
 
+        $edit_cart_flag = $this->input->post('edit_cart_flag');
+        if( $edit_cart_flag ) {
+	        $data['edit_cart_flag'] = $edit_cart_flag;
+        	$temp_basket_id = $this->input->post('temp_basket_id');
+		    if( isset($temp_basket_id) && $temp_basket_id != '' ) {
+		    	$product_basket_data = $this->getCartAndProductData($temp_basket_id);
+		        $preferences = $this->generate_preferences_data_edit_cart_flag($product_basket_data);
+		        $data['IA_data'] = $this->orderModal->Get_IA_Data($product_basket_data['ID']);
+		        $data['IA_all_data'] = $this->orderModal->Get_IA_All_Data($product_basket_data['ID']);
+		        $data['cart_and_product_data'] = $product_basket_data;
+		    }	
+        } else {
+        	$session_id = $this->shopping_model->sessionid();
+        	$preferences = $this->orderModal->material_load_preferences($session_id);	
+        }
 
-        $preferences = $this->orderModal->material_load_preferences($session_id);
+        
+
         $data['preferences'] = $preferences;
-//        print_r($preferences);
+		//        print_r($preferences);
         $data['availabel_in'] = $data['preferences']['available_in'];
 
         /*if($labeltype == 'Full Colour'){ $labeltype = 'Fullcolour'; $Print_type = 'Fullcolour';}
@@ -6258,13 +6275,14 @@ function unsave_checkout_data(){
 
         if (isset($digital_process_plus_white) && !empty($digital_process_plus_white) && $digital_process_plus_white == "add_white" ){
             $labeltype = "6 Colour Digital Process + White";
-
         }
+
+        // echo $labeltype;
 
         $data['labeltype'] = $labeltype;
         $data['producttype'] = $producttype;
         $data['rollfinish'] = $rollfinish;
-//        print_r($data['producttype']);die;
+		//        print_r($data['producttype']);die;
 
 
         if ($producttype == 'sheet') {
@@ -6272,7 +6290,7 @@ function unsave_checkout_data(){
             $data['printing_process'] = $printing_process;
 
             $sheet_product_quality = $this->input->post('sheet_product_quality');
-//            print_r($values_array);die;
+		//            print_r($values_array);die;
 
             if(isset($sheet_product_quality) && !empty($sheet_product_quality)){
 
@@ -6285,6 +6303,7 @@ function unsave_checkout_data(){
                         'producttype' => $producttype,
                         'pressproof' => $pressproof,
                         'finish' => $rollfinish,
+
                         'sheet_product_quality'=>"premium"
                     );
 
@@ -6306,7 +6325,7 @@ function unsave_checkout_data(){
                     $data['prices'] = $this->calculate_sheet_price_printed_emb_page($values_array);
 
                 }
-//                execute first time when user land on finish & embellishment page & show both standerd & premium prices
+		//                execute first time when user land on finish & embellishment page & show both standerd & premium prices
             }else{
 
                 $values_array = array( 'printing' => $labeltype,
@@ -6338,19 +6357,19 @@ function unsave_checkout_data(){
                 $data['prices'] = $this->calculate_sheet_price_printed_emb_page($values_array);
 
 
-//                if ($producttype == 'sheet' && empty($sheet_product_quality)) {
-//                    $alternate_option = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/alternate_option', $data, true);
-//                    $data['alternate_option'] = $alternate_option;
-//
-//                }else{
-//                    if(isset($sheet_product_quality) && !empty($sheet_product_quality)) {
-//
-//                        if ($sheet_product_quality == 'standerd') {
+			//                if ($producttype == 'sheet' && empty($sheet_product_quality)) {
+			//                    $alternate_option = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/alternate_option', $data, true);
+			//                    $data['alternate_option'] = $alternate_option;
+			//
+			//                }else{
+			//                    if(isset($sheet_product_quality) && !empty($sheet_product_quality)) {
+			//
+			//                        if ($sheet_product_quality == 'standerd') {
                 $alternate_option = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/alternate_option', $data, true);
                 $data['alternate_option'] = $alternate_option;
-//                        }
-//                    }
-//                }
+			//                        }
+			//                    }
+			//                }
 
 
 
@@ -6374,9 +6393,9 @@ function unsave_checkout_data(){
                 }
             }
 
-//            echo"<pre>"; print_r($data['prices']);die;
+			//            echo"<pre>"; print_r($data['prices']);die;
 
-//            $price = $this->home_model->currecy_converter($response['price'] + $additional_cost, 'yes');
+			//            $price = $this->home_model->currecy_converter($response['price'] + $additional_cost, 'yes');
         } else{
             $values_array_roll_price = array('roll' => $sheets,
                 'menu' => $menu,
@@ -6388,7 +6407,7 @@ function unsave_checkout_data(){
                 'requestfrom' => "material_page",
                 'rollfinish' => $rollfinish
             );
-//        function that call price calculator function for label-embellishment page
+			//        function that call price calculator function for label-embellishment page
             $data['prices'] = $this->calculate_roll_price_printed_emb_page($values_array_roll_price);
 
             $old_plate_cost_total_for_minus_total_price = 0;
@@ -6410,7 +6429,7 @@ function unsave_checkout_data(){
 
 
         }
-//      echo"<pre>";  print_r($data['prices']);die;
+			//      echo"<pre>";  print_r($data['prices']);die;
 
         /******************  Add To Cart *****************/
 
@@ -6425,11 +6444,15 @@ function unsave_checkout_data(){
 
 
             $data['details']['type'] = 'Rolls';
-//            $printprice = $data['prices']['rawprice'];
-//            $printprice += $total_emb_plate_price;
+		//            $printprice = $data['prices']['rawprice'];
+		//            $printprice += $total_emb_plate_price;
 
             $orientation = str_replace("orientation", "", $orientation);
 
+            // echo "<pre>";
+            // 	print_r($data['prices']);
+            // echo "</pre>";
+            // die();
             $printprice = ($data['prices']['printprice']) + $data['prices']['plainlabelsprice'] + ($data['prices']['presproof_charges']) + ($data['prices']['label_finish']) ;
             $plate_cost -=$old_plate_cost_total_for_minus_total_price;
             $printprice += $plate_cost;
@@ -6444,10 +6467,10 @@ function unsave_checkout_data(){
                 'Print_UnitPrice' => 0,
                 'total_emb_cost' => $total_emb_cost,
                 'Print_Total' => 0);
-//                'Print_UnitPrice' => $printprice,
-//                'Print_Total' => $printprice);
+		//                'Print_UnitPrice' => $printprice,
+		//                'Print_Total' => $printprice);
 
-//            $labels = $data['prices']['labels'];
+		//            $labels = $data['prices']['labels'];
             $labels = $labels;
             $qty = $data['sheets'];
             $LabelsPerRoll = $data['prices']['labels_per_rolls'];
@@ -6457,7 +6480,7 @@ function unsave_checkout_data(){
             $is_custom = 'Yes';
             //            print_r($qty);die;
             $data['sheets'] = $qty;
-//            echo "<pre>";print_r($data['prices']);die;
+		//            echo "<pre>";print_r($data['prices']);die;
 
 
         } else {
@@ -6468,9 +6491,9 @@ function unsave_checkout_data(){
             $data['details']['type'] = 'Sheets';
             $printprice = ($data['prices']['printprice']) + ($data['prices']['designprice']) + ($data['prices']['label_finish']) ;
             $plate_cost -=$old_plate_cost_total_for_minus_total_price;
-//print_r($data['prices']['printprice']);
+			//print_r($data['prices']['printprice']);
             $printprice += $plate_cost;
-//            print_r($printprice);die;
+			//            print_r($printprice);die;
             $total_emb_cost = $data['prices']['label_finish'] + $plate_cost;
 
             $printing_options = array('Printing' => 'Y',
@@ -6488,15 +6511,26 @@ function unsave_checkout_data(){
         }
 
 
-        $SID = $this->shopping_model->sessionid() . '-PRJB';
+		if( $edit_cart_flag ) {        
+			$SID = $this->shopping_model->sessionid();
+		} else {
+			$SID = $this->shopping_model->sessionid() . '-PRJB';
+		}
+        
         if (($LabelsPerRoll == 0 || $LabelsPerRoll == "") && $producttype == "sheet") {
             $LabelsPerRoll = $persheets;
         }
 
-/*echo '<pre>';
+		/*echo '<pre>';
         print_r($this->input->post('product_preferences')); exit;*/
 
-        $items = array('SessionID' => $SID,
+        $items_SessionID = array('SessionID' => $SID);
+
+        if( $edit_cart_flag ) {
+        	$items_SessionID = array();	
+        }
+
+        $items = array(
             'ProductID' => $productid,
             'source' => 'printing',
             'Quantity' => $qty,
@@ -6511,11 +6545,12 @@ function unsave_checkout_data(){
             'FinishTypePrintedLabels' => json_encode($rollfinish_child_array),
             'FinishTypePricePrintedLabels' => json_encode( $data['prices']['label_finish_individual_cost_array']),
             'use_old_plate' => json_encode($use_old_plate),
+            'custom_roll_and_label' => $upload_artwork_option_radio,
             'product_preferences' => json_encode($this->input->post('product_preferences'))
         );
 
         $items = array_merge($items, $printing_options);
-
+        $items = array_merge($items, $items_SessionID);
 
         $userID = $this->session->userdata('userid');
         if (isset($userID) and $userID != '') {
@@ -6526,9 +6561,7 @@ function unsave_checkout_data(){
         }
 
         if (isset($cartid) and $cartid != '') {
-
-            $this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid, 'SessionID' => $SID));
-
+            $this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid));
         } else {
             $this->db->insert('temporaryshoppingbasket', $items);
             if ($this->db->insert_id()) {
@@ -6536,10 +6569,14 @@ function unsave_checkout_data(){
             }
 
         }
-//print_r($SID);die;
+		//print_r($SID);die;
 
         /*************** Discard Previously uploaded artowrks**************/
-        $this->db->delete("integrated_attachments", array('SessionID' => $SID));
+        if( !$edit_cart_flag ) {
+        	$this->db->delete("integrated_attachments", array('SessionID' => $SID));
+        }
+        
+
         /*************** Discard Previously uploaded artowrks**************/
 
         $data['details']['cartid'] = $cartid;
@@ -6560,8 +6597,10 @@ function unsave_checkout_data(){
         $data['content'] = $theHTMLResponse;
 
         //        $theHTMLResponse_home = $this->load->view('material_print_service/home_product_summary', $data, true);
+
+
         $artworkUploadHTMLResponse = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/artwork_upload', $data, true);
-//                $json_data = array('content' => $theHTMLResponse);
+		//                $json_data = array('content' => $theHTMLResponse);
         $data['artwork_upload_view'] = $artworkUploadHTMLResponse;
 
         $json_data = array('response' => 'yes', 'data' => $data);
@@ -6591,18 +6630,39 @@ function unsave_checkout_data(){
         $data['upload_artwork_option_radio'] = $upload_artwork_option_radio;
         $data['upload_artwork_radio'] = $upload_artwork_radio;
 
-        if ($producttype == 'roll') {
+        $edit_cart_flag = $this->input->post('edit_cart_flag');
+        if( $edit_cart_flag ) {
+	        $data['edit_cart_flag'] = $edit_cart_flag;
+        	$temp_basket_id = $this->input->post('temp_basket_id');
+		    if( isset($temp_basket_id) && $temp_basket_id != '' ) {
+		    	$product_basket_data = $this->getCartAndProductData($temp_basket_id);
+		        $preferences = $this->generate_preferences_data_edit_cart_flag($product_basket_data);
+		        $data['IA_data'] = $this->orderModal->Get_IA_Data($product_basket_data['ID']);
+		        $data['IA_all_data'] = $this->orderModal->Get_IA_All_Data($product_basket_data['ID']);
+		        $data['cart_and_product_data'] = $product_basket_data;
+		    
+			    if ($producttype == 'roll') {
+		            $sheets = $product_basket_data['Quantity'];
+		        } else {
+		            $sheets = $this->input->post('qty');
+		            $labels = $sheets * $persheets;
+		        }
+		    }
 
-
-            $query = " Select * from printing_preferences where sessionID = '" . $this->shopping_model->sessionid() . "' LIMIT 1 ";
-            $data_preferences = $this->db->query($query)->row_array();
-            $sheets = $data_preferences['no_of_rolls'];
-//            var_dump($this->shopping_model->sessionid());
-            // $sheets = ceil($labels / $persheets);
         } else {
-            $sheets = $this->input->post('qty');
-            $labels = $sheets * $persheets;
+
+        	if ($producttype == 'roll') {
+	            $query = " Select * from printing_preferences where sessionID = '" . $this->shopping_model->sessionid() . "' LIMIT 1 ";
+	            $data_preferences = $this->db->query($query)->row_array();
+	            $sheets = $data_preferences['no_of_rolls'];
+	        } else {
+	            $sheets = $this->input->post('qty');
+	            $labels = $sheets * $persheets;
+	        }
+       			 	
         }
+
+        
         $data['unitqty'] = $unitqty;
         $data['sheets'] = $sheets;
         $data['labels'] = $labels;
@@ -6612,6 +6672,7 @@ function unsave_checkout_data(){
         $data['details']['cartid'] = $this->input->post('cartid');
 
         $Print_type = $labeltype;
+        
         //$labeltype = $this->home_model->get_db_column('digital_printing_process', 'Print_Type', 'name', $labeltype);
 
         if (preg_match("/Monochrome/i", $labeltype)) {
@@ -6643,6 +6704,10 @@ function unsave_checkout_data(){
         /************************************************/
 
 
+
+        // echo "<pre>";
+        // 	print_r($data);
+        // echo "</pre>";
 
         $artworkUploadHTMLResponse = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/artwork_upload_modal_2', $data, true);
         $data['artwork_upload_view'] = $artworkUploadHTMLResponse;
@@ -7068,8 +7133,11 @@ function unsave_checkout_data(){
         $data['upload_artwork_radio'] = $upload_artwork_radio;
         $data['upload_artwork_option_radio'] = $upload_artwork_option_radio;
         $data['lines_to_populate'] = $this->input->post('lines_to_populate');
+
         $session_id = $this->shopping_model->sessionid();
         $preferences = $this->orderModal->material_load_preferences($session_id);
+
+        $edit_cart_flag = $this->input->post('edit_cart_flag');
 
         if ($upload_artwork_radio == "upload_artwork_now") {
             if (!empty($_FILES)) {
@@ -7163,8 +7231,14 @@ function unsave_checkout_data(){
 
                 if ($response != 'error') {
 
-                    $sid = $this->session->userdata('session_id') . '-PRJB';
-                    $artowrk = array('SessionID' => $sid,
+                    if( isset($edit_cart_flag) && $edit_cart_flag != '' ) {
+                    	$sid = $this->session->userdata('session_id');
+                    } else {
+                    	$sid = $this->session->userdata('session_id') . '-PRJB';
+                    }
+                	
+                    $artowrk = array(
+                    	'SessionID' => $sid,
                         'ProductID' => $productid,
                         'CartID' => $cartid,
                         'name' => $artworkname,
@@ -7173,6 +7247,7 @@ function unsave_checkout_data(){
                         'file' => $response,
                         'status' => 'confirm',
                     );
+
                     $this->db->insert('integrated_attachments', $artowrk);
 
 
@@ -7201,8 +7276,23 @@ function unsave_checkout_data(){
                     }
 
                     $data['label_size'] = $label_size;
+                    
                     $session_id = $this->shopping_model->sessionid();
                     $preferences = $this->orderModal->material_load_preferences($session_id);
+
+                    $edit_cart_flag = $this->input->post('edit_cart_flag');
+			        if( $edit_cart_flag ) {
+				        $data['edit_cart_flag'] = $edit_cart_flag;
+			        	$temp_basket_id = $this->input->post('temp_basket_id');
+					    if( isset($temp_basket_id) && $temp_basket_id != '' ) {
+					    	$product_basket_data = $this->getCartAndProductData($temp_basket_id);
+					        $preferences = $this->generate_preferences_data_edit_cart_flag($product_basket_data);
+					        $data['IA_data'] = $this->orderModal->Get_IA_Data($product_basket_data['ID']);
+					        $data['IA_all_data'] = $this->orderModal->Get_IA_All_Data($product_basket_data['ID']);
+					        $data['cart_and_product_data'] = $product_basket_data;
+					    }	
+			        }
+
                     $data['preferences'] = $preferences;
 //        print_r($preferences);
                     $data['availabel_in'] = $data['preferences']['available_in'];
@@ -7296,7 +7386,9 @@ function unsave_checkout_data(){
 
 
                                     $prices = $this->calculate_sheet_price_printed_emb_page($values_array);
-
+                           //          echo "<pre>";
+			                        // 	print_r($prices);
+			                        // echo "</pre>";
                                 }elseif ($sheet_product_quality == 'standerd'){
                                     $values_array = array( 'printing' => $labeltype,
                                         'labels' => $labels,
@@ -7436,15 +7528,21 @@ function unsave_checkout_data(){
                             'FinishTypePrintedLabels' => json_encode($rollfinish_child_array),
                             'FinishTypePricePrintedLabels' => json_encode( $prices['label_finish_individual_cost_array']),
                             'use_old_plate' => json_encode($use_old_plate),
+                            'custom_roll_and_label' => $upload_artwork_option_radio,
                             'product_preferences' => json_encode($preferences)
                         );
 
 
                         $items = array_merge($items, $printing_items);
 
-                        $SID = $this->shopping_model->sessionid() . '-PRJB';
-                        $this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid, 'SessionID' => $SID));
-
+                        if( isset($edit_cart_flag) && $edit_cart_flag != '' ) {
+                        	$this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid));	
+                        } else {
+                        	$SID = $this->shopping_model->sessionid() . '-PRJB';
+                        	$this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid, 'SessionID' => $SID));	
+                        }
+                        
+                        
 
                         $data['prices'] = $prices;
 //                    echo"<pre>";print_r($prices);die;
@@ -7582,16 +7680,23 @@ function unsave_checkout_data(){
 
                 }
 
-                $sid = $this->session->userdata('session_id') . '-PRJB';
-                $artowrk = array('SessionID' => $sid,
-                    'ProductID' => $productid,
-                    'CartID' => $cartid,
-                    'name' => $artworkname,
-                    'labels' => $labels,
-                    'qty' => $sheets,
-                    'file' => "No File Required For Artwork To Follow ",
-                    'status' => 'confirm',
-                );
+                	if( isset($edit_cart_flag) && $edit_cart_flag != '' ) {
+                    	$sid = $this->session->userdata('session_id');
+                    } else {
+                    	$sid = $this->session->userdata('session_id') . '-PRJB';
+                    }
+                	
+                    $artowrk = array('SessionID' => $sid,
+	                    'ProductID' => $productid,
+	                    'CartID' => $cartid,
+	                    'name' => $artworkname,
+	                    'labels' => $labels,
+	                    'qty' => $sheets,
+	                    'file' => "No File Required For Artwork To Follow ",
+	                    'status' => 'confirm',
+	                );
+
+                
                 $this->db->insert('integrated_attachments', $artowrk);
 
 
@@ -7621,6 +7726,21 @@ function unsave_checkout_data(){
 
                 $session_id = $this->shopping_model->sessionid();
                 $preferences = $this->orderModal->material_load_preferences($session_id);
+
+                $edit_cart_flag = $this->input->post('edit_cart_flag');
+		        if( $edit_cart_flag ) {
+			        $data['edit_cart_flag'] = $edit_cart_flag;
+		        	$temp_basket_id = $this->input->post('temp_basket_id');
+				    if( isset($temp_basket_id) && $temp_basket_id != '' ) {
+				    	$product_basket_data = $this->getCartAndProductData($temp_basket_id);
+				        $preferences = $this->generate_preferences_data_edit_cart_flag($product_basket_data);
+				        $data['IA_data'] = $this->orderModal->Get_IA_Data($product_basket_data['ID']);
+				        $data['IA_all_data'] = $this->orderModal->Get_IA_All_Data($product_basket_data['ID']);
+				        $data['cart_and_product_data'] = $product_basket_data;
+				    }	
+		        }
+
+
                 $data['preferences'] = $preferences;
 //        print_r($preferences);
                 $data['availabel_in'] = $data['preferences']['available_in'];
@@ -7856,13 +7976,20 @@ function unsave_checkout_data(){
                         'TotalPrice' => $prices['plainprice'],
                         'FinishTypePrintedLabels' => json_encode($rollfinish_child_array),
                         'FinishTypePricePrintedLabels' => json_encode( $prices['label_finish_individual_cost_array']),
+                        'custom_roll_and_label' => $upload_artwork_option_radio,
                         'use_old_plate' => json_encode($use_old_plate));
 
 
                     $items = array_merge($items, $printing_items);
 
-                    $SID = $this->shopping_model->sessionid() . '-PRJB';
+
+                    if( isset($edit_cart_flag) && $edit_cart_flag != '' ) {
+                    	$this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid));
+                    } else {
+                    	$SID = $this->shopping_model->sessionid() . '-PRJB';
                     $this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid, 'SessionID' => $SID));
+                    }
+                    
 
 
                     $data['prices'] = $prices;
@@ -8316,7 +8443,7 @@ function unsave_checkout_data(){
 
         if ($_POST) {
 
-
+        	
             $limit_exceed_sheets = '';
             $limit_exceed_designs = '';
 
@@ -8335,6 +8462,7 @@ function unsave_checkout_data(){
             $persheet = $this->input->post('persheet');
             $type = $this->input->post('type');
             $pressproof = $this->input->post('press_proof');
+            $edit_cart_flag = $this->input->post('edit_cart_flag');
             $persheets = $this->input->post('persheet');
             $producttype = $type;
 
@@ -8402,7 +8530,13 @@ function unsave_checkout_data(){
             $data['unitqty'] = $this->input->post('unitqty');
             if (isset($updater) and $updater == 'clear') {
                 $sid = $this->session->userdata('session_id') . '-PRJB';
-                $this->db->delete('integrated_attachments', array('CartID' => $cartid, 'SessionID' => $sid));
+                
+                if( $edit_cart_flag ) {
+                	$this->db->delete('integrated_attachments', array('CartID' => $cartid));	
+                } else {
+                	$this->db->delete('integrated_attachments', array('CartID' => $cartid, 'SessionID' => $sid));	
+                }
+                
                 $limit_exceed_sheets = 'yes';
 
             } else {
@@ -8440,6 +8574,24 @@ function unsave_checkout_data(){
 
             $session_id = $this->shopping_model->sessionid();
             $preferences = $this->orderModal->material_load_preferences($session_id);
+
+            
+	        if( $edit_cart_flag ) {
+		        $data['edit_cart_flag'] = $edit_cart_flag;
+	        	$temp_basket_id = $this->input->post('temp_basket_id');
+			    if( isset($temp_basket_id) && $temp_basket_id != '' ) {
+			    	$product_basket_data = $this->getCartAndProductData($temp_basket_id);
+			        $preferences = $this->generate_preferences_data_edit_cart_flag($product_basket_data);
+			        $data['IA_data'] = $this->orderModal->Get_IA_Data($product_basket_data['ID']);
+			        $data['IA_all_data'] = $this->orderModal->Get_IA_All_Data($product_basket_data['ID']);
+			        $data['cart_and_product_data'] = $product_basket_data;
+			    }	
+	        } else {
+	        	$session_id = $this->shopping_model->sessionid();
+            	$preferences = $this->orderModal->material_load_preferences($session_id);
+	        }
+
+
             $data['preferences'] = $preferences;
 //        print_r($preferences);
             $data['availabel_in'] = $data['preferences']['available_in'];
@@ -8548,23 +8700,23 @@ function unsave_checkout_data(){
 
 
 
-//                    $values_array = array( 'printing' => $labeltype,
-//                        'labels' => $labels,
-//                        'design' => $design,
-//                        'menu' => $menu,
-//                        'persheets' => $persheets,
-//                        'producttype' => $producttype,
-//                        'pressproof' => $pressproof,
-//                        'finish' => $rollfinish
-//                    );
-//
-//                    $prices = $this->calculate_sheet_price_printed_emb_page($values_array);
+					//                    $values_array = array( 'printing' => $labeltype,
+					//                        'labels' => $labels,
+					//                        'design' => $design,
+					//                        'menu' => $menu,
+					//                        'persheets' => $persheets,
+					//                        'producttype' => $producttype,
+					//                        'pressproof' => $pressproof,
+					//                        'finish' => $rollfinish
+					//                    );
+					//
+					//                    $prices = $this->calculate_sheet_price_printed_emb_page($values_array);
 
 
 
-//echo"<pre>"; print_r($prices);die;
+					//echo"<pre>"; print_r($prices);die;
 
-//            $price = $this->home_model->currecy_converter($response['price'] + $additional_cost, 'yes');
+					//            $price = $this->home_model->currecy_converter($response['price'] + $additional_cost, 'yes');
                 } else{
                     $values_array_roll_price = array('roll' => $sheets,
                         'menu' => $menu,
@@ -8578,7 +8730,7 @@ function unsave_checkout_data(){
                         'upload_artwork_option_radio' => $upload_artwork_option_radio
 
                     );
-//        function that call price calculator function for label-embellishment page
+				//        function that call price calculator function for label-embellishment page
                     $prices = $this->calculate_roll_price_printed_emb_page($values_array_roll_price);
 
                 }
@@ -8614,7 +8766,7 @@ function unsave_checkout_data(){
                     }
                     $plate_cost -= $old_plate_cost_total_for_minus_total_price;
                     $printprice_shopping_cart =  $prices['label_finish'] + $plate_cost + $printprice +$prices['presproof_charges'];
-//                        echo"<pre>";print_r($prices);die;
+					//                        echo"<pre>";print_r($prices);die;
 
                     $price_txt = '<b class="color-orange"> ' . symbol . $printprice . ' </b> <br />' . vatoption . ' VAT';
                     $total_emb_cost = $prices['label_finish'] + $plate_cost;
@@ -8622,7 +8774,7 @@ function unsave_checkout_data(){
 
                     $prices['price'] = $price_txt;
 
-//                               $prices['plainprice'] = $prices['plainlabelsprice'];
+					//                               $prices['plainprice'] = $prices['plainlabelsprice'];
                     //summ all prices(emb,finish,pressproof,mb_plae_price,print_price,plain_price for roll as
                     //in case of roll it will go in TotalPrice column of tempshopbaskt and
                     // For sheet print price add sepereately in column
@@ -8640,9 +8792,9 @@ function unsave_checkout_data(){
                     $price_txt = '<b class="color-orange"> ' . symbol . $printprice . ' </b> <br />' . vatoption . ' VAT';
                     $total_emb_cost = $prices['label_finish'] + $plate_cost;
 
-//                        print_r($printprice);die;
+					//                        print_r($printprice);die;
                     $prices['price'] = $price_txt;
-//                        $prices['printprice'] = $printprice;
+					//                        $prices['printprice'] = $printprice;
                 }
 
                 $Print_Design = '1 Design';
@@ -8656,24 +8808,30 @@ function unsave_checkout_data(){
                     'Print_UnitPrice' => $printprice_shopping_cart,
                     'total_emb_cost' => $total_emb_cost,
                     'Print_Total' => $printprice_shopping_cart);
-//                    $plain_price_and_emb_plate_sum = $prices['plainprice'] + $this->input->post('total_emb_plate_price');
+				//                    $plain_price_and_emb_plate_sum = $prices['plainprice'] + $this->input->post('total_emb_plate_price');
                 $unit_price =  $prices['plainprice']/ $qty;
 
                 $items = array('Quantity' => $qty,
                     'orignalQty' => $labels,
+                    'Print_Type' => $labeltype,
                     'UnitPrice' => $unit_price,
                     'TotalPrice' => $prices['plainprice'],
                     'FinishTypePrintedLabels' => json_encode($laminations_and_varnishes_childs_array),
                     'FinishTypePricePrintedLabels' => json_encode( $prices['label_finish_individual_cost_array']),
+                    'custom_roll_and_label' => $upload_artwork_option_radio,
                     'use_old_plate' => json_encode($use_old_plate));
 
+                
 
                 $items = array_merge($items, $printing_items);
 
-
-
-                $SID = $this->shopping_model->sessionid() . '-PRJB';
-                $this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid, 'SessionID' => $SID));
+                if( $edit_cart_flag ) {
+                	$this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid));	
+                } else {
+                	$SID = $this->shopping_model->sessionid() . '-PRJB';
+                	$this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid, 'SessionID' => $SID));	
+                }
+                
 
 
                 $data['prices'] = $prices;
@@ -8682,10 +8840,10 @@ function unsave_checkout_data(){
                 $data['designs'] = $design;
 
 
-//                print_r($prices);echo"<br>";
-//                print_r($labels);echo"<br>";
-//                print_r($qty);echo"<br>";
-//                print_r($design);die;
+				//                print_r($prices);echo"<br>";
+				//                print_r($labels);echo"<br>";
+				//                print_r($qty);echo"<br>";
+				//                print_r($design);die;
                 $query = " Select * from products p,category c WHERE ManufactureID LIKE '$menu' 
                             AND SUBSTRING_INDEX(p.CategoryID,'R',1)=c.CategoryID ";
                 $data['details'] = $this->db->query($query)->row_array();
@@ -8701,12 +8859,14 @@ function unsave_checkout_data(){
                 $data['sidebar_class'] = 'orangeBg';
                 $data['labeltype'] = $labeltype;
                 $data['cartid'] = $cartid;
-//                $data['total_emb_plate_price'] = $this->input->post('total_emb_plate_price');
+				//                $data['total_emb_plate_price'] = $this->input->post('total_emb_plate_price');
                 $cart_summery = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/cart_summery', $data, true);
 
 
 
             }
+
+			
 
             $data['details']['cartid'] = $cartid;
             $data['details']['ProductID'] = $productid;
@@ -8717,7 +8877,6 @@ function unsave_checkout_data(){
                 $data['details']['ManufactureID'] = $this->home_model->get_db_column('products', 'ManufactureID', 'ProductID', $productid);
                 $theHTMLResponse = $this->load->view('order_quotation/label_embellishment_print_service/upload/roll_artwork_files', $data, true);
             } else {
-
                 $theHTMLResponse = $this->load->view('order_quotation/label_embellishment_print_service/upload/a4_artwork_files', $data, true);
             }
 
@@ -8980,6 +9139,9 @@ function unsave_checkout_data(){
             $productid = $this->input->post('prdid');
             $persheet = $this->input->post('persheet');
             $type = $this->input->post('type');
+
+
+
             $upload_artwork_option_radio = $this->input->post('upload_artwork_option_radio');
             $upload_artwork_radio = $this->input->post('upload_artwork_radio');
             $data['upload_artwork_radio'] = $upload_artwork_radio;
@@ -8993,6 +9155,20 @@ function unsave_checkout_data(){
             $data['details']['ProductID'] = $productid;
             $data['details']['LabelsPerSheet'] = $persheet;
             $data['prices']['additional_cost'] = $this->input->post('additional_cost');
+
+
+            $edit_cart_flag = $this->input->post('edit_cart_flag');
+	        if( $edit_cart_flag ) {
+		        $data['edit_cart_flag'] = $edit_cart_flag;
+	        	$temp_basket_id = $this->input->post('temp_basket_id');
+			    if( isset($temp_basket_id) && $temp_basket_id != '' ) {
+			    	$product_basket_data = $this->getCartAndProductData($temp_basket_id);
+			        $preferences = $this->generate_preferences_data_edit_cart_flag($product_basket_data);
+			        $data['IA_data'] = $this->orderModal->Get_IA_Data($product_basket_data['ID']);
+			        $data['IA_all_data'] = $this->orderModal->Get_IA_All_Data($product_basket_data['ID']);
+			        $data['cart_and_product_data'] = $product_basket_data;
+			    }	
+	        }
 
             if ($type == 'roll') {
                 $data['details']['labelCategory'] = 'Roll Labels';
@@ -9520,8 +9696,24 @@ function unsave_checkout_data(){
 
             }
             $data['label_size'] = $label_size;
-            $session_id = $this->shopping_model->sessionid();
-            $preferences = $this->orderModal->material_load_preferences($session_id);
+
+            $edit_cart_flag = $this->input->post('edit_cart_flag');
+	        if( $edit_cart_flag ) {
+		        $data['edit_cart_flag'] = $edit_cart_flag;
+	        	$temp_basket_id = $this->input->post('temp_basket_id');
+			    if( isset($temp_basket_id) && $temp_basket_id != '' ) {
+			    	$product_basket_data = $this->getCartAndProductData($temp_basket_id);
+			        $preferences = $this->generate_preferences_data_edit_cart_flag($product_basket_data);
+			        $data['IA_data'] = $this->orderModal->Get_IA_Data($product_basket_data['ID']);
+			        $data['IA_all_data'] = $this->orderModal->Get_IA_All_Data($product_basket_data['ID']);
+			        $data['cart_and_product_data'] = $product_basket_data;
+			    }	
+	        } else {
+	        	$session_id = $this->shopping_model->sessionid();
+            	$preferences = $this->orderModal->material_load_preferences($session_id);
+	        }
+
+            
             $data['preferences'] = $preferences;
 //        print_r($preferences);
             $data['availabel_in'] = $data['preferences']['available_in'];
@@ -9680,6 +9872,7 @@ function unsave_checkout_data(){
                 'TotalPrice' => $prices['plainprice'],
                 'FinishTypePrintedLabels' => json_encode($laminations_and_varnishes_childs_array),
                 'FinishTypePricePrintedLabels' => json_encode( $prices['label_finish_individual_cost_array']),
+                'custom_roll_and_label' => $upload_artwork_option_radio,
                 'use_old_plate' => json_encode($use_old_plate));
 
 
@@ -9687,7 +9880,12 @@ function unsave_checkout_data(){
 
 //            print_r($prices);echo"<br>";
 //            print_r($items);die;
-            $this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid, 'SessionID' => $SID));
+            if( $edit_cart_flag ) {
+            	$this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid));
+            } else {
+            	$this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid, 'SessionID' => $SID));
+            }
+            
 
 
             $data['prices'] = $prices;
@@ -11887,13 +12085,13 @@ function unsave_checkout_data(){
                     'labels' => $labels,
                     'design' => $design,
                     'rolls' => $qty,
-
                     'menu' => $menu,
                     'persheets' => $persheets,
                     'producttype' => $producttype,
                     'pressproof' => $pressproof,
                     'finish' => $finish,
                     'sheet_product_quality' => $sheet_product_quality
+
                 );
                 $response = $this->price_calculator_label_embellishment($values_array);
 //                echo"<pre>";print_r($response);die;
@@ -12418,7 +12616,6 @@ function unsave_checkout_data(){
 
     public function material_load_preferences()
     {
-
         $combination_array = array();
         $label_embellishments = $this->orderModal->get_label_embellishment_and_combinations();
 
@@ -12441,7 +12638,7 @@ function unsave_checkout_data(){
                     $data = new stdClass();
                     $data->label_embellishment_agianst_id = $label_emb_cond['label_embellishment_agianst_id'];
                     $data->label_condition = $label_emb_cond['label_condition'];
-//                    $data->label_embellishment_title = $label_emb['parsed_title'];
+					//$data->label_embellishment_title = $label_emb['parsed_title'];
                     $data->label_embellishment_title = $label_embellishment_details['label_embellishment_details']['title'];
                     $combination_array[$label_emb['id'] . '_' . $label_emb['title']][] = $data;
 
@@ -12461,11 +12658,54 @@ function unsave_checkout_data(){
         if ($session_id != '') {
             $cartid = $this->home_model->get_db_column('temporaryshoppingbasket', 'id', 'SessionID', $session_id . '-PRJB');
             $data['cartid'] = $cartid;
-
             $preferences = $this->orderModal->material_load_preferences($session_id);
         }
 
+        $edit_cart_flag = $this->input->post('edit_cart_flag');
+        if( $edit_cart_flag ) {
+	        $data['edit_cart_flag'] = $edit_cart_flag;
+        	$temp_basket_id = $this->input->post('temp_basket_id');
+		    if( isset($temp_basket_id) && $temp_basket_id != '' ) {
+		    	$product_basket_data = $this->getCartAndProductData($temp_basket_id);
+		        $preferences = $this->generate_preferences_data_edit_cart_flag($product_basket_data);
+		        $data['IA_data'] = $this->orderModal->Get_IA_Data($product_basket_data['ID']);
+		        $data['IA_all_data'] = $this->orderModal->Get_IA_All_Data($product_basket_data['ID']);
+		        $data['cart_and_product_data'] = $product_basket_data;
 
+
+		        	$history['user_id'] = $data['cart_and_product_data']['UserID'];
+					$finish_PricePrintedLabel = json_decode($data['cart_and_product_data']['FinishTypePricePrintedLabels']);
+					$history['selected_already_plates'] = [];
+					$history['selected_already_plates_composite_array'] = [];
+					$i=0;
+					foreach ($finish_PricePrintedLabel as $selectedOptions){
+					    if ($selectedOptions->use_old_plate == 1){
+					        $selected_plate_orderNumber = $selectedOptions->used_plate_orderNumber;
+					        $selecte_parsed_row = $this->home_model->label_embelishment_with_parent_title($selectedOptions->finish_parsed_title);
+					        $child_id = $selecte_parsed_row[0]->id;
+					        $parent_id = $selecte_parsed_row[0]->label_emb_parent_id;
+					        $parsed_title = $selecte_parsed_row[0]->parsed_title;
+					        array_push($history['selected_already_plates'],$child_id);
+
+					        $purchased_plate_history  = $this->home_model->get_db_column('customers', 'purchased_plate_history', 'UserID', $history['user_id']);
+					        $purchased_plate_history = json_decode($purchased_plate_history);
+
+					        foreach ($purchased_plate_history as $purchased_plate){
+					            if ($parsed_title == $purchased_plate->purchased_plate && $selected_plate_orderNumber == $purchased_plate->order_number){
+					                $history['selected_already_plates_composite_array'][$i] = json_encode(array('already_used_plate_id'=>(int)$child_id,'plate_order_no'=>$selected_plate_orderNumber));
+					                $i++;
+					            }
+					        }
+					    }
+					}
+					$history['selected_already_plates'] = json_encode($history['selected_already_plates']);
+
+					// $hostory_plates_content = $this->purchased_plate_history_selected($history);
+					// $data['hostory_plates_content'] = $hostory_plates_content;
+		    }	
+        }
+
+        
         if (!empty($preferences)) {
 
 
@@ -12499,34 +12739,35 @@ function unsave_checkout_data(){
                 $data['availabel_in'] = $preferences['available_in'];
                 $data['preferences'] = $preferences;
 
-//                $condition = " p.CategoryID LIKE '" . $preferences['selected_size'] . "' AND p.Activate LIKE 'Y'  AND p.Printable LIKE 'Y' ";
-//                $condition .= " AND Adhesive LIKE '" . $preferences['adhesive_a4'] . "'";
-//                $condition .= " AND Material1 LIKE '" . $preferences['color_a4'] . "'";
-//                $condition .= " AND ColourMaterial_upd LIKE '" . $preferences['material_a4'] . "'";
-//
-//                $query = " Select * from products p,category c WHERE $condition AND SUBSTRING_INDEX(p.CategoryID,'R',1) = c.CategoryID";
-//                $data['sheetdetails'] = $this->db->query($query)->row_array();
-//                $data['details'] = $this->db->query($query)->row_array();
-//                $data['sheetdetails'] = $this->db->query($query)->row_array();
+				//                $condition = " p.CategoryID LIKE '" . $preferences['selected_size'] . "' AND p.Activate LIKE 'Y'  AND p.Printable LIKE 'Y' ";
+				//                $condition .= " AND Adhesive LIKE '" . $preferences['adhesive_a4'] . "'";
+				//                $condition .= " AND Material1 LIKE '" . $preferences['color_a4'] . "'";
+				//                $condition .= " AND ColourMaterial_upd LIKE '" . $preferences['material_a4'] . "'";
+				//
+				//                $query = " Select * from products p,category c WHERE $condition AND SUBSTRING_INDEX(p.CategoryID,'R',1) = c.CategoryID";
+				//                $data['sheetdetails'] = $this->db->query($query)->row_array();
+				//                $data['details'] = $this->db->query($query)->row_array();
+				//                $data['sheetdetails'] = $this->db->query($query)->row_array();
                  $data['details'] = $dataProdu;
 
-//                echo"<pre>";print_r($data['rolldetails']);die;
+				//                echo"<pre>";print_r($data['rolldetails']);die;
 
 
                 $theHTMLResponse = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/printing_process_sheet', $data, true);
-//                $json_data = array('content' => $theHTMLResponse);
+					//                $json_data = array('content' => $theHTMLResponse);
                 $data['printing_process_content'] = $theHTMLResponse;
+
                 $finishHTMLResponse = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/label_finish_and_embellishment', $data, true);
-//                $json_data = array('content' => $theHTMLResponse);
+					//                $json_data = array('content' => $theHTMLResponse);
                 $data['finish_content'] = $finishHTMLResponse;
 
                 $cartSummeryHTMLResponse = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/cart_summery', $data, true);
-//                $json_data = array('content' => $theHTMLResponse);
+					//                $json_data = array('content' => $theHTMLResponse);
                 $data['cart_summery'] = $cartSummeryHTMLResponse;
 
-//                $artworkUploadHTMLResponse = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/artwork_upload', $data, true);
-//                $json_data = array('content' => $theHTMLResponse);
-//                $data['artwork_upload_view'] = $artworkUploadHTMLResponse;
+					//                $artworkUploadHTMLResponse = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/artwork_upload', $data, true);
+					//                $json_data = array('content' => $theHTMLResponse);
+					//                $data['artwork_upload_view'] = $artworkUploadHTMLResponse;
             }
             if ($preferences['available_in'] == "Roll" and $preferences['categorycode_roll'] != '') {
                 $catID = explode("R", $preferences['selected_size']);
@@ -12543,14 +12784,14 @@ function unsave_checkout_data(){
                 $data['roll_cores'] = $rollcores;
 
 
-//                $condition = " p.CategoryID LIKE '" . $preferences['selected_size'] . "' AND p.Activate LIKE 'Y'  AND p.Printable LIKE 'Y' ";
-//                $condition .= " AND Adhesive LIKE '" . $preferences['adhesive_roll'] . "'";
-//                $condition .= " AND Material1 LIKE '" . $preferences['color_roll'] . "'";
-//                $condition .= " AND ColourMaterial_upd LIKE '" . $preferences['material_roll'] . "'";
-//
-//                $query = " Select * from products p,category c WHERE $condition AND SUBSTRING_INDEX(p.CategoryID,'R',1) = c.CategoryID";
-//                $data['rolldetails'] = $this->db->query($query)->row_array();
-//                $data['details'] = $this->db->query($query)->row_array();
+				//                $condition = " p.CategoryID LIKE '" . $preferences['selected_size'] . "' AND p.Activate LIKE 'Y'  AND p.Printable LIKE 'Y' ";
+				//                $condition .= " AND Adhesive LIKE '" . $preferences['adhesive_roll'] . "'";
+				//                $condition .= " AND Material1 LIKE '" . $preferences['color_roll'] . "'";
+				//                $condition .= " AND ColourMaterial_upd LIKE '" . $preferences['material_roll'] . "'";
+				//
+				//                $query = " Select * from products p,category c WHERE $condition AND SUBSTRING_INDEX(p.CategoryID,'R',1) = c.CategoryID";
+				//                $data['rolldetails'] = $this->db->query($query)->row_array();
+				//                $data['details'] = $this->db->query($query)->row_array();
                 $data['details'] = $dataProdu;
                 //echo"<pre>";print_r($data['details'][0]->ProductID);die;
 
@@ -12572,23 +12813,23 @@ function unsave_checkout_data(){
                 $data['preferences'] = $preferences;
 
                 $theHTMLResponse = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/printing_process', $data, true);
-//                $json_data = array('content' => $theHTMLResponse);
+				//                $json_data = array('content' => $theHTMLResponse);
                 $data['printing_process_content'] = $theHTMLResponse;
 
                 $finishHTMLResponse = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/label_finish_and_embellishment', $data, true);
-//                $json_data = array('content' => $theHTMLResponse);
+				//                $json_data = array('content' => $theHTMLResponse);
                 $data['finish_content'] = $finishHTMLResponse;
 
                 $cartSummeryHTMLResponse = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/cart_summery', $data, true);
-//                $json_data = array('content' => $theHTMLResponse);
+				//                $json_data = array('content' => $theHTMLResponse);
                 $data['cart_summery'] = $cartSummeryHTMLResponse;
 
-//                $artworkUploadHTMLResponse = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/artwork_upload', $data, true);
-//                $json_data = array('content' => $theHTMLResponse);
-//                $data['artwork_upload_view'] = $artworkUploadHTMLResponse;
+				//                $artworkUploadHTMLResponse = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/artwork_upload', $data, true);
+				//                $json_data = array('content' => $theHTMLResponse);
+				//                $data['artwork_upload_view'] = $artworkUploadHTMLResponse;
 
-//                $data['main_content'] = 'order_quotation/label_embellishment_Print_service/label_emb_page/printing_process_and_product';
-//                $this->load->View('page', $data);
+				//                $data['main_content'] = 'order_quotation/label_embellishment_Print_service/label_emb_page/printing_process_and_product';
+				//                $this->load->View('page', $data);
 
             }
 
@@ -12617,7 +12858,7 @@ function unsave_checkout_data(){
         $preferences = '';
         $email = $email;
         if ($email != '') {
-            // nafees321
+            
             $preferences = $this->orderModal->material_load_printing_preferences($email);
             return $preferences;
         } else {
@@ -12632,7 +12873,7 @@ function unsave_checkout_data(){
         $type = $this->input->post('type');
         $email = $this->input->post('email');
         $orientation = $this->input->post('orientation');
-        // nafees123
+        
         $preferences_printing = $this->material_load_printing_preferences($email);
 
         if (isset($available) and $available == 'both') {
@@ -13128,7 +13369,202 @@ function unsave_checkout_data(){
 
 
 
+    // NAFEES CART PAGE EDIT STARTS
 
+    function addPrintingPreferences_cart_page()
+    {
+
+        /*echo '<pre>';
+        print_r($_POST); exit;*/
+        if ($_POST) {
+            $catid = $this->input->post('CategoryID');
+            $details = $this->home_model->fetch_category_details($catid);
+            //print_r($details); exit;
+            $coresize = $this->input->post('coresize');
+            //print_r($coresize); exit;
+            $categorycodea4 = array($details['CategoryImage']);
+            $categorycoderoll = '';
+            $rollcode = '';
+            $A4code = '';
+            $code = explode('.', $details['CategoryImage']);
+            $userData = $this->user_model->get_data();
+            //$selected_size = $details['CategoryID'].$coresize;
+            $selected_size = $this->input->post('selected_size');
+            $email = $userData['UserEmail'];
+            $material = $this->input->post('material');
+            $color = $this->input->post('color');
+            $adhesive = $this->input->post('adhesive');
+            $shape = $details['Shape_upd'];
+            $min_width = floor($details['Width']);
+            $max_width = ceil($details['Width']);
+            $min_height = floor($details['Height']);
+            $max_height = ceil($details['Height']);
+            /*$dieCode = explode(".",$details['PDF']);
+            $dieCode = $dieCode[0];*/
+            $dieCode = $this->input->post('dieCode');
+
+
+            $type = $this->input->post('type');
+            /*if ($type == 'A4' || $type == 'A3' || $type == 'SRA3' || $type == 'A5') {
+                $condtion = " CategoryActive = 'Y' AND Shape != '' AND ( labelCategory LIKE 'Roll Labels' ) ";
+                $final_condition = $condtion . " AND CategoryImage LIKE '%" . $diecode . "%'";
+            }else{
+                $condtion = " CategoryActive = 'Y' AND Shape != '' AND ( labelCategory LIKE 'Roll Labels' ) ";
+                $final_condition = $condtion . " AND CategoryImage LIKE '%" . $diecode . "%'";
+            }
+
+            $data['records'] = $this->home_model->get_print_sizes($final_condition, $limit);*/
+
+
+            $no_of_labels = $this->input->post('no_of_labels');
+
+            $shape = $this->input->post('shape');
+            $productcode = $this->input->post('productcode');
+
+            $source = $this->input->post('source');
+            $available_in = $this->input->post('available_in');
+            $no_of_rolls = $this->input->post('no_of_rolls');
+
+            /*
+            $email = $this->input->post('email');
+            */
+            $woundoption = $this->input->post('woundoption');
+            //$orientation = "orientation1";
+
+            if ($woundoption == "Inside") {
+                $orientation = 'orientation5';
+            }
+
+            //print_r($type); exit;
+            // IN CASE OF ROLLS ENDS HERE
+            //print_r('a'); exit;
+            if ($type == 'A4' || $type == 'A3' || $type == 'SRA3' || $type == 'A5') {
+                $pref = array(
+                    'email' => $email,
+                    'sessionID' => $this->session->userdata('session_id'),
+                    'shape' => $shape,
+                    'min_width' => $min_width,
+                    'max_width' => $max_width,
+                    'max_height' => $max_height,
+                    'min_height' => $min_height,
+                    'labels_a4' => $no_of_labels,
+                    'source' => $source,
+                    'opposite' => "false",
+                    'selected_size' => $selected_size,
+                    'available_in' => $available_in,
+                    'categorycode_a4' => $dieCode,
+                    'productcode_a4' => $productcode,
+                    'material_a4' => $material,
+                    'adhesive_a4' => $adhesive,
+                    'color_a4' => $color,
+                    'digital_proccess_a4' => "",
+                    'finish_a4' => "",
+                );
+            } else if ($type == 'Rolls') {
+
+                $pref = array(
+                    'sessionID' => $this->session->userdata('session_id'),
+                    'source' => $source,
+                    'productcode_roll' => $productcode,
+                    'shape' => '',
+                    'email' => $email,
+
+                    'min_width' => $min_width,
+                    'max_width' => $max_width,
+                    'max_height' => $max_height,
+                    'min_height' => $min_height,
+
+                    'labels_roll' => $no_of_labels,
+                    'opposite' => "false",
+                    'selected_size' => $selected_size,
+                    'available_in' => $available_in,
+                    'categorycode_roll' => $dieCode,
+
+                    'material_roll' => $material,
+
+                    'no_of_rolls' => $no_of_rolls,
+
+                    'digital_proccess_roll' => "",
+                    'finish_roll' => "",
+                    'orientation' => $orientation,
+
+                    'adhesive_roll' => $adhesive,
+                    'color_roll' => $color,
+                    'coresize' => $coresize,
+                    'wound_roll' => $woundoption
+                );
+            }
+
+
+            echo $this->orderModal->addPrintingPreferences($pref);
+        }
+    }
+
+
+
+    public function getCartAndProductData($temp_basket_id) {
+    	
+		if( isset($temp_basket_id) && $temp_basket_id != '' ) {
+			$cartData = $this->orderModal->getCartDataAgainstId($temp_basket_id);
+			return $cartData;
+		}
+    }
+
+    function generate_preferences_data_edit_cart_flag($line_detail){
+	    
+	    $preferences = array();
+	    $preferences['ProductID'] = $line_detail['ProductID'];
+	    $preferences['ManufactureID'] = $line_detail['ManufactureID'];
+	    $preferences['manuid'] = $line_detail['ManufactureID'];
+
+	    if ($line_detail['ProductBrand'] == 'Roll Labels'){
+	        $preferences['available_in'] = 'Roll';
+	        $preferences['manuid'] = substr($line_detail['ManufactureID'], 0, -1);
+	    } elseif ($line_detail['ProductBrand'] == 'A4 Labels'){
+	        $preferences['available_in'] = 'A4';
+	    }elseif ($line_detail['ProductBrand'] == 'A5 Labels'){
+	        $preferences['available_in'] = 'A5';
+	    }elseif ($line_detail['ProductBrand'] == 'A3 Label'){
+	        $preferences['available_in'] = 'A3';
+	    }elseif ($line_detail['ProductBrand'] == 'SRA3 Label'){
+	        $preferences['available_in'] = 'SRA3';
+	    } else{
+	        $preferences['available_in'] = 'Integrated';
+	    }
+
+	    //$preferences['selected_size'] = substr($line_detail->CategoryID, 0, -2);
+	    $preferences['selected_size'] = $line_detail['CategoryID'];
+	    $preferences['digital_proccess_roll'] = $line_detail['Print_Type'];
+	    $preferences['material_code'] = $this->home_model->getmaterialcode($preferences['manuid']);
+	    $preferences['die_code'] = $this->home_model->getdiecode($preferences['manuid']);
+	    $material_data = $this->home_model->get_material_data_cart_page($preferences['material_code'],$preferences['available_in']);
+
+	    if ($preferences['available_in'] == 'Roll'){
+	        $preferences['coresize'] = "R".substr($line_detail['ManufactureID'], -1, 1);
+	        $preferences['productcode_roll'] = $line_detail['ManufactureID'];
+	        $preferences['Orientation'] = $line_detail['orientation'];
+	        $preferences['wound_roll'] = $line_detail['wound'];
+	        $preferences['color_roll'] = $material_data['material_name'];
+	        $preferences['material_roll'] = $line_detail['ColourMaterial_upd'];
+	        $preferences['categorycode_roll'] = $preferences['die_code'].$preferences['coresize'];
+	        $preferences['adhesive_roll'] = $material_data['adhesive'];
+	        $preferences['labels_roll'] = $line_detail['orignalQty'];
+	        $preferences['quantity'] = $line_detail['Quantity'];
+	    } else {
+	        $preferences['productcode_a4'] = $line_detail['ManufactureID'];
+	        $preferences['color_a4'] = $material_data['material_name'];
+	        $preferences['material_a4'] = $line_detail['ColourMaterial_upd'];
+	        $preferences['categorycode_a4'] = $preferences['die_code'];
+	        $preferences['adhesive_a4'] = $material_data['adhesive'];
+	        $preferences['labels_a4'] = $line_detail['orignalQty'];
+	        $preferences['quantity'] = $line_detail['Quantity'];
+	    }
+
+	    return $preferences;
+	}
+
+
+    // NAFEES CART PAGE EDIT ENDS
 
 
 

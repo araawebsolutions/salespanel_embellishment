@@ -6,7 +6,14 @@
 <?php
 $cartid = $details['cartid'];
 $ProductID = $details['ProductID'];
-$files = $this->home_model->fetch_uploaded_artworks($cartid, $ProductID);
+
+if( isset($edit_cart_flag) && $edit_cart_flag != '' ) {
+    $files = $this->home_model->fetch_uploaded_artworks_edit_cart($cartid, $ProductID);
+} else {
+    $files = $this->home_model->fetch_uploaded_artworks($cartid, $ProductID);
+}
+
+
 
 $total = $this->home_model->get_db_column('temporaryshoppingbasket', 'Quantity', 'ID', $cartid);
 $designs = $this->home_model->get_db_column('temporaryshoppingbasket', 'Print_Qty', 'ID', $cartid);
@@ -148,7 +155,11 @@ $dividefactor   = ($unitqty=='labels')?1:$details['LabelsPerSheet'];
         <?php }
 
         $lines_to_populate = 0;
-        $remaingsheets = $total-$total_sheets;
+        if( $total > 0 ) {
+            $remaingsheets = $total-$total_sheets;
+        }
+        // $remaingsheets = $total-$total_sheets;
+        
 
     }
 

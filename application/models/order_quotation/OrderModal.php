@@ -294,10 +294,7 @@ class orderModal extends CI_Model
     }
 
     public function getArtworkByOrder($serial){
-        return  $this->db->select("at.*")
-            ->from('order_attachments_integrated as at')
-            ->where('Serial',$serial)
-            ->get()->result();
+        return  $this->db->select("at.*")->from('order_attachments_integrated as at')->where('Serial',$serial)->get()->result();
     }
 
     public function getArtworkForQuotation($serial){
@@ -4518,7 +4515,7 @@ class orderModal extends CI_Model
 
     function get_digital_printing_process($type)
     {
-        return $this->db->query(" Select * from digital_printing_process WHERE type LIKE '" . $type . "' OR type LIKE 'both'  order by display_priority asc")->result();
+        return $this->db->query(" Select * from digital_printing_process WHERE status = 'active' AND (type LIKE '" . $type . "' OR type LIKE 'both')  order by display_priority asc")->result();
     }
 
     function roll_core_sizes_finder($catid, $menuid)
@@ -4919,7 +4916,7 @@ class orderModal extends CI_Model
 
     function insert_check($productID, $SID)
     {
-        print_r('111'); exit;
+        // print_r('111'); exit;
         $query = "SELECT COUNT(*) as count From browsing_history WHERE productID = '$productID' and SessionID = '$SID'";
         $result = $this->db->query($query)->row();
 
@@ -4929,6 +4926,31 @@ class orderModal extends CI_Model
             return false;
         }
     }
+
+
+    // NAFEES CART PAGE EDIT STARTS
+        public function getCartDataAgainstId( $temp_basket_id ) {
+            if( isset($temp_basket_id) && $temp_basket_id != '' ) {
+                    $q = $this->db->query("SELECT * FROM temporaryshoppingbasket tsb INNER JOIN products prd on tsb.ProductID = prd.ProductID AND tsb.ID = '".$temp_basket_id."'   ");
+                    return $q->result_array()[0];
+            }
+        }
+        
+        public function Get_IA_Data($cartID) {
+            $uploaded_lines = $this->db->query("select * from integrated_attachments where CartID='".$cartID."'
+                AND file != '' AND file != 'No File Required For Artwork To Follow' ")->result_array();
+            return $uploaded_lines;
+        }
+
+        public function Get_IA_All_Data($cartID) {
+            $uploaded_lines = $this->db->query("select * from integrated_attachments where CartID='".$cartID."' ")->result_array();
+            return $uploaded_lines;
+        }
+
+    
+
+
+    // NAFEES CART PAGE EDIT ENDS
 
 
     /***************************************************/

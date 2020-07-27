@@ -1,15 +1,27 @@
 <?php
 $minroll = $this->home_model->min_qty_roll($details['ManufactureID']);
 
+
 $ProductID = $details['ProductID'];
 $cartid = $details['cartid'];
 
 if(isset($cartid) && !empty($cartid)){
-    $files = $this->home_model->fetch_uploaded_artworks($cartid, $ProductID);
+
+    if( isset($edit_cart_flag) && $edit_cart_flag != '' ) {
+        $files = $this->home_model->fetch_uploaded_artworks_edit_cart($cartid, $ProductID);
+    } else {
+        $files = $this->home_model->fetch_uploaded_artworks($cartid, $ProductID);
+    }
+
     if (count($files) > 0){
-        $total_uploaded_rolls = $this->home_model->fetch_uploaded_artworks_total_qty($cartid, $ProductID);
+        if( isset($edit_cart_flag) && $edit_cart_flag != '' ) {
+            $total_uploaded_rolls = $this->home_model->fetch_uploaded_artworks_total_qty_edit_cart($cartid, $ProductID);
+        } else {
+            $total_uploaded_rolls = $this->home_model->fetch_uploaded_artworks_total_qty($cartid, $ProductID);
+        }
 //    print_r($total_uploaded_rolls);die;
         if (isset($total_uploaded_rolls) && !empty($total_uploaded_rolls)   ){
+
             $additional_cost_per_roll = $prices['additional_cost']/($total_uploaded_rolls[0]->total_roll-$minroll);
 //    print_r($additional_cost_per_roll);
 
@@ -20,7 +32,7 @@ if(isset($cartid) && !empty($cartid)){
 $total = $this->home_model->get_db_column('temporaryshoppingbasket', 'Quantity', 'ID', $cartid);
 $labels = $this->home_model->get_db_column('temporaryshoppingbasket', 'orignalQty', 'ID', $cartid);
 
-
+$flag_minus = false;
 $designs = $this->home_model->get_db_column('temporaryshoppingbasket', 'Print_Qty', 'ID', $cartid);
 
 
@@ -137,7 +149,6 @@ $uploaded_designs = 0; ?>
                 <?php  if (isset($details['labelCategory']) && $details['labelCategory'] =='Roll Labels'){  ?>
                     <td class="text-center">
                         <?php
-
                         if ($files[0]->qty < $minroll){
                             if ($total_rolls > $minroll){
                                 $remaining_roll_for_addtional_charges = $total_rolls-$minroll;
@@ -158,16 +169,19 @@ $uploaded_designs = 0; ?>
 
 
                         }else{
-                            $additional_roll =$total_rolls - $minroll;
+                            $additional_roll = $total_rolls - $minroll;
                             if ($additional_roll>0){
-                                $additional_cost =   $additional_cost_per_roll * $row->qty;
-
-//                            $additional_cost = round(($additional_cost), 2);
+                                if( $flag_minus ) {
+                                    $additional_cost =   $additional_cost_per_roll * $row->qty;
+                                } else {
+                                    $additional_cost =   $additional_cost_per_roll * $additional_roll;
+                                }
+                                $flag_minus = true;
                                 $additional_cost = number_format($additional_cost, 2, '.', '');
-
                                 echo '<h6>+'.symbol.$additional_cost. ' <i class="fa fa-info-circle text-info" aria-hidden="true"></i></h6>';
                             }
-                        } ?>
+                        } 
+                        ?>
 
                     </td>
                 <?php  } ?>
