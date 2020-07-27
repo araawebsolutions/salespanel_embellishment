@@ -8017,7 +8017,7 @@ function checkcart(ProductBrand, qty, batch, ManufactureID, Printing, dataNo) {
 
 
 
-$(document).on("click", ".sheet_updater", function(event) {
+$(document).on("click", ".sheet_updater_old", function(event) {
 	
 	var id = $(this).attr('data-id');
 	var _this = this;

@@ -2091,7 +2091,7 @@
                                                     </td>
                                                     <td class="text-center">
                                                         <?php
-                                                        if ($detail->FinishTypePricePrintedLabels != '' && $detail->total_emb_cost != 0){
+                                                        if (!preg_match("/Roll Labels/i", $detail->ProductBrand) && $detail->FinishTypePricePrintedLabels != '' && $detail->total_emb_cost != 0){
                                                             echo $symbol . (number_format(($detail->Print_Total * $order->exchange_rate)-$detail->total_emb_cost, 2, '.', ''));
                                                         } else {
                                                             echo $symbol . (number_format($detail->Print_Total * $order->exchange_rate, 2, '.', ''));

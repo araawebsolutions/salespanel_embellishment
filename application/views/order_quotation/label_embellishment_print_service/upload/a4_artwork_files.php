@@ -4,33 +4,58 @@
     }
 </style>
 <?php
-$cartid = $details['cartid'];
-$ProductID = $details['ProductID'];
 
-if( isset($edit_cart_flag) && $edit_cart_flag != '' ) {
-    $files = $this->home_model->fetch_uploaded_artworks_edit_cart($cartid, $ProductID);
+if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $flag == 'cart_detail')) {
+    //$refNumber = OrderNumner,QuotationNumnber
+    //$lineNumber = O_SerialNumnber,Q_SerialNumber
+    //$flag = order_detail,quotation_detail
+
+    if ($flag == 'order_detail'){
+        $files = $this->home_model->getArtworkByOrder($lineNumber);
+        $table = 'orderdetails';
+        $where_coumn = 'SerialNumber';
+    }elseif ($flag == 'quotation_detail'){
+        $files = $this->home_model->getArtworkForQuotation($lineNumber);
+        $table = 'quotationdetails';
+        $where_coumn = 'SerialNumber';
+    }
+
+    $ProductID = $details['ProductID'];
+    $total = $this->home_model->get_db_column($table, 'Quantity', $where_coumn, $lineNumber);
+    $designs = $this->home_model->get_db_column($table, 'Print_Qty', $where_coumn, $lineNumber);
+
+    $upload_path = base_url().'theme/assets/images/artworks/';
+
+    $sheets_text  = ($unitqty=='labels')?'Labels':'Sheets';
+    $labels_text = ($unitqty=='labels')?'Sheets':'Labels';
+
+    $multiplyfactor = ($unitqty=='labels')?$details['LabelsPerSheet']:1;
+    $dividefactor   = ($unitqty=='labels')?1:$details['LabelsPerSheet'];
+
 } else {
-    $files = $this->home_model->fetch_uploaded_artworks($cartid, $ProductID);
+    
+    $cartid = $details['cartid'];
+    $ProductID = $details['ProductID'];
+
+    $total = $this->home_model->get_db_column('temporaryshoppingbasket', 'Quantity', 'ID', $cartid);
+    $designs = $this->home_model->get_db_column('temporaryshoppingbasket', 'Print_Qty', 'ID', $cartid);
+
+    $upload_path = base_url().'theme/assets/images/artworks/';
+
+    $sheets_text  = ($unitqty=='labels')?'Labels':'Sheets';
+    $labels_text = ($unitqty=='labels')?'Sheets':'Labels';
+
+    $multiplyfactor = ($unitqty=='labels')?$details['LabelsPerSheet']:1;
+    $dividefactor   = ($unitqty=='labels')?1:$details['LabelsPerSheet'];
+
+    if( isset($edit_cart_flag) && $edit_cart_flag != '' ) {
+        $files = $this->home_model->fetch_uploaded_artworks_edit_cart($cartid, $ProductID);
+    } else {
+        $files = $this->home_model->fetch_uploaded_artworks($cartid, $ProductID);
+    }
 }
-
-
-
-$total = $this->home_model->get_db_column('temporaryshoppingbasket', 'Quantity', 'ID', $cartid);
-$designs = $this->home_model->get_db_column('temporaryshoppingbasket', 'Print_Qty', 'ID', $cartid);
-
-$upload_path = base_url().'theme/assets/images/artworks/';
-
-$sheets_text  = ($unitqty=='labels')?'Labels':'Sheets';
-$labels_text = ($unitqty=='labels')?'Sheets':'Labels';
-
-$multiplyfactor = ($unitqty=='labels')?$details['LabelsPerSheet']:1;
-$dividefactor   = ($unitqty=='labels')?1:$details['LabelsPerSheet'];
-
-//print_r($prices);echo"<br>";
-//print_r($labels);echo"<br>";
-//print_r($qty);echo"<br>";
-//print_r($design);die;
 ?>
+
 
 <div class="clear"></div>
 

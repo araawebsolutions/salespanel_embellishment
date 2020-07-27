@@ -157,32 +157,44 @@ $assets = Assets;?>
 
 
                                                 <!--                                    plain print price section start-->
-                                                <?php
+                                                <?php                                                
 
-                                                //
-                                                if( $edit_cart_flag ) {
-                                                    ?>
-                                                    <input type="text" id="selected_digital_process" value="<?= $cart_and_product_data['Print_Type'];?>" />
-                                                    <input type="text" id="selected_line_type" value="<?= $cart_and_product_data['ProductBrand'];?>" />
-                                                    <input type="text" id="selected_combination_base" value="<?= $cart_and_product_data['combination_base'];?>" />
-                                                    <input type="text" id="custom_roll_and_label" value="<?= $cost_effective_custom_rolls;?>" />
-                                                    <input type="text" id="artwork_now_or_follow" value="<?= $artwork_now_or_follow;?>" />
-                                                    
-                                                    <?php $cartid = $cart_and_product_data['ID'];
+                                                if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $flag == 'cart_detail')) {
+                                                    if ($flag == 'order_detail') {
+                                                        $table = 'orderdetails';
+                                                        $where_coumn = 'SerialNumber';
+                                                    } elseif ($flag == 'quotation_detail') {
+                                                        $table = 'quotationdetails';
+                                                        $where_coumn = 'SerialNumber';
+                                                    }
+                                                    $cartid = '';
+                                                    $acutal_labels = $this->home_model->get_db_column($table, 'labels', $where_coumn, $lineNumber);
+                                                    $acutal_sheets = $this->home_model->get_db_column($table, 'Quantity', $where_coumn, $lineNumber);
+
                                                 } else {
-                                                    $SID = $this->shopping_model->sessionid() . '-PRJB';
-                                                    $cartid = $this->home_model->get_db_column('temporaryshoppingbasket', 'id', 'SessionID', $SID);    
-                                                }
 
-                                                
+                                                    if( $edit_cart_flag ) {?>
+                                                            <input type="text" id="selected_digital_process" value="<?= $cart_and_product_data['Print_Type'];?>" />
+                                                            <input type="text" id="selected_line_type" value="<?= $cart_and_product_data['ProductBrand'];?>" />
+                                                            <input type="text" id="selected_combination_base" value="<?= $cart_and_product_data['combination_base'];?>" />
+                                                            <input type="text" id="custom_roll_and_label" value="<?= $cost_effective_custom_rolls;?>" />
+                                                            <input type="text" id="artwork_now_or_follow" value="<?= $artwork_now_or_follow;?>" />
+                                                            
+                                                            <?php $cartid = $cart_and_product_data['ID'];
+                                                    } else {
+                                                        $SID = $this->shopping_model->sessionid() . '-PRJB';
+                                                        $cartid = $this->home_model->get_db_column('temporaryshoppingbasket', 'id', 'SessionID', $SID);
+                                                    }
+                                                }
 
                                                 $acutal_labels = $this->home_model->get_db_column('temporaryshoppingbasket', 'orignalQty', 'ID', $cartid);
                                                 $acutal_sheets = $this->home_model->get_db_column('temporaryshoppingbasket', 'Quantity', 'ID', $cartid);
+
                                                 $total_labels = 0;
                                                 $total_emb_and_plate_cost =  $prices['label_finish'] + $total_emb_plate_price;
 
                                                 ?>
-                                                <input type="text" id="cartid" value="<?= $cartid ?>"/>
+                                                <input type="hidden" id="cartid" value="<?= $cartid ?>"/>
                                                 <!--    <input type="hidden" id="cartproductid" value="--><?//= $rolldetails['ProductID'] ?><!--"/>-->
                                                 <input type="hidden" id="cartunitqty" value="<?= $unitqty ?>"/>
                                                 <!--    <div class="panel panel-default">-->

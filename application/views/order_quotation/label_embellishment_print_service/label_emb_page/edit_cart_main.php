@@ -4557,9 +4557,6 @@
         var upload_artwork_radio = $('input[name="upload_artwork_2"]:checked').val();
         var upload_artwork_option_radio = $('input[name="upload_artwork_option_2"]:checked').val();
 
-        console.log(upload_artwork_radio+"<<<<<<");
-        console.log(upload_artwork_option_radio+"<<<<<<");
-
         
         $.ajax({
             url: mainUrl + 'ajax/material_update_printing_artworks_label_emb',
@@ -4656,11 +4653,6 @@
             var upload_artwork_radio = $('#artwork_now_or_follow').val();
             var upload_artwork_option_radio = $('#custom_roll_and_label').val();
         }
-        
-
-        console.log(upload_artwork_radio+"<<<<<<123");
-        console.log(upload_artwork_option_radio+"<<<<<<123");
-        console.log(remove_artworks);
         
         $('#cart_summery_loader').show();
         
