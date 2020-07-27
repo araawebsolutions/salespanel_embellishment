@@ -80,6 +80,10 @@ class Artwork_model extends CI_Model{
         return $this->db->query("SELECT * from order_attachments_integrated where ID = $jobno order by ID desc limit 1 ")->row_array();
     }
 
+    public function orderAttachmentBySerialNumber($orderNumber){
+        return $this->db->query("SELECT * from order_attachments_integrated where order_attachments_integrated.Serial = $orderNumber order by ID ASC limit 1 ")->row_array();
+    }
+
 
 	
 	function fetch_order_date($ordernumber){
@@ -295,6 +299,11 @@ class Artwork_model extends CI_Model{
 	
 	function fetch_order_print_lines($ordernumber){
 	 $query = "select * from orderdetails where OrderNumber LIKE '".$ordernumber."' and Printing LIKE 'Y' and source NOT LIKE 'flash' ";
+	 return $this->db->query($query)->result();
+	}
+
+	function fetch_order_print_job($serialNumber){
+	 $query = "select * from orderdetails where SerialNumber LIKE '".$serialNumber."' and Printing LIKE 'Y' and source NOT LIKE 'flash' ";
 	 return $this->db->query($query)->result();
 	}
 	

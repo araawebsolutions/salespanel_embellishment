@@ -22,6 +22,15 @@
                     <div class="card-body" id="custom_dies"></div>
                 </div>
 
+                 <!----___---__--___----__--__--__---____ Process Finish Plates ----___----___--___--__--__----___---____-->
+                <div class="card" style="margin-top:2rem">
+                    <div class="card-header card-heading-text">
+                        <span><i class="fa fa-dot-circle-o"></i> Finish Plates </span>
+                        <span class="sea"></span>
+                    </div>
+                    <div class="card-body" id="finish_plates"></div>
+                </div>
+
                 <!----___---__--___----__--__--__---____ Awaiting Custom Die Oders ----___----___--___--__--__----___---____-->
                 <div class="card" style="margin-top:2rem">
                     <div class="card-header card-heading-text">
@@ -70,7 +79,7 @@
 
 <script type="text/javascript">
     window.onbeforeunload = function () {
-        $('#awaiting_die').DataTable().state.clear();
+        $('#awaiting_die1').DataTable().state.clear();
         $('#getAwaitingOrders').DataTable().state.clear();
         $('#getReorderOrders').DataTable().state.clear();
         $("#getCustomarAprovalTable").DataTable().state.clear();
@@ -79,7 +88,7 @@
 
 <script type="text/javascript">
     $("#pro_die_tab").on("click", function () {
-        $('#awaiting_die').DataTable().state.clear();
+        $('#awaiting_die1').DataTable().state.clear();
         $('#getAwaitingOrders').DataTable().state.clear();
         $('#getReorderOrders').DataTable().state.clear();
         $("#getCustomarAprovalTable").DataTable().state.clear();
@@ -89,9 +98,32 @@
     $(document).ready(function () {
         $('#pro_die_tab').trigger('click');
         customDies();
+        finishPlates();
     });
 
     /* -----_____----____---___--__-_ Start Awaiting Die datatables Panel _-__--___---____----_____----- */
+
+    function finishPlates() {
+
+
+        $('#aa_loader').show();
+        $.ajax({
+            type: "post",
+            url: mainUrl + "dies/dies/getFinishPlatesListing",
+            cache: false,
+            data: {},
+            dataType: 'html',
+            success: function (data) {
+                data = $.parseJSON(data);
+                $('#finish_plates').html(data.html);
+                FinishPlatesTb();
+                $('#aa_loader').hide();
+            },
+            error: function () {
+                swal('warning', 'Error while request..', 'warning');
+            }
+        });
+    }
 
 
     function customDies() {
@@ -133,6 +165,29 @@
             "iDisplayLength": 10,
             "aaSorting": [[0, 'desc']],
             "stateSave": true,
+            language: {
+                paginate: {
+                    next: '&#8594;', // or '→'
+                    previous: '&#8592;' // or '←'
+                }
+            },
+        });
+    }
+
+    function FinishPlatesTb()
+    {
+        $("#finish_plates_table").dataTable({
+            "sDom": 'l<"toolbar">frtip',
+            "bProcessing": false,
+            "bServerSide": false,
+            "bDestroy": true,
+            "bJQueryUI": true,
+            "sPaginationType": "simple_numbers",
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            "iDisplayStart ": 20,
+            "iDisplayLength": 10,
+            "aaSorting": [[0, 'desc']],
+            "stateSave": false,
             language: {
                 paginate: {
                     next: '&#8594;', // or '→'
@@ -925,4 +980,41 @@
             }
         });
     }
+
+    function updatePlateStatus(selectedStatusValue, plate_id) {
+        $('#aa_loader').show();
+        $.ajax({
+            type: "post",
+            url: mainUrl + "dies/dies/updatePlateStatuses",
+            cache: false,
+            data: {selectedStatusValue:selectedStatusValue,plate_id:plate_id},
+            dataType: 'html',
+            success: function (data) {
+                swal('Success', 'Status Changed', 'success');
+                $('#aa_loader').hide();
+            },
+            error: function () {
+                swal('warning', 'Error while request..', 'warning');
+            }
+        });
+    }
+
+    function updateSupllier(selectedSupplierValue, plate_id) {
+        $('#aa_loader').show();
+        $.ajax({
+            type: "post",
+            url: mainUrl + "dies/dies/updateSupplierStatuses",
+            cache: false,
+            data: {selectedSupplierValue:selectedSupplierValue,plate_id:plate_id},
+            dataType: 'html',
+            success: function (data) {
+                swal('Success', 'Supplier Assigned', 'success');
+                $('#aa_loader').hide();
+            },
+            error: function () {
+                swal('warning', 'Error while request..', 'warning');
+            }
+        });
+    }
+
 </script>

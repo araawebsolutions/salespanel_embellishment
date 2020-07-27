@@ -25,6 +25,20 @@ class die_model extends CI_Model {
 	   return $qry['com'];
 	}
     
+    public function get_OAI_by_ID($oai_id) {
+    	
+    	if( isset($oai_id) && $oai_id != '' ) {
+    		$qry = $this->db->query("SELECT * FROM order_attachments_integrated WHERE ID = '".$oai_id."' ORDER BY id DESC ")->result();
+	  		return $qry[0];
+    	}
+
+    }
+
+    public function get_suppliers_list() {
+    	$query = $this->db->query("SELECT * from label_embellishment_plates_suppliers ")->result();
+	    return $query;
+    }
+    
     
     public function fetch_custom_die_quote_counts($id){
 	   $query = $this->db->query("SELECT * from flexible_dies_info WHERE ID = '".$id."' ");
@@ -40,6 +54,12 @@ class die_model extends CI_Model {
 	
 	public function fetch_irregular(){
 	 $qry = $this->db->query("SELECT quotationdetails.SerialNumber,quotationdetails.QuotationNumber from quotationdetails INNER JOIN quotations ON quotations.QuotationNumber = quotationdetails.QuotationNumber WHERE quotations.QuotationStatus = 37  AND quotationdetails.ManufactureID LIKE 'SCO1' AND quotationdetails.die_approve LIKE 'N' ")->result();
+	  return $qry;
+	}
+
+
+	public function fetch_finish_plates(){
+	  $qry = $this->db->query("SELECT * FROM label_embellishment_finish_plates ORDER BY id DESC ")->result();
 	  return $qry;
 	}
 	
