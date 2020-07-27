@@ -132,15 +132,37 @@ $assets = Assets;?>
                                                 <?php
 
                                                 //
-                                                $SID = $this->shopping_model->sessionid() . '-PRJB';
-                                                $cartid = $this->home_model->get_db_column('temporaryshoppingbasket', 'id', 'SessionID', $SID);
 
-                                                $acutal_labels = $this->home_model->get_db_column('temporaryshoppingbasket', 'orignalQty', 'ID', $cartid);
-                                                $acutal_sheets = $this->home_model->get_db_column('temporaryshoppingbasket', 'Quantity', 'ID', $cartid);
+                                                if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $flag == 'cart_detail')) {
+                                                    //$refNumber = OrderNumner,QuotationNumnber
+                                                    //$lineNumber = O_SerialNumnber,Q_SerialNumber
+                                                    //$flag = order_detail,quotation_detail
+
+                                                    if ($flag == 'order_detail') {
+                                                        //$files = $this->home_model->getArtworkByOrder($lineNumber);
+                                                        $table = 'orderdetails';
+                                                        $where_coumn = 'SerialNumber';
+                                                    } elseif ($flag == 'quotation_detail') {
+                                                        //$files = $this->home_model->getArtworkForQuotation($lineNumber);
+                                                        $table = 'quotationdetails';
+                                                        $where_coumn = 'SerialNumber';
+                                                    }
+                                                    $cartid = '';
+                                                    $acutal_labels = $this->home_model->get_db_column($table, 'labels', $where_coumn, $lineNumber);
+                                                    $acutal_sheets = $this->home_model->get_db_column($table, 'Quantity', $where_coumn, $lineNumber);
+
+                                                } else {
+                                                    $SID = $this->shopping_model->sessionid() . '-PRJB';
+                                                    $cartid = $this->home_model->get_db_column('temporaryshoppingbasket', 'id', 'SessionID', $SID);
+                                                    $acutal_labels = $this->home_model->get_db_column('temporaryshoppingbasket', 'orignalQty', 'ID', $cartid);
+                                                    $acutal_sheets = $this->home_model->get_db_column('temporaryshoppingbasket', 'Quantity', 'ID', $cartid);
+                                                }
+
                                                 $total_labels = 0;
                                                 $total_emb_and_plate_cost =  $prices['label_finish'] + $total_emb_plate_price;
 
                                                 ?>
+
                                                 <input type="hidden" id="cartid" value="<?= $cartid ?>"/>
                                                 <!--    <input type="hidden" id="cartproductid" value="--><?//= $rolldetails['ProductID'] ?><!--"/>-->
                                                 <input type="hidden" id="cartunitqty" value="<?= $unitqty ?>"/>

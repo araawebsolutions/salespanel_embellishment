@@ -101,7 +101,7 @@
                                     <div class="col-md-6" style="  margin-top: 4% ">
                                         <label class="containerr" data-printing_process="Monochrome_Black_Only" style="  margin-left: 0% !important; "><span style="  margin-top: 31px;">Premium Quality <?php echo symbol; ?><span id="premium_section_price"> </span></span>
 
-                                            <input type="radio" class="product_quality sheet_section_radio_main"  data-product_quality_selection="premium"   name="digital_printing_process">
+                                            <input type="radio" class="product_quality sheet_section_radio_main  "  data-product_quality_selection="premium"   name="digital_printing_process">
                                             <span class="checkmark"></span>
                                         </label>
                                         <span class="  product-details-description">

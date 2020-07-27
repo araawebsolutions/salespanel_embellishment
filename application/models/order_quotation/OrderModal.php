@@ -4518,7 +4518,7 @@ class orderModal extends CI_Model
 
     function get_digital_printing_process($type)
     {
-        return $this->db->query(" Select * from digital_printing_process WHERE type LIKE '" . $type . "' OR type LIKE 'both'  order by display_priority asc")->result();
+        return $this->db->query(" Select * from digital_printing_process WHERE status = 'active' AND (type LIKE '" . $type . "' OR type LIKE 'both')  order by display_priority asc")->result();
     }
 
     function roll_core_sizes_finder($catid, $menuid)

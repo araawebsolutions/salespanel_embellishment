@@ -186,7 +186,6 @@
                             <?php //include_once(APPPATH . '/views/label_embellishment_print_service/upload/upload_artwork_files.php'); ?>
                             <?php include_once(APPPATH . 'views/order_quotation/label_embellishment_print_service/upload/upload_artwork_files.php'); ?>
                         </div>
-
                     </div>
                     <div class="artwok-guidelines-text-box">Please note uploaded files must be no larger than 2Mb and to achieve the best results for your finished labels you will need a professional standard of artwork. We require scaled, print-ready studio artwork, supplied in editable PDF or EPS format, with a minimum resolution of 300dpi. No original artwork e.g. hand drawn images, can be amended and if you only have image files e.g. JPEG these also cannot be easily amended and need to be print ready as explained in our guidelines.
                     </div>

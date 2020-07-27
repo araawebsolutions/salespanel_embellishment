@@ -1,41 +1,65 @@
 <?php
-$minroll = $this->home_model->min_qty_roll($details['ManufactureID']);
 
-$ProductID = $details['ProductID'];
-$cartid = $details['cartid'];
+if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $flag == 'cart_detail')) {
+    //$refNumber = OrderNumner,QuotationNumnber
+    //$lineNumber = O_SerialNumnber,Q_SerialNumber
+    //$flag = order_detail,quotation_detail
 
-if(isset($cartid) && !empty($cartid)){
-    $files = $this->home_model->fetch_uploaded_artworks($cartid, $ProductID);
+    if ($flag == 'order_detail') {
+        $files = $this->home_model->getArtworkByOrder($lineNumber);
+        $table = 'orderdetails';
+        $artwork_table = 'order_attachments_integrated';
+        $where_coumn = 'SerialNumber';
+    } elseif ($flag == 'quotation_detail') {
+        $files = $this->home_model->getArtworkForQuotation($lineNumber);
+        $table = 'quotationdetails';
+        $artwork_table = 'quotation_attachments_integrated';
+        $where_coumn = 'SerialNumber';
+    }
+
+    $minroll = $this->home_model->min_qty_roll($details['ManufactureID']);
+    $ProductID = $details['ProductID'];
+
+
     if (count($files) > 0){
-        $total_uploaded_rolls = $this->home_model->fetch_uploaded_artworks_total_qty($cartid, $ProductID);
-//    print_r($total_uploaded_rolls);die;
+        $q = $this->db->query(" select sum(qty) as total_roll from ".$artwork_table." WHERE Serial = ".$lineNumber." AND ProductID = ".$ProductID."  ");
+        $total_uploaded_rolls =  $q->result();
         if (isset($total_uploaded_rolls) && !empty($total_uploaded_rolls)   ){
-            $additional_cost_per_roll = $prices['additional_cost']/($total_uploaded_rolls[0]->total_roll-$minroll);
-//    print_r($additional_cost_per_roll);
-
+            $additional_cost_per_roll = $prices['additional_cost']/($total_uploaded_rolls[0]->total_roll);
         }
     }
+
+    $total = $this->home_model->get_db_column($table, 'Quantity', $where_coumn, $lineNumber);
+    $labels = $this->home_model->get_db_column($table, 'labels', $where_coumn, $lineNumber);
+    $designs = $this->home_model->get_db_column($table, 'Print_Qty', $where_coumn, $lineNumber);
+    $min_labels_per_roll = $this->home_model->min_labels_per_roll($minroll);
+    $upload_path = base_url().'theme/assets/images/artworks/';
+    $uploaded_designs = 0;
+} else {
+
+    $minroll = $this->home_model->min_qty_roll($details['ManufactureID']);
+    $ProductID = $details['ProductID'];
+    $cartid = $details['cartid'];
+
+    if(isset($cartid) && !empty($cartid)){
+        $files = $this->home_model->fetch_uploaded_artworks($cartid, $ProductID);
+        if (count($files) > 0){
+            $total_uploaded_rolls = $this->home_model->fetch_uploaded_artworks_total_qty($cartid, $ProductID);
+            if (isset($total_uploaded_rolls) && !empty($total_uploaded_rolls)   ){
+                $additional_cost_per_roll = $prices['additional_cost']/($total_uploaded_rolls[0]->total_roll-$minroll);
+            }
+        }
+    }
+    $total = $this->home_model->get_db_column('temporaryshoppingbasket', 'Quantity', 'ID', $cartid);
+    $labels = $this->home_model->get_db_column('temporaryshoppingbasket', 'orignalQty', 'ID', $cartid);
+    $designs = $this->home_model->get_db_column('temporaryshoppingbasket', 'Print_Qty', 'ID', $cartid);
+    $min_labels_per_roll = $this->home_model->min_labels_per_roll($minroll);
+    $upload_path = base_url().'theme/assets/images/artworks/';
+    $uploaded_designs = 0;
+
 }
 
-$total = $this->home_model->get_db_column('temporaryshoppingbasket', 'Quantity', 'ID', $cartid);
-$labels = $this->home_model->get_db_column('temporaryshoppingbasket', 'orignalQty', 'ID', $cartid);
-
-
-$designs = $this->home_model->get_db_column('temporaryshoppingbasket', 'Print_Qty', 'ID', $cartid);
-
-
-/* echo $this->db->last_query();
- echo "<br>";
- echo $details['ManufactureID'];
- echo "<br>";
- echo "__/".$minroll."/___";*/
-
-$min_labels_per_roll = $this->home_model->min_labels_per_roll($minroll);
-
-
-$upload_path = base_url().'theme/assets/images/artworks/';
-
-$uploaded_designs = 0; ?>
+?>
 
 <table class="table table-striped">
     <thead class="">
