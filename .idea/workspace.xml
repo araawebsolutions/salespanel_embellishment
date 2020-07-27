@@ -6,106 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c8650364-b977-44cb-b822-5b936e6073e8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/config/routes_25042019.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/application/controllers/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/controllers/order_quotation/Order-.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/controllers/order_quotation/Order.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/order_quotation/Order.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/models/Home_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Home_model.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/models/MyPriceModel.php 01-03-2020 12-43" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/models/Shopping_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Shopping_model.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/models/order_quotation/OrderModal-.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/models/order_quotation/OrderModal.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/order_quotation/OrderModal.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/models/seingmodel" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation - Shortcut.lnk" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/already_purchased_plates.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/already_purchased_plates.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/artwork_upload.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/artwork_upload.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/cart_summery.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/cart_summery.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/edit_main.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/edit_main.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/printing_process_sheet.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/printing_process_sheet.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/upload/a4_artwork_files.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/upload/a4_artwork_files.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/upload/roll_artwork_files.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/upload/roll_artwork_files.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_detail/--order_detail_page.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_detail/order_detail_page--kamran.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_detail/order_detail_page-.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_detail/order_detail_page.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/order_detail/order_detail_page.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/Step1.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/Step2.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/artwork_help.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/footer.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/header.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/home_product_summary.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/index_backup.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/index_upload_artwork.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/label_emb_page/already_purchased_plates.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/label_emb_page/alternate_option.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/label_emb_page/artwork_upload.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/label_emb_page/artwork_upload_modal_2.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/label_emb_page/artwork_upload_section.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/label_emb_page/artwork_upload_table.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/label_emb_page/cart_summery.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/label_emb_page/label_finish_and_embellishment.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/label_emb_page/label_finish_and_embellishment_copy.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/label_emb_page/main.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/label_emb_page/printing_process.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/label_emb_page/printing_process_and_product.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/Step1.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/Step2.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/artwork_help.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/home_product_summary.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/index_backup.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/printed-labels.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/product_overview_sidebar.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/product_summary.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/selected_products.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/selected_products_v1.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/size_list.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/softproof/en/approve_summary.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/softproof/en/header.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/softproof/en/qa.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/softproof/en/softproof.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/softproof/fr/approve_summary.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/softproof/fr/header.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/softproof/fr/qa.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/softproof/fr/softproof.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/softproof_beta/en/approve_summary.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/softproof_beta/en/header.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/softproof_beta/en/qa.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/softproof_beta/en/softproof.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/softproof_beta/fr/approve_summary.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/softproof_beta/fr/header.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/softproof_beta/fr/qa.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/softproof_beta/fr/softproof.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/softproof_old/approval_email.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/softproof_old/approve_summary - Copy.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/softproof_old/approve_summary.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/softproof_old/header.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/softproof_old/softproof.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/upload/a4_artwork_files.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/upload/help.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/upload/print_designs_service.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/upload/roll_artwork_files.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/material_print_service/upload/upload_artwork_files.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/page.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/printed-labels.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/product_overview_sidebar.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/product_summary.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/selected_products.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/selected_products_v1.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/size_list.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/softproof/en/approve_summary.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/softproof/en/header.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/softproof/en/qa.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/softproof/en/softproof.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/softproof/fr/approve_summary.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/softproof/fr/header.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/softproof/fr/qa.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/softproof/fr/softproof.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/upload/a4_artwork_files.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/upload/help.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/upload/print_designs_service.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/upload/roll_artwork_files.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_emb_details/upload/upload_artwork_files.php" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/theme/assets/js/custom.js" beforeDir="false" afterPath="$PROJECT_DIR$/theme/assets/js/custom.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -224,7 +125,7 @@
       <workItem from="1595402086562" duration="28106000" />
       <workItem from="1595489135039" duration="26967000" />
       <workItem from="1595573441950" duration="29820000" />
-      <workItem from="1595834108618" duration="4646000" />
+      <workItem from="1595834108618" duration="9895000" />
     </task>
     <servers />
   </component>

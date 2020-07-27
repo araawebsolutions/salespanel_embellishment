@@ -6661,14 +6661,35 @@ function unsave_checkout_data(){
         $data['refNumber'] = $refNumber;
         $data['lineNumber'] = $lineNumber;
 
+        if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
+            $data['flag'] = $flag;
+            $data['refNumber'] = $refNumber;
+            $data['lineNumber'] = $lineNumber;
+
+            if ($flag == 'order_detail'){
+                $line_detail = $this->orderModal->getOrderDetailBySerialNumber($lineNumber);
+
+                $table = 'orderdetails';
+                $where_coumn = 'SerialNumber';
+                $artwork_table = 'order_attachments_integrated';
+            }elseif ($flag == 'quotation_detail'){
+                $line_detail = $this->orderModal->getQuotationDetailBySerialNumber($lineNumber);
+
+                $table = 'quotationdetails';
+                $where_coumn = 'SerialNumber';
+                $artwork_table = 'quotation_attachments_integrated';
+            }
+        }
+
         if ($producttype == 'roll') {
 
-
-            $query = " Select * from printing_preferences where sessionID = '" . $this->shopping_model->sessionid() . "' LIMIT 1 ";
-            $data_preferences = $this->db->query($query)->row_array();
-            $sheets = $data_preferences['no_of_rolls'];
-//            var_dump($this->shopping_model->sessionid());
-            // $sheets = ceil($labels / $persheets);
+            if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
+                $sheets = $line_detail->Quantity;
+            } else {
+                $query = " Select * from printing_preferences where sessionID = '" . $this->shopping_model->sessionid() . "' LIMIT 1 ";
+                $data_preferences = $this->db->query($query)->row_array();
+                $sheets = $data_preferences['no_of_rolls'];
+            }
         } else {
             $sheets = $this->input->post('qty');
             $labels = $sheets * $persheets;
