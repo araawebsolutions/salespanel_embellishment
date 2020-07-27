@@ -6198,6 +6198,8 @@ function unsave_checkout_data(){
 
         }
 
+
+
         if ($producttype == 'roll') {
             $data['coresize'] = $coresize;
             $data['woundoption'] = $woundoption;
@@ -6209,18 +6211,53 @@ function unsave_checkout_data(){
             if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $flag == 'cart_detail')) {
                 $sheets = $o_quantity;
             } else {
-                $query = " Select * from printing_preferences where sessionID = '" . $this->shopping_model->sessionid() . "' LIMIT 1 ";
-                $data_preferences = $this->db->query($query)->row_array();
-                $sheets = $data_preferences['no_of_rolls'];
+        		$edit_cart_flag = $this->input->post('edit_cart_flag');
+				if( $edit_cart_flag ) {
+					$data['edit_cart_flag'] = $edit_cart_flag;
+					$temp_basket_id = $this->input->post('temp_basket_id');
+					if( isset($temp_basket_id) && $temp_basket_id != '' ) {
+						$product_basket_data = $this->getCartAndProductData($temp_basket_id);
+						$preferences = $this->generate_preferences_data_edit_cart_flag($product_basket_data);
+						$data['IA_data'] = $this->orderModal->Get_IA_Data($product_basket_data['ID']);
+						$data['IA_all_data'] = $this->orderModal->Get_IA_All_Data($product_basket_data['ID']);
+						$data['cart_and_product_data'] = $product_basket_data;
+					}	
+
+					$sheets = $data['cart_and_product_data']['Quantity'];
+				} else {
+					$query = " Select * from printing_preferences where sessionID = '" . $this->shopping_model->sessionid() . "' LIMIT 1 ";
+	                $data_preferences = $this->db->query($query)->row_array();
+	                $sheets = $data_preferences['no_of_rolls'];
+				}
             }
         } else {
             if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $flag == 'cart_detail')) {
                 $sheets = $o_quantity;
             }else{
-                $sheets = $this->input->post('qty');
+
+            	$edit_cart_flag = $this->input->post('edit_cart_flag');
+				if( $edit_cart_flag ) {
+					$data['edit_cart_flag'] = $edit_cart_flag;
+					$temp_basket_id = $this->input->post('temp_basket_id');
+					if( isset($temp_basket_id) && $temp_basket_id != '' ) {
+						$product_basket_data = $this->getCartAndProductData($temp_basket_id);
+						$preferences = $this->generate_preferences_data_edit_cart_flag($product_basket_data);
+						$data['IA_data'] = $this->orderModal->Get_IA_Data($product_basket_data['ID']);
+						$data['IA_all_data'] = $this->orderModal->Get_IA_All_Data($product_basket_data['ID']);
+						$data['cart_and_product_data'] = $product_basket_data;
+					}	
+
+					$sheets = $data['cart_and_product_data']['Quantity'];
+				} else {
+					$sheets = $this->input->post('qty');	
+				}
+
             }
             $labels = $sheets * $persheets;
         }
+
+
+
 
         $data['unitqty'] = $unitqty;
         $data['sheets'] = $sheets;
@@ -13082,6 +13119,7 @@ function unsave_checkout_data(){
 
 		        	$history['user_id'] = $data['cart_and_product_data']['UserID'];
 					$finish_PricePrintedLabel = json_decode($data['cart_and_product_data']['FinishTypePricePrintedLabels']);
+
 					$history['selected_already_plates'] = [];
 					$history['selected_already_plates_composite_array'] = [];
 					$i=0;
@@ -13106,9 +13144,8 @@ function unsave_checkout_data(){
 					    }
 					}
 					$history['selected_already_plates'] = json_encode($history['selected_already_plates']);
-
-					// $hostory_plates_content = $this->purchased_plate_history_selected($history);
-					// $data['hostory_plates_content'] = $hostory_plates_content;
+					$hostory_plates_content = $this->purchased_plate_history_selected($history);
+					$data['hostory_plates_content'] = $hostory_plates_content;
 		    }	
         }
 

@@ -61,7 +61,7 @@
 
                             <?php
                                 $disabled_checkboxes = "";
-                                if( isset($edit_cart_flag) && $edit_cart_flag != '' ) {
+                                if( (isset($edit_cart_flag) && $edit_cart_flag != '' ) || (isset($flag) && $flag != '')) {
                                     $disabled_checkboxes = "disabled";
                                 }
 

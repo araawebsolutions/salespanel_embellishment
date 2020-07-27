@@ -629,12 +629,12 @@ tr.table_white_bar {
             <td class="invoicetable_tabel_border" align="center">
             <?
                 $print_exvat = $AccountDetail->Print_Total;
-                if ($AccountDetail->FinishTypePricePrintedLabels != '' && $AccountDetail->total_emb_cost != 0){
-                    echo $symbol."".(number_format(($print_exvat*$exchange_rate)- $AccountDetail->total_emb_cost,2));
-                } else {
-                    echo $symbol."".(number_format($print_exvat*$exchange_rate,2));
-                }
 
+                if (!preg_match("/Roll Labels/i", $AccountDetail->ProductBrand) && $AccountDetail->FinishTypePricePrintedLabels != '' && $AccountDetail->total_emb_cost != 0){
+                    echo $symbol . (number_format(($print_exvat * $exchange_rate)-$AccountDetail->total_emb_cost, 2, '.', ''));
+                } else {
+                    echo $symbol . (number_format($print_exvat * $exchange_rate, 2, '.', ''));
+                }
             ?>
             </td>
         </tr>

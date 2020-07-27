@@ -1524,7 +1524,6 @@
         var edit_cart_flag = $('#edit_cart_flag').val();
         var temp_basket_id = $('#temp_basket_id').val();
         
-
         $.ajax({
             url: mainUrl + 'ajax/material_load_preferences',
             type: "POST",
@@ -1578,15 +1577,17 @@
                     finish_content.html(data.data.finish_content);
                     cart_summery.html(data.data.cart_summery);
                     // $('#label_coresize').html(data.data.roll_cores);
+                    $('#purchased_plate_section').html(data.data.hostory_plates_content);
                     $("#brandName").text(preferences.available_in);
 
                     checkedSelectedLemOptions($.parseJSON(data.data.cart_and_product_data['FinishTypePricePrintedLabels']));
-                    pre_load_apply_preferences(preferences);
 
-                    $('#purchased_plate_section').html(data.data.hostory_plates_content);
                     
                     $('.sheet_section_radio_main_container').hide();
                     $('#standerd_inner_section_options').hide();
+                    
+                    // return;
+                    pre_load_apply_preferences(preferences);
 
                     // $('#premium_inner_section_options').hide();
                     // $('#premium_inner_section_description').hide();
@@ -1598,7 +1599,7 @@
                         $('#tab-2').css('pointer-events','none');
                         $('#tab-3').css('pointer-events','none');
                         $('#tab-4').css('pointer-events','none');
-                        $('#purchased_plate_cta').css('pointer-events','none');
+                        // $('#purchased_plate_cta').css('pointer-events','none');
 
                     }
 
@@ -1935,7 +1936,7 @@
 
                         $("[data-toggle=tooltip-orintation_popup]").tooltip('destroy');
                         $("[data-toggle=tooltip-orintation_popup]").tooltip();
-                        clear_uploaded_artworks();
+                        // clear_uploaded_artworks();
                         // $('#aa_loader').hide();
                         // intialize_progressbar();
 
@@ -4916,6 +4917,7 @@
         $('#purchased_plate_history_loader').show();
         $('#purchased_plate_section').html('');
 
+
         $.ajax({
             url: mainUrl + 'ajax/purchased_plate_history',
             type: "POST",
@@ -5234,6 +5236,18 @@
         });
 
         combination_base = $('#selected_combination_base').val();
+
+        selected_already_plates = [];
+        selected_already_plates_composite_array = [];
+        var i = 0;
+        $('.already_plates:checked').each(function () {
+            var composite_obj = {already_used_plate_id:$(this).data('embellishment_selection_id'), plate_order_no:$(this).data('plate_order_no')};
+            selected_already_plates_composite_array[i] =  JSON.stringify(composite_obj) ;
+            selected_already_plates[i] = $(this).data('embellishment_selection_id');
+            i++;
+        });
+
+
     }
 
 
