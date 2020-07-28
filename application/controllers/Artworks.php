@@ -716,7 +716,7 @@ class Artworks extends CI_Controller {
 	 			
 	 		}
 	 	}
-	 	
+
 
 		$jobno = $this->input->post('attach');
 		$comment = $this->input->post('comment');
@@ -830,14 +830,21 @@ class Artworks extends CI_Controller {
 	   
 	   $jobdetail = $this->Artwork_model->fetch_one_artwork($jobno);
 	   $OrderNumber = $jobdetail['OrderNumber'];
+	   $Serial = $jobdetail['Serial'];
+	   
 	   $ver = $jobdetail['version'];
 	   
 	   if($val=="approve"){
 	      if($type=="print"){
+
+			 $this->add_LE_plates($Serial);
 			 $array = array('status'=>70,'lastmodified'=>time(),'action'=>0,'checked'=>1,'print_file'=>$sql['file']);
 	         $this->Artwork_model->update_order_attachment($jobno,$array);
 	         $this->Artwork_model->add_to_timeline($jobno,'69',$ver,1,0);  
 		     $this->update_for_selection_to_production($OrderNumber);
+
+
+
 		  }else if($type=="soft"){
 			$this->db->update('order_attachments_integrated', array('softproof'=>$sql['softproof']), array('ID'=>$sql['attach_id']));
 			$max = $this->db->query("SELECT MAX(`ref`) as max from artwork_chat where `attach_id` = '".$sql['attach_id']."' ")->row_array();
@@ -862,7 +869,66 @@ class Artworks extends CI_Controller {
 	   
 	   $this->decisionslider($nextjob,'normal');
 	 }
+
+
+	 public function add_LE_plates($OrderSerial) {
+ 		if( isset($OrderSerial) && $OrderSerial != '' ) {
+ 			$order_details = $this->Artwork_model->fetch_order_print_job($OrderSerial);
+ 			if( isset($order_details) && count($order_details) > 0 ) {
+			 	foreach ($order_details as $key => $ordeDetail) {
+			 		$jsonData = $ordeDetail->FinishTypePricePrintedLabels;
+			 		
+			 		$LB_jsonDecode = json_decode($jsonData);
+					if( gettype($LB_jsonDecode) == "array" ) {
+						$SerialNumber = $ordeDetail->SerialNumber;
+				 		$OrderNumber = $ordeDetail->OrderNumber;
+				 		$UserID = $ordeDetail->UserID;
+
+				 		$OAI_Data = $this->Artwork_model->orderAttachmentBySerialNumber($SerialNumber);
+				 		$OAI_Data_ID = $OAI_Data['ID'];
+
+				 		foreach ($LB_jsonDecode as $key => $each_plate_data) {
+
+				 			$LE_data = $this->Home_model->label_embelishment_with_parent_title($each_plate_data->finish_parsed_title);
+				 			$LE_id = $LE_data[0]->id;
+
+				 			$parse_parent_title = $each_plate_data->parsed_parent_title;
+				 			$parse_child_title = $each_plate_data->finish_parsed_title;
+				 			$plate_cost = $each_plate_data->plate_cost;
+				 			$use_old_plate = $each_plate_data->use_old_plate;
+
+				 			if( $use_old_plate == 0 && $plate_cost > 0 ) {
+
+				 				$add_plate_data = array(
+			 						'OrderNumber'=> $ordeDetail->OrderNumber,
+			 						'UserID'=> $ordeDetail->UserID,
+			 						'SerialNumber'=> $ordeDetail->SerialNumber,
+			 						'oai_id'=> $OAI_Data_ID,
+			 						'parse_title_parent'=> $parse_parent_title,
+			 						'parse_title_child'=> $parse_child_title,
+			 						'updated_date'=> date("Y-m-d H:i:s"),
+			 						'plate_id'=> $LE_id
+		 						);
+
+		 						$this->find_add_LE_plates($add_plate_data);
+				 			}
+
+				 			
+				 		}
+					}
+			 	}
+			 }
+ 		}	
+	 }
 	 
+
+	 public function find_add_LE_plates($add_plate_data) {
+	 	if( $add_plate_data && count($add_plate_data) > 0 ) {
+	 		$this->db->insert('label_embellishment_finish_plates', $add_plate_data );
+	 	}
+
+	 }
+
 	 public function update_for_selection_to_production($OrderNumber){  
 	  $check = $this->db->query("select * from order_attachments_integrated 
      where OrderNumber LIKE '".$OrderNumber."' and  checked = 0 ")->result();

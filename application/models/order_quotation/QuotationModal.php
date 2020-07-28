@@ -315,6 +315,7 @@ class quotationModal extends CI_Model
                 'sample'=>$cartdata->OrderData,
                 'FinishTypePrintedLabels' => $cartdata->FinishTypePrintedLabels,
                 'FinishTypePricePrintedLabels' => $cartdata->FinishTypePricePrintedLabels,
+                'sequential_and_variable_data' => $cartdata->sequential_and_variable_data,
                 'total_emb_cost' => $cartdata->total_emb_cost
             );
 
@@ -1427,6 +1428,7 @@ class quotationModal extends CI_Model
               'odp_foc'=>$order_detail->qp_foc,
             'FinishTypePrintedLabels' => $order_detail->FinishTypePrintedLabels,
             'FinishTypePricePrintedLabels' => $order_detail->FinishTypePricePrintedLabels,
+            'sequential_and_variable_data' => $order_detail->sequential_and_variable_data,
             'total_emb_cost' => $order_detail->total_emb_cost
 
             );

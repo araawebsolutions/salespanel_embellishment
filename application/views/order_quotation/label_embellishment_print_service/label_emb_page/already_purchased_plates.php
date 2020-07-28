@@ -23,9 +23,7 @@
     <div class="row">
         <?php
 
-        $usrid = $this->session->userdata('userid');
-        //        $UserName = ucfirst($this->session->userdata('UserName'));
-
+        $usrid = $this->session->userdata('customer_id');
         if (isset($usrid) and $usrid != '') { ?>
             <input type="hidden" id="user_id" value="<?php echo $usrid;?>">
             <div class="col-md-8">

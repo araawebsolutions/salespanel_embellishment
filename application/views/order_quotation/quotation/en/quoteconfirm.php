@@ -757,6 +757,7 @@ tr.table_white_bar {
               $index = 0;
               $parsed_child_title = '';
               $parsed_title_price = 0;
+              $plate_cost1 = 0;
               foreach ($lem_options as $lem_option) {
 
                   $parsed_title = ucwords(str_replace("_", " ", $lem_option->finish_parsed_title));
@@ -766,7 +767,11 @@ tr.table_white_bar {
 
                   ($use_old_plate == 1 ?  $plate_cost = 0 : $plate_cost = $lem_option->plate_cost);
 
+
+
                   if ($parent_id == 1) { //For Lamination and varnish
+                      $plate_cost1 += $plate_cost;
+
                       $parsed_child_title .= $parsed_title.", ";
                       $parsed_title_price += $lem_option->finish_price;
 
@@ -780,13 +785,13 @@ tr.table_white_bar {
                               <td class="invoicetable_tabel_border"><?= "<b>".$parsed_parent_title." : </b>".$parsed_child_title?></td>
                               <td class="invoicetable_tabel_border"></td>
                               <td class="invoicetable_tabel_border" align="center">
-                                  <?= $symbol." ".number_format((($parsed_title_price+$plate_cost) / $total_labels) * $exchange_rate, 2, '.', '') ?>
+                                  <?= $symbol." ".number_format((($parsed_title_price+$plate_cost1) / $total_labels) * $exchange_rate, 2, '.', '') ?>
                                   <br>Per Label
                               </td>
                               <td class="invoicetable_tabel_border"></td>
                               <td class="invoicetable_tabel_border" align="center">
                                   <?php
-                                  echo $symbol." ".number_format(($parsed_title_price * $exchange_rate), 2) ;
+                                  echo $symbol." ".number_format((($parsed_title_price+$plate_cost1) * $exchange_rate), 2) ;
                                   ?>
                               </td>
                           </tr>
@@ -815,21 +820,40 @@ tr.table_white_bar {
                           </td>
                       </tr>
 
-                  <?php } else { //For Sequential Data ?>
+                  <?php } else { //For Sequential Data
+                      $parsed_parent_title = ucwords(str_replace("_", " ", $parsed_parent_title)); 
+                   ?>
 
                       <tr>
                           <td class="invoicetable_tabel_border"></td>
-                          <td class="invoicetable_tabel_border">Sequential Variable Data</td>
-                          <td class="invoicetable_tabel_border"></td>
-                          <td class="invoicetable_tabel_border" align="center">
-                              <?= $symbol." ".number_format((sequential_price / $total_labels) * $exchange_rate, 2, '.', '') ?>
-                              <br>Per Label
+                          <td class="invoicetable_tabel_border">
+                            <?php
+                                  echo "<b>".$parsed_parent_title." : </b>";
+                                  
+                                  if( isset($AccountDetail->sequential_and_variable_data) && $AccountDetail->sequential_and_variable_data != '' ) {
+                                    $json_data = json_decode($AccountDetail->sequential_and_variable_data);
+                                    if( gettype($json_data) == "array" ) {
+                                        foreach ($json_data as $key => $eachData) {
+                                          if( $key == 0 ) {
+                                              echo "<b>(Start #: </b>".$eachData->starting_data."<b> -  End #: </b>".$eachData->ending_data."<b>)</b>";
+                                          } else {
+                                              echo "<b>,&nbsp; (Start #: </b>".$eachData->starting_data."<b> -  End #: </b>".$eachData->ending_data."<b>)</b>&nbsp;&nbsp;";
+                                          }
+                                        }
+                                    }
+                                  }
+                                  $parsed_title_price = count($json_data) * sequential_price;
+                              ?>
                           </td>
                           <td class="invoicetable_tabel_border"></td>
                           <td class="invoicetable_tabel_border" align="center">
-                              <?php
-                              echo $symbol." ".number_format((sequential_price * $exchange_rate), 2) ;
-                              ?>
+                              <?= $symbol." ".number_format(($parsed_title_price / $AccountDetail->labels) * $exchange_rate, 2, '.', '') ?>
+                                <br>
+                                Per Label
+                          </td>
+                          <td class="invoicetable_tabel_border"></td>
+                          <td class="invoicetable_tabel_border" align="center">
+                              <?= $symbol." ".number_format(($parsed_title_price * $exchange_rate), 2) ?>
                           </td>
                       </tr>
 
@@ -839,6 +863,7 @@ tr.table_white_bar {
 
               <?php
           }  //Labels Embellishment Options Start
+
 
       $total_exvat += $linetotalexvat;
       $total_invat += $linetotalinvat;

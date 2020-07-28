@@ -278,10 +278,21 @@ class Dies extends CI_Controller {
 		return $this->getCustomOrdersListingVeiw();
 	}
     
-	public function getCustomOrdersListingVeiw(){
+    public function getCustomOrdersListingVeiw(){
 		
 		$data['irregular'] = $this->die_model->fetch_irregular();
 		$theHTMLResponse = $this->load->view('die/process_die/custom_dies_tb',$data,true);
+		//$data['quote'] = $qou;
+		$json_data = array('html'=>$theHTMLResponse);
+		$this->output->set_content_type('application/json');	
+		$this->output->set_output(json_encode($json_data));
+	}
+
+	public function getFinishPlatesListing(){
+		
+		$data['fetch_finish_plates'] = $this->die_model->fetch_finish_plates();
+		$data['plate_suppliers'] = $this->die_model->get_suppliers_list();
+		$theHTMLResponse = $this->load->view('die/process_die/finish_plates_tb',$data,true);
 		//$data['quote'] = $qou;
 		$json_data = array('html'=>$theHTMLResponse);
 		$this->output->set_content_type('application/json');	
@@ -1170,7 +1181,25 @@ public function save_reorder_flexiblepricing(){
 		$this->output->set_content_type('application/json');	
 		$this->output->set_output(json_encode($json_data));
 	}
-	
+		
+	public function updatePlateStatuses() {
+		
+		$selectedStatusValue = $this->input->post('selectedStatusValue');	
+		$plate_id = $this->input->post('plate_id');
+
+		$this->db->where("id",$plate_id);
+      	$this->db->update("label_embellishment_finish_plates",array('status'=>$selectedStatusValue,'updated_date'=>date("Y-m-d H:i:s")));
+	}
+
+	public function updateSupplierStatuses() {
+		
+		$selectedSupplierValue = $this->input->post('selectedSupplierValue');	
+		$plate_id = $this->input->post('plate_id');
+
+		$this->db->where("id",$plate_id);
+      	$this->db->update("label_embellishment_finish_plates",array('supplier_id'=>$selectedSupplierValue,'updated_date'=>date("Y-m-d H:i:s")));
+	}
+
 	function movetoproduction(){
         $diecode = $this->input->post("diecode");
         $serial = $this->input->post("serial");

@@ -29,7 +29,7 @@ class Invoice extends CI_Controller {
   
   public function getAllinvoice(){
       $this->load->model('invoice_model');
-    echo $this->invoice_model->getAllinvoice();
+      echo $this->invoice_model->getAllinvoice();
   }  
   
   

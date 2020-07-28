@@ -428,7 +428,7 @@ $exchange_rate = $this->cartModal->get_exchange_rate($currency);
                                 class="btn btn-secondarys btn-rounded waves-light waves-effect btn-upload-artwork"  data-toggle="modal" data-target=".bs-example-modal-lga"><i class="fa fa-cloud-upload" aria-hidden="true"></i>&nbsp;
                             Click here to Upload Your Artwork </button>
                             &nbsp;&nbsp;&nbsp;
-                        <button type="button" id="artworki_for_cart<?=$key?>" style="padding-right: 10px"  onclick="printed_labels()"
+                        <button type="button" id="artworki_for_cart<?=$key?>" style="padding-right: 10px"  onclick="printed_labels('<?= $record->ID ?>')"
                                 class="btn btn-secondarys btn-rounded waves-light waves-effect btn-upload-artwork"  data-toggle="modal" data-target=".bs-example-modal-lga"><i class="fa fa-cloud-upload" aria-hidden="true"></i>&nbsp;
                             Embellishment </button>
                     <?php } ?>
@@ -586,9 +586,8 @@ $exchange_rate = $this->cartModal->get_exchange_rate($currency);
 
 
 <script>
-    function printed_labels(_this)
+    function printed_labels(temp_basket_id)
     {
-        //document.location = "<?php //echo base_url();?>//material-printed-labels/";
-        document.location = "<?php echo base_url();?>order_emb_details/";
+      document.location = "<?php echo base_url();?>order_quotation/order/edit_cart_main/true/"+temp_basket_id;
     }
 </script>

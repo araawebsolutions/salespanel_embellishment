@@ -137,7 +137,7 @@
                     if( gettype($LB_jsonDecode) == "array" ) {
                         foreach ($LB_jsonDecode as $key => $each_LE) {
                             
-                            if( ($each_LE->plate_cost > 0) && ($each_LE->use_old_plate == 0) ) {
+                            if( ($each_LE->plate_cost > 0)  ) {
                               $total_files_uploaded++;
                             ?>
                                   

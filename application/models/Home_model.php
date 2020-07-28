@@ -6702,10 +6702,23 @@ class Home_model extends CI_Model
         $q = $this->db->query(" select * from integrated_attachments WHERE SessionID LIKE '" . $sid . "' AND ProductID =$ProductID AND CartID=$cartid ORDER BY ID ASC ");
         return $q->result();
     }
+
+    function fetch_uploaded_artworks_edit_cart($cartid, $ProductID)
+    {
+        $q = $this->db->query(" select * from integrated_attachments WHERE ProductID =$ProductID AND CartID=$cartid ORDER BY ID ASC ");
+        return $q->result();
+    }
+
     function fetch_uploaded_artworks_total_qty($cartid, $ProductID)
     {
         $sid = $this->session->userdata('session_id') . '-PRJB';
         $q = $this->db->query(" select sum(qty) as total_roll from integrated_attachments WHERE SessionID LIKE '" . $sid . "' AND ProductID = '" . $ProductID. "'  AND CartID= '" .$cartid. "'");
+        return $q->result();
+    }
+
+    function fetch_uploaded_artworks_total_qty_edit_cart($cartid, $ProductID)
+    {
+        $q = $this->db->query(" select sum(qty) as total_roll from integrated_attachments WHERE ProductID = '" . $ProductID. "'  AND CartID= '" .$cartid. "'");
         return $q->result();
     }
 
@@ -7685,7 +7698,7 @@ class Home_model extends CI_Model
 
 
         /************* Prices Uplift by 6% Yearly **************/
-
+        
 
         $price = $this->check_price_uplift($price);
 
@@ -9920,6 +9933,134 @@ class Home_model extends CI_Model
             }
         }
         return $matched_row;
+    }
+
+
+    // NAFEES CART PAGE EDIT STARTS
+        function get_material_data_cart_page($material_code,$type){
+
+            $qry = $this->db->query("select * from material_tooltip_info WHERE material_code LIKE '%".$material_code."%' AND type LIKE '%".$type."%' ");
+            return $qry->row_array();
+        }
+    // NAFEES CART PAGE EDIT ENDS
+
+
+
+
+    function get_material_data($material_code,$type){
+
+        $qry = $this->db->query("select * from material_tooltip_info WHERE material_code LIKE '%".$material_code."%' AND type LIKE '%".$type."%' ");
+        return $qry->row_array();
+    }
+
+    function generate_preferences_data($line_detail){
+        $preferences = array();
+
+        $preferences['ProductID'] = $line_detail->ProductID;
+        $preferences['ManufactureID'] = $line_detail->ManufactureID;
+        $preferences['manuid'] = $line_detail->ManufactureID;
+
+        if ($line_detail->ProductBrand == 'Roll Labels'){
+            $preferences['available_in'] = 'Roll';
+            $preferences['manuid'] = substr($line_detail->ManufactureID, 0, -1);
+        } elseif ($line_detail->ProductBrand == 'A4 Labels'){
+            $preferences['available_in'] = 'A4';
+        }elseif ($line_detail->ProductBrand == 'A5 Labels'){
+            $preferences['available_in'] = 'A5';
+        }elseif ($line_detail->ProductBrand == 'A3 Label'){
+            $preferences['available_in'] = 'A3';
+        }elseif ($line_detail->ProductBrand == 'SRA3 Label'){
+            $preferences['available_in'] = 'SRA3';
+        } else{
+            $preferences['available_in'] = 'Integrated';
+        }
+
+        //$preferences['selected_size'] = substr($line_detail->CategoryID, 0, -2);
+        $preferences['selected_size'] = $line_detail->CategoryID;
+        $preferences['digital_proccess_roll'] = $line_detail->Print_Type;
+        $preferences['material_code'] = $this->getmaterialcode($preferences['manuid']);
+        $preferences['die_code'] = $this->getdiecode($preferences['manuid']);
+        $material_data = $this->get_material_data($preferences['material_code'],$preferences['available_in']);
+
+        if ($preferences['available_in'] == 'Roll'){
+            $preferences['coresize'] = "R".substr($line_detail->ManufactureID, -1, 1);
+            $preferences['productcode_roll'] = $line_detail->ManufactureID;
+            $preferences['Orientation'] = $line_detail->Orientation;
+            $preferences['wound_roll'] = $line_detail->Wound;
+            $preferences['color_roll'] = $material_data['material_name'];
+            $preferences['material_roll'] = $line_detail->ColourMaterial_upd;
+            $preferences['categorycode_roll'] = $preferences['die_code'].$preferences['coresize'];
+            $preferences['adhesive_roll'] = $material_data['adhesive'];
+            $preferences['labels_roll'] = $line_detail->labels;
+            $preferences['quantity'] = $line_detail->Quantity;
+        } else {
+            $preferences['productcode_a4'] = $line_detail->ManufactureID;
+            $preferences['color_a4'] = $material_data['material_name'];
+            $preferences['material_a4'] = $line_detail->ColourMaterial_upd;
+            $preferences['categorycode_a4'] = $preferences['die_code'];
+            $preferences['adhesive_a4'] = $material_data['adhesive'];
+            $preferences['labels_a4'] = $line_detail->labels;
+            $preferences['quantity'] = $line_detail->Quantity;
+        }
+
+        return $preferences;
+    }
+
+    function emb_update_line($line_data,$flag,$refNumber,$lineNumber){
+
+        if ($flag == 'order_detail'){
+            $table = 'orderdetails';
+            $where_coumn = 'SerialNumber';
+        } elseif ($flag == 'quotation_detail'){
+            $table = 'quotationdetails';
+            $where_coumn = 'SerialNumber';
+        }elseif ($flag == 'cart_detail'){
+            $table = 'temporaryshoppingbasket';
+            $where_coumn = 'ID';
+        }
+
+        $updation_array = array(
+            'Print_Type' => $line_data['Print_Type'],
+            'Print_Design' => $line_data['Print_Design'],
+            'Free' => $line_data['Free'],
+            'Print_Qty' => $line_data['Print_Qty'],
+            'Print_UnitPrice' => $line_data['Print_UnitPrice'],
+            'Print_Total' => $line_data['Print_Total'],
+            'Wound'=>$line_data['wound'],
+            'Orientation'=>$line_data['orientation'],
+            'Quantity' => $line_data['Quantity'],
+            'labels'=>$line_data['orignalQty'],
+            'Price' => $line_data['TotalPrice'],
+            'pressproof' => $line_data['pressproof'],
+            'total_emb_cost' => $line_data['total_emb_cost'],
+            'custom_roll_and_label' => $line_data['custom_roll_and_label'],
+            'FinishTypePrintedLabels' => $line_data['FinishTypePrintedLabels'],
+            'FinishTypePricePrintedLabels' => $line_data['FinishTypePricePrintedLabels']
+        );
+
+        /*echo "<pre>";
+        print_r($updation_array);
+        echo "</pre>";
+        die();*/
+
+        $this->db->where($where_coumn, $lineNumber);
+        $this->db->update($table, $updation_array);
+
+
+    }
+
+    function getArtworkByOrder($serial){
+        return  $this->db->select("at.*")
+            ->from('order_attachments_integrated as at')
+            ->where('Serial',$serial)
+            ->get()->result();
+    }
+
+    function getArtworkForQuotation($serial){
+        return  $this->db->select("at.*")
+            ->from('quotation_attachments_integrated as at')
+            ->where('Serial',$serial)
+            ->get()->result();
     }
 
         /***************************************************/

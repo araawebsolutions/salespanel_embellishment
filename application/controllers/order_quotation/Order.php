@@ -3932,10 +3932,12 @@ class order extends CI_Controller
         $this->load->View('order_quotation/label_embellishment_print_service/page', $data);
     }
 
-    function order_emb_details()
+    function edit_cart_main( $edit_cart_flag = NULL, $temp_basket_id = NULL )
     {
-        $data['main_content'] = 'order_quotation/order_emb_details/label_emb_page/main';
-        $this->load->View('order_quotation/order_emb_details/page', $data);
+        $data['main_content'] = 'order_quotation/label_embellishment_print_service/label_emb_page/edit_cart_main';
+        $data['edit_cart_flag'] = $edit_cart_flag;
+        $data['temp_basket_id'] = $temp_basket_id;
+        $this->load->View('order_quotation/label_embellishment_print_service/page', $data);
     }
 
     function print_service()
@@ -3979,21 +3981,45 @@ class order extends CI_Controller
         $this->load->View('page', $data);
     }
 
-    function edit_emb_options($flag=NULL,$orderNumber=NULL, $serialNumber=NULL){
+    function edit_emb_options($flag=NULL,$orderNumber=NULL,$serialNumber=NULL){
 
         if (isset($flag) && $flag =='order_detail'){
             $data['lineDetail'] = $this->orderModal->getOrderDetailBySerialNumber($serialNumber);
+
+            $total_lines = $this->orderModal->getArtworkByOrder($serialNumber);
+            $uploaded_lines = $this->db->query("select count(*) as total_files from order_attachments_integrated where Serial='".$serialNumber."'
+             AND file != '' AND file != 'No File Required For Artwork To Follow' ")->row_array()['total_files'];
+            $data['artwork_total_lines'] =  count($total_lines);
+            if ($uploaded_lines > 0){
+                $data['upload_artwork'] = 'yes';
+                $data['artwork_to_follow'] = 'no';
+            } else {
+                $data['artwork_to_follow'] = 'yes';
+                $data['upload_artwork'] = 'no';
+            }
         } elseif (isset($flag) && $flag=='quotation_detail'){
             $data['lineDetail'] = $this->orderModal->getQuotationDetailBySerialNumber($serialNumber);
+
+            $total_lines = $this->orderModal->getArtworkForQuotation($serialNumber);
+            $uploaded_lines = $this->db->query("select count(*) as total_files from quotation_attachments_integrated where Serial='".$serialNumber."'
+             AND file != '' AND file != 'No File Required For Artwork To Follow' ")->row_array()['total_files'];
+            $data['artwork_total_lines'] =  count($total_lines);
+            if ($uploaded_lines > 0){
+                $data['upload_artwork'] = 'yes';
+                $data['artwork_to_follow'] = 'no';
+            } else {
+                $data['artwork_to_follow'] = 'yes';
+                $data['upload_artwork'] = 'no';
+            }
         }
 
-        $data['refNumber'] = $orderNumber;
-        $data['lineNumber'] = $serialNumber;
+        $data['refNumber'] = $orderNumber; //OrderNumber,QuotationNumber,Cartid
+        $data['lineNumber'] = $serialNumber; //O_SerialNumer,O_SerialNumner,temporarybasketlineind
         $data['flag'] = $flag;
-        $data['return_url'] = $_SERVER['HTTP_REFERER'];
+        $data['returnUrl'] = $_SERVER['HTTP_REFERER'];
         $data['main_content'] = 'order_quotation/label_embellishment_print_service/label_emb_page/edit_main';
 
-       /* echo "<pre>";
+        /*echo "<pre>";
         print_r($data);
         echo "</pre>";
         die();*/

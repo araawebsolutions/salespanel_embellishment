@@ -8427,6 +8427,7 @@ function updateNewMaterialSheets(mainTrId,flexId,matId,format) {
 	var min_sheet	= $('#min_sheet'+matId).val();
 	
 	var die_code	= $('#die_code'+matId).val();
+	//alert(die_code);
 	var proID		= $('#productid'+matId).val();
 	var printing 	= $('#prnt_dropdown_'+matId).val();
 	var printing 	= $('#prnt_dropdown_'+matId).val();

@@ -37,9 +37,8 @@
 
 
             <div class="margin-top-20" style="padding: 0px 7.5px;">
-                <input type="checkbox"
-
-                    <?php if($prices['presproof_charges'] >0){ echo "checked"; } ?> id="press_proof" />
+                    
+                <input type="checkbox" <?php if( ($prices['presproof_charges'] > 0) || (isset($cart_and_product_data['pressproof']) && $cart_and_product_data['pressproof'] == 1) ){ echo "checked"; } ?> id="press_proof" />
                 <label for="press_proof">
                     <span class="labels-embelishemnt-pressproof">Do you require a hard copy pre-production press proof? (Cost £50.00) <br></span>
                     <span class="labels-embelishemnt-pressproof-detail">You will always automatically receive an electronic free of charge soft proof for approval before your labels

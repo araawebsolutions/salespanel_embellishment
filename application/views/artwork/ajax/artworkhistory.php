@@ -4,6 +4,18 @@
         display:none !important;
     }
 }
+
+
+
+  .btn-print1 {
+    margin-left: 0px !important;
+    padding: 3px;
+  }
+  .no-border {
+    text-align: center;
+  }
+
+
 </style>
 <div class="row m-t-5">
                                         <span class="artwork-history-text pull-left col-md-6">Customer's Artwork History</span>
@@ -37,6 +49,12 @@
                         <th class="no-border">CO</th>
                         <th class="no-border">SP</th>
                         <th class="no-border">PF</th>
+
+                        <th class="no-border">Lamination & Varnishes</th>
+                        <th class="no-border">Hot Foil</th>
+                        <th class="no-border">Embossing & Debossing</th>
+                        <th class="no-border">Silk Screen Print</th>
+
                         <th class="no-border">Sheet/Rolls</th>
                         <th class="no-border">Labels</th>
 
@@ -76,6 +94,48 @@
                                         Download
                                     </button>
                                 </td>
+
+                                <td class="no-border">
+                                    <? if(isset($row->laminations_varnishes) && $row->laminations_varnishes!=""){?>  
+                                        <a href="<?=FILEPATH?>laminations_varnishes/<?=$row->laminations_varnishes?>" target="_blank"> 
+                                            <button type="button" class="btn btn-outline-dark waves-light waves-effect btn-print1">Download</button>
+                                        </a>
+                                    <?php } else {
+                                      echo "-----";
+                                    } ?>
+
+                                </td>
+
+                                <td class="no-border">
+                                    <? if(isset($row->hot_foil) && $row->hot_foil!=""){?>  
+                                        <a href="<?=FILEPATH?>hot_foil/<?=$row->hot_foil?>" target="_blank"> 
+                                            <button type="button" class="btn btn-outline-dark waves-light waves-effect btn-print1">Download</button>
+                                        </a>
+                                    <?php } else {
+                                      echo "-----";
+                                    } ?>
+                                </td>
+
+                                <td class="no-border">
+                                    <? if(isset($row->embossing_debossing) && $row->embossing_debossing!=""){?>  
+                                        <a href="<?=FILEPATH?>embossing_debossing/<?=$row->embossing_debossing?>" target="_blank"> 
+                                            <button type="button" class="btn btn-outline-dark waves-light waves-effect btn-print1">Download</button>
+                                        </a>
+                                    <?php } else {
+                                      echo "-----";
+                                    } ?>
+                                </td>
+
+                                <td class="no-border">
+                                  <? if(isset($row->silkscreen_print) && $row->silkscreen_print!=""){?>  
+                                      <a href="<?=FILEPATH?>silkscreen_print/<?=$row->silkscreen_print?>" target="_blank"> 
+                                          <button type="button" class="btn btn-outline-dark waves-light waves-effect btn-print1">Download</button>
+                                      </a>
+                                  <?php } else {
+                                      echo "-----";
+                                    } ?>
+                                </td>
+
 
                                  <td class="no-border"><?=$row->qty?></td>
                                  <td class="no-border"><?=$row->labels?></td>
