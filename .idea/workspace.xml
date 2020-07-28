@@ -6,6 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="c8650364-b977-44cb-b822-5b936e6073e8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/application/controllers/Artworks.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/Artworks.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/controllers/Auth.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/Auth.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/controllers/Credit_accounts.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/Credit_accounts.php" afterDir="false" />
@@ -724,6 +725,9 @@
       <change beforePath="$PROJECT_DIR$/application/views/return/updateTicket.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/return/updateTicket.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/views/vat_exempt_orders.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/vat_exempt_orders.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/theme/assets/js/custom.js" beforeDir="false" afterPath="$PROJECT_DIR$/theme/assets/js/custom.js" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/application/controllers/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/ajax.php" afterDir="false" />
+>>>>>>> f66ca60a23d1e643b639d11a186d6bc138eff70c
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -827,6 +831,7 @@
       <workItem from="1592550204407" duration="24402000" />
       <workItem from="1592808929121" duration="30448000" />
       <workItem from="1592901595485" duration="27598000" />
+<<<<<<< HEAD
       <workItem from="1592991191219" duration="836000" />
       <workItem from="1593003373304" duration="5208000" />
       <workItem from="1593009907553" duration="2979000" />
@@ -864,11 +869,44 @@
       <workItem from="1595488093993" duration="27773000" />
       <workItem from="1595573967490" duration="26604000" />
       <workItem from="1595832326180" duration="39963000" />
+=======
+      <workItem from="1592991191219" duration="85000" />
+      <workItem from="1593608263958" duration="475000" />
+      <workItem from="1593608780691" duration="8594000" />
+      <workItem from="1593673171197" duration="6950000" />
+      <workItem from="1593760114316" duration="21424000" />
+      <workItem from="1594019171002" duration="6728000" />
+      <workItem from="1594107782121" duration="18108000" />
+      <workItem from="1594192092509" duration="28090000" />
+      <workItem from="1594279237657" duration="17849000" />
+      <workItem from="1594367258305" duration="14879000" />
+      <workItem from="1594624948637" duration="22158000" />
+      <workItem from="1594715736797" duration="23275000" />
+      <workItem from="1594796537131" duration="22659000" />
+      <workItem from="1594884874439" duration="23570000" />
+      <workItem from="1594971230966" duration="25534000" />
+      <workItem from="1595228733251" duration="29648000" />
+      <workItem from="1595314424280" duration="29206000" />
+      <workItem from="1595402086562" duration="28106000" />
+      <workItem from="1595489135039" duration="26967000" />
+      <workItem from="1595573441950" duration="29820000" />
+      <workItem from="1595834108618" duration="9895000" />
+>>>>>>> f66ca60a23d1e643b639d11a186d6bc138eff70c
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.History.Properties">
+    <option name="COLUMN_ORDER">
+      <list>
+        <option value="0" />
+        <option value="2" />
+        <option value="3" />
+        <option value="1" />
+      </list>
+    </option>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">

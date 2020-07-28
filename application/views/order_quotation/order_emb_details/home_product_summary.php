@@ -1,1 +1,0 @@
-<?php include(APPPATH . '/views/material_print_service/product_overview_sidebar.php'); ?>

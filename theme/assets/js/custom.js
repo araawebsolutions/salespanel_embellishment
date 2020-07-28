@@ -609,7 +609,7 @@ function addToBasket() {
     var price = $('#price').text().slice(2);
     var original_price = $('#original_price').val();
     var checkoutArtwork = $('#checkoutArtwork').val();
-  var qty = $('#myqty' + serialNumber).val();
+    var qty = $('#myqty' + serialNumber).val();
     
       var Custom_design = $('#nodesign2001').val();
       var Custom_labels = $('#at_label2001').val();
@@ -1947,7 +1947,7 @@ function addToPrintingCart(serialNumber, productId, orderNumber, manfactureId, b
 				$('#reloadmypage').hide();
 				$('#addTobskt').show();
            }
-			update_topbasket();
+			// update_topbasket();
 			
         },
 
@@ -8017,7 +8017,7 @@ function checkcart(ProductBrand, qty, batch, ManufactureID, Printing, dataNo) {
 
 
 
-$(document).on("click", ".sheet_updater", function(event) {
+$(document).on("click", ".sheet_updater_old", function(event) {
 	
 	var id = $(this).attr('data-id');
 	var _this = this;
