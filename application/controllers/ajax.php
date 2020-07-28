@@ -7394,7 +7394,7 @@ function unsave_checkout_data(){
                             'qty' => $sheets,
                             'source' => "backoffice",
                             'file' => $response,
-                            'status' => '64',
+                            'status' => 64,
                         );
 
                         $this->db->insert($artwork_table, $artowrk);
@@ -7846,6 +7846,25 @@ function unsave_checkout_data(){
 
                 //$persheet = 44;
 
+                $product_branding = $this->ProductBrandByProductId($productid);
+                $product_branding = str_replace(" Labels", "", $product_branding);
+                $product_branding = str_replace(" Label", "", $product_branding);
+
+
+                if (preg_match("/SRA3/i", $product_branding)) {
+                    $brand = 'SRA3';
+                } else if (preg_match("/A5/i", $product_branding)) {
+                    $brand = 'A5';
+                } else if (preg_match("/A3/i", $product_branding)) {
+                    $brand = 'A3';
+                } else if (preg_match("/Roll/i", $product_branding)) {
+                    $brand = 'Rolls';
+                } else if (preg_match("/Integrated/i", $product_branding)) {
+                    $brand = 'Integrated';
+                } else {
+                    $brand = 'A4';
+                }
+
 
                 $plate_cost = 0;
                 $minus_plate_cost = array();
@@ -7902,17 +7921,20 @@ function unsave_checkout_data(){
 
                 if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
 
+
                     $artowrk = array(
                         'UserID' => $line_detail->UserID,
                         'OrderNumber'=> $refNumber,
                         'Serial' => $lineNumber,
+                        'Brand' => $brand,
                         'ProductID' => $productid,
                         'diecode' => $line_detail->ManufactureID,
                         'name' => $artworkname,
+                        'source' => "backoffice",
                         'labels' => $labels,
                         'qty' => $sheets,
-                        'file' => "No File Required For Artwork To Follow ",
-                        'status' => 'confirm',
+                        'file' => "No File Required For Artwork To Follow",
+                        'status' => 64,
                     );
                     $this->db->insert($artwork_table, $artowrk);
 
