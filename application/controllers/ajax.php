@@ -3365,7 +3365,13 @@ function add_search_log(){
 	}
 	
 	function ProductBrand($id){
-		$query=$this->db->query("select  ProductBrand from products  where ManufactureID='".$id."'");
+		$query=$this->db->query("select  ProductBrand from products  where ManufactureID = '".$id."'");
+		$res=$query->row_array();
+		return $res['ProductBrand'];
+	}
+
+	function ProductBrandByProductId($id){
+		$query=$this->db->query("select  ProductBrand from products  where ProductID = '".$id."'");
 		$res=$query->row_array();
 		return $res['ProductBrand'];
 	}
@@ -7273,6 +7279,26 @@ function unsave_checkout_data(){
 
                 $cartid = $this->input->post('cartid');
                 $productid = $this->input->post('productid');
+
+				$product_branding = $this->ProductBrandByProductId($productid);
+                $product_branding = str_replace(" Labels", "", $product_branding);
+                $product_branding = str_replace(" Label", "", $product_branding);
+
+
+                if (preg_match("/SRA3/i", $product_branding)) {
+                    $brand = 'SRA3';
+                } else if (preg_match("/A5/i", $product_branding)) {
+                    $brand = 'A5';
+                } else if (preg_match("/A3/i", $product_branding)) {
+                    $brand = 'A3';
+                } else if (preg_match("/Roll/i", $product_branding)) {
+                    $brand = 'Rolls';
+                } else if (preg_match("/Integrated/i", $product_branding)) {
+                    $brand = 'Integrated';
+                } else {
+                    $brand = 'A4';
+                }
+
                 $labels = $this->input->post('labels');
                 $sheets = $this->input->post('sheets');
                 $artworkname = $this->input->post('artworkname');
@@ -7360,13 +7386,15 @@ function unsave_checkout_data(){
                             'UserID' => $line_detail->UserID,
                             'OrderNumber'=> $refNumber,
                             'Serial' => $lineNumber,
+                            'Brand' => $brand,
                             'ProductID' => $productid,
                             'diecode' => $line_detail->ManufactureID,
                             'name' => $artworkname,
                             'labels' => $labels,
                             'qty' => $sheets,
+                            'source' => "backoffice",
                             'file' => $response,
-                            'status' => 'confirm',
+                            'status' => '64',
                         );
 
                         $this->db->insert($artwork_table, $artowrk);
@@ -8820,12 +8848,16 @@ function unsave_checkout_data(){
             } else {
                 $sid = $this->session->userdata('session_id') . '-PRJB';
                 $artowrk = array('labels' => $labels,
-                    'qty' => $sheets,
-                    'status' => 'confirm');
+                    'qty' => $sheets
+                );
 
                 if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
                     $this->db->update($artwork_table, $artowrk, array('ID' => $id));
                 } else {
+                	$artowrk = array('labels' => $labels,
+                    'qty' => $sheets,
+                    'status' => 'confirm');
+
                     $this->db->update('integrated_attachments', $artowrk, array('ID' => $id));
                 }
 

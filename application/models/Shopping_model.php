@@ -1415,7 +1415,7 @@ function show_quotation_basket(){
 
                             //new code
                             $checked = ($int_row->source=='flash')?'1':'0';
-                            $des_source = ($int_row->source=='flash')?'flash':'web';
+                            $des_source = ($int_row->source=='flash')?'flash':'backoffice';
                             $job_status = ($int_row->source=='flash')?70:64;
                             $approve_date_field = ($int_row->source=='flash')?time():0;
                             $attach_array = array('OrderNumber'=>$OrderNumber,
