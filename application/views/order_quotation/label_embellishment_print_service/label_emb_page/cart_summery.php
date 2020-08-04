@@ -185,10 +185,13 @@ $assets = Assets;?>
                                                         $SID = $this->shopping_model->sessionid() . '-PRJB';
                                                         $cartid = $this->home_model->get_db_column('temporaryshoppingbasket', 'id', 'SessionID', $SID);
                                                     }
+
+                                                    $acutal_labels = $this->home_model->get_db_column('temporaryshoppingbasket', 'orignalQty', 'ID', $cartid);
+                                                    $acutal_sheets = $this->home_model->get_db_column('temporaryshoppingbasket', 'Quantity', 'ID', $cartid);
+
                                                 }
 
-                                                $acutal_labels = $this->home_model->get_db_column('temporaryshoppingbasket', 'orignalQty', 'ID', $cartid);
-                                                $acutal_sheets = $this->home_model->get_db_column('temporaryshoppingbasket', 'Quantity', 'ID', $cartid);
+                                                
 
                                                 $total_labels = 0;
                                                 $total_emb_and_plate_cost =  $prices['label_finish'] + $total_emb_plate_price;

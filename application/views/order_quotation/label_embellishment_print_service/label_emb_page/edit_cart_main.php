@@ -1595,10 +1595,10 @@
 
                     //disable click on page load on emb option tabs
                     if (preferences.available_in != "Roll"){
-                        $('#tab-1').css('pointer-events','none');
-                        $('#tab-2').css('pointer-events','none');
-                        $('#tab-3').css('pointer-events','none');
-                        $('#tab-4').css('pointer-events','none');
+                        // $('#tab-1').css('pointer-events','none');
+                        // $('#tab-2').css('pointer-events','none');
+                        // $('#tab-3').css('pointer-events','none');
+                        // $('#tab-4').css('pointer-events','none');
                         // $('#purchased_plate_cta').css('pointer-events','none');
 
                     }
