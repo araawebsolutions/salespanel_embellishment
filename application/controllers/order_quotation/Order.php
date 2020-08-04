@@ -95,7 +95,6 @@ class order extends CI_Controller
         $data['environment'] = $this->rest_paypal->environment();
         /**********************************************************************/
 
-
         $this->load->view('page', $data);
     }
 
@@ -3985,6 +3984,7 @@ class order extends CI_Controller
 
         if (isset($flag) && $flag =='order_detail'){
             $data['lineDetail'] = $this->orderModal->getOrderDetailBySerialNumber($serialNumber);
+            $data['customer_id'] = $data['lineDetail']->UserID;
 
             $total_lines = $this->orderModal->getArtworkByOrder($serialNumber);
             $uploaded_lines = $this->db->query("select count(*) as total_files from order_attachments_integrated where Serial='".$serialNumber."'
@@ -3999,6 +3999,7 @@ class order extends CI_Controller
             }
         } elseif (isset($flag) && $flag=='quotation_detail'){
             $data['lineDetail'] = $this->orderModal->getQuotationDetailBySerialNumber($serialNumber);
+            $data['customer_id'] = $data['lineDetail']->CustomerID;
 
             $total_lines = $this->orderModal->getArtworkForQuotation($serialNumber);
             $uploaded_lines = $this->db->query("select count(*) as total_files from quotation_attachments_integrated where Serial='".$serialNumber."'
@@ -4013,8 +4014,10 @@ class order extends CI_Controller
             }
         }
 
-        $data['refNumber'] = $orderNumber; //OrderNumber,QuotationNumber,Cartid
-        $data['lineNumber'] = $serialNumber; //O_SerialNumer,O_SerialNumner,temporarybasketlineind
+        $this->session->set_userdata('customer_id',$data['customer_id']);
+
+        $data['refNumber'] = $orderNumber; //OrderNumber,QuotationNumber
+        $data['lineNumber'] = $serialNumber; //O_SerialNumer,Q_SerialNumner
         $data['flag'] = $flag;
         $data['returnUrl'] = $_SERVER['HTTP_REFERER'];
         $data['main_content'] = 'order_quotation/label_embellishment_print_service/label_emb_page/edit_main';

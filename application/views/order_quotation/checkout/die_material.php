@@ -200,6 +200,12 @@ if ($quotationDetail->regmark != 'Y') {
 
                 </button>
 
+                <span style="margin-left: 10px;">
+
+                    <a id="edit_order_line" href="<?php echo main_url.'order_quotation/order/edit_emb_options/quotation_detail/'.$quotationDetail->QuotationNumber.'/'.$quotationDetail->SerialNumber; ?>" class="m-20 btn btn-secondarys btn-rounded waves-light waves-effect btn-upload-artwork" >&nbsp; Embellishment </a>
+
+                </span>
+
 
 
             </div>
@@ -266,11 +272,17 @@ if ($quotationDetail->regmark != 'Y') {
 
             <?php
             if ($quotationDetail->FinishTypePricePrintedLabels != '' && $quotationDetail->total_emb_cost != 0){
-                echo $symbol . (number_format(($quotationDetail->Print_Total * $quotation->exchange_rate)-$quotationDetail->total_emb_cost, 2, '.', ''));
-                $row_total_line += ($quotationDetail->Print_Total * $quotation->exchange_rate)-$quotationDetail->total_emb_cost;
+                if (!preg_match("/Roll Labels/i", $quotationDetail->ProductBrand)){
+                    echo $symbol . (number_format(($quotationDetail->Print_Total * $exchange_rate)-$quotationDetail->total_emb_cost, 2, '.', ''));
+                    $row_total_line += ($quotationDetail->Print_Total * $exchange_rate)-$quotationDetail->total_emb_cost;
+                } else {
+                    echo $symbol . (number_format(($quotationDetail->Print_Total * $exchange_rate), 2, '.', ''));
+                    $row_total_line += ($quotationDetail->Print_Total * $exchange_rate)-$quotationDetail->total_emb_cost;
+                }
+
             } else {
                 echo $symbol . (number_format($quotationDetail->Print_Total * $exchange_rate, 2, '.', ''));
-                $row_total_line += ($quotationDetail->Print_Total * $quotation->exchange_rate);
+                $row_total_line += ($quotationDetail->Print_Total * $exchange_rate);
             }
             ?>
         </td>
