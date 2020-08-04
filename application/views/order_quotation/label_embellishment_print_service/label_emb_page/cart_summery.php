@@ -159,16 +159,18 @@ $assets = Assets;?>
                                                 <!--                                    plain print price section start-->
                                                 <?php                                                
 
-                                                if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $flag == 'cart_detail')) {
+                                                if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
                                                     if ($flag == 'order_detail') {
                                                         $table = 'orderdetails';
                                                         $where_coumn = 'SerialNumber';
+                                                        $acutal_labels = $this->home_model->get_db_column($table, 'labels', $where_coumn, $lineNumber);
                                                     } elseif ($flag == 'quotation_detail') {
                                                         $table = 'quotationdetails';
                                                         $where_coumn = 'SerialNumber';
+                                                        $acutal_labels = $this->home_model->get_db_column($table, 'orignalQty', $where_coumn, $lineNumber);
                                                     }
                                                     $cartid = '';
-                                                    $acutal_labels = $this->home_model->get_db_column($table, 'labels', $where_coumn, $lineNumber);
+
                                                     $acutal_sheets = $this->home_model->get_db_column($table, 'Quantity', $where_coumn, $lineNumber);
 
                                                 } else {
@@ -188,10 +190,9 @@ $assets = Assets;?>
 
                                                     $acutal_labels = $this->home_model->get_db_column('temporaryshoppingbasket', 'orignalQty', 'ID', $cartid);
                                                     $acutal_sheets = $this->home_model->get_db_column('temporaryshoppingbasket', 'Quantity', 'ID', $cartid);
-
                                                 }
 
-                                                
+
 
                                                 $total_labels = 0;
                                                 $total_emb_and_plate_cost =  $prices['label_finish'] + $total_emb_plate_price;
