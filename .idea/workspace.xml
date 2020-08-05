@@ -18,6 +18,21 @@
       <change beforePath="$PROJECT_DIR$/application/controllers/Vat_exempt_orders.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/Vat_exempt_orders.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/controllers/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/ajax.php" afterDir="false" />
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+      <change beforePath="$PROJECT_DIR$/application/controllers/order_quotation/Order.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/order_quotation/Order.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Home_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Home_model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/checkout/die_material.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/checkout/die_material.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/already_purchased_plates.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/already_purchased_plates.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/cart_summery.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/cart_summery.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/edit_main.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/edit_main.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/upload/roll_artwork_files.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/upload/roll_artwork_files.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_detail/order_detail_page.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/order_detail/order_detail_page.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/quotation/en/quoteconfirm.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/quotation/en/quoteconfirm.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/quotation/fr/quoteconfirm.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/quotation/fr/quoteconfirm.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/quotation/quotation_detail_page.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/quotation/quotation_detail_page.php" afterDir="false" />
+=======
+>>>>>>> dc1ea88b077de27b9c5eb7a19ee7c0b202ed173e
       <change beforePath="$PROJECT_DIR$/application/controllers/cart/Cart.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/cart/Cart.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/controllers/cart/Cart_live.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/cart/Cart_live.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/controllers/credits/Credits.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/credits/Credits.php" afterDir="false" />
@@ -729,6 +744,7 @@
 =======
       <change beforePath="$PROJECT_DIR$/application/controllers/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/ajax.php" afterDir="false" />
 >>>>>>> f66ca60a23d1e643b639d11a186d6bc138eff70c
+<<<<<<< HEAD
 =======
       <change beforePath="$PROJECT_DIR$/application/controllers/order_quotation/Order.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/order_quotation/Order.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/models/Home_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Home_model.php" afterDir="false" />
@@ -742,6 +758,9 @@
       <change beforePath="$PROJECT_DIR$/application/views/order_quotation/quotation/fr/quoteconfirm.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/quotation/fr/quoteconfirm.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/views/order_quotation/quotation/quotation_detail_page.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/quotation/quotation_detail_page.php" afterDir="false" />
 >>>>>>> 390930ad291446fc46586287f6aade688a965aa7
+=======
+>>>>>>> b343bb2fef8982a0b98f69ac0862dd07914484dc
+>>>>>>> dc1ea88b077de27b9c5eb7a19ee7c0b202ed173e
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -919,15 +938,25 @@
       <workItem from="1595489135039" duration="26967000" />
       <workItem from="1595573441950" duration="29820000" />
 <<<<<<< HEAD
+<<<<<<< HEAD
       <workItem from="1595834108618" duration="9895000" />
 >>>>>>> f66ca60a23d1e643b639d11a186d6bc138eff70c
 =======
+=======
+>>>>>>> dc1ea88b077de27b9c5eb7a19ee7c0b202ed173e
       <workItem from="1595834108618" duration="10489000" />
       <workItem from="1595920227384" duration="12014000" />
       <workItem from="1596005921574" duration="2762000" />
       <workItem from="1596100053975" duration="21964000" />
       <workItem from="1596526909155" duration="12441000" />
+<<<<<<< HEAD
 >>>>>>> 390930ad291446fc46586287f6aade688a965aa7
+=======
+=======
+      <workItem from="1595834108618" duration="9895000" />
+>>>>>>> f66ca60a23d1e643b639d11a186d6bc138eff70c
+>>>>>>> b343bb2fef8982a0b98f69ac0862dd07914484dc
+>>>>>>> dc1ea88b077de27b9c5eb7a19ee7c0b202ed173e
     </task>
     <servers />
   </component>

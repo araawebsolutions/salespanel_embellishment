@@ -271,7 +271,6 @@
                 <!--               --><?php //include('printing_process_and_product.php') ?>
 
                 <!-- Label Finishes & Embellishments & Cart Summary Starts -->
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
                 <section>
                     <div class="row">
                         <div id="finish_content" class="col-md-9 col-xs-12">

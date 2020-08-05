@@ -236,6 +236,7 @@
 <?php
 if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $flag == 'cart_detail')) {
     $lem_options = $lineDetail->FinishTypePricePrintedLabels;
+
     ?>
 
     <input type="hidden" id="selected_digital_process" name="selected_digital_process" value="<?=$lineDetail->Print_Type?>">
@@ -290,7 +291,7 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
                 <!--               --><?php //include('printing_process_and_product.php') ?>
 
                 <!-- Label Finishes & Embellishments & Cart Summary Starts -->
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+<!--                <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>-->
                 <section>
                     <div class="row">
                         <div id="finish_content" class="col-md-9 col-xs-12">
