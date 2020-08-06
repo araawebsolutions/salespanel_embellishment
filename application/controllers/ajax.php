@@ -13747,9 +13747,11 @@ function unsave_checkout_data(){
         if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
             if($flag == 'order_detail'){
                 $line_detail = $this->orderModal->getOrderDetailBySerialNumber($lineNumber);
+                $history['user_id'] = $line_detail->UserID;
             }
             elseif ($flag == 'quotation_detail'){
                 $line_detail = $this->orderModal->getQuotationDetailBySerialNumber($lineNumber);
+                $history['user_id'] = $line_detail->CustomerID;
             }
             $preferences = $this->home_model->generate_preferences_data($line_detail,$flag);
         }
@@ -13903,7 +13905,7 @@ function unsave_checkout_data(){
 
 
 
-            $history['user_id'] = $line_detail->UserID;
+
             $finish_PricePrintedLabel = json_decode($line_detail->FinishTypePricePrintedLabels);
             $history['selected_already_plates'] = [];
             $history['selected_already_plates_composite_array'] = [];
