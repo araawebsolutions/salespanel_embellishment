@@ -3412,7 +3412,6 @@ class order extends CI_Controller
         $this->orderModal->changestatus($id, $status);
         
         if ($status==10) {
-
             $orderNumber = $this->orderModal->getordernumber($id);
 
             $message = " Dear Admin, The Order Number (" . $orderNumber . ") is given On Hold status by " . $this->loginame . ".";
@@ -3445,7 +3444,6 @@ class order extends CI_Controller
 
 
     public function add_contact()
-
     {
         if ($this->input->post() == TRUE) {
             /*----------Newsletter Subscription---------------*/
