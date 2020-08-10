@@ -586,6 +586,83 @@ $exchange_rate = $this->cartModal->get_exchange_rate($currency);
 
 
 <script>
+    function custom_die_emb(_this)
+    {
+        $(_this).parents('.mainContainer').find('.aa_loader').show();
+        var _this = $(_this);
+
+        var no_of_labels = $(_this).parents('.mainContainer').find('.plainsheet_input').val();
+        var labels = $(_this).parents('.mainContainer').find('.LabelsPerSheet').val();
+        var input_id = $(_this).parents('.mainContainer').find('.plainsheet_input');
+        var qty = parseInt(input_id.val());
+        var unitqty = $(_this).parents('.mainContainer').find('.plainsheet_unit').val(); //Sheets Labels
+
+        unitqty = $.trim(unitqty);
+
+
+
+
+
+
+        if (qty % labels != 0 && unitqty == 'Labels') {
+            var multipyer = parseInt(labels) * parseInt(parseInt(qty / labels) + 1);
+            input_id.val(multipyer);
+            var qty = multipyer;
+        }
+        if (unitqty == 'Labels') {
+            no_of_labels = parseInt(qty / labels);
+        }
+        else if (unitqty == 'Sheets') {
+            no_of_labels = parseInt(qty);
+        }
+
+        var selected_size = $(_this).parents('.mainContainer').find('.selected_size').val();
+        var available_in = $(_this).parents('.mainContainer').find('.available_in').val();
+        var type = $(_this).parents('.mainContainer').find('.type').val();
+        var material = $(_this).parents('.mainContainer').find('.material').val();
+        var color = $(_this).parents('.mainContainer').find('.color').val();
+        var adhesive = $(_this).parents('.mainContainer').find('.adhesive').val();
+
+
+        var source = $(_this).parents('.mainContainer').find('.source').val();
+
+
+
+
+        var productcode = $(_this).parents('.mainContainer').find('.manfactureid').val();
+
+        var dieCode = $(_this).parents('.mainContainer').find('.dieCode').val();
+        /*alert(available_in);
+        var dieCode = 'SCO1';*/
+
+        $.ajax({
+
+            url: mainUrl + 'ajax/addPrintingPreferences',
+            type: "POST",
+            async: "false",
+            dataType: "html",
+            data: {
+                no_of_labels: no_of_labels,
+                productcode: productcode,
+                dieCode: dieCode,
+                source: source,
+                selected_size: selected_size,
+                available_in: available_in,
+                material: material,
+                color: color,
+                adhesive: adhesive,
+                type: type
+            },
+            success: function (data) {
+                if(data)
+                {
+                    //document.location = "<?php echo base_url();?>new_print_service/";
+                }
+                $(_this).parents('.mainContainer').find('.aa_loader').hide();
+            }
+        });
+    }
+
     function printed_labels(temp_basket_id)
     {
       document.location = "<?php echo base_url();?>order_quotation/order/edit_cart_main/true/"+temp_basket_id;

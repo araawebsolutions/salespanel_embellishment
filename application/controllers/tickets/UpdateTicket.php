@@ -9,10 +9,6 @@ class updateTicket extends CI_Controller {
 		$this->load->database();
 		$this->load->model('return/updateTicket_model');
 		$this->home_model->user_login_ajax();
-		//$this->load->model('Rejected_artwork_model');
-		//$this->session->set_userdata('UserName','kamran');
-		//$this->session->set_userdata('UserID','640847'); //640847 // 641147
-		$this->session->set_userdata('UserTypeID','50');
 
          /*error_reporting(-1);
       ini_set('display_errors', 1);

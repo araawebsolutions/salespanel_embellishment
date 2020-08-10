@@ -13,6 +13,7 @@ class search extends CI_Controller
         $this->load->model('cart/cartModal');
         $this->load->model('order_quotation/quotationModal');
         $this->load->model('quoteModel');
+        $this->load->model('order_quotation/orderModal');
         $this->home_model->user_login_ajax();
         //error_reporting(E_ALL);
     }
@@ -4056,6 +4057,10 @@ class search extends CI_Controller
     function calculate_roll_price_new()
     {
 
+        /*echo '<pre>';
+        print_r($_POST);
+        exit;*/
+
         if (!$_POST) {
             $_POST = json_decode(file_get_contents('php://input'), true);
         }
@@ -4112,6 +4117,107 @@ class search extends CI_Controller
 
             $this->db->where('ID', $this->input->post('matId'));
             $this->db->update('flexible_dies_mat', $array);
+
+
+
+
+
+
+
+            //print_r($menu); exit;
+            $available_in = $this->input->post('formats');;
+            $no_of_labels = $this->input->post('roll');
+            //print_r($available_in); exit;
+            if ($available_in == 'A4' || $available_in == 'A3' || $available_in == 'SRA3' || $available_in == 'A5') {
+
+                /*preg_match('/(\d+)\D*$/', $productcode, $m);
+                $lastnum = $m[1];
+                $mat_code = explode($lastnum, $productcode);
+                $c = strtoupper($mat_code[1]);
+                print_r($productcode.' = '.$c);
+                print_r('<br>');
+                exit;*/
+
+                $productcode = $menu;
+                $length = (strlen($productcode) - 1);
+                $productcode1 = substr($productcode, 0, $length);
+                preg_match('/(\d+)\D*$/', $productcode1, $m);
+                $lastnum = $m[1];
+                $mat_code = explode($lastnum, $productcode1);
+                $first = strtoupper($mat_code[1]);
+                $productcode_a4 = explode($first, $productcode1)[0];
+                //$productcode_a4 = 'SCO1';
+                //$productcode = 'SCO1';
+                //print_r($productcode.' = '.$productcode_a4); exit;
+
+//print_r($available_in); exit;
+                $pref = array(
+                    'email' => $email,
+                    'sessionID' => $this->session->userdata('session_id'),
+                    'shape' => '',
+                    'labels_a4' => $no_of_labels,
+                    'source' => 'custom_die',
+                    'opposite' => "false",
+                    'selected_size' => '',
+                    'available_in' => $available_in,
+                    'categorycode_a4' => 'SCO1',
+                    'productcode_a4' => $menu,
+                    'material_a4' => '',
+                    'adhesive_a4' => '',
+                    'color_a4' => '',
+                );
+            } else if ($available_in == 'Roll') {
+//print_r($menu); exit;
+                $productcode = $menu;
+                $length = (strlen($productcode) - 1);
+                $productcode1 = substr($productcode, 0, $length);
+                preg_match('/(\d+)\D*$/', $productcode1, $m);
+                $lastnum = $m[1];
+                $mat_code = explode($lastnum, $productcode1);
+                $first = strtoupper($mat_code[1]);
+                $productcode_a4 = explode($first, $productcode1)[0];
+
+
+                $pref = array(
+                    'email' => $email,
+                    'sessionID' => $this->session->userdata('session_id'),
+                    'shape' => '',
+                    'labels_roll' => $no_of_labels,
+                    'source' => 'custom_die',
+                    'opposite' => "false",
+                    'selected_size' => '',
+                    'available_in' => $available_in,
+                    'categorycode_roll' => 'SCO1',
+                    'productcode_roll' => $productcode,
+                    'material_roll' => '',
+                    'no_of_rolls' => $no_of_labels,
+
+                    'orientation' => '',
+                    'adhesive_roll' => '',
+                    'color_roll' => '',
+                    'coresize' => $this->input->post('size'),
+                    'wound_roll' => $this->input->post('wound')
+                );
+            }
+
+
+            $this->orderModal->addPrintingPreferences($pref);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
             $shapes = $this->input->post('shape');
@@ -4453,6 +4559,9 @@ class search extends CI_Controller
 
     function calculate_sheet_priceCustomDiesSheets()
     {
+        /*echo '<pre>';
+        print_r($_POST);
+        exit;*/
         if (!$_POST) {
             $_POST = json_decode(file_get_contents('php://input'), true);
         }
@@ -4462,6 +4571,7 @@ class search extends CI_Controller
             $cart_id = '';
             $qty = $this->input->post('qty');
             $menu = $this->input->post('menuid');
+            $productcode = $this->input->post('menuid');
             $labels = $this->input->post('labels');
             $labeltype = $this->input->post('labeltype');
             $productid = $this->input->post('prd_id');
@@ -4502,6 +4612,101 @@ class search extends CI_Controller
             $this->db->update('flexible_dies_mat', $array);
 
 
+
+
+
+
+
+            $available_in = $bran;
+            $no_of_labels = $this->input->post('qty');
+            //print_r($no_of_labels); exit;
+            if ($available_in == 'A4' || $available_in == 'A3' || $available_in == 'SRA3' || $available_in == 'A5') {
+
+                /*preg_match('/(\d+)\D*$/', $productcode, $m);
+                $lastnum = $m[1];
+                $mat_code = explode($lastnum, $productcode);
+                $c = strtoupper($mat_code[1]);
+                print_r($productcode.' = '.$c);
+                print_r('<br>');
+                exit;*/
+
+                $productcode = $menu;
+                $length = (strlen($productcode) - 1);
+                $productcode1 = substr($productcode, 0, $length);
+                preg_match('/(\d+)\D*$/', $productcode1, $m);
+                $lastnum = $m[1];
+                $mat_code = explode($lastnum, $productcode1);
+                $first = strtoupper($mat_code[1]);
+                $productcode_a4 = explode($first, $productcode1)[0];
+                //$productcode_a4 = 'SCO1';
+                //$productcode = 'SCO1';
+                //print_r($productcode.' = '.$productcode_a4); exit;
+
+//print_r($available_in); exit;
+                $pref = array(
+                    'email' => $email,
+                    'sessionID' => $this->session->userdata('session_id'),
+                    'shape' => '',
+                    'labels_a4' => $no_of_labels,
+                    'source' => 'custom_die',
+                    'opposite' => "false",
+                    'selected_size' => '',
+                    'available_in' => $available_in,
+                    'categorycode_a4' => 'SCO1',
+                    'productcode_a4' => $menu,
+                    'material_a4' => '',
+                    'adhesive_a4' => '',
+                    'color_a4' => '',
+                );
+            } else if ($available_in == 'Rolls') {
+
+                $pref = array(
+                    'sessionID' => $this->session->userdata('session_id'),
+                    'source' => $source,
+                    'productcode_roll' => $productcode,
+                    'shape' => '',
+                    'email' => $email,
+
+
+                    'labels_roll' => $no_of_labels,
+                    'opposite' => "false",
+                    'selected_size' => $selected_size,
+                    'available_in' => $available_in,
+                    'categorycode_roll' => $dieCode.$coresize,
+
+                    'material_roll' => $material,
+
+                    'no_of_rolls' => $no_of_rolls,
+
+                    'orientation' => $orientation,
+
+                    'adhesive_roll' => $adhesive,
+                    'color_roll' => $color,
+                    'coresize' => $coresize,
+                    'wound_roll' => $woundoption
+                );
+            }
+
+
+            $this->orderModal->addPrintingPreferences($pref);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             if (isset($cart_id) and $cart_id != '') {
                 $design = $this->get_uploaded_number_design($cart_id, $productid);
             } else {
@@ -4516,7 +4721,7 @@ class search extends CI_Controller
                 $labeltype = 'Fullcolour';
             }
 
-
+            //print_r($qty); exit;
             //if($ProductBrand=='Application Labels'){
             if (isset($qty) and $qty > 0) {
                 $data = $this->product_model->ajax_price($qty, $menu, $ProductBrand);
@@ -4530,7 +4735,7 @@ class search extends CI_Controller
 
                 if ($labeltype == 'Mono' || $labeltype == 'Fullcolour') {
                     $printprice = $this->home_model->calculate_printed_sheets($qty, $labeltype, $design, $ProductBrand, $menu);
-
+                    //print_r($printprice); exit;
                     $free_artworks = $printprice['artworks'];
                     $designprice = $printprice['desginprice'];
                     $printprice = $printprice['price'];

@@ -257,7 +257,7 @@ function valids(){
 	
 	var to_line = $('#to_rec').val();
 	to_line = parseInt(to_line);
-
+alert('to_line = '+to_line);
 	var x= 1;
 	for(i=0; i < to_line; i++){
 		
@@ -300,7 +300,10 @@ function valids(){
 			var finish = $('#finishdropdown_'+row_id).val();
 			
 			
-			
+			/*alert(p_type);
+			alert(format);
+			alert(x);
+			alert(to_line);*/
 			if(p_type=='plain' && format =='sheet'){
                 //$('#cut_mat_btn'+i).trigger('click');
 				if(x == to_line){
@@ -344,8 +347,11 @@ function valids(){
 				hide_pop('matqty'+row_id);
 				$('#err_qty'+row_id).hide();
 			}
-			
+
+					alert('to_line = '+to_line);
+					alert('x = '+x);
 				if(x == to_line){
+				    alert('true = ');
 	                //alert(x+' -1- '+to_line);
 					return true;
 				}
@@ -404,9 +410,12 @@ function valids(){
 				//return false;
 				
 			}
-			
-		
-				if(x == to_line){
+
+
+                // alert('roll to_line = '+to_line);
+                // alert('roll x = '+x);
+                if(x == to_line){
+                    // alert('true = ');
 	//alert(x+' -2- '+to_line);
 					return true;
 				}

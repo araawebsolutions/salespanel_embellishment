@@ -208,7 +208,7 @@ class quotationModal extends CI_Model
             $prodcompletename = $this->customize_product_name($cartdata->is_custom,$cartdata->ProductCategoryName,$cartdata->LabelsPerRoll,
                 ($cartdata->orignalQty / $cartdata->Quantity),$cartdata->ReOrderCode,$cartdata->ManufactureID,$cartdata->ProductBrand,$cartdata->wound,$cartdata->OrderData);
 
-            if($cartdata->ProductID==0){
+            if($cartdata->ProductID==0 || $cartdata->p_code == 'SCO1'){
                 $prodcompletename = $cartdata->p_name;
                 $p_code=$cartdata->p_code;
             }else{

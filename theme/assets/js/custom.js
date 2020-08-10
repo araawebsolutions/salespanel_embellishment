@@ -10364,7 +10364,7 @@ function deletepressproof(serial,pagess) {
         break;
     }
   });
- 
+
 }
 
 
@@ -10394,6 +10394,9 @@ $(document).on("click", ".find_cust", function(e) {
         //alert('s');
 
         $('.cus_matss').each(function(i, obj) {
+            var plain_print = $('#mat_print'+i).val();
+            // alert(i);
+            // alert(plain_print);
             $('#cut_mat_btn'+i).trigger('click');
         });
              //window.location.href =  "https://www.aalabels.com/salespanel/index.php/checkout";

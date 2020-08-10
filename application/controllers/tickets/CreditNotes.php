@@ -12,11 +12,7 @@ class creditNotes extends CI_Controller {
 //        /$this->load->model('orderModel');
 		$this->home_model->user_login_ajax();
         
-		//$this->load->model('Rejected_artwork_model');
-		//	error_reporting(E_ALL);
-		//$this->session->set_userdata('UserName','kamran');
-		//$this->session->set_userdata('UserID','640847'); //640847 // 641147
-		$this->session->set_userdata('UserTypeID','50');
+
 
 
 

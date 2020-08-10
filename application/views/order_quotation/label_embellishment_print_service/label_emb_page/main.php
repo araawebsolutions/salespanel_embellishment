@@ -1535,7 +1535,7 @@
                 if (data.response == 'yes') {
 
 
-                    if (data.preferences.source != "material_page") {
+                    if (data.preferences.source != "material_page" && data.preferences.source != "custom_die") {
                         document.location = "<?php echo base_url() . 'printed-labels/';?>";
                     }
 
@@ -1580,7 +1580,7 @@
                     $("#brandName").text(preferences.available_in);
 
 
-                    pre_load_apply_preferences(preferences);
+                    pre_load_apply_preferences(preferences, data.data.cartid);
                     $('#standerd_inner_section_options').hide();
                     $('#premium_inner_section_options').hide();
                     $('#premium_inner_section_description').hide();
@@ -1599,14 +1599,14 @@
 
 
                 } else {
-                    document.location = "<?php echo base_url() . 'printed-labels/';?>";
+                    //document.location = "<?php //echo base_url() . 'printed-labels/';?>//";
                 }
             }
         });
     }
 
 
-    function pre_load_apply_preferences(data) {
+    function pre_load_apply_preferences(data, cartid=null) {
 
 
         setTimeout(function () {
@@ -1665,7 +1665,7 @@
                 $(".roll_sheets_block .labels-form .dm-selector li a[data-id='" + data.orientation + "']").trigger("click");
             }
         }, 4500);
-        pre_load_add_item(data);
+        pre_load_add_item(data, cartid);
         $("#full_page_loader").hide();
 
     }
@@ -1762,7 +1762,7 @@
         $('.outsideorientation').find('.popup_orientation').val(orientatoin);
     });
 
-    function pre_load_add_item(allPreferences) {
+    function pre_load_add_item(allPreferences, cartid=null) {
         var press_proof = 0;
         if ($('#press_proof').is(":checked")) {
             press_proof = 1;
@@ -1818,7 +1818,9 @@
         var min_qty = parseInt($('#min_qty' + id).val());
         var max_qty = parseInt($('#max_qty' + id).val());
 
-        var cartid = $('#cartid').val();
+        if(cartid == null || cartid == '' || cartid == undefined){
+            var cartid = $('#cartid').val();
+        }
         //var pressproof = $('#pressproof').val();
         // show_loader('80', '27');
         var _this = $("#add_btn" + id);
@@ -1886,7 +1888,7 @@
                 laminations_and_varnishes_childs: laminations_and_varnishes_childs,
                 selected_already_plates: selected_already_plates,
                 selected_already_plates_composite_array: selected_already_plates_composite_array,
-                'product_preferences': allPreferences
+                /*'product_preferences': allPreferences*/
 
 
             },
@@ -2990,6 +2992,8 @@
         // var cartid = $('#cartid').val();
         // alert(cartid);
         var prdid = $('#cartproductid').val();
+        var product_code = $('#product_code').text();
+        //alert(product_code);
         var labelpersheets = $('#labels_p_sheet' + prdid).val();
         var artworkname = $(_this).parents('.upload_row').find('.artwork_name').val();
         if (upload_artwork_radio == "upload_artwork_now") {
@@ -3075,6 +3079,7 @@
                 form_data.append("sheet_product_quality", sheet_product_quality);
                 form_data.append("cartid", cartid);
                 form_data.append("productid", prdid);
+                form_data.append("product_code", product_code);
                 form_data.append("labels", labels);
                 form_data.append("sheets", sheets);
                 form_data.append("artworkname", artworkname);
@@ -3172,6 +3177,7 @@
                 form_data.append("lines_to_populate", lines_to_populate);
                 form_data.append("cartid", cartid);
                 form_data.append("productid", prdid);
+                form_data.append("product_code", product_code);
                 form_data.append("labels", labels);
                 form_data.append("sheets", sheets);
                 form_data.append("artworkname", artworkname);
@@ -4725,6 +4731,8 @@
                 } else {
                     var text = 'designs';
                 }
+                alert(remaing);
+                alert(remaing_designs);
                 swal({
                         title: 'You have reduced the number of ' + text + ' please confirm to recalculate the price.',
                         type: "warning",

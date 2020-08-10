@@ -65,7 +65,12 @@ foreach ($assoc as $rowp) {
 	
 	$matInfo = $ci->cartModal->fetchmaterinfo($rowp->ID);
 	$records = $ci->cartModal->fetchdierecordinfo($matInfo['OID']);
-	
+
+    $printprice = 0;
+	if($matInfo){
+        $printprice = $matInfo['printprice'];
+    }
+
 	//echo '<pre>'; print_r($records); echo '</pre>';
 	
 	$matInfo_size = $matInfo['core'];
@@ -207,10 +212,16 @@ foreach ($assoc as $rowp) {
           <? if($asformat =='roll'){ echo $rowp->rolllabels;} else { echo ( ($scorecord['across'] * $scorecord['around']) * $rowp->qty);} ;?> labels
           
           <br>
-          
+          <?php
+          if($printprice && $printprice > 0){
+              $qty_readonly = 'readonly';
+          }else{
+              $qty_readonly = '';
+          }
+          ?>
             <input type="number" min="0" id="matqty<?= $rowp->ID ?>"
                    onchange="$('#matqty<?= $rowp->ID ?>').popover('hide');" value="<?= $rowp->qty ?>"
-                   class="form-control input-number text-center allownumeric" name="quant1">
+                   class="form-control input-number text-center allownumeric" name="quant1" <?php echo $qty_readonly ?>>
             <span class="err" id="err_qty<?= $rowp->ID ?>">Please Choose Qty</span>
 
 
@@ -235,10 +246,18 @@ foreach ($assoc as $rowp) {
                onclick="deleteLineFromMaterial(<?= $key ?>,<?= $rowp->ID ?>)"
                id="deletenode1"></i>
 
-			<?php if($carRes[0]->format!="Roll"){ ?>
-            <i class="fa fa-floppy-o bt-save" id="cut_mat_btn<?= $key ?>" onclick="updateNewMaterialSheets(<?= $key ?>,<?= $carRes[0]->ID ?>,<?= $rowp->ID ?>,'<?=
-            $carRes[0]->format
-            ?>')"></i>
+			<?php if($carRes[0]->format!="Roll"){
+
+
+            if($printprice && $printprice > 0){ ?>
+                <i class="fa fa-floppy-o bt-save"></i>
+            <?php }else{ ?>
+                <i class="fa fa-floppy-o bt-save" id="cut_mat_btn<?= $key ?>" onclick="updateNewMaterialSheets(<?= $key ?>,<?= $carRes[0]->ID ?>,<?= $rowp->ID ?>,'<?=
+                $carRes[0]->format
+                ?>')"></i>
+            <?php }
+			    ?>
+
 			<?php } else{ ?>
 			<i class="fa fa-floppy-o bt-save"  id="cut_mat_btn<?= $key ?>"
                onclick="updateMaterialPriceRolls(<?= $key ?>,<?= $carRes[0]->ID ?>,<?= $rowp->ID ?>,'<?= $carRes[0]->format ?>')"></i>
@@ -313,8 +332,10 @@ foreach ($assoc as $rowp) {
                            value="<? if($rowp->designs==0 || $rowp->designs==""){ echo '';}else{ echo $rowp->designs;} ?>"
                            onchange="$('#designmat<?= $rowp->ID ?>').popover('hide');">
                 </div>
-
-                <span class="err" id="err_no_designs<?= $rowp->ID ?>">Please Choose no of Designs</span>
+                    <button type="button" id="artworki_for_cart<?=$key?>" style="padding-right: 10px"  onclick="custom_die_emb()"
+                            class="btn btn-secondarys btn-rounded waves-light waves-effect btn-upload-artwork"  data-toggle="modal" data-target=".bs-example-modal-lga"><i class="fa fa-cloud-upload" aria-hidden="true"></i>&nbsp;
+                        Embellishment C </button>
+                    <span class="err" id="err_no_designs<?= $rowp->ID ?>">Please Choose no of Designs</span>
 
                 <? } ?>
 

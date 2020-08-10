@@ -4436,7 +4436,7 @@ class orderModal extends CI_Model
             ->row_array();
 
         if (!empty($preferences)) {
-            if ( (($preferences['available_in'] == "A4") || ($preferences['available_in'] == "A3")) && ($preferences['material_a4'] == '' || $preferences['material_a4'] == NULL || $preferences['color_a4'] == '' || $preferences['color_a4'] == NULL || $preferences['adhesive_a4'] == '' || $preferences['adhesive_a4'] == NULL))
+            /*if ( (($preferences['available_in'] == "A4") || ($preferences['available_in'] == "A3")) && ($preferences['material_a4'] == '' || $preferences['material_a4'] == NULL || $preferences['color_a4'] == '' || $preferences['color_a4'] == NULL || $preferences['adhesive_a4'] == '' || $preferences['adhesive_a4'] == NULL))
             {
                 $remove = array(
                     'productcode_a4' => NULL
@@ -4492,7 +4492,7 @@ class orderModal extends CI_Model
                     $this->db->update('printing_preferences', $remove);
                 }
                 $preferences = array_merge($preferences, $remove);
-            }
+            }*/
             //echo"<pre>";print_r($preferences);echo"</pre>";exit;
             return $preferences;
         }
@@ -4509,6 +4509,13 @@ class orderModal extends CI_Model
     function getProductData($manu_id)
     {
         $query = $this->db->query("SELECT * FROM `products` WHERE ManufactureID LIKE '%$manu_id%' ");
+        $result = $query->result();
+        return $result;
+    }
+
+    function getCustomDieData()
+    {
+        $query = $this->db->query("SELECT * FROM `products` WHERE ProductID = 0 ");
         $result = $query->result();
         return $result;
     }
@@ -4951,6 +4958,26 @@ class orderModal extends CI_Model
 
 
     // NAFEES CART PAGE EDIT ENDS
+
+
+
+
+    function update_flexible_dies_mat($data)
+    {
+        if (!empty($data)) {
+            $data['Domain'] = "AA";
+            $count = $this->db->where('sessionID', $this->shopping_model->sessionid())->get('printing_preferences')->num_rows();
+            if ($count == 0) {
+                $this->db->insert('printing_preferences', $data);
+            } else {
+
+                $this->db->where('sessionID', $this->shopping_model->sessionid());
+                $this->db->update('printing_preferences', $data);
+
+            }
+        }
+        return true;
+    }
 
 
     /***************************************************/

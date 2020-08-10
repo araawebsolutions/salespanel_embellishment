@@ -13,11 +13,7 @@ class addTickets extends CI_Controller {
     // $this->load->model('return/quotemodel');
         
     
-		//$this->load->model('Rejected_artwork_model');
-		//error_reporting(E_ALL);
-		//$this->session->set_userdata('UserName','kamran');
-		//$this->session->set_userdata('UserID','616100'); //640847 // 641147
-		$this->session->set_userdata('UserTypeID','50');
+
      
 	}
 

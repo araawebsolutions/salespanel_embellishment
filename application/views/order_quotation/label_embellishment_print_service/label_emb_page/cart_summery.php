@@ -182,8 +182,12 @@ $assets = Assets;?>
                                                             
                                                             <?php $cartid = $cart_and_product_data['ID'];
                                                     } else {
-                                                        $SID = $this->shopping_model->sessionid() . '-PRJB';
+                                                        $SID = $this->shopping_model->sessionid();
                                                         $cartid = $this->home_model->get_db_column('temporaryshoppingbasket', 'id', 'SessionID', $SID);
+                                                        if(!$cartid){
+                                                            $SID = $this->shopping_model->sessionid() . '-PRJB';
+                                                            $cartid = $this->home_model->get_db_column('temporaryshoppingbasket', 'id', 'SessionID', $SID);
+                                                        }
                                                     }
                                                 }
 

@@ -6117,6 +6117,10 @@ function unsave_checkout_data(){
     //using this function to calculate cart price on values update/change in cart summery section of printed-labels start
     function material_continue_with_product_printed_labels()
     {
+        /*echo '<pre>';
+        print_r($_POST['producttype']);
+        exit;*/
+        //print_r('hi'); exit;
 		//        print_r($this->input->post('selected_already_plates_composite_array'));die;
         $pressproof = 0;
         $orientation = '';
@@ -6138,6 +6142,7 @@ function unsave_checkout_data(){
         $menu = $this->input->post('menuid');
         $productid = $this->input->post('prd_id');
         $cartid = $this->input->post('cartid');
+        //print_r('cartid = '.$cartid); exit;
         //        $rollfinish = $this->input->post('rollfinish');
 
         $coresize = $this->input->post('coresize');
@@ -6205,7 +6210,7 @@ function unsave_checkout_data(){
         }
 
 
-
+//print_r($producttype); exit;
         if ($producttype == 'roll') {
             $data['coresize'] = $coresize;
             $data['woundoption'] = $woundoption;
@@ -6574,7 +6579,15 @@ function unsave_checkout_data(){
         }
 
 
-		if( $edit_cart_flag ) {        
+
+        if (isset($cartid) and $cartid != '') {
+            $check_for_custom_die = $this->db->select('p_code')->where('ID', $cartid)->get('temporaryshoppingbasket')->row();
+            if ($check_for_custom_die && $check_for_custom_die->p_code == 'SCO1') {
+                $cust_die = 'SCO1';
+            }
+        }
+
+		if( $edit_cart_flag || $cust_die) {
 			$SID = $this->shopping_model->sessionid();
 		} else {
 			$SID = $this->shopping_model->sessionid() . '-PRJB';
@@ -6629,7 +6642,49 @@ function unsave_checkout_data(){
             }
 
 			if (isset($cartid) and $cartid != '') {
-				$this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid));
+
+
+
+                /*FOR SCO1*/
+                /*$this->db->set('SessionID', $SID)
+                    ->where('ID', $cartid)
+                    ->update('temporaryshoppingbasket');*/
+                $check_for_custom_die = $this->db->select('p_code')->where('ID', $cartid)->get('temporaryshoppingbasket')->row();
+                //print_r($check_for_custom_die); exit;
+                if($check_for_custom_die && $check_for_custom_die->p_code == 'SCO1'){
+                    $flexible_dies_mat = $this->db->select('flexible_dies_mat.ID')
+                        ->join('flexible_dies_info', 'flexible_dies_info.ID = flexible_dies_mat.OID')
+                        ->where('flexible_dies_info.CartID', $cartid)
+                        ->get('flexible_dies_mat')
+                        ->row();
+                    if($flexible_dies_mat){
+                        $flexible_dies_mat_id = $flexible_dies_mat->ID;
+                    }else{
+                        $flexible_dies_mat_id = 0;
+                    }
+
+                    $flex_array = array(
+                        'qty' => $items['Quantity'],
+                        'designs' => $items['Print_Qty'],
+                        'printing' => $items['Print_Type'],
+                        'plainprice' => $items['TotalPrice'],
+                        'printprice' => $items['Print_Total']
+                    );
+                    $this->db->update('flexible_dies_mat', $flex_array, array('ID' => $flexible_dies_mat_id));
+
+                    unset($items['Quantity'], $items['TotalPrice'], $items['UnitPrice'], $items['Print_Total']);
+                }
+                /*echo '<pre>';
+                print_r($items); exit;*/
+                //$this->orderModal->update_flexible_dies_mat($items);
+
+
+                //print_r($flexible_dies_mat_id); exit;
+
+
+
+
+                $this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid));
 			} else {
 				$this->db->insert('temporaryshoppingbasket', $items);
 				if ($this->db->insert_id()) {
@@ -6706,7 +6761,7 @@ function unsave_checkout_data(){
 		$data['flag'] = $flag;
         $data['refNumber'] = $refNumber;
 		$data['lineNumber'] = $lineNumber;
-		
+
         if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
 			$data['flag'] = $flag;
 			$data['refNumber'] = $refNumber;
@@ -7218,7 +7273,7 @@ function unsave_checkout_data(){
     //    upload file function for label emb task upload modal
     function material_upload_printing_artworks_label_emb()
     {
-       /* echo "<pre>";
+        /*echo "<pre>";
         print_r($_POST);
         echo "</pre>";
         die();*/
@@ -7830,6 +7885,7 @@ function unsave_checkout_data(){
 
                 $cartid = $this->input->post('cartid');
                 $productid = $this->input->post('productid');
+                $product_code = $this->input->post('product_code');
                 $labels = $this->input->post('labels');
                 $sheets = $this->input->post('sheets');
                 $artworkname = $this->input->post('artworkname');
@@ -7956,7 +8012,24 @@ function unsave_checkout_data(){
 	                    'status' => 'confirm',
 	                );
 					$this->db->insert('integrated_attachments', $artowrk);
-					
+
+					if($product_code && $product_code == 'SCO1'){
+					    $flexible_dies_mat = $this->db->select('flexible_dies_mat.ID')
+                            ->join('flexible_dies_info', 'flexible_dies_info.ID = flexible_dies_mat.OID')
+                            ->where('flexible_dies_info.CartID', $cartid)
+                            ->get('flexible_dies_mat')
+                            ->row();
+                        if($flexible_dies_mat){
+                            $flexible_dies_mat_id = $flexible_dies_mat->ID;
+                        }else{
+                            $flexible_dies_mat_id = 0;
+                        }
+
+                        $mat_update = array(
+                            'qty' => $sheets
+                        );
+                        $this->db->update('flexible_dies_mat', $mat_update, array('ID' => $flexible_dies_mat_id));
+                    }
                 }
 
                 if ($type == 'roll') {
@@ -12996,7 +13069,7 @@ function unsave_checkout_data(){
         $colors_list = $this->product_model->get_material_columns('color', $material);
         $adhesive_list = $this->product_model->get_material_columns('adhesive', $material, $color);
 
-        $colorsResponse = $this->product_model->make_material_dropdown($colors_list,'color','Sort by Colour',$color);
+        $colorsResponse = $this->product_model->make_material_dropdown($colors_list,'color','Sort by Co/material_list_vlour',$color);
         $adhesiveResponse = $this->product_model->make_material_dropdown($adhesive_list,'adhesive','Sort by Adhesive',$adhesive);
 
         $theHTMLResponse = $this->load->view('static/material_list', $data, true);
@@ -13066,6 +13139,7 @@ function unsave_checkout_data(){
 
     public function load_preferences()
     {
+        //print_r('hi'); exit;
         if($_POST)
         {
             $email = $preferences = '';
@@ -13117,9 +13191,7 @@ function unsave_checkout_data(){
         $combination_array = array();
         $label_embellishments = $this->orderModal->get_label_embellishment_and_combinations();
 
-        /*echo "<pre>";
-        print_r($label_embellishments);
-        die;*/
+
         $embellishment_plate_price = array();
         foreach ($label_embellishments['label_embellishment'] as $key1 => $label_emb) {
             $plate_price = new stdClass();
@@ -13154,11 +13226,15 @@ function unsave_checkout_data(){
 
         $session_id = $this->shopping_model->sessionid();
         if ($session_id != '') {
-            $cartid = $this->home_model->get_db_column('temporaryshoppingbasket', 'id', 'SessionID', $session_id . '-PRJB');
+            $cartid = $this->home_model->get_db_column('temporaryshoppingbasket', 'id', 'SessionID', $session_id);
+            if(!$cartid){
+                $cartid = $this->home_model->get_db_column('temporaryshoppingbasket', 'id', 'SessionID', $session_id . '-PRJB');
+            }
             $data['cartid'] = $cartid;
             $preferences = $this->orderModal->material_load_preferences($session_id);
         }
 
+        //print_r($data['cartid']); exit;
         $edit_cart_flag = $this->input->post('edit_cart_flag');
         if( $edit_cart_flag ) {
 	        $data['edit_cart_flag'] = $edit_cart_flag;
@@ -13203,6 +13279,7 @@ function unsave_checkout_data(){
 		    }	
         }
 
+
         
         if (!empty($preferences)) {
 
@@ -13212,11 +13289,12 @@ function unsave_checkout_data(){
                 $cat_desc = explode("-", $cat_desc);
                 $preferences['cat_desc_a4'] = $cat_desc[0];
                 $preferences['cat_desc_roll'] = '';
-
+                /*echo '<pre>';
+                print_r($preferences); exit;*/
                 $dataProdu = $this->orderModal->getProductData($preferences['productcode_a4']);
                 $preferences['ProductID'] = $dataProdu[0]->ProductID;
                 $preferences['ManufactureID'] = $dataProdu[0]->ManufactureID;
-
+                //print_r('here'); exit;
                 $category_id = $preferences['selected_size'];
 
 
