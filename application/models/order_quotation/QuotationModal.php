@@ -313,6 +313,7 @@ class quotationModal extends CI_Model
                 'design_file'=>$cartdata->design_file,
                 'regmark'=>$cartdata->regmark,
                 'sample'=>$cartdata->OrderData,
+                'custom_roll_and_label' => $cartdata->custom_roll_and_label,
                 'FinishTypePrintedLabels' => $cartdata->FinishTypePrintedLabels,
                 'FinishTypePricePrintedLabels' => $cartdata->FinishTypePricePrintedLabels,
                 'sequential_and_variable_data' => $cartdata->sequential_and_variable_data,
@@ -1422,14 +1423,15 @@ class quotationModal extends CI_Model
                 'regmark'=>$order_detail->regmark,
                 'sample'=>$order_detail->sample,
               
-              'odp_proof'=>$order_detail->qp_proof,
-              'odp_qty'=>$order_detail->qp_qty,
-              'odp_price'=>$order_detail->qp_price,
-              'odp_foc'=>$order_detail->qp_foc,
-            'FinishTypePrintedLabels' => $order_detail->FinishTypePrintedLabels,
-            'FinishTypePricePrintedLabels' => $order_detail->FinishTypePricePrintedLabels,
-            'sequential_and_variable_data' => $order_detail->sequential_and_variable_data,
-            'total_emb_cost' => $order_detail->total_emb_cost
+                'odp_proof'=>$order_detail->qp_proof,
+                'odp_qty'=>$order_detail->qp_qty,
+                'odp_price'=>$order_detail->qp_price,
+                'odp_foc'=>$order_detail->qp_foc,
+                'custom_roll_and_label' => $order_detail->custom_roll_and_label,
+                'FinishTypePrintedLabels' => $order_detail->FinishTypePrintedLabels,
+                'FinishTypePricePrintedLabels' => $order_detail->FinishTypePricePrintedLabels,
+                'sequential_and_variable_data' => $order_detail->sequential_and_variable_data,
+                'total_emb_cost' => $order_detail->total_emb_cost
 
             );
 

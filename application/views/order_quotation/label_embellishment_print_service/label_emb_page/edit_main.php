@@ -236,13 +236,14 @@
 <?php
 if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $flag == 'cart_detail')) {
     $lem_options = $lineDetail->FinishTypePricePrintedLabels;
+
     ?>
 
     <input type="hidden" id="selected_digital_process" name="selected_digital_process" value="<?=$lineDetail->Print_Type?>">
     <input type="hidden" id="selected_combination_base" name="selected_combination_base" value="<?=$lineDetail->combination_base?>">
     <input type="hidden" id="selected_line_type" name="selected_line_type" value="<?=$lineDetail->ProductBrand?>">
     <input type="hidden" id="selected_custom_roll_and_label" name="custom_roll_and_label" value="<?=$lineDetail->custom_roll_and_label?>">
-    <input type="hidden" id="selected_user_id" name="selected_user_id" value="<?=$lineDetail->UserID?>">
+    <input type="hidden" id="selected_user_id" name="selected_user_id" value="<?=$customer_id?>">
     <input type="hidden" id="selected_pressproof" name="selected_pressproof" value="<?=$lineDetail->pressproof?>">
 
     <input type="hidden" id="selected_artwork_total_lines" name="selected_artwork_total_lines" value="<?=$artwork_total_lines?>">
@@ -290,7 +291,6 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
                 <!--               --><?php //include('printing_process_and_product.php') ?>
 
                 <!-- Label Finishes & Embellishments & Cart Summary Starts -->
-                <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
                 <section>
                     <div class="row">
                         <div id="finish_content" class="col-md-9 col-xs-12">

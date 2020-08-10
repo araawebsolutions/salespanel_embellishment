@@ -6,10 +6,77 @@
       <change beforePath="$PROJECT_DIR$/.idea/salespanel_new.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/controllers/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/ajax.php" afterDir="false" />
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/application/controllers/search/Search.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/search/Search.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/controllers/tickets/AddTickets.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/tickets/AddTickets.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/controllers/tickets/CreditNotes.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/tickets/CreditNotes.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/controllers/tickets/UpdateTicket.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/tickets/UpdateTicket.php" afterDir="false" />
+=======
+<<<<<<< HEAD
+      <change beforePath="$PROJECT_DIR$/application/controllers/order_quotation/Order.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/order_quotation/Order.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Home_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Home_model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/checkout/die_material.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/checkout/die_material.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/already_purchased_plates.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/already_purchased_plates.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/cart_summery.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/cart_summery.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/edit_main.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/edit_main.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/upload/roll_artwork_files.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/upload/roll_artwork_files.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/order_detail/order_detail_page.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/order_detail/order_detail_page.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/quotation/en/quoteconfirm.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/quotation/en/quoteconfirm.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/quotation/fr/quoteconfirm.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/quotation/fr/quoteconfirm.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/quotation/quotation_detail_page.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/quotation/quotation_detail_page.php" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/application/controllers/cart/Cart.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/cart/Cart.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/controllers/cart/Cart_live.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/cart/Cart_live.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/controllers/credits/Credits.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/credits/Credits.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/controllers/customer/Customer.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/customer/Customer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/controllers/dies/Dies.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/dies/Dies.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/controllers/enquiry/Enquiry.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/enquiry/Enquiry.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/controllers/follow/Followup.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/follow/Followup.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/controllers/follow/Followups.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/follow/Followups.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/controllers/order_quotation/Order-.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/controllers/order_quotation/Order.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/order_quotation/Order.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/controllers/search/Filter.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/search/Filter.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/controllers/search/Search___old.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/search/Search___old.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/--Filter_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/--Filter_model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Accountmodel.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Accountmodel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Artwork_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Artwork_model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Credit_account_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Credit_account_model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/DashboardModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/DashboardModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Discount_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Discount_model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Emailmodel.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Emailmodel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Filter_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Filter_model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Filter_model__old.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Filter_model__old.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Foreign_currency_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Foreign_currency_model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Home_model-org.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Home_model-org.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Home_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Home_model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Invoice_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Invoice_model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/MyPriceModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/MyPriceModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/MyPriceModel.php 01-03-2020 12-43" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Pagination.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Pagination.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Payment_sales_audit_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Payment_sales_audit_model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Product_model-org.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Product_model-org.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Product_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Product_model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/QuoteModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/QuoteModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Rejected_artwork_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Rejected_artwork_model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Reporting_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Reporting_model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Shopping_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Shopping_model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Shopping_model_live.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Shopping_model_live.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/User_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/User_model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Vat_exempt_orders_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Vat_exempt_orders_model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/credit/CreditNoteModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/credit/CreditNoteModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/customer/CustomerModel.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/customer/CustomerModel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/dies/Die_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/dies/Die_model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/email/EmailModal.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/email/EmailModal.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/enquiry/EnquiryModal.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/enquiry/EnquiryModal.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/follow/FollowModal.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/follow/FollowModal.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/oldmodels/Accountmodel.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/oldmodels/Accountmodel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/oldmodels/Ordermodel.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/oldmodels/Ordermodel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/oldmodels/Quotemodel.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/oldmodels/Quotemodel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/oldmodels/Reportsmodel.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/oldmodels/Reportsmodel.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/orderAttachmentsIntegrated/OrderAttachment.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/orderAttachmentsIntegrated/OrderAttachment.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/order_quotation/CustomDieModal_umair.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/order_quotation/CustomDieModal_umair.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/order_quotation/OrderModal-.php" beforeDir="false" />
+>>>>>>> ec63718fde302f682f71343f52728a7536a7307d
       <change beforePath="$PROJECT_DIR$/application/models/order_quotation/OrderModal.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/order_quotation/OrderModal.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/models/order_quotation/QuotationModal.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/order_quotation/QuotationModal.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/views/order_quotation/checkout/cart_material.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/checkout/cart_material.php" afterDir="false" />
@@ -1075,7 +1142,14 @@
       <change beforePath="$PROJECT_DIR$/theme/assets/images/tickets/ticketImage_1587651969.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/theme/assets/images/tickets/ticketImage_1587654358.png" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/theme/assets/js/custom.js" beforeDir="false" afterPath="$PROJECT_DIR$/theme/assets/js/custom.js" afterDir="false" />
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/theme/assets/js/tab.js" beforeDir="false" afterPath="$PROJECT_DIR$/theme/assets/js/tab.js" afterDir="false" />
+=======
+=======
+      <change beforePath="$PROJECT_DIR$/application/controllers/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/ajax.php" afterDir="false" />
+>>>>>>> f66ca60a23d1e643b639d11a186d6bc138eff70c
+>>>>>>> b343bb2fef8982a0b98f69ac0862dd07914484dc
+>>>>>>> ec63718fde302f682f71343f52728a7536a7307d
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -1087,6 +1161,20 @@
     <execution>
       <executable />
     </execution>
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -1118,12 +1206,115 @@
       <created>1596005950074</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
+<<<<<<< HEAD
       <updated>1596005950074</updated>
       <workItem from="1596005951747" duration="16000" />
       <workItem from="1596005973312" duration="16042000" />
       <workItem from="1596092351522" duration="28192000" />
       <workItem from="1596610585354" duration="83670000" />
       <workItem from="1597042947775" duration="5752000" />
+=======
+      <updated>1587726461143</updated>
+      <workItem from="1587726462326" duration="13053000" />
+      <workItem from="1587962206268" duration="7103000" />
+      <workItem from="1588072597979" duration="939000" />
+      <workItem from="1588227360989" duration="15610000" />
+      <workItem from="1588566474232" duration="26764000" />
+      <workItem from="1588652840620" duration="10402000" />
+      <workItem from="1588665301504" duration="605000" />
+      <workItem from="1588680755011" duration="6746000" />
+      <workItem from="1588750072441" duration="1557000" />
+      <workItem from="1588753351276" duration="9000" />
+      <workItem from="1588753371908" duration="23255000" />
+      <workItem from="1588842520777" duration="31459000" />
+      <workItem from="1589172440359" duration="7632000" />
+      <workItem from="1589182779502" duration="70216000" />
+      <workItem from="1589520741827" duration="12276000" />
+      <workItem from="1589536102834" duration="6247000" />
+      <workItem from="1589777776815" duration="33875000" />
+      <workItem from="1589874555634" duration="63808000" />
+      <workItem from="1590997255440" duration="100649000" />
+      <workItem from="1591339716325" duration="20964000" />
+      <workItem from="1591602881809" duration="12460000" />
+      <workItem from="1591716119358" duration="57921000" />
+      <workItem from="1591945708038" duration="26258000" />
+      <workItem from="1592204889247" duration="50626000" />
+      <workItem from="1592317922913" duration="5171000" />
+      <workItem from="1592376806855" duration="29382000" />
+      <workItem from="1592468321173" duration="21753000" />
+      <workItem from="1592550204407" duration="24402000" />
+      <workItem from="1592808929121" duration="30448000" />
+      <workItem from="1592901595485" duration="27598000" />
+<<<<<<< HEAD
+      <workItem from="1592991191219" duration="836000" />
+      <workItem from="1593003373304" duration="5208000" />
+      <workItem from="1593009907553" duration="2979000" />
+      <workItem from="1593013263690" duration="4463000" />
+      <workItem from="1593076994444" duration="37432000" />
+      <workItem from="1593179950084" duration="5441000" />
+      <workItem from="1593415144660" duration="8000" />
+      <workItem from="1593415191032" duration="10226000" />
+      <workItem from="1593437797499" duration="8181000" />
+      <workItem from="1593499475642" duration="12470000" />
+      <workItem from="1593525639887" duration="4045000" />
+      <workItem from="1593586059194" duration="6965000" />
+      <workItem from="1593594091456" duration="17169000" />
+      <workItem from="1593672715349" duration="21299000" />
+      <workItem from="1594030889384" duration="7453000" />
+      <workItem from="1594051304845" duration="1000" />
+      <workItem from="1594051322666" duration="2000" />
+      <workItem from="1594104574750" duration="18225000" />
+      <workItem from="1594126744909" duration="875000" />
+      <workItem from="1594127633444" duration="8168000" />
+      <workItem from="1594191892502" duration="21257000" />
+      <workItem from="1594278526284" duration="21790000" />
+      <workItem from="1594364635725" duration="20302000" />
+      <workItem from="1594625216345" duration="4000" />
+      <workItem from="1594625230062" duration="20696000" />
+      <workItem from="1594709523435" duration="23455000" />
+      <workItem from="1594742451456" duration="96000" />
+      <workItem from="1594795780728" duration="25833000" />
+      <workItem from="1594883296959" duration="27045000" />
+      <workItem from="1594969898506" duration="25953000" />
+      <workItem from="1595228841232" duration="26327000" />
+      <workItem from="1595314954146" duration="23580000" />
+      <workItem from="1595401072422" duration="27501000" />
+      <workItem from="1595433824111" duration="3000" />
+      <workItem from="1595488093993" duration="27773000" />
+      <workItem from="1595573967490" duration="26604000" />
+      <workItem from="1595832326180" duration="39963000" />
+=======
+      <workItem from="1592991191219" duration="85000" />
+      <workItem from="1593608263958" duration="475000" />
+      <workItem from="1593608780691" duration="8594000" />
+      <workItem from="1593673171197" duration="6950000" />
+      <workItem from="1593760114316" duration="21424000" />
+      <workItem from="1594019171002" duration="6728000" />
+      <workItem from="1594107782121" duration="18108000" />
+      <workItem from="1594192092509" duration="28090000" />
+      <workItem from="1594279237657" duration="17849000" />
+      <workItem from="1594367258305" duration="14879000" />
+      <workItem from="1594624948637" duration="22158000" />
+      <workItem from="1594715736797" duration="23275000" />
+      <workItem from="1594796537131" duration="22659000" />
+      <workItem from="1594884874439" duration="23570000" />
+      <workItem from="1594971230966" duration="25534000" />
+      <workItem from="1595228733251" duration="29648000" />
+      <workItem from="1595314424280" duration="29206000" />
+      <workItem from="1595402086562" duration="28106000" />
+      <workItem from="1595489135039" duration="26967000" />
+      <workItem from="1595573441950" duration="29820000" />
+<<<<<<< HEAD
+      <workItem from="1595834108618" duration="10489000" />
+      <workItem from="1595920227384" duration="12014000" />
+      <workItem from="1596005921574" duration="2762000" />
+      <workItem from="1596100053975" duration="21964000" />
+      <workItem from="1596526909155" duration="12441000" />
+=======
+      <workItem from="1595834108618" duration="9895000" />
+>>>>>>> f66ca60a23d1e643b639d11a186d6bc138eff70c
+>>>>>>> b343bb2fef8982a0b98f69ac0862dd07914484dc
+>>>>>>> ec63718fde302f682f71343f52728a7536a7307d
     </task>
     <servers />
   </component>

@@ -23,7 +23,12 @@
     <div class="row">
         <?php
 
+        /*echo "<pre>";
+        print_r($this->session->all_userdata());
+        echo "</pre>";*/
+
         $usrid = $this->session->userdata('customer_id');
+
         if (isset($usrid) and $usrid != '') { ?>
             <input type="hidden" id="user_id" value="<?php echo $usrid;?>">
             <div class="col-md-8">

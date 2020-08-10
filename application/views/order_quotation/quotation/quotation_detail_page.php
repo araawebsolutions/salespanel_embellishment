@@ -783,7 +783,7 @@ $UserTypeID = $this->session->userdata('UserTypeID');
             <?php  /*}*/ ?>
 
 
-            <?php } else{  ?>
+            <?php } else {  ?>
             <?php include(APPPATH . 'views/order_quotation/checkout/die_material.php'); ?>
 
 
@@ -885,16 +885,16 @@ $UserTypeID = $this->session->userdata('UserTypeID');
                                 <td></td>
                             </tr>
 
-                        <?php } else { //For Sequential Data ?>
+                        <?php } else {  //For Sequential Data ?>
 
                             <tr>
                                 <td></td>
                                 <td></td>
                                 <td>
                                    <?php
-                                      echo "<b>".$parsed_parent_title." : </b>";
-                                      
-                                      if( isset($quotationDetail->sequential_and_variable_data) && $quotationDetail->sequential_and_variable_data != '' ) {
+                                      echo "<b>".$parsed_parent_title." :</b>";
+
+                                      if(isset($quotationDetail->sequential_and_variable_data) && $quotationDetail->sequential_and_variable_data != '' ) {
                                         $json_data = json_decode($quotationDetail->sequential_and_variable_data);
                                         if( gettype($json_data) == "array" ) {
                                             foreach ($json_data as $key => $eachData) {

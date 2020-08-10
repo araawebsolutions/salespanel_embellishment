@@ -42,7 +42,7 @@ class Ajax extends CI_Controller{
 	function rollimages($diecode=NULL){
 		if($diecode!=NULL){
 			
-			$qry =  "SELECT ManufactureID from products p , category  c where SUBSTRING_INDEX( p.CategoryID, 'R', 1 ) = c.CategoryID 
+			$qry = "SELECT ManufactureID from products p , category  c where SUBSTRING_INDEX( p.CategoryID, 'R', 1 ) = c.CategoryID 
 					AND (p.Activate ='Y' or p.Activate ='y') AND c.CategoryID LIKE '".$diecode."'";
 					$query  = $this->db->query($qry);
 					$result = $query->result();
@@ -6219,7 +6219,7 @@ function unsave_checkout_data(){
                 $pressproof = 1;
             }
 
-            if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $flag == 'cart_detail')) {
+            if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
                 $sheets = $o_quantity;
             } else {
         		$edit_cart_flag = $this->input->post('edit_cart_flag');
@@ -6624,7 +6624,7 @@ function unsave_checkout_data(){
         $items = array_merge($items, $printing_options);
 
         if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $flag == 'cart_detail')) {
-           
+
             $updation_array = $this->home_model->emb_update_line($items,$flag,$refNumber,$lineNumber);
 
             $data['flag'] = $flag;
@@ -6722,6 +6722,7 @@ function unsave_checkout_data(){
         echo "</pre>";
         die();*/
 
+
         $theHTMLResponse = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/cart_summery', $data, true);
         $data['content'] = $theHTMLResponse;
 
@@ -6771,13 +6772,13 @@ function unsave_checkout_data(){
 				$line_detail = $this->orderModal->getOrderDetailBySerialNumber($lineNumber);
 		
 				$table = 'orderdetails';
-				$where_coumn = 'SerialNumber';
+				$where_column = 'SerialNumber';
 				$artwork_table = 'order_attachments_integrated';
 			}elseif ($flag == 'quotation_detail'){
 				$line_detail = $this->orderModal->getQuotationDetailBySerialNumber($lineNumber);
 		
 				$table = 'quotationdetails';
-				$where_coumn = 'SerialNumber';
+				$where_column = 'SerialNumber';
 				$artwork_table = 'quotation_attachments_integrated';
 			}
 		}
@@ -7297,13 +7298,15 @@ function unsave_checkout_data(){
                 $line_detail = $this->orderModal->getOrderDetailBySerialNumber($lineNumber);
 
                 $table = 'orderdetails';
-                $where_coumn = 'SerialNumber';
+                $where_column = 'SerialNumber';
+                $label_column = 'labels';
                 $artwork_table = 'order_attachments_integrated';
             }elseif ($flag == 'quotation_detail'){
                 $line_detail = $this->orderModal->getQuotationDetailBySerialNumber($lineNumber);
 
                 $table = 'quotationdetails';
-                $where_coumn = 'SerialNumber';
+                $where_column = 'SerialNumber';
+                $label_column = 'orignalQty';
                 $artwork_table = 'quotation_attachments_integrated';
             }
         }
@@ -7452,6 +7455,13 @@ function unsave_checkout_data(){
                             'status' => 64,
                         );
 
+                        if ($flag == 'quotation_detail'){
+                            $artowrk['QuotationNumber'] = $artowrk['OrderNumber'];
+                            $artowrk['UserID'] = $line_detail->CustomerID;
+                            unset($artowrk['OrderNumber']);
+                            unset($artowrk['Brand']);
+                        }
+
                         $this->db->insert($artwork_table, $artowrk);
                     } else {
 						if( isset($edit_cart_flag) && $edit_cart_flag != '' ) {
@@ -7476,7 +7486,7 @@ function unsave_checkout_data(){
                     if ($type == 'roll') {
 
                         if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
-                            $actual_labels = $this->home_model->get_db_column($table, 'labels', $where_coumn, $lineNumber);
+                            $actual_labels = $this->home_model->get_db_column($table, $label_column, $where_column, $lineNumber);
 
                             $upload_qty = $this->db->query(' Select SUM(labels) as labels,SUM(qty) as qty from '.$artwork_table.' 
                                         WHERE Serial LIKE '.$lineNumber.' AND ProductID LIKE '.$productid.' ')->row_array();
@@ -7540,7 +7550,7 @@ function unsave_checkout_data(){
 
                         if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
 
-                            $row = $this->db->query('Select * from '.$table.' WHERE '.$where_coumn.' = '.$lineNumber .' ')->row_array();
+                            $row = $this->db->query('Select * from '.$table.' WHERE '.$where_column.' = '.$lineNumber .' ')->row_array();
 
                         } else {
                             $row = $this->db->query('Select * from temporaryshoppingbasket WHERE ID LIKE "' . $cartid . '"')->row_array();
@@ -7992,6 +8002,14 @@ function unsave_checkout_data(){
                         'file' => "No File Required For Artwork To Follow",
                         'status' => 64,
                     );
+
+                    if ($flag == 'quotation_detail'){
+                        $artowrk['QuotationNumber'] = $artowrk['OrderNumber'];
+                        $artowrk['UserID'] = $line_detail->CustomerID;
+                        unset($artowrk['OrderNumber']);
+                        unset($artowrk['Brand']);
+                    }
+
                     $this->db->insert($artwork_table, $artowrk);
 
                 } else {
@@ -8035,7 +8053,7 @@ function unsave_checkout_data(){
                 if ($type == 'roll') {
 
                     if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
-                        $actual_labels = $this->home_model->get_db_column($table, 'labels', $where_coumn, $lineNumber);
+                        $actual_labels = $this->home_model->get_db_column($table, $label_column, $where_column, $lineNumber);
 
                         $upload_qty = $this->db->query(' Select SUM(labels) as labels,SUM(qty) as qty from '.$artwork_table.' 
                                         WHERE Serial LIKE '.$lineNumber.' AND ProductID LIKE '.$productid.' ')->row_array();
@@ -8091,7 +8109,7 @@ function unsave_checkout_data(){
                 if (!empty($limit_exceed_designs) || !empty($limit_exceed_sheets)) {
 
                     if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
-                        $row = $this->db->query('Select * from '.$table.' WHERE '.$where_coumn.' LIKE '.$lineNumber.' ')->row_array();
+                        $row = $this->db->query('Select * from '.$table.' WHERE '.$where_column.' LIKE '.$lineNumber.' ')->row_array();
                     } else {
                         $row = $this->db->query('Select * from temporaryshoppingbasket WHERE ID LIKE "' . $cartid . '"')->row_array();
                     }
@@ -8103,7 +8121,12 @@ function unsave_checkout_data(){
                     $design = $row['Print_Qty'];
                     //$labels = $row['orignalQty']*$persheet;
                     if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
-                        $labels = $row['labels'];
+                        if($flag == 'quotation_detail'){
+                            $labels = $row['orignalQty'];
+                        } else {
+                            $labels = $row['labels'];
+                        }
+
                     } else {
                         $labels = $row['orignalQty'];
                     }
@@ -8345,7 +8368,7 @@ function unsave_checkout_data(){
 
 
                     if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
-                        $items['labels'] = $labels;
+
                         $updation_array = $this->home_model->emb_update_line($items,$flag,$refNumber,$lineNumber);
 
                     } else {
@@ -8853,13 +8876,15 @@ function unsave_checkout_data(){
                     $line_detail = $this->orderModal->getOrderDetailBySerialNumber($lineNumber);
 
                     $table = 'orderdetails';
-                    $where_coumn = 'SerialNumber';
+                    $where_column = 'SerialNumber';
+                    $label_column = 'labels';
                     $artwork_table = 'order_attachments_integrated';
                 }elseif ($flag == 'quotation_detail'){
                     $line_detail = $this->orderModal->getQuotationDetailBySerialNumber($lineNumber);
 
                     $table = 'quotationdetails';
-                    $where_coumn = 'SerialNumber';
+                    $where_column = 'SerialNumber';
+                    $label_column = 'orignalQty';
                     $artwork_table = 'quotation_attachments_integrated';
                 }
             }
@@ -8950,8 +8975,7 @@ function unsave_checkout_data(){
                     $this->db->update($artwork_table, $artowrk, array('ID' => $id));
                 } else {
                 	$artowrk = array('labels' => $labels,
-                    'qty' => $sheets,
-                    'status' => 'confirm');
+                    'qty' => $sheets);
 
                     $this->db->update('integrated_attachments', $artowrk, array('ID' => $id));
                 }
@@ -8962,7 +8986,7 @@ function unsave_checkout_data(){
             if ($type == 'roll') {
 
                 if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
-                    $actual_labels = $this->home_model->get_db_column($table, 'labels', $where_coumn, $lineNumber);
+                    $actual_labels = $this->home_model->get_db_column($table, $label_column, $where_column, $lineNumber);
 
                     $upload_qty = $this->db->query(' Select SUM(labels) as labels,SUM(qty) as qty from '.$artwork_table.' 
                                         WHERE Serial LIKE '.$lineNumber.' AND ProductID LIKE '.$productid.' ')->row_array();
@@ -9020,7 +9044,7 @@ function unsave_checkout_data(){
             if (isset($limit_exceed_sheets) and $limit_exceed_sheets == 'yes') {
 
                 if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
-                    $row = $this->db->query('Select * from '.$table.' WHERE '.$where_coumn.' = '.$lineNumber .' ')->row_array();
+                    $row = $this->db->query('Select * from '.$table.' WHERE '.$where_column.' = '.$lineNumber .' ')->row_array();
                 } else {
                     $row = $this->db->query('Select * from temporaryshoppingbasket WHERE ID LIKE "' . $cartid . '"')->row_array();
                 }
@@ -9033,7 +9057,12 @@ function unsave_checkout_data(){
                 $design = $row['Print_Qty'];
                 $cart_qty = $row['Quantity'];
                 if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
-                    $cart_labels = $row['labels'];
+                    if ($flag == 'quotation_detail'){
+                        $cart_labels = $row['orignalQty'];
+                    } else {
+                        $cart_labels = $row['labels'];
+                    }
+
                 } else {
                     $cart_labels = $row['orignalQty'];
                 }
@@ -9600,13 +9629,13 @@ function unsave_checkout_data(){
                     $line_detail = $this->orderModal->getOrderDetailBySerialNumber($lineNumber);
 
                     $table = 'orderdetails';
-                    $where_coumn = 'SerialNumber';
+                    $where_column = 'SerialNumber';
                     $artwork_table = 'order_attachments_integrated';
                 }elseif ($flag == 'quotation_detail'){
                     $line_detail = $this->orderModal->getQuotationDetailBySerialNumber($lineNumber);
 
                     $table = 'quotationdetails';
-                    $where_coumn = 'SerialNumber';
+                    $where_column = 'SerialNumber';
                     $artwork_table = 'quotation_attachments_integrated';
                 }
             }
@@ -10058,13 +10087,15 @@ function unsave_checkout_data(){
                     $line_detail = $this->orderModal->getOrderDetailBySerialNumber($lineNumber);
 
                     $table = 'orderdetails';
-                    $where_coumn = 'SerialNumber';
+                    $where_column = 'SerialNumber';
+                    $label_column = 'labels';
                     $artwork_table = 'order_attachments_integrated';
                 }elseif ($flag == 'quotation_detail'){
                     $line_detail = $this->orderModal->getQuotationDetailBySerialNumber($lineNumber);
 
                     $table = 'quotationdetails';
-                    $where_coumn = 'SerialNumber';
+                    $where_column = 'SerialNumber';
+                    $label_column = 'orignalQty';
                     $artwork_table = 'quotation_attachments_integrated';
                 }
             }
@@ -10131,7 +10162,7 @@ function unsave_checkout_data(){
                 WHERE Serial = '.$lineNumber .' AND ProductID LIKE '.$productid.' ')->row_array();
 
 
-                $row = $this->db->query('Select * from '.$table.' WHERE '.$where_coumn.' = '.$lineNumber .' ')->row_array();
+                $row = $this->db->query('Select * from '.$table.' WHERE '.$where_column.' = '.$lineNumber .' ')->row_array();
 
             } else {
 
@@ -13791,11 +13822,17 @@ function unsave_checkout_data(){
             $preferences = $this->orderModal->material_load_preferences($session_id);
         }*/
 
-       if(isset($flag) && $flag == 'order_detail'){
-           $line_detail = $this->orderModal->getOrderDetailBySerialNumber($lineNumber);
-       }
-
-       $preferences = $this->home_model->generate_preferences_data($line_detail);
+        if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
+            if($flag == 'order_detail'){
+                $line_detail = $this->orderModal->getOrderDetailBySerialNumber($lineNumber);
+                $history['user_id'] = $line_detail->UserID;
+            }
+            elseif ($flag == 'quotation_detail'){
+                $line_detail = $this->orderModal->getQuotationDetailBySerialNumber($lineNumber);
+                $history['user_id'] = $line_detail->CustomerID;
+            }
+            $preferences = $this->home_model->generate_preferences_data($line_detail,$flag);
+        }
 
        /* echo "<pre>";
         print_r($line_detail);
@@ -13946,7 +13983,7 @@ function unsave_checkout_data(){
 
 
 
-            $history['user_id'] = $line_detail->UserID;
+
             $finish_PricePrintedLabel = json_decode($line_detail->FinishTypePricePrintedLabels);
             $history['selected_already_plates'] = [];
             $history['selected_already_plates_composite_array'] = [];

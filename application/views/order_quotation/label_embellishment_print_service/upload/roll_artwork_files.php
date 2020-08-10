@@ -10,11 +10,15 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
         $table = 'orderdetails';
         $artwork_table = 'order_attachments_integrated';
         $where_coumn = 'SerialNumber';
+
+        $labels = $this->home_model->get_db_column($table, 'labels', $where_coumn, $lineNumber);
     } elseif ($flag == 'quotation_detail') {
         $files = $this->home_model->getArtworkForQuotation($lineNumber);
         $table = 'quotationdetails';
         $artwork_table = 'quotation_attachments_integrated';
         $where_coumn = 'SerialNumber';
+
+        $labels = $this->home_model->get_db_column($table, 'orignalQty', $where_coumn, $lineNumber);
     }
 
     $minroll = $this->home_model->min_qty_roll($details['ManufactureID']);
@@ -30,7 +34,7 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
     }
 
     $total = $this->home_model->get_db_column($table, 'Quantity', $where_coumn, $lineNumber);
-    $labels = $this->home_model->get_db_column($table, 'labels', $where_coumn, $lineNumber);
+
     $designs = $this->home_model->get_db_column($table, 'Print_Qty', $where_coumn, $lineNumber);
     $min_labels_per_roll = $this->home_model->min_labels_per_roll($minroll);
     $upload_path = base_url().'theme/assets/images/artworks/';

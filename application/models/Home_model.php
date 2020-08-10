@@ -9953,9 +9953,9 @@ class Home_model extends CI_Model
         return $qry->row_array();
     }
 
-    function generate_preferences_data($line_detail){
-        $preferences = array();
+    function generate_preferences_data($line_detail,$flag=NULL){
 
+        $preferences = array();
         $preferences['ProductID'] = $line_detail->ProductID;
         $preferences['ManufactureID'] = $line_detail->ManufactureID;
         $preferences['manuid'] = $line_detail->ManufactureID;
@@ -9991,7 +9991,11 @@ class Home_model extends CI_Model
             $preferences['material_roll'] = $line_detail->ColourMaterial_upd;
             $preferences['categorycode_roll'] = $preferences['die_code'].$preferences['coresize'];
             $preferences['adhesive_roll'] = $material_data['adhesive'];
-            $preferences['labels_roll'] = $line_detail->labels;
+            if (isset($flag) && $flag == 'quotation_detail'){
+                $preferences['labels_roll'] = $line_detail->orignalQty;
+            } else {
+                $preferences['labels_roll'] = $line_detail->labels;
+            }
             $preferences['quantity'] = $line_detail->Quantity;
         } else {
             $preferences['productcode_a4'] = $line_detail->ManufactureID;
@@ -9999,7 +10003,11 @@ class Home_model extends CI_Model
             $preferences['material_a4'] = $line_detail->ColourMaterial_upd;
             $preferences['categorycode_a4'] = $preferences['die_code'];
             $preferences['adhesive_a4'] = $material_data['adhesive'];
-            $preferences['labels_a4'] = $line_detail->labels;
+            if (isset($flag) && $flag == 'quotation_detail'){
+                $preferences['labels_a4'] = $line_detail->orignalQty;
+            } else {
+                $preferences['labels_a4'] = $line_detail->labels;
+            }
             $preferences['quantity'] = $line_detail->Quantity;
         }
 
@@ -10038,6 +10046,11 @@ class Home_model extends CI_Model
             'FinishTypePricePrintedLabels' => $line_data['FinishTypePricePrintedLabels']
         );
 
+        if ($flag == 'quotation_detail'){
+            $updation_array['orignalQty'] = $updation_array['labels'];
+            unset($updation_array['labels']);
+        }
+
         /*echo "<pre>";
         print_r($updation_array);
         echo "</pre>";
@@ -10045,7 +10058,6 @@ class Home_model extends CI_Model
 
         $this->db->where($where_coumn, $lineNumber);
         $this->db->update($table, $updation_array);
-
 
     }
 
