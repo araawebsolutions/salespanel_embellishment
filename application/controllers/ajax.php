@@ -42,7 +42,7 @@ class Ajax extends CI_Controller{
 	function rollimages($diecode=NULL){
 		if($diecode!=NULL){
 			
-			$qry =  "SELECT ManufactureID from products p , category  c where SUBSTRING_INDEX( p.CategoryID, 'R', 1 ) = c.CategoryID 
+			$qry = "SELECT ManufactureID from products p , category  c where SUBSTRING_INDEX( p.CategoryID, 'R', 1 ) = c.CategoryID 
 					AND (p.Activate ='Y' or p.Activate ='y') AND c.CategoryID LIKE '".$diecode."'";
 					$query  = $this->db->query($qry);
 					$result = $query->result();
