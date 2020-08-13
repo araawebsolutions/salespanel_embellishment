@@ -10075,6 +10075,19 @@ class Home_model extends CI_Model
             ->get()->result();
     }
 
+    function desing_service_charges_label_emb($design)
+    {
+        if ($design == 1) {
+            $price = 49.99;
+        } else if ($design == 2) {
+            $price = 89.99;
+        } else if ($design == 3) {
+            $price = 124.99;
+        }
+        return $price;
+
+    }
+
         /***************************************************/
         /***********LABEL EMBELLISHMENT TASK ENDS***********/
         /***************************************************/
