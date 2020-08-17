@@ -254,7 +254,7 @@
                             </div>
                         </div>
                         <div class="mt-15 col-md-3 col-xs-6 rowflex">
-                            <div class="panel panel-default rowflexdiv">
+                            <div class="panel panel-default rowflexdiv field_containers">
                                 <div id="headingOne" class="panel-title_blue">
                                     <div>Select Finish Preferences</div>
                                 </div>

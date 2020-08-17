@@ -723,7 +723,7 @@ $assets = Assets; ?>
                                                     if( $edit_cart_flag ) {?>
                                                         <input type="hidden" id="selected_digital_process" value="<?= $cart_and_product_data['Print_Type'];?>" />
                                                         <input type="hidden" id="selected_line_type" value="<?= $cart_and_product_data['ProductBrand'];?>" />
-                                                        <input type="hidden" id="selected_combination_base" value="<?= $cart_and_product_data['combination_base'];?>" />
+                                                        <input type="text" id="selected_combination_base" value="<?= $cart_and_product_data['combination_base'];?>" />
                                                         <input type="hidden" id="custom_roll_and_label" value="<?= $cost_effective_custom_rolls;?>" />
                                                         <input type="hidden" id="artwork_now_or_follow" value="<?= $artwork_now_or_follow;?>" />
 
@@ -743,7 +743,7 @@ $assets = Assets; ?>
                                                 $total_emb_and_plate_cost =  $prices['label_finish'] + $total_emb_plate_price;
 
                                                 ?>
-                                                <input type="hidden" id="cartid" value="<?= $cartid ?>"/>
+                                                <input type="text" id="cartid" value="<?= $cartid ?>"/>
                                                 <!--    <input type="hidden" id="cartproductid" value="-->
                                                 <? //= $rolldetails['ProductID'] ?><!--"/>-->
                                                 <input type="hidden" id="cartunitqty" value="<?= $unitqty ?>"/>

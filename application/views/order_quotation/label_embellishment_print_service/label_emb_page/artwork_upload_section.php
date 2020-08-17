@@ -20,14 +20,13 @@
 
         <div class="col-md-8  ">
             <span class="label-embellishment-small-text">
-                        Using our expert graphic designers to create
-                        excellent designs for your product.
+                        Using our expert graphic designers to create excellent designs for your product.
                     </span>
         </div>
         <div class="col-md-1"></div>
         <div class="col-md-3">
 <!--            <a href="#model-one" class="btn btn-big">model!</a>-->
-            <a href="javascript:;" id="inhouse_modal_button" style="width: 100% !important;" class="label-embellishment-cta-adjusted inhouse-design  inhouse_modal_button" data-toggle="modal" data-target="#inhouse_design_modal">
+            <a href="javascript:;" id="inhouse_modal_button" style="width: 100% !important;" class="label-embellishment-cta-adjusted1 inhouse-design  inhouse_modal_button" data-toggle="modal" data-target="#inhouse_design_modal">
                 Inhouse Design Services <i class="fa fa-chevron-right"></i>
             </a>
 <!--            <a href="#"  style="width: 100% !important;" class="label-embellishment-cta-adjusted"> Inhouse Design Services <i class="fa fa-chevron-right"> </i>-->
@@ -43,7 +42,17 @@
         <div class="margin-top-20 label_embelishemnt_pressproof_section" style="padding: 0px 7.5px;">
             <input type="checkbox"
 
-                <?php if($prices['presproof_charges'] >0){ echo "checked"; } ?> id="press_proof" />
+                <?php
+                if($prices['presproof_charges'] > 0) {
+                    echo "checked"; 
+                } else if( $edit_cart_flag && $cart_and_product_data['pressproof'] == 1 ) {
+                    echo "checked";
+                }
+                
+                
+                ?>
+
+                id="press_proof" />
                 <label for="press_proof">
                     <span class="labels-embelishemnt-pressproof">Do you require a hard copy pre-production press proof? (Cost £50.00) <br></span>
                     <span class="labels-embelishemnt-pressproof-detail">You will always automatically receive an electronic free of charge soft proof for approval before your labels

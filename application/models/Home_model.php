@@ -7446,6 +7446,21 @@ class Home_model extends CI_Model
     }
 
 
+    function insert_preferences_temp_basket($data, $temp_basket_id)
+    {
+        if (!empty($data)) {
+                
+                if(!isset($data['orientation'] ) ) {
+                    $data['orientation'] = "1";
+                }
+
+                $this->db->where('ID', $temp_basket_id  );
+                $this->db->update('temporaryshoppingbasket', $data);
+        }
+        return true;
+    }
+
+
     function load_preferences($email)
 
 
