@@ -6135,7 +6135,7 @@ function unsave_checkout_data(){
 
             if ($flag == 'order_detail'){
                 $line_detail = $this->orderModal->getOrderDetailBySerialNumber($lineNumber);
-
+                //echo "<pre>Debuging<br>-----";print_r($line_detail);die();
                 $table = 'orderdetails';
                 $where_column = 'SerialNumber';
                 $label_column = 'labels';
@@ -6532,6 +6532,7 @@ function unsave_checkout_data(){
 //                echo $qty;die;
             }
 
+
             $values_array_roll_price = array(
                 'roll' => $qty,
                 'menu' => $menu,
@@ -6546,13 +6547,19 @@ function unsave_checkout_data(){
             );
 			//        function that call price calculator function for label-embellishment page
             $data['prices'] = $this->calculate_roll_price_printed_emb_page($values_array_roll_price);
-            
+
+            /*echo "1<pre>";
+            print_r($data['prices']);
+            echo "</pre>";
+            die();*/
+            $printprice = 0;
             if ($qty > $data['prices']['rolls']) {
                 $additional_rolls = $qty - $data['prices']['rolls'];
                 $additional_cost = $this->home_model->additional_charges_rolls($additional_rolls);
                 $additional_cost = $this->home_model->currecy_converter($additional_cost, 'yes');
                 $data['prices']['additional_cost'] = number_format($additional_cost, 2, '.', '');
 
+                $printprice = $printprice + $additional_cost;
             }
 
             $old_plate_cost_total_for_minus_total_price = 0;
@@ -6598,7 +6605,8 @@ function unsave_checkout_data(){
             // 	print_r($data['prices']);
             // echo "</pre>";
             // die();
-            $printprice = ($data['prices']['printprice']) + $data['prices']['plainlabelsprice'] + ($data['prices']['presproof_charges']) + ($data['prices']['label_finish']) ;
+            //$printprice += ($data['prices']['printprice']) + $data['prices']['plainlabelsprice'] + ($data['prices']['presproof_charges']) + ($data['prices']['label_finish']) ;
+            $printprice += ($data['prices']['halfprintprice']) + $data['prices']['plainlabelsprice'] + ($data['prices']['presproof_charges']) + ($data['prices']['label_finish']) ;
             $plate_cost -=$old_plate_cost_total_for_minus_total_price;
             $printprice += $plate_cost;
 
@@ -6617,6 +6625,8 @@ function unsave_checkout_data(){
                 }
 
             }
+
+            //echo $printprice;die();
 
             $printing_options = array('Printing' => 'Y',
                 'Print_Type' => $labeltype,
@@ -9234,6 +9244,12 @@ function unsave_checkout_data(){
                     $prices = $this->calculate_roll_price_printed_emb_page($values_array_roll_price);
 
                 }
+
+                /*echo "11<pre>";
+                print_r($prices);
+                echo "</pre>";
+                die();*/
+
                 $old_plate_cost_total_for_minus_total_price = 0;
                 foreach ($prices['label_finish_individual_cost_array'] as $key=> $label_finish_individual_cost_array) {
                     $prices['label_finish_individual_cost_array'][$key]->use_old_plate = 0;
@@ -9281,7 +9297,11 @@ function unsave_checkout_data(){
                     // For sheet print price add sepereately in column
                     // Print_Total and plain price add in TotalPrice and shows both prices in separate line in cart and order confirmaion.
                     $total_price_all = $printprice_shopping_cart +  $prices['plainlabelsprice'];
+
+
                     $prices['plainprice'] = $total_price_all;
+
+
                     $prices['printprice'] = $printprice;
                     $printprice_shopping_cart = 0;
 
@@ -12701,7 +12721,6 @@ function unsave_checkout_data(){
     function calculate_roll_price_printed_emb_page($data)
     {
 
-
         if ($data) {
             $presproof =$data['pressproof'];
             $roll = $data['roll'];
@@ -12760,6 +12779,7 @@ function unsave_checkout_data(){
                     'pressproof' => $presproof,
                     'finish' => $labelfinish);
                 $response = $this->price_calculator_label_embellishment($values_array);
+                //echo "<pre>";print_r($response);die();
 
                 if ($data['upload_artwork_option_radio'] == "custom_roll_and_label"){
                     $promotiondiscount = $response['promotiondiscount'];
@@ -12771,10 +12791,12 @@ function unsave_checkout_data(){
 
                 }
 
+
                 $label_finish_individual_cost_array = $response['label_finish_individual_cost_array'];
                 $plainlabelsprice = $response['plainlabelsprice'];
                 $label_finish = $response['label_finish'];
                 $rec = $this->home_model->get_total_uploaded_qty($cartid, $prd_id);
+
                 $uploaded_labels = $rec['labels'];
                 $uploaded_rolls = $rec['sheets'];
 
@@ -12785,6 +12807,9 @@ function unsave_checkout_data(){
                     $additional_cost = $this->home_model->additional_charges_rolls($additional_rolls);
                     $additional_cost;
                 }
+                /*echo "uploaded_rolls: ".$uploaded_rolls."<br>";
+                echo "response['rolls']: ".$response['rolls']."<br>";
+                echo "additional_cost: ".$additional_cost;die();*/
 
                 $presproof_charges = $this->home_model->currecy_converter($presproof_charges, 'yes');
                 $presproof_charges = number_format($presproof_charges, 2, '.', '');
@@ -13321,19 +13346,59 @@ function unsave_checkout_data(){
 
 
             $container = $this->input->post('container');
+
 //            print_r($container);die;
             $con_type = explode("_", $container);
             $con_type = $con_type[0];
-            $pref = array('email' => $email,
-                'sessionID' => $this->session->userdata('session_id'),
 
-                'coresize' => $coresize,
-                'wound_roll' => $wound_roll,
-                'orientation' => $orientation,
-                'digital_proccess_' . $con_type => $digital_process,
-            );
-//             echo"<prE>";print_r("$pref");echo"</pre>";exit;
-            $this->home_model->insert_preferences($pref);
+            $flag = $this->input->post('flag');
+            $refNumber = $this->input->post('refNumber');
+            $lineNumber = $this->input->post('lineNumber');
+
+            if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
+                $orientation = substr($orientation, -1, 1);
+                if ($flag == 'order_detail'){
+                    //$line_detail = $this->orderModal->getOrderDetailBySerialNumber($lineNumber);
+
+                    $table = 'orderdetails';
+                    $where_column = 'SerialNumber';
+                    $label_column = 'labels';
+                    $artwork_table = 'order_attachments_integrated';
+
+                    $pref = array(
+                        'Wound' => $wound_roll,
+                        'Orientation' => $orientation,
+                        'Print_Type' => $digital_process,
+                    );
+                }elseif ($flag == 'quotation_detail'){
+                    //$line_detail = $this->orderModal->getQuotationDetailBySerialNumber($lineNumber);
+
+                    $table = 'quotationdetails';
+                    $where_column = 'SerialNumber';
+                    $label_column = 'orignalQty';
+                    $artwork_table = 'quotation_attachments_integrated';
+
+                    $pref = array(
+                        'wound' => $wound_roll,
+                        'Orientation' => $orientation,
+                        'Print_Type' => $digital_process,
+                    );
+                }
+
+                $this->db->where($where_column, $lineNumber);
+                $this->db->update($table, $pref);
+            } else {
+                $pref = array('email' => $email,
+                    'sessionID' => $this->session->userdata('session_id'),
+
+                    'coresize' => $coresize,
+                    'wound_roll' => $wound_roll,
+                    'orientation' => $orientation,
+                    'digital_proccess_' . $con_type => $digital_process,
+                );
+//              echo"<prE>";print_r("$pref");echo"</pre>";exit;
+                $this->home_model->insert_preferences($pref);
+            }
         }
     }
 

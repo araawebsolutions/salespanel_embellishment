@@ -1108,6 +1108,8 @@ function show_quotation_basket(){
                     'design_file'=>$c->design_file,
                     'FinishTypePrintedLabels' => $c->FinishTypePrintedLabels,
                     'FinishTypePricePrintedLabels' => $c->FinishTypePricePrintedLabels,
+                    'label_application' => $c->label_application,
+                    'combination_base' => $c->combination_base,
                     'custom_roll_and_label' => $c->custom_roll_and_label,
                     'total_emb_cost' => $c->total_emb_cost,
                     'page_location'=>$c->page_location,

@@ -10043,7 +10043,9 @@ class Home_model extends CI_Model
             'total_emb_cost' => $line_data['total_emb_cost'],
             'custom_roll_and_label' => $line_data['custom_roll_and_label'],
             'FinishTypePrintedLabels' => $line_data['FinishTypePrintedLabels'],
-            'FinishTypePricePrintedLabels' => $line_data['FinishTypePricePrintedLabels']
+            'FinishTypePricePrintedLabels' => $line_data['FinishTypePricePrintedLabels'],
+            'combination_base' => $line_data['combination_base'],
+            'label_application' => $line_data['label_application']
         );
 
         if ($flag == 'quotation_detail'){
