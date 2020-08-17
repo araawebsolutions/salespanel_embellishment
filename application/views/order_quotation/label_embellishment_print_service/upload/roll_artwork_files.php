@@ -28,8 +28,9 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
     if (count($files) > 0){
         $q = $this->db->query(" select sum(qty) as total_roll from ".$artwork_table." WHERE Serial = ".$lineNumber." AND ProductID = ".$ProductID."  ");
         $total_uploaded_rolls =  $q->result();
+
         if (isset($total_uploaded_rolls) && !empty($total_uploaded_rolls)   ){
-            $additional_cost_per_roll = $prices['additional_cost']/($total_uploaded_rolls[0]->total_roll);
+            $additional_cost_per_roll = $prices['additional_cost']/($total_uploaded_rolls[0]->total_roll-$minroll);
         }
     }
 
@@ -39,6 +40,7 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
     $min_labels_per_roll = $this->home_model->min_labels_per_roll($minroll);
     $upload_path = base_url().'theme/assets/images/artworks/';
     $uploaded_designs = 0;
+    $flag_minus = false;
 } else {
 
     $ProductID = $details['ProductID'];
