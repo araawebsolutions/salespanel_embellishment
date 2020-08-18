@@ -3986,7 +3986,7 @@ class order extends CI_Controller
 
             $total_lines = $this->orderModal->getArtworkByOrder($serialNumber);
             $uploaded_lines = $this->db->query("select count(*) as total_files from order_attachments_integrated where Serial='".$serialNumber."'
-             AND (file != '' OR file != 'No File Required For Artwork To Follow') ")->row_array()['total_files'];
+             AND file != '' AND file != 'No File Required For Artwork To Follow' ")->row_array()['total_files'];
             $data['artwork_total_lines'] =  count($total_lines);
             if ($uploaded_lines > 0){
                 $data['upload_artwork'] = 'yes';
@@ -4001,7 +4001,7 @@ class order extends CI_Controller
 
             $total_lines = $this->orderModal->getArtworkForQuotation($serialNumber);
             $uploaded_lines = $this->db->query("select count(*) as total_files from quotation_attachments_integrated where Serial='".$serialNumber."'
-             AND (file != '' OR file != 'No File Required For Artwork To Follow') ")->row_array()['total_files'];
+             AND file != '' AND file != 'No File Required For Artwork To Follow' ")->row_array()['total_files'];
             $data['artwork_total_lines'] =  count($total_lines);
             if ($uploaded_lines > 0){
                 $data['upload_artwork'] = 'yes';

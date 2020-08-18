@@ -1424,7 +1424,7 @@ class quotationModal extends CI_Model
                 'design_file'=>$order_detail->design_file,
                 'regmark'=>$order_detail->regmark,
                 'sample'=>$order_detail->sample,
-              
+                
                 'odp_proof'=>$order_detail->qp_proof,
                 'odp_qty'=>$order_detail->qp_qty,
                 'odp_price'=>$order_detail->qp_price,
