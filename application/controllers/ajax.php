@@ -6753,9 +6753,9 @@ function unsave_checkout_data(){
 			//print_r($SID);die;
 
 			/*************** Discard Previously uploaded artowrks**************/
-			if( !$edit_cart_flag ) {
-				$this->db->delete("integrated_attachments", array('SessionID' => $SID));
-			}
+			// if( !$edit_cart_flag ) {
+			// 	$this->db->delete("integrated_attachments", array('SessionID' => $SID));
+			// }
 			
 			$data['details']['cartid'] = $cartid;
 
@@ -9363,6 +9363,11 @@ function unsave_checkout_data(){
                 
 
                 $items = array_merge($items, $printing_items);
+
+                // echo "<pre>";
+                // 	print_r($items);
+                // 	echo 
+                // 	die();
 
                 if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
                     $updation_array = $this->home_model->emb_update_line($items,$flag,$refNumber,$lineNumber);

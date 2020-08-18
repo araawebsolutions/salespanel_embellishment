@@ -367,9 +367,8 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
     </div>
 <? } ?>
 
-<input type="hidden" id="actual_designs_qty" value="<?=$designs?>"  />
-<input type="hidden" id="upload_remaining_designs" value="<?=($designs-$uploaded_designs)?>"  />
-<input type="hidden" id="upload_remaining_labels" value="<?=($remaingsheets*$details['LabelsPerSheet'])?>"  />
-
-<input type="hidden" id="actual_sheets" value="<?=$total?>"  />
-<input type="hidden" id="uploaded_sheets" value="<?=$total_sheets?>"  />
+<input type="hidden" id="actual_designs_qty" value="<?=$designs?>" />
+<input type="hidden" id="upload_remaining_designs" value="<?=($designs-$uploaded_designs)?>" />
+<input type="hidden" id="upload_remaining_labels" value="<?=($remaingsheets*$details['LabelsPerSheet'])?>" />
+<input type="hidden" id="actual_sheets" value="<?=$total?>" />
+<input type="hidden" id="uploaded_sheets" value="<?=$total_sheets?>" />

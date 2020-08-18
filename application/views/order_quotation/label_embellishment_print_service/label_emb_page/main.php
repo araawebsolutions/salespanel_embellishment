@@ -3560,7 +3560,8 @@
                 form_data.append("laminations_and_varnishes_childs", laminations_and_varnishes_childs);
                 form_data.append("selected_already_plates_composite_array", JSON.stringify(selected_already_plates_composite_array));
                 form_data.append("label_application", label_application);
-
+                form_data.append("combination_base", combination_base);
+                
                 // console.log(type);
                 if (upload_artwork_radio == "upload_artwork_now") {
 

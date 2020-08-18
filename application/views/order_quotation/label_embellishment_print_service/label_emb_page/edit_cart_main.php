@@ -3508,6 +3508,7 @@
                 form_data.append("selected_already_plates_composite_array", JSON.stringify(selected_already_plates_composite_array));
                 form_data.append("lines_to_populate", lines_to_populate);
                 form_data.append("label_application", label_application);
+                form_data.append("combination_base", combination_base);
 
                 // console.log(type);
                 if (upload_artwork_radio == "upload_artwork_now") {
@@ -3622,6 +3623,7 @@
                 form_data.append("laminations_and_varnishes_childs", laminations_and_varnishes_childs);
                 form_data.append("selected_already_plates_composite_array", JSON.stringify(selected_already_plates_composite_array));
                 form_data.append("label_application", label_application);
+                form_data.append("combination_base", combination_base);
 
                 // console.log(type);
                 if (upload_artwork_radio == "upload_artwork_now") {
@@ -4956,7 +4958,7 @@
         var remaing = parseInt($('#upload_remaining_labels').val());
         // alert(remaing);
         var exceed = '';
-        if (remaing < 0) {
+        if (remaing <= 0) {
             exceed = 'yes';
         }
         $('#cart_summery_loader').show();
@@ -4967,7 +4969,6 @@
         var upload_artwork_radio = $('input[name="upload_artwork_2"]:checked').val();
         var upload_artwork_option_radio = $('input[name="upload_artwork_option_2"]:checked').val();
 
-        
         $.ajax({
             url: mainUrl + 'ajax/material_update_printing_artworks_label_emb',
             type: "POST",
