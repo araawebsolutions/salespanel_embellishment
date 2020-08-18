@@ -1741,7 +1741,7 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
                     $('#purchased_plate_section').html(data.data.hostory_plates_content);
                     // $('#label_coresize').html(data.data.roll_cores);
                     $("#brandName").text(preferences.available_in);
-
+                    $('.sheet_section_radio_main_container').hide();
                     <?php
                     if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {?>
                     checkedSelectedLemOptions(<?=$lem_options?>);
@@ -3693,6 +3693,7 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
                 form_data.append("selected_already_plates_composite_array", JSON.stringify(selected_already_plates_composite_array));
                 form_data.append("lines_to_populate", lines_to_populate);
                 form_data.append("label_application", label_application);
+                form_data.append("combination_base", combination_base);
                 form_data.append("flag", flag);
                 form_data.append("refNumber", refNumber);
                 form_data.append("lineNumber", lineNumber);
@@ -3807,6 +3808,7 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
                 form_data.append("laminations_and_varnishes_childs", laminations_and_varnishes_childs);
                 form_data.append("selected_already_plates_composite_array", JSON.stringify(selected_already_plates_composite_array));
                 form_data.append("label_application", label_application);
+                form_data.append("combination_base", combination_base);
                 form_data.append("flag", flag);
                 form_data.append("refNumber", refNumber);
                 form_data.append("lineNumber", lineNumber);
@@ -5843,6 +5845,7 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
             var uploaded_sheets = parseInt($('#uploaded_sheets').val());
             var actual_sheets = parseInt($('#actual_sheets').val());
             var upload_remaining_designs = parseInt($('#upload_remaining_designs').val());
+
             if (upload_remaining_designs == 0) {
 
                 $(".label-embellishment-cta-adjusted").trigger("click");

@@ -6189,6 +6189,20 @@ function unsave_checkout_data(){
         $minus_plate_cost = array();
         $use_old_plate = array();
 
+        $page_reload = $this->input->post('page_reload');
+
+        if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
+            $row = $this->db->query('Select * from '.$table.' WHERE '.$where_column.' = '.$lineNumber .' ')->row_array();
+        } else {
+            $row = $this->db->query('Select * from temporaryshoppingbasket WHERE ID = "' . $cartid . '"')->row_array();
+        }
+        if (isset($row) && !empty($row)){
+            $design = $row['Print_Qty'];
+
+        }
+
+
+
 
         foreach ($rollfinish_child_array as $finish_child){
 		//            print_r($finish_child); echo '<br>';
@@ -6612,7 +6626,7 @@ function unsave_checkout_data(){
 
             $total_emb_cost = $data['prices']['label_finish'] + $plate_cost;
 
-            $page_reload = $this->input->post('page_reload');
+            /*$page_reload = $this->input->post('page_reload');
             if (isset($page_reload) && empty($page_reload)){
                 if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
                     $row = $this->db->query('Select * from '.$table.' WHERE '.$where_column.' = '.$lineNumber .' ')->row_array();
@@ -6624,7 +6638,7 @@ function unsave_checkout_data(){
 
                 }
 
-            }
+            }*/
 
             //echo $printprice;die();
 
