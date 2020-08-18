@@ -1,16 +1,26 @@
 <link rel='stylesheet' href='<?= Assets ?>css/label_embellishment.css'>
 
-
-
-<!--<link rel='stylesheet' href='<?/*= Assets */?>css/main-unminify.css'>-->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.1.3/assets/owl.carousel.min.css'>
-
-
-<link rel='stylesheet' href='<?= Assets ?>css/11custom.css'>
+<link rel="stylesheet" href="<?= Assets_path ?>css/dropzone.css">
+<link rel='stylesheet' href='<?= Assets ?>css/in_house_design.css'>
 <script src="<?= Assets ?>labelfinder/js/jquery-ui.js"></script>
+<script src="<?= Assets_path ?>js/dropzone.js"></script>
+<script src="<?= Assets_path ?>js/jquery.validate.js"></script>
 
 <style>
+
+    .checkmark {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        height: 12px !important;
+        width: 12px !important;
+        border-radius: unset !important;
+        background-color: #fff !important;
+    }
+
+    /*.modal-body{*/
+    /*    height: auto !important;*/
+    /*}*/
     .sweet-alert {
         left: 35% !important;
         box-shadow: 0 0 20px;
@@ -233,9 +243,9 @@
 
 <?php $assets = 'https://www.aalabels.com/theme/site/'; ?>
 <div id="full_page_loader" class="white-screen"
-     style="position: absolute;top: 30%;right: 0;width: 100%;z-index: 999;height: 110%;display: none;background: #FFF;opacity: 0.8;">
+     style=" position: absolute; top: 27%;  right: 0px;  width: 100%;  z-index: 999; height: 20%;  background: rgb(255, 255, 255);  opacity: 1;">
     <div class="text-center"
-         style="margin: 20% 43% !important;background: rgba(255,255,255,.9) none repeat scroll 0 0;padding: 10px;border-radius: 5px;width: 18%;border: solid 1px #CCC;">
+         style="margin: 5% 42% !important;background: rgba(255,255,255,.9) none repeat scroll 0 0;padding: 10px;border-radius: 5px;width: 18%;border: solid 1px #CCC;">
         <img onerror="imgError(this);" src="<?= Assets ?>images/loader.gif" class="image"
              style="width:139px; height:29px; " alt="AA Labels Loader">
     </div>
@@ -271,6 +281,7 @@
                 <!--               --><?php //include('printing_process_and_product.php') ?>
 
                 <!-- Label Finishes & Embellishments & Cart Summary Starts -->
+
                 <section>
                     <div class="row">
                         <div id="finish_content" class="col-md-9 col-xs-12">
@@ -287,8 +298,20 @@
                     <div class="row padding-8">
                         <hr>
                         <div class="col-md-3 float-left no-padding">
-                            <a href="#" class="label-embellishment-cta"><i class="fa fa-chevron-left"></i> Back to
+                            <a href="#" class="label-embellishment-cta gotoMaterialPage"><i
+                                        class="fa fa-chevron-left"></i> Back to
                                 Material & Quantity</a>
+                        </div>
+                        <div class="col-md-3 no-padding" style="float: right">
+                            <!--        <a href="javascript:;" class="label-embellishement-cta proceed_to_checkout" id="label-embellishement-cta" onclick="proceedToCart(this)">Proceed with printed labels on <span  id="brandName">-->
+                            <?php //echo  ucfirst($producttype);?><!-- </span></a>-->
+                            <a href="javascript:;" class="label-embellishement-cta proceed_to_checkout"
+                               id="label-embellishement-cta">Proceed with printed labels on <span
+                                        id="brandName"><?php echo ucfirst($producttype); ?> </span></a>
+                            <a href="javascript:;" class="label-embellishement-cta "
+                               id="label-embellishement-calculate-price-cta" style="display: none ;"
+                               onclick="reCaculate(this)">Calculate Price <i class='fa fa-calculator'></i></a>
+
                         </div>
                     </div>
                 </section>
@@ -316,6 +339,8 @@
                                                              src="<?= Assets ?>images/header/call_opr_1.png"></div>
             </div>
         </div>
+
+
         <!-- end -->
 
 
@@ -388,6 +413,11 @@
 <!-- Popup For Artwork Upload & Artwork to follow Start -->
 <div id="artwork_upload_view">
 </div>
+
+<!-- Popup For Artwork Upload & Artwork to follow Start -->
+<div id="in_house_design_service_popup">
+</div>
+
 <!-- --><?php
 //echo"<pre>";print_r($details);
 //
@@ -581,7 +611,7 @@
                 //     }
                 // }
                 //also add same functionality to purchased plate section
-                if($(this).data('tirggered_source')){
+                if ($(this).data('tirggered_source')) {
 
                     $('#uncheck_purchased_plate' + emb_selection_id).prop("checked", true);
                     $('#uncheck' + emb_selection_id).prop("checked", true);
@@ -591,16 +621,15 @@
                     // composite_array['plate_order_no'] = $(this).data('plate_order_no');
                     // composite_array['already_used_plate_id'] = $(this).data('embellishment_selection_id') ;
 
-                    var composite_obj = {already_used_plate_id:emb_selection_id, plate_order_no:plate_order_no_last};
+                    var composite_obj = {already_used_plate_id: emb_selection_id, plate_order_no: plate_order_no_last};
                     var lenght = selected_already_plates_composite_array.length;
-                    selected_already_plates_composite_array[lenght] =  JSON.stringify(composite_obj) ;
+                    selected_already_plates_composite_array[lenght] = JSON.stringify(composite_obj);
 
 
-                }else{
+                } else {
                     $('#uncheck' + emb_selection_id).prop("checked", true);
 
                 }
-
 
 
                 // var index = selected_already_plates.indexOf(emb_selection_id);
@@ -640,10 +669,14 @@
 
                         selected_already_plates.push(checked_id);
 
+                        //  this issue needs to be resolved as due to his entry its showing already purchase price section
+                        //commenting these lines as it will require in case of conflict popup in already purchased plate modal so will consider it in last
+                        // commenting it to prevent error in case of Label Finishes & Embellishments options price calculation (to prevent already purchased plate price section)
+                        // var composite_obj = {already_used_plate_id: checked_id, plate_order_no: plate_order_no_last};
+                        // selected_already_plates_composite_array[0] = JSON.stringify(composite_obj);
 
                         var composite_obj = {already_used_plate_id:checked_id, plate_order_no:plate_order_no_last};
                         selected_already_plates_composite_array[0] =  JSON.stringify(composite_obj);
-
                     }
 
                 });
@@ -749,6 +782,7 @@
     //
     //     // alert("dsfsdfsd");
     // });
+
     var combination_base = '';
     var selected_already_plates = [];
     var selected_already_plates_composite_array = [];
@@ -1563,7 +1597,6 @@
                         backtomaterial_ype = "roll-labels-printed";
                     }
 
-
                     if (data.preferences.selected_size == null) {
                         return false;
                     }
@@ -1575,12 +1608,77 @@
                     contentbox.html(data.data.printing_process_content);
                     finish_content.html(data.data.finish_content);
                     cart_summery.html(data.data.cart_summery);
+
+
+
+
+
+                    combination_base =  data.data.cart_and_product_data['combination_base'];
+                    console.log("Combination base : "+combination_base);
+                    var wound = data.data.cart_and_product_data['wound'];
+                    var label_application = data.data.cart_and_product_data['label_application'];
+                    var orientation = "Orientation"+data.data.cart_and_product_data['orientation'];
+
+                    console.log("Wound : "+wound);
+                    console.log("Label Application : "+label_application);
+                    console.log("Orientation : "+orientation);
+                    console.log("Available In: "+preferences.available_in);
+                    
+                    $("#woundoption select").val(wound);
+                    $('#label_application option[value='+label_application+']').attr('selected','selected');
+                    
+                    if(preferences.available_in == "Roll")
+                    {
+                        if(wound == 'Inside')
+                        {
+                            $('.insideorientation').show();
+                            $('.outsideorientation').hide();
+                        } else {
+                            $('.insideorientation').hide();
+                            $('.outsideorientation').show();
+                        }
+
+                        if(orientation != '' && orientation != null)
+                        {
+                            if(wound == 'Outside')
+                            {
+                                $('.field_containers').find('.dropdown-toggle').html((orientation).substr(0,1).toUpperCase()+(orientation).substr(1)+' <i class="fa fa-unsorted"></i>');
+                                $('#label_orientation').val(orientation);
+                            }
+                            else
+                            {
+
+                                $('.field_containers').find('.dropdown-toggle').html((orientation).substr(0,1).toUpperCase()+(orientation).substr(1)+' <i class="fa fa-unsorted"></i>');
+                                $('#label_orientation').val(orientation);
+                            }
+                        }
+                        else
+                        {
+                            if(wound == 'Inside')
+                            {
+                                $('.field_containers').find('.dropdown-toggle').html('Orientation 5 <i class="fa fa-unsorted"></i>');
+                                $('#label_orientation').val("orientation1");
+                            }
+                            else
+                            {
+                                $('.field_containers').find('.dropdown-toggle').html('Orientation 5 <i class="fa fa-unsorted"></i>');
+                                $('#label_orientation').val('orientation5');
+                            }
+
+                        }
+                    }
+
+                    var orientatoin = $('#label_orientation').val();
+                    $('.insideorientation').find('.popup_orientation').val(orientatoin);
+                    $('.outsideorientation').find('.popup_orientation').val(orientatoin);
+
+
                     // $('#label_coresize').html(data.data.roll_cores);
                     $('#purchased_plate_section').html(data.data.hostory_plates_content);
                     $("#brandName").text(preferences.available_in);
 
                     checkedSelectedLemOptions($.parseJSON(data.data.cart_and_product_data['FinishTypePricePrintedLabels']));
-
+                    
                     
                     $('.sheet_section_radio_main_container').hide();
                     $('#standerd_inner_section_options').hide();
@@ -1594,10 +1692,10 @@
 
                     //disable click on page load on emb option tabs
                     if (preferences.available_in != "Roll"){
-                        $('#tab-1').css('pointer-events','none');
-                        $('#tab-2').css('pointer-events','none');
-                        $('#tab-3').css('pointer-events','none');
-                        $('#tab-4').css('pointer-events','none');
+                        // $('#tab-1').css('pointer-events','none');
+                        // $('#tab-2').css('pointer-events','none');
+                        // $('#tab-3').css('pointer-events','none');
+                        // $('#tab-4').css('pointer-events','none');
                         // $('#purchased_plate_cta').css('pointer-events','none');
 
                     }
@@ -1614,7 +1712,7 @@
 
     function pre_load_apply_preferences(data) {
 
-
+        /*
         setTimeout(function () {
 
             if (data.available_in == "Roll") {
@@ -1656,6 +1754,7 @@
 
         }, 1000);
 
+
         setTimeout(function () {
             if (data.coresize != '' && data.coresize != null) {
                 $(".roll_sheets_block #label_coresize").val(data.coresize);
@@ -1671,6 +1770,8 @@
                 $(".roll_sheets_block .labels-form .dm-selector li a[data-id='" + data.orientation + "']").trigger("click");
             }
         }, 4500);
+
+        */
         pre_load_add_item(data);
         $("#full_page_loader").hide();
 
@@ -1767,8 +1868,11 @@
         $('.insideorientation').find('.popup_orientation').val(orientatoin);
         $('.outsideorientation').find('.popup_orientation').val(orientatoin);
     });
+    var uploaded_file_names = [];
+    var has_files = 0;
+    var all_files_uploaded = 0;
 
-    function pre_load_add_item(allPreferences) {
+    function pre_load_add_item(allPreferences, page_reload) {
         var press_proof = 0;
         if ($('#press_proof').is(":checked")) {
             press_proof = 1;
@@ -1813,8 +1917,6 @@
             var sheet_product_quality =  $('.sheet_inner_section_radio:checked').data('product_quality_selection_inner');
 
         }
-
-
         var digital_process_plus_white =  $('.digital_process_plus_white:checked').data('add_white');
 
 
@@ -1832,11 +1934,32 @@
         var _this = $("#add_btn" + id);
         // change_btn_state(_this, 'disable', 'proceed-print');
 
+        //get qty from preferences first after that take it from most updated qty
+        var qty = $('.current_qty').text();
 
+        if (!qty || qty == 0 || qty == 'NaN') {
+            if (type == 'roll') {
+                qty = allPreferences.labels_roll;
+
+            } else {
+                qty = allPreferences.labels_a4;
+
+            }
+        } else {
+            if (type == 'roll') {
+                qty = parseInt(qty);
+
+            } else {
+                qty = Math.ceil(qty / labels);
+
+
+            }
+        }
 
         //unselect already purchased plate of same base when user select another from laminations and varnish section(new plate in case of hot_foil,emboss/deboss as they have same base->parent for is child)
 
         //get user selected element values
+
         $('.emb_option:checked').each(function () {
             current_emb_id = $(this).data('embellishment_id');
             current_emb_selection_id = $(this).data('embellishment_selection_id');
@@ -1851,11 +1974,11 @@
                     if (index !== -1) selected_already_plates.splice(index, 1);
 
                     //maintain composite array with order no to select purchased plate of exact order if user has same plate more then one in different order with different softproof.
-                    $.each(selected_already_plates_composite_array,function (a,b) {
+                    $.each(selected_already_plates_composite_array, function (a, b) {
                         // return string so convert it into object
                         var c =  JSON.parse(b);
 
-                        if (c.already_used_plate_id == history_emb_selection_id ){
+                        if (c.already_used_plate_id == history_emb_selection_id) {
                             //get index of obj after matching and delete it from objects of objects global 'selected_already_plates_composite_array'
                             //splice function can't use as its for arrays only.
                             delete selected_already_plates_composite_array[a];
@@ -1864,6 +1987,23 @@
                 }
             });
         });
+
+        var remaing = parseInt($('#upload_remaining_labels').val());
+        // console.log("1");
+        var designs_remain = parseInt($('#upload_remaining_designs').val());
+        if (designs_remain < 1) {
+            var limit_exceed_designs = 'yes';
+        } else {
+            var limit_exceed_designs = 'no';
+        }
+        if (remaing <= 0) {
+            var limit_exceed_sheet = 'yes';
+            var artwork_uploaded_for_rolls = true;
+        } else {
+            var artwork_uploaded_for_rolls = false;
+        }
+
+        var label_application = $('#label_application').val();
 
         // selected_already_plates_composite_array.serializeArray()
         $('#cart_summery_loader').show();
@@ -1883,6 +2023,12 @@
             async: "false",
             dataType: "html",
             data: {
+                page_reload: page_reload,
+                label_application: label_application,
+                combination_base: combination_base,
+                artwork_uploaded_for_rolls: artwork_uploaded_for_rolls,
+                limit_exceed_designs: limit_exceed_designs,
+                limit_exceed_sheet: limit_exceed_sheet,
                 digital_process_plus_white: digital_process_plus_white,
                 sheet_product_quality: sheet_product_quality,
                 qty: qty,
@@ -1909,18 +2055,20 @@
                 laminations_and_varnishes_childs: laminations_and_varnishes_childs,
                 selected_already_plates: selected_already_plates,
                 selected_already_plates_composite_array: selected_already_plates_composite_array,
-                'product_preferences': allPreferences
+                upload_artwork_radio: upload_artwork_radio
 
 
             },
             success: function (data) {
+
+                // console.log(data);
                 if (!data == '') {
                     data = $.parseJSON(data);
                     if (data.response == 'yes') {
 
-                        if (data.data.prices && data.data.premium_prices){
-                            $('#standerd_section_price').html(data.data.prices.printprice*2);
-                            $('#premium_section_price').html(data.data.premium_prices.printprice*2);
+                        if (data.data.prices && data.data.premium_prices) {
+                            $('#standerd_section_price').html(data.data.prices.printprice * 2);
+                            $('#premium_section_price').html(data.data.premium_prices.printprice * 2);
 
                         }
 
@@ -1929,6 +2077,99 @@
                         // $('#Printing_Step_4').find('.show_selected_product').html(data.content);
                         $('#cart_summery').html(data.data.content);
                         artwork_upload_view.html(data.data.artwork_upload_view);
+
+                        //append inhouse design services and also initialize dropzone for file upload START
+                        $('#in_house_design_service_popup').html(data.data.in_house_design_service);
+                        if ($('#ddropzone').length) {
+                            Dropzone.autoDiscover = false;
+                            var fileList = new Array;
+
+
+                            $("#ddropzone").dropzone({
+                                addRemoveLinks: true,
+                                // autoProcessQueue: false,
+                                // uploadMultiple:true,
+                                parallelUploads: 30, // Number of files process at a time (default 2)
+                                acceptedFiles: 'image/png  , image/jpg , image/gif , image/jpeg  , application/pdf  , application/postscript',
+                                url: mainUrl + 'ajax/upload_file_custom_design_label_emb',
+                                maxFiles: 30,
+
+                                maxfilesexceeded: function (file) {
+                                    this.removeFile(file);
+
+                                },
+                                sending: function (file, xhr, formData) {
+                                    formData.append('cartid', cartid);
+                                },
+                                success: function (file, serverFileName) {
+
+                                    fileList[i] = {
+                                        "serverFileName": serverFileName,
+                                        "fileName": file.name,
+                                        "fileId": i
+                                    };
+                                    //console.log(fileList);
+                                    i++;
+
+
+                                    var args = Array.prototype.slice.call(arguments);
+                                    uploaded_file_names.push(args[1]);
+                                    // alert("inside success");
+                                    // Look at the output in you browser console, if there is something interesting
+                                    console.log(args[1]);
+                                },
+                                addedfiles: function (file) {
+                                    has_files = 1;
+                                },
+                                queuecomplete: function (file) {
+                                    all_files_uploaded = 1;
+                                },
+
+                                removedfile: function (file) {
+                                    var rmvFile = "";
+                                    for (f = 0; f < fileList.length; f++) {
+
+                                        if (fileList[f].fileName == file.name) {
+                                            rmvFile = fileList[f].serverFileName;
+
+                                        }
+
+                                    }
+
+                                    if (rmvFile) {
+                                        $.ajax({
+                                            url: mainUrl + 'ajax/upload_file_custom_design_label_emb',
+                                            type: "POST",
+                                            data: {name: rmvFile, request: 2},
+                                        });
+                                        var _ref;
+                                        return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+                                    }
+                                },
+
+                                // removedfile: function (file) {
+                                //     var name = file.name;
+                                //
+                                //     $.ajax({
+                                //         type: 'POST',
+                                //         url: mainUrl + 'ajax/upload_file_custom_design_label_emb',
+                                //         data: {name: name, request: 2},
+                                //         sucess: function (data) {
+                                //             console.log('success: ' + data);
+                                //         }
+                                //     });
+                                //     var _ref;
+                                //     return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+                                // },
+
+                                error: function (file, message) {
+                                    $(file.previewElement).addClass("dz-error").find('.dz-error-message').text(message);
+                                }
+                            });
+                            // other code here
+                        }
+                        //append inhouse design services and also initialize dropzone for file upload END
+
                         $('#alternate_option').html(data.data.alternate_option);
 
                         // $('#Printing_Step_2').find('#product_summary_overview_home').html(data.content_home);
@@ -1943,19 +2184,88 @@
                     }
                 }
                 $('#cart_summery_loader').hide();
+                if (page_reload) {
+                    $('#a4_material_selection').css('margin-top', '-183px');
+
+                }
 
             }
         });
     }
 
-    $(document).on("click", ".digital_process, .emb_option, .product_quality, #press_proof", function (e) {
+    $(document).on("click", ".digital_process, .emb_option, .save_qty_btn, .product_quality, #press_proof", function (e) {
 
         $('#label-embellishement-calculate-price-cta').show("slide", {direction: "up"}, 400);
         $('#label-embellishement-cta').hide();
 
     });
+    var is_finish_pref_dropbox_valid = 0;
 
     function reCaculate(_this) {
+
+
+        var label_coresize = $('#label_coresize').val();
+        var woundoption = $('#woundoption').val();
+        var label_orientation = $('#label_orientation').val();
+        var label_application = $('#label_application').val();
+
+        var prdid = $('#cartproductid').val();
+        var type = $('#producttype' + prdid).val();
+        if (type == 'roll') {
+
+                if (is_finish_pref_dropbox_valid == 0) {
+                if (label_coresize == '' || label_coresize == undefined) {
+                    $('#label_coresize').css('border', '2px solid red');
+                    // show_faded_popover($('#label_coresize'), 'Select one of the option to proceed.');
+                    is_finish_pref_dropbox_valid=0;
+                    // return false;
+                } else {
+                    is_finish_pref_dropbox_valid++;
+
+                }
+
+                if (woundoption == '' || woundoption == undefined) {
+                    $('#woundoption').css('border', '2px solid red');
+                    // show_faded_popover($('#woundoption'), 'Select one of the option to proceed.');
+                    is_finish_pref_dropbox_valid=0;
+
+                    // return false;
+                } else {
+                    is_finish_pref_dropbox_valid++;
+
+                }
+                if (label_orientation == '' || label_orientation == undefined) {
+                    $('#label_orientation').css('border', '2px solid red');
+                    // show_faded_popover($('#label_orientation'), 'Select one of the option to proceed.');
+                    is_finish_pref_dropbox_valid=0;
+
+                    // return false;
+                }
+                else {
+                    is_finish_pref_dropbox_valid++;
+
+                }
+                if (label_application == '' || label_application == undefined) {
+                    $('#label_application').css('border', '2px solid red');
+                    // show_faded_popover($('#label_application'), 'Select one of the option to proceed.');
+                    is_finish_pref_dropbox_valid=0;
+
+                    // return false;
+                } else {
+                    is_finish_pref_dropbox_valid++;
+
+                }
+
+                if(is_finish_pref_dropbox_valid <= 0){
+                    // $('#toTop').trigger('click');
+                    $('html, body').animate({ scrollTop: 0 },  "slow");
+                    return false;
+                }
+
+
+            }
+        }
+
         $('#label-embellishement-cta').show("slide", {direction: "up"}, 400);
         $('#label-embellishement-calculate-price-cta').hide();
         pre_load_add_item(preferences_global);
@@ -2001,9 +2311,13 @@
 //     var digital_printing_process  = digital_printing_process;
 //
 // }
+        var edit_cart_flag = $('#edit_cart_flag').val();
+        var temp_basket_id = $('#temp_basket_id').val();
         var core_size = $('#label_coresize').val();
         var wound_option = $('#woundoption').val();
         var label_orientation = $('#label_orientation').val();
+        var label_application = $('#label_application').val();
+
         digital_printing_process = $('input[name="digital_printing_process"]:checked').parents().data("printing_process");
         // var digital_printing_process = $('#label_orientation').val();
         $('#finish_process_loader').show();
@@ -2013,8 +2327,13 @@
             data: {
                 container: container,
                 email: $("#email").val(),
+                // digital_proccess: digital_proccess,
                 core_size: core_size,
                 wound_option: wound_option,
+                edit_cart_flag: edit_cart_flag,
+                label_application: label_application,
+                temp_basket_id: temp_basket_id,
+                
                 digital_process: digital_printing_process,
                 label_orientation: label_orientation
             },
@@ -2172,7 +2491,34 @@
     });
     var product_type = '';
     var proceed_next_screen = '';
+    var upload_artwork_radio_old_selection = '';
+    var upload_artwork_option_radio_old_selection = '';
     $(document).on("click", "#about_your_artwork_cta", function (event) {
+        upload_artwork_radio_old_selection = upload_artwork_radio;
+        upload_artwork_option_radio_old_selection = upload_artwork_option_radio;
+        var id = preferences_global.ProductID;
+
+        var type = $('#producttype' + id).val();
+        if (type != 'roll') {
+            var sheet_product_quality = $('.sheet_inner_section_radio:checked').data('product_quality_selection_inner');
+            if (!sheet_product_quality || sheet_product_quality == '' || sheet_product_quality == undefined) {
+                // $(this).css('pointer-events','none');
+
+                $(this).removeAttr('data-target');
+
+
+                swal("Something Missing", "Please Select Digital Process To Continue", "error");
+                return;
+
+            } else {
+                $("#about_your_artwork_cta").attr("data-target", "#artworkuploadpopup");
+
+
+                // $(this).css('pointer-events','unset');
+
+            }
+        }
+
         //recheck radio buttons when user click on about artwork cta according to most recent value
         $("input[value='" + upload_artwork_radio + "']").prop("checked", true);
         $("input[value='" + upload_artwork_option_radio + "']").prop("checked", true);
@@ -2195,7 +2541,7 @@
             $('.artwork_inner_col').removeClass('col-md-6');
             $('.artwork_inner_col').addClass('col-md-3');
             product_type = 'sheet';
-        }else{
+        } else {
             product_type = 'roll';
         }
         $('.modal-body').css("height", "88%");
@@ -2277,7 +2623,7 @@
                 if (isConfirm) {
                     // update_cart_with_upload();
                     // if (upload_artwork_radio !== $(this).val() || upload_artwork_option_radio !==  $(this).val()){
-                    //     $(this).prop('checked','checked');
+                    //     $(this).attr('checked','checked');
                     upload_artwork_radio = $('input[name=upload_artwork_2]:checked').val();
                     upload_artwork_option_radio = $('input[name=upload_artwork_option_2]:checked').val();
                     // alert(upload_artwork_radio+'-'+upload_artwork_option_radio);
@@ -2477,6 +2823,8 @@
         // if (upload_option !== 'upload_artwork') {
         //     clear_uploaded_artworks();
         // }
+        // $('.save_and_close_popup_checks').attr('data-dismiss', '');
+
         cartid = $('#cartid').val();
         var id = preferences_global.ProductID;
         var menuid = preferences_global.ManufactureID;
@@ -2519,9 +2867,8 @@
             }
 
         }
-        if (upload_artwork_radio !== "upload_artwork_now") {
-            $('.upload_artwork_loader').show();
-
+        if (upload_artwork_radio != upload_artwork_radio_old_selection || upload_artwork_option_radio != upload_artwork_option_radio_old_selection) {
+            // $('.upload_artwork_loader').show();
             // clear_uploaded_artworks();
 
         }
@@ -2535,6 +2882,34 @@
             }
 
         });
+
+        var id = preferences_global.ProductID;
+        var type = $('#producttype' + id).val();
+        var labels = $('#labels_p_sheet' + id).val();
+
+
+//get qty from preferences first after that take it from most updated qty
+        var qty = $('.current_qty').text();
+
+        if (!qty || qty == 0 || qty == 'NaN') {
+            if (type == 'roll') {
+                qty = preferences_global.labels_roll;
+
+            } else {
+                qty = preferences_global.labels_a4;
+
+            }
+        } else {
+            if (type == 'roll') {
+                qty = parseInt(qty);
+
+            } else {
+                qty = Math.ceil(qty / labels);
+
+
+            }
+        }
+
         //proceed to next (inner) modal if all checks fulfilled otherwise show error
         if (proceed_next_screen == 1) {
 
@@ -2551,7 +2926,7 @@
                 $('.modal-backdrop').remove();
 
                 $('.upload_artwork').show();
-
+                clear_uploaded_artworks();
                 $.ajax({
                     url: mainUrl + 'ajax/material_populate_artwork_upload_table_printed_labels',
                     type: "POST",
@@ -3039,6 +3414,11 @@
             var labels = $(_this).parents('.upload_row').find('.roll_labels_input').val();
             var sheets = $(_this).parents('.upload_row').find('.input_rolls').val();
             var lb_txt = 'labels';
+            var free_roll_allowed = $('.free_roll_allowed').val();
+
+            var no_of_rolls = $('#final_uploaded_rolls').val();
+
+
         } else {
             if (cartunitqty == 'labels') {
                 var labels = $(_this).parents('.upload_row').find('.labels_input').val();
@@ -3101,6 +3481,7 @@
                     form_data.append("file", uploadfile);
                 }
                 var digital_process_plus_white =  $('.digital_process_plus_white:checked').data('add_white');
+                var label_application = $('#label_application').val();
                 var edit_cart_flag = $("#edit_cart_flag").val();
                 var temp_basket_id = $('#temp_basket_id').val();
 
@@ -3126,8 +3507,8 @@
                 
                 form_data.append("selected_already_plates_composite_array", JSON.stringify(selected_already_plates_composite_array));
                 form_data.append("lines_to_populate", lines_to_populate);
-
-                
+                form_data.append("label_application", label_application);
+                form_data.append("combination_base", combination_base);
 
                 // console.log(type);
                 if (upload_artwork_radio == "upload_artwork_now") {
@@ -3153,6 +3534,16 @@
                     form_data.append("limit_exceed_sheet", 'yes');
                     var msg = 'You have entered extra ' + lb_txt + ', click here to update your basket.';
                 }
+                if (no_of_rolls > free_roll_allowed) { console.log('I am here');
+                    form_data.append("limit_exceed_sheet", 'yes');
+                    var msg = 'You have entered extra ' + lb_txt + ', click here to update your basket.';
+                }
+                console.log(designs_remain);
+                console.log(remaing);
+                console.log(no_of_rolls);
+                console.log(free_roll_allowed);
+                console.log(msg+"====");
+
                 if (remaing < 0 || (designs_remain < 1 && type != 'roll')) {
                     swal({
                             title: msg,
@@ -3205,7 +3596,10 @@
 
                     form_data.append("file", uploadfile);
                 }
+                var digital_process_plus_white = $('.digital_process_plus_white:checked').data('add_white');
+                var label_application = $('#label_application').val();
 
+                form_data.append("digital_process_plus_white", digital_process_plus_white);
                 var edit_cart_flag = $("#edit_cart_flag").val();
                 var temp_basket_id = $('#temp_basket_id').val();
                 form_data.append("sheet_product_quality", sheet_product_quality);
@@ -3228,6 +3622,8 @@
                 form_data.append("laminations_and_varnishes", laminations_and_varnishes);
                 form_data.append("laminations_and_varnishes_childs", laminations_and_varnishes_childs);
                 form_data.append("selected_already_plates_composite_array", JSON.stringify(selected_already_plates_composite_array));
+                form_data.append("label_application", label_application);
+                form_data.append("combination_base", combination_base);
 
                 // console.log(type);
                 if (upload_artwork_radio == "upload_artwork_now") {
@@ -3352,6 +3748,10 @@
         $('.upload_row').show();
         $(this).hide();
         $('#add_another_line').hide();
+    });
+    $(document).on("blur", ".roll_labels_input,input_label_p_roll ", function (e) {
+        verify_labels_or_rolls_qty(this);
+        $(this).parents('.upload_row').find('.quantity_updater').hide();
     });
     $(document).on("click", ".quantity_updater", function (e) {
 
@@ -4079,6 +4479,8 @@
                     intialize_progressbar();
                     $("#upload_progress").hide();
                     $('#cart_summery_loader').hide();
+                    $('#a4_material_selection').css('margin-top', '-217px');
+                    $('.save_and_close_popup_checks').attr('data-dismiss', 'modal');
 
                 } else {
                     swal('upload failed', data.message, 'error');
@@ -4288,6 +4690,7 @@
 
         }
         var digital_process_plus_white =  $('.digital_process_plus_white:checked').data('add_white');
+        var label_application = $('#label_application').val();
         var edit_cart_flag = $("#edit_cart_flag").val();
         var temp_basket_id = $('#temp_basket_id').val();
 
@@ -4298,6 +4701,8 @@
             async: "false",
             dataType: "html",
             data: {
+                label_application: label_application,
+                combination_base: combination_base,
                 digital_process_plus_white: digital_process_plus_white,
                 sheet_product_quality: sheet_product_quality,
                 cartid: cartid,
@@ -4325,8 +4730,12 @@
                     $('#ajax_upload_content').html(data.content);
 
                     intialize_progressbar();
+                    $('.save_and_close_popup_checks').attr('data-dismiss', 'modal');
+
                 }
                 $('#cart_summery_loader').hide();
+                $('#a4_material_selection').css('margin-top', '-217px');
+
             }
 
         });
@@ -4344,6 +4753,7 @@
     function add_to_car_product() {
         var cartid = $('#cartid').val();
         var prdid = $('#cartproductid').val();
+        var edit_cart_flag = $('#edit_cart_flag').val();
         var labelpersheets = $('#labels_p_sheet' + prdid).val();
         var actual_qty = parseInt($('#sheet_qty_' + prdid).val());
         var coresize = $('#label_coresize').val();
@@ -4365,6 +4775,7 @@
         form_data.append("coresize", coresize);
         form_data.append("woundoption", woundoption);
         form_data.append("orientation", orientation);
+        form_data.append("edit_cart_flag", edit_cart_flag);
         form_data.append("upload_option", upload_option);
         form_data.append("persheet", labelpersheets);
         form_data.append("comments", comments);
@@ -4542,11 +4953,12 @@
         var digital_process_plus_white =  $('.digital_process_plus_white:checked').data('add_white');
 
         // console.log("before qty 3");
+        var label_application = $('#label_application').val();
 
         var remaing = parseInt($('#upload_remaining_labels').val());
         // alert(remaing);
         var exceed = '';
-        if (remaing < 0) {
+        if (remaing <= 0) {
             exceed = 'yes';
         }
         $('#cart_summery_loader').show();
@@ -4557,7 +4969,6 @@
         var upload_artwork_radio = $('input[name="upload_artwork_2"]:checked').val();
         var upload_artwork_option_radio = $('input[name="upload_artwork_option_2"]:checked').val();
 
-        
         $.ajax({
             url: mainUrl + 'ajax/material_update_printing_artworks_label_emb',
             type: "POST",
@@ -4565,6 +4976,8 @@
             dataType: "html",
             data: {
                 digital_process_plus_white: digital_process_plus_white,
+                label_application: label_application,
+                combination_base: combination_base,
                 sheet_product_quality: sheet_product_quality,
                 id: id,
                 cartid: cartid,
@@ -4599,9 +5012,11 @@
                         // $('#sheet_qty_'+prdid).val(parseInt(data.labels));
                         // $('#design_qty_'+prdid).val(parseInt(data.design));
                         //$('#cal_btn'+prdid).click();
+                        $('.save_and_close_popup_checks').attr('data-dismiss', 'modal');
 
                     }
                     $('#cart_summery_loader').hide();
+                    $('#a4_material_selection').css('margin-top', '-217px');
 
 
                 }
@@ -4642,6 +5057,7 @@
 
 
         var digital_process_plus_white =  $('.digital_process_plus_white:checked').data('add_white');
+        var label_application = $('#label_application').val();
 
         // var upload_artwork_radio = $('#artwork_now_or_follow').val();
         // var upload_artwork_option_radio = $('#custom_roll_and_label').val();
@@ -4666,6 +5082,8 @@
             dataType: "html",
             data: {
                 digital_process_plus_white: digital_process_plus_white,
+                label_application: label_application,
+                combination_base: combination_base,
                 sheet_product_quality: sheet_product_quality,
                 cartid: cartid,
                 productid: prdid,
@@ -4704,6 +5122,8 @@
                     }
                     $('#cart_summery_loader').hide();
                     $('.upload_artwork_loader').hide();
+                    $('#a4_material_selection').css('margin-top', '-217px');
+
 
                 }
             }
@@ -4711,8 +5131,8 @@
     }
 
 
-
     $(document).on("click", ".proceed_to_checkout", function (e) {
+
         var prdid = $('#cartproductid').val();
         if (upload_artwork_radio == "upload_artwork_now") {
             var upload_option = "upload_artwork";
@@ -4761,7 +5181,7 @@
             }
             alert_box("Minimum " + minqty + " " + cartunitqty + " required, please adjust remaining sheets in your artworks");
             return false;
-        } else if (actual_designs == remaing_designs && (upload_option == 'upload_artwork' || upload_option == 'email_artwork')) {
+        } else if ((actual_designs == remaing_designs && (upload_option == 'upload_artwork' || upload_option == 'email_artwork')) || actual_designs == remaing_designs || uploaded_sheets == 0) {
             alert_box("Please upload your artworks before proceeding to checkout ");
             return false;
         } else if ($('.uploadsavesection').css('display') == 'table-row' && (upload_option == 'upload_artwork' || upload_option == 'email_artwork')) {
@@ -4817,21 +5237,9 @@
                 } else {
                     var text = 'designs';
                 }
-                swal({
-                        title: 'You have reduced the number of ' + text + ' please confirm to recalculate the price.',
-                        type: "warning",
-                        showCancelButton: true,
-                        confirmButtonClass: "btn orangeBg",
-                        confirmButtonText: "Confirm",
-                        cancelButtonClass: "btn blueBg m-r-10",
-                        cancelButtonText: "Cancel",
-                        closeOnConfirm: true,
-                        closeOnCancel: true
-                    },
-                    function (isConfirm) {
                         var count = 0;
                         $('.upload_row').each(function () {
-                            if(!($(this).hasClass('uploadsavesection'))){
+                    if (!($(this).hasClass('uploadsavesection'))) {
                                 // alert("inside if");
                                 count++;
 
@@ -4839,10 +5247,33 @@
                         });
                         // alert(count);
                         lines_to_populate = count;
-                        if (isConfirm) {
                             update_cart_with_upload();
-                        }
-                    });
+                // swal({
+                //         title: 'You have reduced the number of ' + text + ' please confirm to recalculate the price.',
+                //         type: "warning",
+                //         showCancelButton: true,
+                //         confirmButtonClass: "btn orangeBg",
+                //         confirmButtonText: "Confirm",
+                //         cancelButtonClass: "btn blueBg m-r-10",
+                //         cancelButtonText: "Cancel",
+                //         closeOnConfirm: true,
+                //         closeOnCancel: true
+                //     },
+                //     function (isConfirm) {
+                //         var count = 0;
+                //         $('.upload_row').each(function () {
+                //             if(!($(this).hasClass('uploadsavesection'))){
+                //                 // alert("inside if");
+                //                 count++;
+                //
+                //             }
+                //         });
+                //         // alert(count);
+                //         lines_to_populate = count;
+                //         if (isConfirm) {
+                //             update_cart_with_upload();
+                //         }
+                //     });
             } else {
                 //Have you uploaded all your artworks?
                 var summary_price = $('#cart_summery_total_price').text();
@@ -4869,10 +5300,6 @@
             }
         }
     });
-
-
-
-
 
 
     $(document).on("click", "#purchased_plate_cta", function (event) {
@@ -4956,9 +5383,9 @@
     $(document).on("click", ".sheet_section_radio_main", function (event) {
         // alert("radio_selection");
         var radio_selection =   $(this).data('product_quality_selection');
-        $('#a4_material_selection').css('margin-top','-220px');
+        $('#a4_material_selection').css('margin-top', '-369px');
 
-        if (radio_selection == "standerd"){
+        if (radio_selection == "standerd") {
 
             // alert('uncheck yes');
             //Reset embelisment & Finish selections And Arrays start
@@ -4990,31 +5417,29 @@
             $('#standerd_inner_section_options').show();
             $('#premium_inner_section_options').hide();
 
-            $('#printing_process_default_check').prop("checked",true);
-            $('#sheet_inner_section_radio_id_standerd').attr("checked",true);
-            $('#sheet_inner_section_radio_id_premium').attr("checked",false);
-            $('#tab-1').css('pointer-events','none');
-            $('#tab-2').css('pointer-events','none');
-            $('#tab-3').css('pointer-events','none');
-            $('#tab-4').css('pointer-events','none');
-            $('#tab-4').css('pointer-events','none');
-            $('#purchased_plate_cta').css('pointer-events','none');
-        }else if(radio_selection == "premium"){
+            $('.printing_process_default_check').trigger("click");
+            $('#sheet_inner_section_radio_id_standerd').attr("checked", true);
+            $('#sheet_inner_section_radio_id_premium').attr("checked", false);
+            $('#tab-1').css('pointer-events', 'none');
+            $('#tab-2').css('pointer-events', 'none');
+            $('#tab-3').css('pointer-events', 'none');
+            $('#tab-5').css('pointer-events', 'none');
+            $('#purchased_plate_cta').css('pointer-events', 'none');
+        } else if (radio_selection == "premium") {
 
             $('.alternate_option_section').hide();
             $('#standerd_inner_section_options').hide();
             $('#premium_inner_section_options').show();
 
-            $('#printing_process_default_check').prop("checked",true);
-            $('#sheet_inner_section_radio_id_premium').attr("checked",true);
-            $('#sheet_inner_section_radio_id_standerd').attr("checked",false);
+            $('.printing_process_default_check').trigger("click");
+            $('#sheet_inner_section_radio_id_premium').attr("checked", true);
+            $('#sheet_inner_section_radio_id_standerd').attr("checked", false);
 
-            $('#tab-1').css('pointer-events','unset');
-            $('#tab-2').css('pointer-events','unset');
-            $('#tab-3').css('pointer-events','unset');
-            $('#tab-4').css('pointer-events','unset');
-            $('#tab-4').css('pointer-events','unset');
-            $('#purchased_plate_cta').css('pointer-events','unset');
+            $('#tab-1').css('pointer-events', 'unset');
+            $('#tab-2').css('pointer-events', 'unset');
+            $('#tab-3').css('pointer-events', 'unset');
+            $('#tab-5').css('pointer-events', 'unset');
+            $('#purchased_plate_cta').css('pointer-events', 'unset');
 
 
         }
@@ -5025,9 +5450,7 @@
     });
     $(document).on("click", ".sheet_inner_section_radio", function (event) {
         var radio_selection =   $(this).data('product_quality_selection_inner');
-        if (radio_selection == "standerd"){
-
-
+        if (radio_selection == "standerd") {
 
 
             //Reset embelisment & Finish selections And Arrays start
@@ -5058,20 +5481,19 @@
 
             $('#standerd_inner_section_options').show();
             $('#premium_inner_section_options').hide();
-            $('#printing_process_default_check').trigger('click');
+            $('.printing_process_default_check').trigger('click');
 
 
             $('#standerd_inner_section_description').show();
             $('#premium_inner_section_description').hide();
             //Enable finishes & emb options for premium sheet selection
-            $('#tab-1').css('pointer-events','none');
-            $('#tab-2').css('pointer-events','none');
-            $('#tab-3').css('pointer-events','none');
-            $('#tab-4').css('pointer-events','none');
-            $('#tab-4').css('pointer-events','none');
-            $('#purchased_plate_cta').css('pointer-events','none');
+            $('#tab-1').css('pointer-events', 'none');
+            $('#tab-2').css('pointer-events', 'none');
+            $('#tab-3').css('pointer-events', 'none');
+            $('#tab-5').css('pointer-events', 'none');
+            $('#purchased_plate_cta').css('pointer-events', 'none');
 
-        }else if(radio_selection == "premium"){
+        } else if (radio_selection == "premium") {
 
             $('#printing_process_default_check_premium').trigger('click');
 
@@ -5083,12 +5505,11 @@
             $('#premium_inner_section_description').show();
             $('#standerd_inner_section_description').hide();
             //Enable finishes & emb options for premium sheet selection
-            $('#tab-1').css('pointer-events','unset');
-            $('#tab-2').css('pointer-events','unset');
-            $('#tab-3').css('pointer-events','unset');
-            $('#tab-4').css('pointer-events','unset');
-            $('#tab-4').css('pointer-events','unset');
-            $('#purchased_plate_cta').css('pointer-events','unset');
+            $('#tab-1').css('pointer-events', 'unset');
+            $('#tab-2').css('pointer-events', 'unset');
+            $('#tab-3').css('pointer-events', 'unset');
+            $('#tab-5').css('pointer-events', 'unset');
+            $('#purchased_plate_cta').css('pointer-events', 'unset');
 
         }
 
@@ -5096,8 +5517,8 @@
     });
 
     $(document).on("click", ".digital_process_plus_white", function (e) {
-        if(!$('.pre_select_for_white').is(':checked')) {
-            var   msg= 'Check At Least one Option From Digital Process To Add White';
+        if (!$('.pre_select_for_white').is(':checked')) {
+            var msg = 'Check At Least one Option From Digital Process To Add White';
 
             swal("Select Digital Printing Process First", msg, "error");
             $('.digital_process_plus_white').prop('checked',false);
@@ -5107,10 +5528,11 @@
 
     });
     $(document).on("click", ".alternate_option_proceed_click", function (e) {
-        $('.sheet_section_radio_main').each(function (i,item) {
+        $('.sheet_section_radio_main').each(function (i, item) {
             var sheet_section_radio_main_val =  $(this).data('product_quality_selection');
-            if(sheet_section_radio_main_val == 'premium'){
-                alert("inside if");
+            $('#a4_material_selection').css('margin-top', '-220px');
+            if (sheet_section_radio_main_val == 'premium') {
+                // alert("inside if");
                 $(this).trigger('click');
                 $('#sheet_inner_section_radio_id_premium').trigger('click');
                 $('#printing_process_default_check_premium').trigger('click');
@@ -5128,34 +5550,34 @@
 
         var type = $('#producttype' + id).val();
 
-        if(type == 'sheet'){
+        if (type == 'sheet') {
 
 
-            if (!sheet_product_quality ){
-                var   msg= 'Select Digital Printing Process First';
+            if (!sheet_product_quality) {
+                var msg = 'Select Digital Printing Process First';
 
                 swal("Something Missing", msg, "error");
 
-            }else if (sheet_product_quality && sheet_product_quality == 'standerd'){
+            } else if (sheet_product_quality && sheet_product_quality == 'standerd') {
                 var msg = '';
 
-                if(msg_count == 1){
-                    msg= 'Finishes are not available from the Standard Quality Print option. Please select from the Premium Quality Print option.';
+                if (msg_count == 5) {
+                    msg = 'Finishes are not available from the Standard Quality Print option. Please select from the Premium Quality Print option.';
                     msg_count = '';
                     swal("Something Missing", msg, "error");
 
-                }else if(msg_count == 2){
-                    var msg= 'Foils are not available from the Standard Quality Print option. Please select from the Premium Quality Print option. ';
+                } else if (msg_count == 2) {
+                    var msg = 'Foils are not available from the Standard Quality Print option. Please select from the Premium Quality Print option. ';
                     msg_count = '';
                     swal("Something Missing", msg, "error");
 
-                }else if(msg_count == 3){
-                    var msg= 'Debossing and embossing are not available from the Standard Quality Print option. Please select from the Premium Quality Print option.';
+                } else if (msg_count == 1) {
+                    var msg = 'Debossing and embossing are not available from the Standard Quality Print option. Please select from the Premium Quality Print option.';
                     msg_count = '';
                     swal("Something Missing", msg, "error");
 
-                }else if(msg_count == 4){
-                    var msg= 'Silk-screen print is not available from the Standard Quality Print option. Please select from the Premium Quality Print option.';
+                } else if (msg_count == 3) {
+                    var msg = 'Silk-screen print is not available from the Standard Quality Print option. Please select from the Premium Quality Print option.';
                     msg_count = '';
                     swal("Something Missing", msg, "error");
 
@@ -5165,16 +5587,562 @@
 
         }
     });
+    //Embellishment qty updation before artwork upload and also  once artworks uploaded and user go back to emb page
+    $(document).on("click", ".save_qty_btn", function (event) {
+
+        var unitqty = 'Labels';
+        // alert(unitqty);
+        var labels = $('.LabelsPerSheet').val();
+        var printingType = $('.product_type').val();
+        var min_qty = $('.minimum_quantities').val();
+        var max_qty = $('.maximum_quantities').val();
+        var input_id = $('.inpu_qty_edit');
+
+
+        var qty = parseInt(input_id.val());
+
+
+        if (printingType == 'Sheets') {
+            if (unitqty == 'Labels') {
+                min_qty = parseInt(labels) * min_qty;
+                max_qty = parseInt(labels) * max_qty;
+            }
+
+        } else {
+            min_qty = 0;
+            max_qty = parseInt(labels) * max_qty;
+
+        }
+        if (!is_numeric(qty) || qty == '' || qty < min_qty) {
+            input_id.val(min_qty);
+            if (unitqty == "Labels") {
+                show_faded_popover(input_id, 'Quantity has been amended for production as ' + min_qty + ' labels.');
+            } else {
+                show_faded_popover(input_id, 'Quantity has been amended for production as ' + min_qty + ' sheets.');
+            }
+            qty = parseInt(input_id.val());
+        }
+
+        if (qty > max_qty) {
+            input_id.val(max_qty);
+            if (unitqty == 'Labels') {
+                show_faded_popover(input_id, 'Quantity has been amended for production as ' + max_qty + ' labels.');
+            } else {
+                show_faded_popover(input_id, 'Quantity has been amended for production as ' + max_qty + ' sheets.');
+
+            }
+            qty = parseInt(input_id.val());
+        }
+
+        if (qty % labels != 0 && unitqty == 'Labels') {
+            var multipyer = parseInt(labels) * parseInt(parseInt(qty / labels) + 1);
+            input_id.val(multipyer);
+            var qty = multipyer;
+        }
+        if (unitqty == 'Labels') {
+            qty = parseInt(qty / labels);
+        }
+
+        $('.current_qty').text($('.inpu_qty_edit').val());
+        $('.MaterialProductPriceMain_container').hide();
+        $('.product_details_container').show();
+        $('.emb_option_price_container').show();
+
+        reCaculate(this);
+
+    });
+    $(document).on("click", "#emb_qty_edit", function (event) {
+        // alert("dsfsd");
+
+        // var sheets = $('.upload_row').find('.labels_input').val();
+        var sheets = $('.total_user_sheet').text();
+
+
+        // if (sheets.length == 0 || sheets == 0 || sheets == '') {
+        //     var id = $('.upload_row').find('.labels_input');
+        //     var popover = $('.upload_row').find('.popover').length;
+        //     if (popover == 0) {
+        //         show_faded_popover(id, "Minimum 1 sheet required ");
+        //     }
+        //
+        //     return false;
+        // }
+        var prdid = $('#cartproductid').val();
+        var type = $('#producttype' + prdid).val();
+        if (type == 'sheet' && sheets >= 25) {
+            var uploaded_sheets = parseInt($('#uploaded_sheets').val());
+            var actual_sheets = parseInt($('#actual_sheets').val());
+            var upload_remaining_designs = parseInt($('#upload_remaining_designs').val());
+            if (upload_remaining_designs == 0) {
+
+                $(".label-embellishment-cta-adjusted").trigger("click");
+
+                // alert('inside roll if');
+                //run before artwork upload edit option
+            } else {
+                $('.inpu_qty_edit').val($('.current_qty').text());
+                $('.product_details_container').hide();
+                $('.MaterialProductPriceMain_container').show();
+                $('.emb_option_price_container').hide();
+
+                // alert('inside roll else');
+
+            }
+            //  $('#product_content').css('pointer-events','none');
+            // $('#finish_content').css('pointer-events','none');
+
+            // $('#product_content').css('pointer-events','none');
+            // $('.about_artwork_and_inhouse_service_section').css('pointer-events','none');
+            // $('.already_purchase_plate_section').css('pointer-events','none');
+            // $('.label_embelishemnt_pressproof_section').css('pointer-events','none');
+            //
+            // $('#tab-1').css('pointer-events','none');
+            // $('#tab-2').css('pointer-events','none');
+            // $('#tab-3').css('pointer-events','none');
+            // $('#tab-5').css('pointer-events','none');
+
+        } else if (type == 'roll') {
+            var no_of_rolls = $('#final_uploaded_rolls').val();
+            //run when artwork uploaded and user go back to emb page
+            if (no_of_rolls > 0) {
+
+                $(".label-embellishment-cta-adjusted").trigger("click");
+
+                // alert('inside roll if');
+                //run before artwork upload edit option
+            } else {
+                $('.inpu_qty_edit').val($('.current_qty').text());
+                $('.product_details_container').hide();
+                $('.MaterialProductPriceMain_container').show();
+                $('.emb_option_price_container').hide();
+
+                // alert('inside roll else');
+
+            }
+            // alert(type);
+            // $('#product_content').css('pointer-events','none');
+            // $('#finish_content').css('pointer-events','none');
+        }
+
+    });
+    //all checks of proceed_to_checkout function except checkout rather to go checkout it closes the pop up
+    $(document).on("click", ".save_and_close_popup_checks", function (e) {
+
+        var prdid = $('#cartproductid').val();
+        if (upload_artwork_radio == "upload_artwork_now") {
+            var upload_option = "upload_artwork";
+        } else if (upload_artwork_radio == "artwork_to_follow") {
+            var upload_option = "email_artwork";
+        }
+        // var upload_option = $('input[name=upload_artwork_2]').data('upload_option');
+        // var upload_option = $('input[name=upload_artwork_2]:checked').val();
+        var type = $('#producttype' + prdid).val();
+// alert(upload_option);
+        var labelpersheets = $('#labels_p_sheet' + prdid).val();
+        var cartunitqty = $('#cartunitqty').val();
+        if (type == 'roll') {
+            var remaing = parseInt($('#upload_remaining_labels').val());
+            var msg_text = 'labels';
+            var uploaded_sheets = parseInt($('#final_uploaded_rolls').val());
+            var uploaded_labels = parseInt($('#final_uploaded_labels').val());
+            var lables_qty_text = uploaded_labels + ' Labels on ' + uploaded_sheets + ' Rolls\n';
+        } else {
+            var actual_sheets = parseInt($('#actual_sheets').val());
+            var uploaded_sheets = parseInt($('#uploaded_sheets').val());
+            var uploaded_labels = parseInt(uploaded_sheets * labelpersheets);
+            var remaing = actual_sheets - uploaded_sheets;
+            var msg_text = 'sheets';
+            if (cartunitqty == 'labels') {
+                var msg_text = 'labels';
+            }
+            var lables_qty_text = uploaded_labels + ' Labels on ' + uploaded_sheets + ' Sheets\n';
+        }
+        var remaing_designs = parseInt($('#upload_remaining_designs').val());
+        var designservice = $('input[name=print_designservice]:checked').val();
+        var exceed = '';
+        //var message = 'Do you want to continue without uploading artworks.?';
+        var message = 'Have you uploaded all your artworks.?';
+        var actual_designs = parseInt($('#actual_designs_qty').val());
+        if ($('.UploadMainSelection').css('display') == 'block' && upload_option != 'email_artwork') {
+            alert_box("Please click to  Proceed before checkout ");
+            return false;
+        } else if (upload_option == 'design_services' && typeof designservice == 'undefined') {
+            alert_box("Please select no of design against design service");
+            return false;
+        } else if (type == 'sheet' && uploaded_sheets < 25 && (upload_option == 'upload_artwork' || upload_option == 'email_artwork')) {
+            var minqty = 25;
+            if (cartunitqty == 'labels') {
+                var minqty = 25 * parseInt(labelpersheets);
+            }
+            alert_box("Minimum " + minqty + " " + cartunitqty + " required, please adjust remaining sheets in your artworks");
+            return false;
+        } else if (actual_designs == remaing_designs && (upload_option == 'upload_artwork' || upload_option == 'email_artwork')) {
+            alert_box("Please upload your artworks before proceeding to checkout ");
+            return false;
+        } else if ($('.uploadsavesection').css('display') == 'table-row' && (upload_option == 'upload_artwork' || upload_option == 'email_artwork')) {
+
+            swal({
+                    title: 'Please complete  or delete the incomplete line.',
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn orangeBg",
+                    confirmButtonText: "Continue",
+                    cancelButtonClass: "btn blueBg m-r-10",
+                    cancelButtonText: "Delete",
+                    closeOnConfirm: true,
+                    closeOnCancel: true
+                },
+                function (isConfirm) {
+
+                    if (isConfirm) {
+                        return false;
+                    } else {
+                        $('.uploadsavesection').hide();
+                        $('#add_another_line').show();
+                        $('.add_another_art').show();
+                        return false;
+                    }
+                });
+            //alert_box("Please complete the file upload process to continue.");
+            //return false;
+        } else {
+            // if (upload_option == 'email_artwork' || upload_option == 'design_services') {
+            if (upload_option == 'design_services') {
+                swal({
+                        title: 'Do you want to continue without uploading artworks.?',
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn orangeBg",
+                        confirmButtonText: "No",
+                        cancelButtonClass: "btn blueBg m-r-10",
+                        cancelButtonText: "Yes",
+                        closeOnConfirm: true,
+                        closeOnCancel: true
+                    },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            console.log('cancel');
+                        } else {
+                            add_to_car_product();
+                            $('.save_and_close_popup_checks').attr('data-dismiss', 'modal');
+
+                        }
+                    });
+                // } else if ((remaing > 0 || remaing_designs > 0) && upload_option == 'upload_artwork') {
+            } else if ((remaing > 0 || remaing_designs > 0) && (upload_option == 'upload_artwork' || upload_option == 'email_artwork')) {
+                if (remaing > 0) {
+                    var text = msg_text;
+                } else {
+                    var text = 'designs';
+                }
+                var count = 0;
+                $('.upload_row').each(function () {
+                    if (!($(this).hasClass('uploadsavesection'))) {
+                        // alert("inside if");
+                        count++;
+
+                    }
+                });
+                // alert(count);
+                lines_to_populate = count;
+                // $('#product_content').css('pointer-events','none');
+                // $('.about_artwork_and_inhouse_service_section').css('pointer-events','none');
+                // $('.already_purchase_plate_section').css('pointer-events','none');
+                // $('.label_embelishemnt_pressproof_section').css('pointer-events','none');
+                //
+                // $('#tab-1').css('pointer-events','none');
+                // $('#tab-2').css('pointer-events','none');
+                // $('#tab-3').css('pointer-events','none');
+                // $('#tab-5').css('pointer-events','none');
+                update_cart_with_upload();
+
+                // swal({
+                //         title: 'You have reduced the number of ' + text + ' please confirm to recalculate the price.',
+                //         type: "warning",
+                //         showCancelButton: true,
+                //         confirmButtonClass: "btn orangeBg",
+                //         confirmButtonText: "Confirm",
+                //         cancelButtonClass: "btn blueBg m-r-10",
+                //         cancelButtonText: "Cancel",
+                //         closeOnConfirm: true,
+                //         closeOnCancel: true
+                //     },
+                //     function (isConfirm) {
+                //         var count = 0;
+                //         $('.upload_row').each(function () {
+                //             if(!($(this).hasClass('uploadsavesection'))){
+                //                 // alert("inside if");
+                //                 count++;
+                //
+                //             }
+                //         });
+                //         // alert(count);
+                //         lines_to_populate = count;
+                //         if (isConfirm) {
+                //             update_cart_with_upload();
+                //         }
+                //     });
+            }
+        }
+        $('.save_and_close_popup_checks').attr('data-dismiss', 'modal');
+
+
+    });
+
+    function design_service_additional_version(_this) {
+        // this = _this;
+        var additional_version = $(_this).data("additional-version");
+        var selected_package = $(_this).data("package");
+        //reset additional version btn value other then current selection
+        var count = 0;
+        $('.additional_ver_btn').each(function () {
+            var package = ($(this).data('package-btn'));
+            if (package != selected_package) {
+                $(this).find('strong').text('Select');
+
+            }
+
+            // $('.design_service_form_container').fadeOut(500);
+
+        });
+        //make current value selection on current additional version btn
+        $('#' + selected_package).find('strong').text(additional_version);
+    }
+
+    $(document).on("click", ".proceed_pkg_btn", function (e) {
+        var show_error = 1;
+
+        var selected_package = $(this).data("package-bn");
+        $('.additional_ver_btn').each(function () {
+            var package = ($(this).data('package-btn'));
+            // if (package != selected_package){
+            var text = $(this).find('strong').text();
+            if (text != 'Select') {
+                var additional_version = $(this).data("additional-version");
+                var selected_package = $(this).data("package");
+                show_error = 0;
+            }
+
+            // }
+        });
+        if (show_error == 1) {
+            // $(this).css('border','1px solid red');
+            show_faded_popover($('#custom_label'), 'Select one of the option to proceed.');
+        } else {
+            $('.design_service_form_container').fadeIn(1000);
+
+        }
+    });
+
+
+    $(".specialvalidation").keypress(function (e) {
+        var keyCode = e.which;
+        if (!((keyCode >= 48 && keyCode <= 57)
+            || (keyCode >= 65 && keyCode <= 90)
+            || (keyCode >= 97 && keyCode <= 122))
+            && keyCode != 8 && keyCode != 32) {
+            return false;
+        }
+    });
+    $(document).on("keypress", ".emailspecialvalidation", function (e) {
+
+        var keyCode = e.which;
+
+        if (keyCode == 46 || keyCode == 64 || keyCode == 95 || keyCode == 45) {
+            return true;
+        } else if (!((keyCode >= 48 && keyCode <= 57)
+            || (keyCode >= 65 && keyCode <= 90)
+            || (keyCode >= 97 && keyCode <= 122))
+            && keyCode != 8 && keyCode != 32) {
+            return false;
+        }
+
+    });
+
+
+    $(document).on("keypress keyup blur", ".numeric", function (e) {
+        $(this).val($(this).val().replace(/[^\d].+/, ""));
+        if ((e.which < 48 || e.which > 57)) {
+            e.preventDefault();
+        }
+    });
+
+    $(document).on("keypress keyup blur", ".letters", function (e) {
+        return (e.charCode > 64 && e.charCode < 91) || (e.charCode > 96 && e.charCode < 123);
+    });
+
+    /*var form = $("#design_service_form");
+    form.validate({
+        errorPlacement: function errorPlacement(error, element) {
+            element.after(error);
+        },
+        rules: {
+
+            email: {
+                required: true,
+                email: true,
+
+            },
+            captcha: {
+                required: true,
+                onkeyup: false,
+                remote: mainUrl + "ajax/is_valid_captcha"
+            }
+        },
+        messages: {
+            captcha: {
+                remote: " please enter a valid word! "
+            }
+        },
+
+        submitHandler: function (form) {
+            form.submit();
+            return false;
+        }
+
+    });
+*/
+
+    function submit_design_service_form(e) {
+        // alert(has_files);
+        // var cartid = $('#cartid').val();
+        //
+        // Dropzone.autoDiscover = false;
+        //
+        // var myDropzone = Dropzone.forElement(".dropzone");
+        // myDropzone.on('sending', function (file, xhr, formData) {
+        //     formData.append('caerid', cartid);
+        // });
+        // myDropzone.on('success', function () {
+        //
+        //     var args = Array.prototype.slice.call(arguments);
+        //     uploaded_file_names.push(args[1]);
+        //     alert("inside success");
+        //     // Look at the output in you browser console, if there is something interesting
+        //     console.log(typeof args[1]);
+        // });
+        //
+        //
+        //
+        //
+        // if (myDropzone.processQueue()) {
+        //     alert(all_files_uploaded);
+        //
+        // }
+
+
+        var proceed = 0;
+        if (has_files == 1 && all_files_uploaded == 1) {
+            proceed = 1;
+        } else if (has_files == 0) {
+            proceed = 1;
+        }
+        if (proceed == 1) {
+
+            setTimeout(function () {
+                var design_brief = $('#design_brief').val();
+                var full_name = $('#full_name').val();
+                var email = $('#email').val();
+                var phone = $('#phone').val();
+                var additional_version = '';
+                var selected_package = '';
+                $('.additional_ver_btn').each(function () {
+                    var package = ($(this).data('package-btn'));
+                    // if (package != selected_package){
+                    var text = $(this).find('strong').text();
+                    if (text != 'Select') {
+
+                        additional_version = parseInt(text);
+                        selected_package = $(this).data("package-btn");
+                    }
+                });
+
+
+                var form_data = new FormData();
+                form_data.append("uploaded_file_names", uploaded_file_names);
+                form_data.append("selected_package", selected_package);
+                form_data.append("additional_version", additional_version);
+                form_data.append("design_brief", design_brief);
+                form_data.append("full_name", full_name);
+                form_data.append("email", email);
+                form_data.append("phone", phone);
+                form_data.append("cartid", cartid);
+
+                // $('#inhouse_design_loader').show();
+                // $('#inhouse_design_modal').css('pointer-events', 'none');
+
+                $.ajax({
+                    url: mainUrl + 'ajax/add_custom_design_to_cart_label_emb',
+                    type: "POST",
+                    async: "false",
+                    dataType: "html",
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: form_data,
+                    success: function (data) {
+                        data = $.parseJSON(data);
+                        if (data.status == 'yes'){
+                            var finaltext = 'Custon design Service Product is added to your basket';
+                            //$("#cart").html(data.top_cart);
+                            swal({
+                                    title: finaltext,
+                                    type: "",
+                                    showCancelButton: true,
+                                    confirmButtonClass: "btn orangeBg m-t-10",
+                                    confirmButtonText: "Continue to Checkout",
+                                    cancelButtonClass: "btn blueBg m-r-10 m-t-10",
+                                    cancelButtonText: "Add More",
+                                    closeOnConfirm: true,
+                                    closeOnCancel: true
+                                },
+                                function (isConfirm) {
+                                    if (isConfirm) {
+                                        window.location.href = '<?php echo SAURL ?>order_quotation/order/index';
+                                    }
+                                });
+                        }
+
+                        $('#inhouse_design_modal').modal('toggle');
+                        $('#inhouse_design_loader').hide();
+                    }
+                });
+            }, 500);
+
+        }
+
+
+    }
+
+
+    // $(document).on("keyup", "#captcha", function (e) {
+    //
+    //     $.ajax({
+    //         url: mainUrl + "ajax/is_valid_captcha",
+    //         type: "GET",
+    //
+    //         success: function (data) {
+    // 
+    //         }
+    //     });
+    //
+    // });
+    $(document).on("click", ".design_service_form_submit", function (e) {
+
+
+        if ($("#design_service_form").valid()) {
+            $('#inhouse_design_loader').show();
+            // $('#inhouse_design_modal').css('pointer-events', 'none');
+            submit_design_service_form();
+        }
+    });
+
 
 
     function checkedSelectedLemOptions(lem_options){ // This is to show preselected label embellishment options
 
         var selected_digital_process = $('#selected_digital_process').val();
         var selected_line_type = $('#selected_line_type').val();
-
-        console.log(selected_digital_process);
-        console.log(selected_line_type);
-        
 
         $('.digital_process').prop('checked', false);
 
@@ -5186,7 +6154,8 @@
 
 
         var digital_process = $.trim(str_digital[0]);
-        console.log(digital_process);
+
+        
         var plus_white = $.trim(str_digital[1]);
 
         
@@ -5195,7 +6164,10 @@
 
             var digital_process_parent = $(this).parents().data("printing_process");
 
-            if (digital_process_parent == 'Monochrome_Black_Only' && (digital_process == 'Mono' || digital_process == 'Monochrome - Black Only')) {
+            // console.log("11111= "+digital_process_parent);
+            // console.log("22222= "+digital_process);
+            if (digital_process_parent == 'Monochrome_Black_Only' && (digital_process == 'Mono' || digital_process == 'Monochrome - Black Only' || digital_process == 'Monochrome Black Only')) {
+                // console.log("I am INNINIIn");
                 $(this).prop('checked', true);
             }
             if (digital_process_parent == '4_Colour_Digital_Process' && (digital_process == 'Fullcolour' || digital_process == '4 Colour Digital Process')) {
@@ -5248,8 +6220,24 @@
 
 
     }
-
-
+    // $(document).on("click",".delete_item",function(e){
+    //     var t= $(this).attr("id");
+    //     swal({title:"Are you sure you want to Delete.?",
+    //         type:"warning",
+    //         showCancelButton:!0,
+    //         confirmButtonClass:"btn orangeBg",
+    //         confirmButtonText:"Cancel",
+    //         cancelButtonClass:"btn blueBg",
+    //         cancelButtonText:"OK",
+    //         closeOnConfirm:!0,closeOnCancel:!0},
+    //         function(e){e?console.log("cancel"):
+    //             $.ajax({url:base+"ajax/delete_product_cart",
+    //                 type:"POST",
+    //                 async:"false",
+    //                 data:{serial:t},
+    //                 dataType:"json",
+    //                 success:function(e){$("#aja_cart").html(e.cart_data),
+    //                     $("#cart").html(e.top_cart),
+    //                     $("#ajax_delivery").html(e.delivey),$("#ajax_order_summary").html(e.orderSummary)}})})})
 
 </script>
-

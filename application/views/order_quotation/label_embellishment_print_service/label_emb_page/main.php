@@ -281,7 +281,7 @@
                 <!--               --><?php //include('printing_process_and_product.php') ?>
 
                 <!-- Label Finishes & Embellishments & Cart Summary Starts -->
-                <!--                <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>-->
+
                 <section>
                     <div class="row">
                         <div id="finish_content" class="col-md-9 col-xs-12">
@@ -3560,7 +3560,8 @@
                 form_data.append("laminations_and_varnishes_childs", laminations_and_varnishes_childs);
                 form_data.append("selected_already_plates_composite_array", JSON.stringify(selected_already_plates_composite_array));
                 form_data.append("label_application", label_application);
-
+                form_data.append("combination_base", combination_base);
+                
                 // console.log(type);
                 if (upload_artwork_radio == "upload_artwork_now") {
 

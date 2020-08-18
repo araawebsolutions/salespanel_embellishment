@@ -7446,21 +7446,6 @@ class Home_model extends CI_Model
     }
 
 
-    function insert_preferences_temp_basket($data, $temp_basket_id)
-    {
-        if (!empty($data)) {
-                
-                if(!isset($data['orientation'] ) ) {
-                    $data['orientation'] = "1";
-                }
-
-                $this->db->where('ID', $temp_basket_id  );
-                $this->db->update('temporaryshoppingbasket', $data);
-        }
-        return true;
-    }
-
-
     function load_preferences($email)
 
 
@@ -9968,9 +9953,9 @@ class Home_model extends CI_Model
         return $qry->row_array();
     }
 
-    function generate_preferences_data($line_detail,$flag=NULL){
-
+    function generate_preferences_data($line_detail){
         $preferences = array();
+
         $preferences['ProductID'] = $line_detail->ProductID;
         $preferences['ManufactureID'] = $line_detail->ManufactureID;
         $preferences['manuid'] = $line_detail->ManufactureID;
@@ -10006,11 +9991,7 @@ class Home_model extends CI_Model
             $preferences['material_roll'] = $line_detail->ColourMaterial_upd;
             $preferences['categorycode_roll'] = $preferences['die_code'].$preferences['coresize'];
             $preferences['adhesive_roll'] = $material_data['adhesive'];
-            if (isset($flag) && $flag == 'quotation_detail'){
-                $preferences['labels_roll'] = $line_detail->orignalQty;
-            } else {
-                $preferences['labels_roll'] = $line_detail->labels;
-            }
+            $preferences['labels_roll'] = $line_detail->labels;
             $preferences['quantity'] = $line_detail->Quantity;
         } else {
             $preferences['productcode_a4'] = $line_detail->ManufactureID;
@@ -10018,11 +9999,7 @@ class Home_model extends CI_Model
             $preferences['material_a4'] = $line_detail->ColourMaterial_upd;
             $preferences['categorycode_a4'] = $preferences['die_code'];
             $preferences['adhesive_a4'] = $material_data['adhesive'];
-            if (isset($flag) && $flag == 'quotation_detail'){
-                $preferences['labels_a4'] = $line_detail->orignalQty;
-            } else {
-                $preferences['labels_a4'] = $line_detail->labels;
-            }
+            $preferences['labels_a4'] = $line_detail->labels;
             $preferences['quantity'] = $line_detail->Quantity;
         }
 
@@ -10058,15 +10035,8 @@ class Home_model extends CI_Model
             'total_emb_cost' => $line_data['total_emb_cost'],
             'custom_roll_and_label' => $line_data['custom_roll_and_label'],
             'FinishTypePrintedLabels' => $line_data['FinishTypePrintedLabels'],
-            'FinishTypePricePrintedLabels' => $line_data['FinishTypePricePrintedLabels'],
-            'combination_base' => $line_data['combination_base'],
-            'label_application' => $line_data['label_application']
+            'FinishTypePricePrintedLabels' => $line_data['FinishTypePricePrintedLabels']
         );
-
-        if ($flag == 'quotation_detail'){
-            $updation_array['orignalQty'] = $updation_array['labels'];
-            unset($updation_array['labels']);
-        }
 
         /*echo "<pre>";
         print_r($updation_array);
@@ -10075,6 +10045,7 @@ class Home_model extends CI_Model
 
         $this->db->where($where_coumn, $lineNumber);
         $this->db->update($table, $updation_array);
+
 
     }
 
@@ -10090,19 +10061,6 @@ class Home_model extends CI_Model
             ->from('quotation_attachments_integrated as at')
             ->where('Serial',$serial)
             ->get()->result();
-    }
-
-    function desing_service_charges_label_emb($design)
-    {
-        if ($design == 1) {
-            $price = 49.99;
-        } else if ($design == 2) {
-            $price = 89.99;
-        } else if ($design == 3) {
-            $price = 124.99;
-        }
-        return $price;
-
     }
 
         /***************************************************/

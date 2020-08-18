@@ -743,7 +743,7 @@ $assets = Assets; ?>
                                                 $total_emb_and_plate_cost =  $prices['label_finish'] + $total_emb_plate_price;
 
                                                 ?>
-                                                <input type="hidden" id="cartid" value="<?= $cartid ?>"/>
+                                                <input type="text" id="cartid" value="<?= $cartid ?>"/>
                                                 <!--    <input type="hidden" id="cartproductid" value="-->
                                                 <? //= $rolldetails['ProductID'] ?><!--"/>-->
                                                 <input type="hidden" id="cartunitqty" value="<?= $unitqty ?>"/>

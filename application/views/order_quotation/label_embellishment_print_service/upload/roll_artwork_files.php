@@ -75,11 +75,7 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
             }
         }
     }
-
-    
-
 }
-
 ?>
 
 <table class="table table-striped">

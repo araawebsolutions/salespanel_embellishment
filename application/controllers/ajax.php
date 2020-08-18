@@ -6167,7 +6167,9 @@ function unsave_checkout_data(){
 
         $coresize = $this->input->post('coresize');
         $woundoption = $this->input->post('woundoption');
+        
         $orientation = $this->input->post('orientation');
+
         $producttype = $this->input->post('producttype');
         $pressproof = $this->input->post('press_proof');
 
@@ -6486,6 +6488,7 @@ function unsave_checkout_data(){
                 $data['prices'] = $this->calculate_sheet_price_printed_emb_page($values_array);
 
 
+
 			//                if ($producttype == 'sheet' && empty($sheet_product_quality)) {
 			//                    $alternate_option = $this->load->view('order_quotation/label_embellishment_print_service/label_emb_page/alternate_option', $data, true);
 			//                    $data['alternate_option'] = $alternate_option;
@@ -6702,6 +6705,15 @@ function unsave_checkout_data(){
 		/*echo '<pre>';
         print_r($this->input->post('product_preferences')); exit;*/
 
+
+        $orientation_number = $orientation;
+        if( $edit_cart_flag ) {
+        	preg_match_all('!\d+!', $orientation, $matches);
+        	$orientation_number = $matches[0][0];
+        }
+
+        
+
         $items = array(
 			'SessionID' => $SID,
 			'ProductID' => $productid,
@@ -6713,7 +6725,7 @@ function unsave_checkout_data(){
             'wound' => $wound,
             'is_custom' => $is_custom,
             'LabelsPerRoll' => $LabelsPerRoll,
-            'orientation' => $orientation,
+            'orientation' => $orientation_number,
             'pressproof' => $pressproof,
             'FinishTypePrintedLabels' => json_encode($rollfinish_child_array),
             'FinishTypePricePrintedLabels' => json_encode($data['prices']['label_finish_individual_cost_array']),
@@ -6755,9 +6767,9 @@ function unsave_checkout_data(){
 			//print_r($SID);die;
 
 			/*************** Discard Previously uploaded artowrks**************/
-			if( !$edit_cart_flag ) {
-				$this->db->delete("integrated_attachments", array('SessionID' => $SID));
-			}
+			// if( !$edit_cart_flag ) {
+			// 	$this->db->delete("integrated_attachments", array('SessionID' => $SID));
+			// }
 			
 			$data['details']['cartid'] = $cartid;
 
@@ -9366,6 +9378,11 @@ function unsave_checkout_data(){
 
                 $items = array_merge($items, $printing_items);
 
+                // echo "<pre>";
+                // 	print_r($items);
+                // 	echo 
+                // 	die();
+
                 if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
                     $updation_array = $this->home_model->emb_update_line($items,$flag,$refNumber,$lineNumber);
                 } else {
@@ -10862,120 +10879,126 @@ function unsave_checkout_data(){
         $woundoption = $this->input->post('woundoption');
         $orientation = $this->input->post('orientation');
         $upload_option = $this->input->post('upload_option');
-
+        $edit_cart_flag = $this->input->post('edit_cart_flag');
         $flag = $this->input->post('flag');
+
         $refNumber = $this->input->post('refNumber');
         $lineNumber = $this->input->post('lineNumber');
         $returnUrl = $this->input->post('returnUrl');
 
         if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
            // Dont need here Just continue;
-        } else {
-            if ($_POST) {
+        } else  {
+        	if( $edit_cart_flag ) {
+        		// Dont need here Just continue;
+        	} else {
 
-                $update_array = array();
-                $product_type = 'sheet';
+	            if ($_POST) {
 
-                $query = " Select * from products WHERE ProductID LIKE '$prdid' LIMIT 1";
-                $details = $this->db->query($query)->row_array();
-                $orignal_productid = $details['ProductID'];
+	                $update_array = array();
+	                $product_type = 'sheet';
 
-                if (preg_match("/roll labels/is", $details['ProductBrand'])) {
+	                $query = " Select * from products WHERE ProductID LIKE '$prdid' LIMIT 1";
+	                $details = $this->db->query($query)->row_array();
+	                $orignal_productid = $details['ProductID'];
 
-
-                    $menu = substr($details['ManufactureID'], 0, -1);
-                    $menuid = $menu . str_replace("R", "", $coresize);
-                    $orignal_productid = $this->home_model->get_db_column('products', 'ProductID', 'ManufactureID', $menuid);
-
-                    $orientation = str_replace("orientation", "", $orientation);
-                    $update_array = array_merge(array('orientation' => $orientation,
-                        'wound' => $woundoption,
-                        'ProductID' => $orignal_productid), $update_array);
-                    $product_type = 'roll';
-                }
-
-                if ($upload_option == 'design_services') {
-
-                    /*$printprice = $this->home_model->get_db_column('temporaryshoppingbasket', 'Print_Total', 'ID', $cartid);
-
-                        $desingsservice =  $this->input->post('desingsservice');
-                        $comments =  $this->input->post('comments');
-                        $desingscharge = $this->home_model->desing_service_charges($desingsservice);
-                        $update_array = array_merge($update_array, array('design_service'=>$desingsservice,
-                                                                         'design_service_charge'=>$desingscharge,
-                                                                         'Print_UnitPrice'=>($printprice+$desingscharge),
-                                                                         'Print_Total'=>($printprice+$desingscharge)));
-                        if (!empty($_FILES)) {
-                            $response = $this->home_model->upload_images('file','/');
-                            if($response!='error'){
-                                $update_array = array_merge($update_array, array('design_file'=>$response));
-                            }
-                        }
-                        if(isset($comments) and $comments!=''){
-                                $update_array = array_merge($update_array, array('Product_detail'=>$comments));
-                        }*/
-                    $desingsservice = $this->input->post('desingsservice');
-                    //$comments =  $this->input->post('comments');
-                    $comments = $this->product_model->clean($this->input->post('comments', true));
-                    $desingscharge = $this->home_model->desing_service_charges($desingsservice);
-
-                    $design_file = '';
-                    if (!empty($_FILES)) {
-                        $response = $this->home_model->upload_images('file', '/');
-                        if ($response != 'error') {
-                            $design_file = $response;
-                        }
-                    }
-
-                    $desingscharge = $desingscharge / 1.2;
-                    $unit_price = $desingscharge / $desingsservice;
-                    $SID = $this->shopping_model->sessionid();
-                    $design_array = array('SessionID' => $SID,
-                        'p_code' => $cartid,
-                        'ProductID' => 125633,
-                        'OrderTime' => 'NOW()',
-                        'source' => 'printing',
-                        'Quantity' => $desingsservice,
-                        'UnitPrice' => $unit_price,
-                        'TotalPrice' => $desingscharge,
-                        'Product_detail' => $comments,
-                        'design_file' => $design_file);
-                    $this->db->insert('temporaryshoppingbasket', $design_array);
+	                if (preg_match("/roll labels/is", $details['ProductBrand'])) {
 
 
-                } else {
+	                    $menu = substr($details['ManufactureID'], 0, -1);
+	                    $menuid = $menu . str_replace("R", "", $coresize);
+	                    $orignal_productid = $this->home_model->get_db_column('products', 'ProductID', 'ManufactureID', $menuid);
+
+	                    $orientation = str_replace("orientation", "", $orientation);
+	                    $update_array = array_merge(array('orientation' => $orientation,
+	                        'wound' => $woundoption,
+	                        'ProductID' => $orignal_productid), $update_array);
+	                    $product_type = 'roll';
+	                }
+
+	                if ($upload_option == 'design_services') {
+
+	                    /*$printprice = $this->home_model->get_db_column('temporaryshoppingbasket', 'Print_Total', 'ID', $cartid);
+
+	                        $desingsservice =  $this->input->post('desingsservice');
+	                        $comments =  $this->input->post('comments');
+	                        $desingscharge = $this->home_model->desing_service_charges($desingsservice);
+	                        $update_array = array_merge($update_array, array('design_service'=>$desingsservice,
+	                                                                         'design_service_charge'=>$desingscharge,
+	                                                                         'Print_UnitPrice'=>($printprice+$desingscharge),
+	                                                                         'Print_Total'=>($printprice+$desingscharge)));
+	                        if (!empty($_FILES)) {
+	                            $response = $this->home_model->upload_images('file','/');
+	                            if($response!='error'){
+	                                $update_array = array_merge($update_array, array('design_file'=>$response));
+	                            }
+	                        }
+	                        if(isset($comments) and $comments!=''){
+	                                $update_array = array_merge($update_array, array('Product_detail'=>$comments));
+	                        }*/
+	                    $desingsservice = $this->input->post('desingsservice');
+	                    //$comments =  $this->input->post('comments');
+	                    $comments = $this->product_model->clean($this->input->post('comments', true));
+	                    $desingscharge = $this->home_model->desing_service_charges($desingsservice);
+
+	                    $design_file = '';
+	                    if (!empty($_FILES)) {
+	                        $response = $this->home_model->upload_images('file', '/');
+	                        if ($response != 'error') {
+	                            $design_file = $response;
+	                        }
+	                    }
+
+	                    $desingscharge = $desingscharge / 1.2;
+	                    $unit_price = $desingscharge / $desingsservice;
+	                    $SID = $this->shopping_model->sessionid();
+	                    $design_array = array('SessionID' => $SID,
+	                        'p_code' => $cartid,
+	                        'ProductID' => 125633,
+	                        'OrderTime' => 'NOW()',
+	                        'source' => 'printing',
+	                        'Quantity' => $desingsservice,
+	                        'UnitPrice' => $unit_price,
+	                        'TotalPrice' => $desingscharge,
+	                        'Product_detail' => $comments,
+	                        'design_file' => $design_file);
+	                    $this->db->insert('temporaryshoppingbasket', $design_array);
 
 
-                    $update_array = array_merge($update_array, array('Product_detail' => '',
-                        'design_file' => '',
-                        'design_service_charge' => '',
-                        'design_service' => ''));
-                }
+	                } else {
 
 
-                $SID = $this->shopping_model->sessionid();
-                $update_array = array_merge(array('SessionID' => $SID, 'page_location' => 'Printed Labels'), $update_array);
-                $row = $this->db->query('Select pressproof from temporaryshoppingbasket
-					WHERE ID LIKE "' . $cartid . '" AND SessionID LIKE "' . $SID . '-PRJB"')->row_array();
-
-                if (isset($row['pressproof']) and $row['pressproof'] == 1 and preg_match("/roll labels/is", $details['ProductBrand'])) {
-                    $update_array = array_merge($update_array,
-                        array('Product_detail' => '***DO NOT START PRINTING ORDER UNTIL PRESS PROOF HAS BEEN APPROVED***'));
-                }
+	                    $update_array = array_merge($update_array, array('Product_detail' => '',
+	                        'design_file' => '',
+	                        'design_service_charge' => '',
+	                        'design_service' => ''));
+	                }
 
 
-                $this->db->update('temporaryshoppingbasket', $update_array, array('ID' => $cartid, 'SessionID' => $SID . '-PRJB'));
-                /*echo '<pre>';print_r($update_array); die;*/
-                if ($upload_option == 'upload_artwork' || $upload_option == 'email_artwork') {
-                    $this->db->update('integrated_attachments', array('SessionID' => $SID,
-                        'ProductID' => $orignal_productid),
-                        array('ProductID' => $prdid,
-                            'CartID' => $cartid,
-                            'SessionID' => $SID . '-PRJB'));
-                } else {
-                    $this->db->delete('integrated_attachments', array('CartID' => $cartid, 'SessionID' => $SID . '-PRJB', 'ProductID' => $prdid));
-                }
-            }
+	                $SID = $this->shopping_model->sessionid();
+	                $update_array = array_merge(array('SessionID' => $SID, 'page_location' => 'Printed Labels'), $update_array);
+	                $row = $this->db->query('Select pressproof from temporaryshoppingbasket
+						WHERE ID LIKE "' . $cartid . '" AND SessionID LIKE "' . $SID . '-PRJB"')->row_array();
+
+	                if (isset($row['pressproof']) and $row['pressproof'] == 1 and preg_match("/roll labels/is", $details['ProductBrand'])) {
+	                    $update_array = array_merge($update_array,
+	                        array('Product_detail' => '***DO NOT START PRINTING ORDER UNTIL PRESS PROOF HAS BEEN APPROVED***'));
+	                }
+
+
+	                $this->db->update('temporaryshoppingbasket', $update_array, array('ID' => $cartid, 'SessionID' => $SID . '-PRJB'));
+	                /*echo '<pre>';print_r($update_array); die;*/
+	                if ($upload_option == 'upload_artwork' || $upload_option == 'email_artwork') {
+	                    $this->db->update('integrated_attachments', array('SessionID' => $SID,
+	                        'ProductID' => $orignal_productid),
+	                        array('ProductID' => $prdid,
+	                            'CartID' => $cartid,
+	                            'SessionID' => $SID . '-PRJB'));
+	                } else {
+	                    $this->db->delete('integrated_attachments', array('CartID' => $cartid, 'SessionID' => $SID . '-PRJB', 'ProductID' => $prdid));
+	                }
+	            }
+	        }
         }
 
         /*echo '<pre>';
@@ -13355,7 +13378,13 @@ function unsave_checkout_data(){
             $coresize = $this->input->post('core_size');
             $wound_roll = $this->input->post('wound_option');
             $orientation = $this->input->post('label_orientation');
+            $label_application = $this->input->post('label_application');
+            
             $digital_process = $this->input->post('digital_process');
+            $edit_cart_flag = $this->input->post('edit_cart_flag');
+            $temp_basket_id = $this->input->post('temp_basket_id');
+            
+            
             //            $orientation = $this->input->post('orientation');
 
 
@@ -13364,7 +13393,7 @@ function unsave_checkout_data(){
 //            print_r($container);die;
             $con_type = explode("_", $container);
             $con_type = $con_type[0];
-
+            
             $flag = $this->input->post('flag');
             $refNumber = $this->input->post('refNumber');
             $lineNumber = $this->input->post('lineNumber');
@@ -13402,16 +13431,30 @@ function unsave_checkout_data(){
                 $this->db->where($where_column, $lineNumber);
                 $this->db->update($table, $pref);
             } else {
-                $pref = array('email' => $email,
-                    'sessionID' => $this->session->userdata('session_id'),
 
-                    'coresize' => $coresize,
-                    'wound_roll' => $wound_roll,
-                    'orientation' => $orientation,
-                    'digital_proccess_' . $con_type => $digital_process,
-                );
-//              echo"<prE>";print_r("$pref");echo"</pre>";exit;
-                $this->home_model->insert_preferences($pref);
+				if( $edit_cart_flag && $temp_basket_id != "" ) {
+            	
+					preg_match_all('!\d+!', $orientation, $matches);
+					$orientation_number = $matches[0][0];
+					$pref = array(
+						'coresize' => $coresize,
+						'wound' => $wound_roll,
+						'orientation' => $orientation_number,
+						'label_application' => $label_application,
+						'Print_Type' => str_replace("_", " ", $digital_process),
+					);
+					$this->home_model->insert_preferences_temp_basket($pref, $temp_basket_id);
+				} else {
+					$pref = array('email' => $email,
+						'sessionID' => $this->session->userdata('session_id'),
+
+						'coresize' => $coresize,
+						'wound_roll' => $wound_roll,
+						'orientation' => $orientation,
+						'digital_proccess_' . $con_type => $digital_process,
+					);
+					$this->home_model->insert_preferences($pref);
+				}
             }
         }
     }
