@@ -10001,15 +10001,16 @@ class Home_model extends CI_Model
             $preferences['coresize'] = "R".substr($line_detail->ManufactureID, -1, 1);
             $preferences['productcode_roll'] = $line_detail->ManufactureID;
             $preferences['Orientation'] = $line_detail->Orientation;
-            $preferences['wound_roll'] = $line_detail->Wound;
             $preferences['color_roll'] = $material_data['material_name'];
             $preferences['material_roll'] = $line_detail->ColourMaterial_upd;
             $preferences['categorycode_roll'] = $preferences['die_code'].$preferences['coresize'];
             $preferences['adhesive_roll'] = $material_data['adhesive'];
             if (isset($flag) && $flag == 'quotation_detail'){
                 $preferences['labels_roll'] = $line_detail->orignalQty;
+                $preferences['wound_roll'] = $line_detail->wound;
             } else {
                 $preferences['labels_roll'] = $line_detail->labels;
+                $preferences['wound_roll'] = $line_detail->Wound;
             }
             $preferences['quantity'] = $line_detail->Quantity;
         } else {

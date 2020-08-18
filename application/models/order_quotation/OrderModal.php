@@ -4938,7 +4938,7 @@ class orderModal extends CI_Model
         
         public function Get_IA_Data($cartID) {
             $uploaded_lines = $this->db->query("select * from integrated_attachments where CartID='".$cartID."'
-                AND file != '' AND file != 'No File Required For Artwork To Follow' ")->result_array();
+                AND (file != '' AND file != 'No File Required For Artwork To Follow') ")->result_array();
             return $uploaded_lines;
         }
 
