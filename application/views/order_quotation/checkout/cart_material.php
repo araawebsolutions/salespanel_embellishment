@@ -55,14 +55,14 @@ $clr_class = '';
 <? $cc = 1;
 //echo '<pre>'; print_r($assoc); echo '</pre>';
 
-	
+
 
 
 
 foreach ($assoc as $rowp) {
-	
-    $eprintoption = ($rowp->labeltype == "printed") ? "display:block" : "display:none"; 
-	
+
+    $eprintoption = ($rowp->labeltype == "printed") ? "display:block" : "display:none";
+
 	$matInfo = $ci->cartModal->fetchmaterinfo($rowp->ID);
 	$records = $ci->cartModal->fetchdierecordinfo($matInfo['OID']);
 
@@ -71,34 +71,46 @@ foreach ($assoc as $rowp) {
         $printprice = $matInfo['printprice'];
     }
 
+
+
+	$get_cart_data = $ci->cartModal->fetchcartinfo($records['CartID']);
+    $FinishTypePricePrintedLabels = 0;
+	if($get_cart_data){
+	    if($get_cart_data['FinishTypePricePrintedLabels']){
+            $FinishTypePricePrintedLabels = 1;
+        }
+    }
+
+	//print_r($FinishTypePricePrintedLabels); exit;
+
 	//echo '<pre>'; print_r($records); echo '</pre>';
-	
+
 	$matInfo_size = $matInfo['core'];
-	
-	if($matInfo_size == 25){ $matInfo_size =  1; }else if($matInfo_size == 38){ $matInfo_size =  2; }else if($matInfo_size == 44.5){ 
+
+	if($matInfo_size == 25){ $matInfo_size =  1; }else if($matInfo_size == 38){ $matInfo_size =  2; }else if($matInfo_size == 44.5){
 		$matInfo_size =  3; }else if($matInfo_size == 76){ $matInfo_size =  4; }
-	
-	
+
+
 	$cors = 1;
 	if($matInfo_size!=""){
 		$cors = $matInfo_size;
 	}
-	
-	
+
+
 	 $productCode = $records['die_code'] . $matInfo['material'];
-	
+
 	if($asformat=="sheet"){
 		$productCode = 'AA'.$productCode;
 	}
-	
-	
-	$min_qty = $ci->home_model->min_qty_roll($productCode.$cors); 
-	$max_qty_rol = $ci->home_model->max_qty_roll($productCode.$cors); 
-	
+
+
+	$min_qty = $ci->home_model->min_qty_roll($productCode.$cors);
+	$max_qty_rol = $ci->home_model->max_qty_roll($productCode.$cors);
+
 	$product = $this->cartModal->getProductId($productCode);
     $max_qty = $product['LabelsPerSheet'];
-	
-	
+
+
 	if (preg_match("/A3/", $records['format'])) {
         $min_qtys = '100';
         $max_qtys = '50000';
@@ -112,7 +124,7 @@ foreach ($assoc as $rowp) {
         $max_qtys = '50000';
         $type = 'A4';
     }
-	
+
 	if (preg_match("/PETC/", $matInfo['material']) || preg_match("/PETH/", $matInfo['material']) || preg_match("/PVUD/", $matInfo['material'])) {
 		//$min_qty = '25';
 		$min_qtys= '5';
@@ -133,23 +145,23 @@ foreach ($assoc as $rowp) {
     <input type="hidden" id="row_id<?= $key ?>" value="<?= $rowp->ID ?>">
     <input type="hidden" id="format<?= $key ?>" value="<?= $asformat ?>">
     <input type="hidden" id="label_type<?= $key ?>" value="<?= $rowp->labeltype ?>">
-			
+
 			<input type="hidden" id="max_roll<?= $rowp->ID ?>" value="<?= $min_qty ?>">
             <input type="hidden" id="max_lb<?= $rowp->ID ?>" value="<?= $max_qty ?>">
 			<input type="hidden" id="max_roll_qty<?= $rowp->ID ?>" value="<?= $max_qty_rol ?>">
-			
+
 			<input type="hidden" id="min_sheet<?= $rowp->ID ?>" value="<?= $min_qtys ?>" />
-			
+
 			<input type="hidden" id="die_code<?= $rowp->ID ?>" value="<?= $productCode ?>" />
 			<input type="hidden" id="productid<?= $rowp->ID ?>" value="<?= $product['ProductID'] ?>" />
-			
+
 			<input type="hidden" id="width_die<?= $rowp->ID ?>" value="<?= $records['width'] ?>" />
 			<input type="hidden" id="height_die<?= $rowp->ID ?>" value="<?= $records['height'] ?>" />
 			<input type="hidden" id="shape<?= $rowp->ID ?>" value="<?= $records['shape'] ?>" />
-			
-			
+
+
 		</td>
-		
+
         <td>
           <?php if(@$quotation->QuotationStatus!="13"){?>
 			<!--<b class="text-center"><?= $rowp->material ?></b><br/>-->
@@ -198,22 +210,22 @@ foreach ($assoc as $rowp) {
             <td id="mat_unit_price" class="text-center">0.00</td>
         <?php } else { ?>
             <td id="mat_unit_price" class="text-center">
-				<?=$symbol?><?= (number_format((($materialprice)  / ($rowp->qty * ($rowp->rolllabels==0)?( ($scorecord['across'] * $scorecord['around']) * $rowp->qty):$rowp->rolllabels)) * $exchange_rate , 4)); 
-				
-				
-				
+				<?=$symbol?><?= (number_format((($materialprice)  / ($rowp->qty * ($rowp->rolllabels==0)?( ($scorecord['across'] * $scorecord['around']) * $rowp->qty):$rowp->rolllabels)) * $exchange_rate , 4));
+
+
+
 				?>
 		</td>
         <?php } ?>
         <td align="center">
-         
-          
+
+
           <?=$rowp->qty;?> <?php echo ucfirst($asformat); ?><?=($rowp->qty > 1)?'s':''; ?> <br>
           <? if($asformat =='roll'){ echo $rowp->rolllabels;} else { echo ( ($scorecord['across'] * $scorecord['around']) * $rowp->qty);} ;?> labels
-          
+
           <br>
           <?php
-          if($printprice && $printprice > 0){
+          if($FinishTypePricePrintedLabels && $FinishTypePricePrintedLabels > 0){
               $qty_readonly = 'readonly';
           }else{
               $qty_readonly = '';
@@ -231,16 +243,28 @@ foreach ($assoc as $rowp) {
             class="text-center">
           <?= $symbol ?><? echo(number_format($materialprice * $exchange_rate, 2)); ?>
       </td>-->
-      
+
        <td id="mat_price" class="text-center">
-        <?= $symbol ?><? echo(number_format($materialprice * $exchange_rate, 2)); ?>
-        
-        <?php @$row_total_line += number_format($materialprice * $exchange_rate, 2); ?>
+<!--        --><?//= $symbol ?><!----><?// echo(number_format($materialprice * $exchange_rate, 2)); ?>
+<!---->
+<!--        --><?php //@$row_total_line += number_format($materialprice * $exchange_rate, 2); ?>
+
+
+
+           <?php if ($quotationDetail->FinishTypePricePrintedLabels != '' && $quotationDetail->total_emb_cost != 0){
+                    echo $symbol ?><?= number_format(($materialprice * $exchange_rate) - $quotationDetail->total_emb_cost, 2,'.','') ?>
+                    <?php @$row_total_line += number_format(($materialprice * $exchange_rate)-$quotationDetail->total_emb_cost, 2);
+                } else {
+                    echo $symbol ?><?= number_format($materialprice * $exchange_rate, 2,'.','') ?>
+                    <?php @$row_total_line += number_format($materialprice * $exchange_rate, 2);
+                } ?>
+
+
       </td>
 
 
 		<td class="padding-6 icon-tablee">
-    
+
     <?php if(@$quotation->QuotationStatus!="13"){?>
             <i class="fa fa-trash-o bt-delete"
                onclick="deleteLineFromMaterial(<?= $key ?>,<?= $rowp->ID ?>)"
@@ -249,21 +273,25 @@ foreach ($assoc as $rowp) {
 			<?php if($carRes[0]->format!="Roll"){
 
 
-            if($printprice && $printprice > 0){ ?>
+                if($FinishTypePricePrintedLabels && $FinishTypePricePrintedLabels > 0){ ?>
+                    <i class="fa fa-floppy-o bt-save"></i>
+                <?php }else{ ?>
+                    <i class="fa fa-floppy-o bt-save" id="cut_mat_btn<?= $key ?>" onclick="updateNewMaterialSheets(<?= $key ?>,<?= $carRes[0]->ID ?>,<?= $rowp->ID ?>,'<?=
+                    $carRes[0]->format
+                    ?>')"></i>
+                <?php }
+			} else {
+            if($FinishTypePricePrintedLabels && $FinishTypePricePrintedLabels > 0){ ?>
                 <i class="fa fa-floppy-o bt-save"></i>
-            <?php }else{ ?>
-                <i class="fa fa-floppy-o bt-save" id="cut_mat_btn<?= $key ?>" onclick="updateNewMaterialSheets(<?= $key ?>,<?= $carRes[0]->ID ?>,<?= $rowp->ID ?>,'<?=
-                $carRes[0]->format
-                ?>')"></i>
-            <?php }
-			    ?>
 
-			<?php } else{ ?>
-			<i class="fa fa-floppy-o bt-save"  id="cut_mat_btn<?= $key ?>"
-               onclick="updateMaterialPriceRolls(<?= $key ?>,<?= $carRes[0]->ID ?>,<?= $rowp->ID ?>,'<?= $carRes[0]->format ?>')"></i>
-			<?php } ?>
-    
-			<?php } ?>
+            <?php }else{ ?>
+
+                <i class="fa fa-floppy-o bt-save"  id="cut_mat_btn<?= $key ?>"
+                   onclick="updateMaterialPriceRolls(<?= $key ?>,<?= $carRes[0]->ID ?>,<?= $rowp->ID ?>,'<?= $carRes[0]->format ?>')"></i>
+            <?php }
+        }
+
+			} ?>
         </td>
 
 
@@ -323,8 +351,8 @@ foreach ($assoc as $rowp) {
                     </div>
 
                     <span class="err" id="err_printed_sheet<?= $rowp->ID ?>">Please Select Printing</span>
-                    
-                    
+
+
                       <div <?= $eprintoption ?>
                         class="eprintoption<?= $rowp->ID ?>" style="margin-right: 15px;">
                     <input id="designmat<?= $rowp->ID ?>" class="joiner no-ioffdeign" type="number"
@@ -332,9 +360,19 @@ foreach ($assoc as $rowp) {
                            value="<? if($rowp->designs==0 || $rowp->designs==""){ echo '';}else{ echo $rowp->designs;} ?>"
                            onchange="$('#designmat<?= $rowp->ID ?>').popover('hide');">
                 </div>
-                    <button type="button" id="artworki_for_cart<?=$key?>" style="padding-right: 10px"  onclick="custom_die_emb()"
+                    <!--<button type="button" id="artworki_for_cart<?/*=$key*/?>" style="padding-right: 10px"  onclick="custom_die_emb()"
                             class="btn btn-secondarys btn-rounded waves-light waves-effect btn-upload-artwork"  data-toggle="modal" data-target=".bs-example-modal-lga"><i class="fa fa-cloud-upload" aria-hidden="true"></i>&nbsp;
-                        Embellishment C </button>
+                        Embellishment C </button>-->
+
+                    <?php if ($quotationDetail && $quotationDetail->ManufactureID == 'SCO1') { ?>
+                        <a id="edit_order_line" href="<?php echo main_url.'order_quotation/order/edit_emb_options/quotation_detail/'.$quotationDetail->QuotationNumber.'/'.$quotationDetail->SerialNumber; ?>" class="m-20 btn btn-secondarys btn-rounded waves-light waves-effect btn-upload-artwork" >&nbsp;
+                            Embellishment quo </a>
+                    <?php }else{ ?>
+                        <button type="button" id="artworki_for_cart<?=$key?>" style="padding-right: 10px"  onclick="printed_labels('<?= $record->ID ?>')"
+                                class="btn btn-secondarys btn-rounded waves-light waves-effect btn-upload-artwork"  data-toggle="modal" data-target=".bs-example-modal-lga"><i class="fa fa-cloud-upload" aria-hidden="true"></i>&nbsp;
+                            Embellishment cart </button>
+                    <?php } ?>
+
                     <span class="err" id="err_no_designs<?= $rowp->ID ?>">Please Choose no of Designs</span>
 
                 <? } ?>
@@ -344,7 +382,7 @@ foreach ($assoc as $rowp) {
 
                 <? if ($asformat == "roll" && $rowp->labeltype == "printed") { ?>
 
-             
+
                     <div style="margin-right: 15px;" class="divstyle">
                         <span class="labels-form">
                             <label class="select">
@@ -374,8 +412,8 @@ foreach ($assoc as $rowp) {
                                 <i></i></label></span>
                     </div>
                     <span class="err" id="err_finish_roll<?= $rowp->ID ?>">Please choose Finish</span>
-                    
-                   
+
+
 
                 <? } ?>
 
@@ -427,7 +465,7 @@ foreach ($assoc as $rowp) {
 
 
                 <?  if ($asformat == "roll" && $rowp->labeltype == "printed") {  ?>
-                
+
                  <div <?= $eprintoption ?> class="eprintoption<?= $rowp->ID ?>" style="margin-right: 15px;">
                     <input id="designmat<?= $rowp->ID ?>" class="joiner no-ioffdeign" type="number"
                            placeholder="No. Designs"
@@ -437,35 +475,49 @@ foreach ($assoc as $rowp) {
 
                 <span class="err" id="err_no_designs<?= $rowp->ID ?>">Please Choose no of Designs</span>
                 <?php } ?>
-							
-							
+
+
 				<div>
-                    
-                    
+
+
                 <?  if ($asformat == "roll" && $rowp->labeltype == "printed") {  ?>
                 <div class="divstyle">
                 <input id="labelsmat<?= $rowp->ID  ?>" class="joiner no-ioffdeign" type="number" placeholder="No. Labels on Rolls" value="<? if($rowp->rolllabels==0 || $rowp->rolllabels==""){ echo '';}else{ echo $rowp->rolllabels;} ?>"
                onchange="$('#labelsmat<?= $rowp->ID ?>').popover('hide');">
                 </div>
                     <span class="err" id="err_no_labels<?= $rowp->ID ?>">Please Choose Total Labels</span>
+
+
+                    <?php if ($quotationDetail && $quotationDetail->ManufactureID == 'SCO1') { ?>
+                        <a id="edit_order_line" href="<?php echo main_url.'order_quotation/order/edit_emb_options/quotation_detail/'.$quotationDetail->QuotationNumber.'/'.$quotationDetail->SerialNumber; ?>" class="m-20 btn btn-secondarys btn-rounded waves-light waves-effect btn-upload-artwork" >&nbsp;
+                            Embellishment quo </a>
+                    <?php }else{ ?>
+                        <button type="button" id="artworki_for_cart<?=$key?>" style="padding-right: 10px"  onclick="printed_labels('<?= $record->ID ?>')"
+                                class="btn btn-secondarys btn-rounded waves-light waves-effect btn-upload-artwork"  data-toggle="modal" data-target=".bs-example-modal-lga"><i class="fa fa-cloud-upload" aria-hidden="true"></i>&nbsp;
+                            Embellishment cart </button>
+                    <?php } ?>
+
+
+
                     <?  } else if($asformat == "roll" && $rowp->labeltype == "plain"){ ?>
                     <div class="divstyle">
                 <input id="labelsmat<?= $rowp->ID  ?>" class="joiner no-ioffdeign" type="number" placeholder="No. Labels Per Rolls" value="<? if($rowp->rolllabels==0 || $rowp->rolllabels==""){ echo '';}else{ echo $rowp->rolllabels / $rowp->qty;} ?>"
                onchange="$('#labelsmat<?= $rowp->ID ?>').popover('hide');">
                 </div>
                     <span class="err" id="err_no_labels<?= $rowp->ID ?>">Please Choose Total Labels</span>
-                    <?php } 
-                    
-                    
-                    
-                    
+
+                    <?php }
+
+
+
+
                     ?>
-                    
-                    
-                    
+
+
+
               </div>
 
-							
+
 
 
             </div>
@@ -475,14 +527,14 @@ foreach ($assoc as $rowp) {
             <!-- --------------------------------------------------->
 
 
-          
+
 
         </td>
         <td></td>
         <td align="center">
           <?php if($rowp->labeltype == "printed") {?>
           <?php echo $rowp->designs.' ';?><?=($rowp->designs > 1)?"Designs":"Design" ?>
-           
+
           <?php } ?>
       </td>
         <td></td>
@@ -528,3 +580,11 @@ foreach ($assoc as $rowp) {
     <td colspan="2"></td>
 </tr>
 <?php } ?>
+
+
+<script>
+    function printed_labels(temp_basket_id)
+    {
+        document.location = "<?php echo base_url();?>order_quotation/order/edit_cart_main/true/"+temp_basket_id;
+    }
+</script>

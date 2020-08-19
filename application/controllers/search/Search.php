@@ -4057,9 +4057,7 @@ class search extends CI_Controller
     function calculate_roll_price_new()
     {
 
-        /*echo '<pre>';
-        print_r($_POST);
-        exit;*/
+
 
         if (!$_POST) {
             $_POST = json_decode(file_get_contents('php://input'), true);
@@ -4127,6 +4125,7 @@ class search extends CI_Controller
             //print_r($menu); exit;
             $available_in = $this->input->post('formats');;
             $no_of_labels = $this->input->post('roll');
+            $labels_roll = $this->input->post('org_labels');
             //print_r($available_in); exit;
             if ($available_in == 'A4' || $available_in == 'A3' || $available_in == 'SRA3' || $available_in == 'A5') {
 
@@ -4177,15 +4176,21 @@ class search extends CI_Controller
                 $first = strtoupper($mat_code[1]);
                 $productcode_a4 = explode($first, $productcode1)[0];
 
+                $CategoryID = $this->home_model->getCategory($productcode);
+                if(!$CategoryID){
+                    $selected_size = '';
+                }else{
+                    $selected_size = $CategoryID;
+                }
 
                 $pref = array(
                     'email' => $email,
                     'sessionID' => $this->session->userdata('session_id'),
                     'shape' => '',
-                    'labels_roll' => $no_of_labels,
+                    'labels_roll' => $labels_roll,
                     'source' => 'custom_die',
                     'opposite' => "false",
-                    'selected_size' => '',
+                    'selected_size' => $selected_size,
                     'available_in' => $available_in,
                     'categorycode_roll' => 'SCO1',
                     'productcode_roll' => $productcode,
@@ -4638,6 +4643,8 @@ class search extends CI_Controller
                 $mat_code = explode($lastnum, $productcode1);
                 $first = strtoupper($mat_code[1]);
                 $productcode_a4 = explode($first, $productcode1)[0];
+
+
                 //$productcode_a4 = 'SCO1';
                 //$productcode = 'SCO1';
                 //print_r($productcode.' = '.$productcode_a4); exit;

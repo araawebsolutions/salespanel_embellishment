@@ -203,6 +203,10 @@ class cartModal extends CI_Model
         $qry = $this->db->query("select * from flexible_dies_info where ID = $id");
         return $qry->row_array();
     }
+    public function fetchcartinfo($id){
+        $qry = $this->db->query("select p_code, FinishTypePricePrintedLabels from temporaryshoppingbasket where ID = $id");
+        return $qry->row_array();
+    }
 
     public function updatecustomsheetprice($scorecord,$material){
 

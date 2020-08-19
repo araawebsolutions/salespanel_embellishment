@@ -9955,10 +9955,24 @@ class Home_model extends CI_Model
 
     function generate_preferences_data($line_detail,$flag=NULL){
 
+        /*echo '<pre>';
+        print_r($line_detail); exit;*/
         $preferences = array();
         $preferences['ProductID'] = $line_detail->ProductID;
         $preferences['ManufactureID'] = $line_detail->ManufactureID;
         $preferences['manuid'] = $line_detail->ManufactureID;
+
+        $get_manufacture_id = $this->db->select('ManufactureID')
+            ->where('SerialNumber', $line_detail->SerialNumber)
+            ->get('quotationdetails')
+            ->row();
+        $manufacture_id = $get_manufacture_id->ManufactureID;
+        /*if($manufacture_id == 'SCO1'){
+
+        }*/
+        /*echo '<pre>';
+        print_r($line_detail); exit;*/
+
 
         if ($line_detail->ProductBrand == 'Roll Labels'){
             $preferences['available_in'] = 'Roll';
@@ -9989,7 +10003,7 @@ class Home_model extends CI_Model
             $preferences['wound_roll'] = $line_detail->Wound;
             $preferences['color_roll'] = $material_data['material_name'];
             $preferences['material_roll'] = $line_detail->ColourMaterial_upd;
-            $preferences['categorycode_roll'] = $preferences['die_code'].$preferences['coresize'];
+            $preferences['categorycode_roll'] = $manufacture_id; //$preferences['die_code'].$preferences['coresize'];
             $preferences['adhesive_roll'] = $material_data['adhesive'];
             if (isset($flag) && $flag == 'quotation_detail'){
                 $preferences['labels_roll'] = $line_detail->orignalQty;
@@ -10001,7 +10015,7 @@ class Home_model extends CI_Model
             $preferences['productcode_a4'] = $line_detail->ManufactureID;
             $preferences['color_a4'] = $material_data['material_name'];
             $preferences['material_a4'] = $line_detail->ColourMaterial_upd;
-            $preferences['categorycode_a4'] = $preferences['die_code'];
+            $preferences['categorycode_a4'] = $manufacture_id; //$preferences['die_code'];
             $preferences['adhesive_a4'] = $material_data['adhesive'];
             if (isset($flag) && $flag == 'quotation_detail'){
                 $preferences['labels_a4'] = $line_detail->orignalQty;
@@ -10011,10 +10025,27 @@ class Home_model extends CI_Model
             $preferences['quantity'] = $line_detail->Quantity;
         }
 
+        if($manufacture_id == 'SCO1'){
+            $qty_mat = $this->db->select('flexible_dies_mat.qty')
+                ->join('flexible_dies_info', 'flexible_dies_info.ID = flexible_dies_mat.OID')
+                ->where('flexible_dies_info.QID', $line_detail->SerialNumber)
+                ->get('flexible_dies_mat')
+                ->row();
+            if($qty_mat){
+                $preferences['quantity'] = $qty_mat->qty;
+            }
+
+        }
+        /*echo '<pre>';
+        print_r($preferences['quantity']); exit;
+        echo '<pre>';
+        print_r($preferences);
+        exit;*/
+
         return $preferences;
     }
 
-    function emb_update_line($line_data,$flag,$refNumber,$lineNumber){
+    function emb_update_line($line_data,$flag,$refNumber,$lineNumber,$product_code=null){
 
         if ($flag == 'order_detail'){
             $table = 'orderdetails';
@@ -10026,6 +10057,13 @@ class Home_model extends CI_Model
             $table = 'temporaryshoppingbasket';
             $where_coumn = 'ID';
         }
+
+
+//print_r($product_code); exit;
+        /*echo '<pre>';
+        print_r($line_data);
+        exit;*/
+
 
         $updation_array = array(
             'Print_Type' => $line_data['Print_Type'],
@@ -10046,9 +10084,48 @@ class Home_model extends CI_Model
             'FinishTypePricePrintedLabels' => $line_data['FinishTypePricePrintedLabels']
         );
 
+
         if ($flag == 'quotation_detail'){
             $updation_array['orignalQty'] = $updation_array['labels'];
             unset($updation_array['labels']);
+
+
+
+            /*echo '<pre>';
+            print_r($updation_array);
+            exit;*/
+
+            /*FOR SCO1 Start*/
+
+            if($product_code && $product_code == 'SCO1'){
+                $flexible_dies_mat = $this->db->select('flexible_dies_mat.ID, flexible_dies_mat.qty')
+                    ->join('flexible_dies_info', 'flexible_dies_info.ID = flexible_dies_mat.OID')
+                    ->where('flexible_dies_info.QID', $lineNumber)
+                    ->get('flexible_dies_mat')
+                    ->row();
+                if($flexible_dies_mat){
+                    $flexible_dies_mat_id = $flexible_dies_mat->ID;
+                    $prev_qty = $flexible_dies_mat->qty;
+                }else{
+                    $flexible_dies_mat_id = 0;
+                    $prev_qty = 0;
+                }
+                //print_r($flexible_dies_mat_id); exit;
+
+                $flex_array = array(
+                    'qty' => $updation_array['Quantity'],
+                    'rolllabels' => $updation_array['orignalQty'],
+                    'designs' => $updation_array['Print_Qty'],
+                    'printing' => $updation_array['Print_Type'],
+                    'plainprice' => $updation_array['Price'],
+                    'printprice' => $updation_array['Print_Total']
+                );
+                $this->db->update('flexible_dies_mat', $flex_array, array('ID' => $flexible_dies_mat_id));
+                unset($updation_array['Quantity'], $updation_array['Price'], $updation_array['UnitPrice'], $updation_array['Print_Total']);
+            }
+            /*FOR SCO1 Ends*/
+
+
         }
 
         /*echo "<pre>";
@@ -10058,6 +10135,11 @@ class Home_model extends CI_Model
 
         $this->db->where($where_coumn, $lineNumber);
         $this->db->update($table, $updation_array);
+
+
+
+
+
 
     }
 
@@ -10073,6 +10155,23 @@ class Home_model extends CI_Model
             ->from('quotation_attachments_integrated as at')
             ->where('Serial',$serial)
             ->get()->result();
+    }
+
+    function getCategory($productcode){
+        $cat = $this->db->select("CategoryID")
+            ->from('products')
+            ->where('ManufactureID',$productcode)
+            ->get()->row();
+        if($cat){
+            $mat_code = explode('R', $cat->CategoryID);
+            $first = $mat_code[0];
+            if($first){
+                return $first;
+            }
+        }else{
+            return false;
+        }
+
     }
 
         /***************************************************/

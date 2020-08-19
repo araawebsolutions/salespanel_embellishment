@@ -430,7 +430,7 @@ $exchange_rate = $this->cartModal->get_exchange_rate($currency);
                             &nbsp;&nbsp;&nbsp;
                         <button type="button" id="artworki_for_cart<?=$key?>" style="padding-right: 10px"  onclick="printed_labels('<?= $record->ID ?>')"
                                 class="btn btn-secondarys btn-rounded waves-light waves-effect btn-upload-artwork"  data-toggle="modal" data-target=".bs-example-modal-lga"><i class="fa fa-cloud-upload" aria-hidden="true"></i>&nbsp;
-                            Embellishment </button>
+                            Embellishment cart </button>
                     <?php } ?>
                     <input type="hidden" id="artworkNeeded"
                            value="<?php echo ($record->Printing == 'Y') ? 'Yes' : 'NO' ?>"></td>

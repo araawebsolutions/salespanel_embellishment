@@ -140,7 +140,11 @@ $assets = Assets;?>
 
                                                     <?php } ?>
 
-                                                    <?php } ?>
+                                                    <?php }
+                                                    /*echo '<pre>';
+                                                    print_r($preferences);
+                                                    exit;*/
+                                                    ?>
                                                     <span class="product-details-title"><span
                                                                 id="product_color"> <?php echo ($preferences['color_roll']) ? ($preferences['color_roll']) : ($preferences['color_a4']) ?></span> <span
                                                                 id="product_material"> </span><?php echo ($preferences['material_roll']) ? ($preferences['material_roll']) : ($preferences['material_a4']) ?> :</span><br>

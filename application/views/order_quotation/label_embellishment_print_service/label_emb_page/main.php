@@ -4731,8 +4731,7 @@
                 } else {
                     var text = 'designs';
                 }
-                alert(remaing);
-                alert(remaing_designs);
+
                 swal({
                         title: 'You have reduced the number of ' + text + ' please confirm to recalculate the price.',
                         type: "warning",

@@ -348,10 +348,17 @@ $UserTypeID = $this->session->userdata('UserTypeID');
             <input type="hidden" data-max_qty_integrated="<?php echo $quotationDetail->SerialNumber ?>"
                                                value="<?php echo $this->orderModal->max_qty_integrated($quotationDetail->ManufactureID); ?>">
 
+                <?php
+                /*echo '<pre>';
+                print_r($quotationDetail); exit;*/
+                ?>
 
             <?php if ($quotationDetail->ManufactureID == 'SCO1') {
                 $carRes = $this->user_model->getCartQuotationData($quotationDetail->SerialNumber); ?>
-
+                    <?php
+                    /*echo '<pre>';
+                    print_r($carRes); exit;*/
+                    ?>
 
             <tr id="line<?= $key ?>" class="<?=$clr_class?>">
               <td style="text-align: center;">
@@ -445,6 +452,21 @@ $UserTypeID = $this->session->userdata('UserTypeID');
               <td class="text-center" id="checkout_price<?= $key ?>">
                 <?= $symbol ?><?= number_format($quotationDetail->Price * $exchange_rate, 2,'.',''); ?>
                 <?php $row_total_line += ($quotationDetail->Price * $exchange_rate);?>
+
+
+
+
+
+                <?php /*if ($quotationDetail->FinishTypePricePrintedLabels != '' && $quotationDetail->total_emb_cost != 0){
+                    echo $symbol */?><!--<?/*= number_format(($quotationDetail->Price * $exchange_rate) - $quotationDetail->total_emb_cost, 2,'.','') */?>
+                    <?php /*$row_total_line += ($quotationDetail->Price * $exchange_rate)-$quotationDetail->total_emb_cost;
+                } else {
+                    echo $symbol */?><?/*= number_format($quotationDetail->Price * $exchange_rate, 2,'.','') */?>
+                    --><?php /*$row_total_line += ($quotationDetail->Price * $exchange_rate);
+                } */?>
+
+
+
               </td>
 
               <td class="padding-6 icon-tablee">
@@ -654,6 +676,22 @@ $UserTypeID = $this->session->userdata('UserTypeID');
                 <?= $symbol ?><?= number_format($quotationDetail->Price * $exchange_rate, 2,'.','') ?>
                 <?php $row_total_line += ($quotationDetail->Price * $exchange_rate);?>
               </td>
+
+
+
+
+
+                <?php /*if ($quotationDetail->FinishTypePricePrintedLabels != '' && $quotationDetail->total_emb_cost != 0){
+                echo $symbol . (number_format(($quotationDetail->Print_Total * $quotation->exchange_rate)-$quotationDetail->total_emb_cost, 2, '.', ''));
+                $row_total_line += ($quotationDetail->Print_Total * $quotation->exchange_rate)-$quotationDetail->total_emb_cost;
+                } else {
+                echo $symbol . (number_format($quotationDetail->Print_Total * $quotation->exchange_rate, 2, '.', ''));
+                $row_total_line += ($quotationDetail->Print_Total * $quotation->exchange_rate);
+                } */?>
+
+
+
+
 
               <td class="padding-6 icon-tablee">
                 <?php if ($quotationDetail->active != "c") { ?>

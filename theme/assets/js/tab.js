@@ -257,7 +257,7 @@ function valids(){
 	
 	var to_line = $('#to_rec').val();
 	to_line = parseInt(to_line);
-alert('to_line = '+to_line);
+//alert('to_line = '+to_line);
 	var x= 1;
 	for(i=0; i < to_line; i++){
 		
@@ -422,8 +422,9 @@ alert('to_line = '+to_line);
 	
 				
 			}
-			
-			
+			/*alert('p_type = '+p_type);
+			alert('format = '+format);*/
+
 			if(p_type=='printed' && format =='roll'){
 				
 				$('#assco'+row_id).removeClass('hide');

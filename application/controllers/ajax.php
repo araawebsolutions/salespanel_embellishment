@@ -1838,7 +1838,7 @@ class Ajax extends CI_Controller{
 				$groupby ='';
 				if($category=='Roll'){$groupby = " Group By LEFT( p.ManufactureID, CHAR_LENGTH( p.ManufactureID ) -1 ) "; }
 				
-				
+
 				/******* New finder implemenations **********/
 					if($page=='finder'){
 							$shape_option = $this->home_model->genrate_shapes($shape_list);
@@ -6118,7 +6118,7 @@ function unsave_checkout_data(){
     function material_continue_with_product_printed_labels()
     {
         /*echo '<pre>';
-        print_r($_POST['producttype']);
+        print_r($_POST);
         exit;*/
         //print_r('hi'); exit;
 		//        print_r($this->input->post('selected_already_plates_composite_array'));die;
@@ -6134,7 +6134,9 @@ function unsave_checkout_data(){
         $upload_artwork_option_radio = $this->input->post('upload_artwork_option_radio');
 
         $labels = $this->input->post('qty');
+        //print_r($labels); exit;
         $persheets = $this->input->post('labelspersheets');
+        //print_r($persheets); exit;
         $upload_artwork_option_radio = $this->input->post('upload_artwork_option_radio');
         
         $digital_process_plus_white = $this->input->post('digital_process_plus_white');
@@ -6210,7 +6212,7 @@ function unsave_checkout_data(){
         }
 
 
-//print_r($producttype); exit;
+//print_r('o_quantity = '.$o_quantity); exit;
         if ($producttype == 'roll') {
             $data['coresize'] = $coresize;
             $data['woundoption'] = $woundoption;
@@ -6229,12 +6231,32 @@ function unsave_checkout_data(){
 					if( isset($temp_basket_id) && $temp_basket_id != '' ) {
 						$product_basket_data = $this->getCartAndProductData($temp_basket_id);
 						$preferences = $this->generate_preferences_data_edit_cart_flag($product_basket_data);
+						/*echo '<pre>';
+						print_r($preferences);
+						exit;*/
 						$data['IA_data'] = $this->orderModal->Get_IA_Data($product_basket_data['ID']);
 						$data['IA_all_data'] = $this->orderModal->Get_IA_All_Data($product_basket_data['ID']);
 						$data['cart_and_product_data'] = $product_basket_data;
-					}	
+					}
 
-					$sheets = $data['cart_and_product_data']['Quantity'];
+
+                    $check_for_custom_die = $this->db->select('p_code')->where('ID', $temp_basket_id)->get('temporaryshoppingbasket')->row();
+                    if ($check_for_custom_die && $check_for_custom_die->p_code == 'SCO1') {
+                        $mat_qty = $this->db->select('flexible_dies_mat.qty')
+                            ->join('flexible_dies_info', 'flexible_dies_info.ID = flexible_dies_mat.OID')
+                            ->where('CartID', $temp_basket_id)
+                            ->get('flexible_dies_mat')
+                            ->row();
+                        if($mat_qty){
+                            $sheets = $mat_qty->qty;
+                        }else{
+                            $sheets = 0;
+                        }
+
+                    }else{
+                        $sheets = $data['cart_and_product_data']['Quantity'];
+                    }
+
 				} else {
 					$query = " Select * from printing_preferences where sessionID = '" . $this->shopping_model->sessionid() . "' LIMIT 1 ";
 	                $data_preferences = $this->db->query($query)->row_array();
@@ -6244,6 +6266,7 @@ function unsave_checkout_data(){
         } else {
             if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $flag == 'cart_detail')) {
                 $sheets = $o_quantity;
+                //print_r('sheets 3 = '.$sheets); exit;
             }else{
 
             	$edit_cart_flag = $this->input->post('edit_cart_flag');
@@ -6251,27 +6274,54 @@ function unsave_checkout_data(){
 					$data['edit_cart_flag'] = $edit_cart_flag;
 					$temp_basket_id = $this->input->post('temp_basket_id');
 					if( isset($temp_basket_id) && $temp_basket_id != '' ) {
+
+					    /*if( == 'SCO1')*/
 						$product_basket_data = $this->getCartAndProductData($temp_basket_id);
 						$preferences = $this->generate_preferences_data_edit_cart_flag($product_basket_data);
 						$data['IA_data'] = $this->orderModal->Get_IA_Data($product_basket_data['ID']);
 						$data['IA_all_data'] = $this->orderModal->Get_IA_All_Data($product_basket_data['ID']);
 						$data['cart_and_product_data'] = $product_basket_data;
-					}	
+					}
 
-					$sheets = $data['cart_and_product_data']['Quantity'];
+                    $check_for_custom_die = $this->db->select('p_code')->where('ID', $temp_basket_id)->get('temporaryshoppingbasket')->row();
+                    if ($check_for_custom_die && $check_for_custom_die->p_code == 'SCO1') {
+                        $mat_qty = $this->db->select('flexible_dies_mat.qty')
+                            ->join('flexible_dies_info', 'flexible_dies_info.ID = flexible_dies_mat.OID')
+                            ->where('CartID', $temp_basket_id)
+                            ->get('flexible_dies_mat')
+                            ->row();
+                        if($mat_qty){
+                            $sheets = $mat_qty->qty;
+                        }else{
+                            $sheets = 0;
+                        }
+
+                    }else{
+                        $sheets = $data['cart_and_product_data']['Quantity'];
+                    }
+
+                    //print_r('sheets 2 = '.$sheets); exit;
 				} else {
-					$sheets = $this->input->post('qty');	
+					$sheets = $this->input->post('qty');
+                    //print_r('sheets 1 = '.$sheets); exit;
 				}
 
             }
             $labels = $sheets * $persheets;
         }
 
+        /*print_r(' labels = '.$labels);
+        print_r(' persheets = '.$persheets);
+        print_r(' sheets = '.$sheets);
+        exit;*/
+
+
 
 
 
         $data['unitqty'] = $unitqty;
         $data['sheets'] = $sheets;
+        //print_r('sheets = '.$sheets); exit;
         $data['labels'] = $labels;
         $data['labels_total_qty'] = $labels;
         $query = " Select * from products p,category c WHERE ManufactureID LIKE '$menu' AND SUBSTRING_INDEX(p.CategoryID,'R',1)=c.CategoryID";
@@ -6387,6 +6437,10 @@ function unsave_checkout_data(){
 
 
                     $data['prices'] = $this->calculate_sheet_price_printed_emb_page($values_array);
+                    /*echo '<pre>';
+                    print_r('h<br>');
+                    print_r($data['prices']);
+                    exit;*/
 
                 }elseif ($sheet_product_quality == 'standerd'){
                     $values_array = array( 'printing' => $labeltype,
@@ -6507,6 +6561,10 @@ function unsave_checkout_data(){
 
 
         }
+
+        /*echo '<pre>';
+        print_r($data['prices']);
+        exit;*/
         /******************  Add To Cart *****************/
 
         $wound = '';
@@ -6576,6 +6634,8 @@ function unsave_checkout_data(){
             $qty = $sheets;
             $total = $data['prices']['plainprice'];
             $unit_price = $total / $qty;
+
+
         }
 
 
@@ -6597,9 +6657,10 @@ function unsave_checkout_data(){
             $LabelsPerRoll = $persheets;
         }
 
-		/*echo '<pre>';
-        print_r($this->input->post('product_preferences')); exit;*/
 
+		//print_r($qty); exit;
+
+        //print_r($labels); exit;
         $items = array(
 			'SessionID' => $SID,
 			'ProductID' => $productid,
@@ -6620,12 +6681,26 @@ function unsave_checkout_data(){
         );
 
 
+        /*echo '<pre>';
+        print_r($items); exit;*/
 
         $items = array_merge($items, $printing_options);
 
+        /*echo '<pre>';
+        //print_r($flag); exit;
+        print_r($items); exit;*/
+
         if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $flag == 'cart_detail')) {
 
-            $updation_array = $this->home_model->emb_update_line($items,$flag,$refNumber,$lineNumber);
+
+            $check_for_custom_die = $this->db->select('ManufactureID')->where('SerialNumber', $lineNumber)->get('quotationdetails')->row();
+            if ($check_for_custom_die && $check_for_custom_die->ManufactureID == 'SCO1') {
+                $product_code = 'SCO1';
+            }else{
+                $product_code = '';
+            }
+
+            $updation_array = $this->home_model->emb_update_line($items,$flag,$refNumber,$lineNumber,$product_code);
 
             $data['flag'] = $flag;
             $data['refNumber'] = $refNumber;
@@ -6650,7 +6725,6 @@ function unsave_checkout_data(){
                     ->where('ID', $cartid)
                     ->update('temporaryshoppingbasket');*/
                 $check_for_custom_die = $this->db->select('p_code')->where('ID', $cartid)->get('temporaryshoppingbasket')->row();
-                //print_r($check_for_custom_die); exit;
                 if($check_for_custom_die && $check_for_custom_die->p_code == 'SCO1'){
                     $flexible_dies_mat = $this->db->select('flexible_dies_mat.ID')
                         ->join('flexible_dies_info', 'flexible_dies_info.ID = flexible_dies_mat.OID')
@@ -6662,6 +6736,9 @@ function unsave_checkout_data(){
                     }else{
                         $flexible_dies_mat_id = 0;
                     }
+
+                    /*echo '<pre>';
+                    print_r($items); exit;*/
 
                     $flex_array = array(
                         'qty' => $items['Quantity'],
@@ -7322,6 +7399,7 @@ function unsave_checkout_data(){
 
 
 
+
         if ($upload_artwork_radio == "upload_artwork_now") {
             if (!empty($_FILES)) {
 
@@ -7823,7 +7901,8 @@ function unsave_checkout_data(){
 							}
                         }
 
-
+                        /*echo '<pre>';
+print_r($prices); exit;*/
                         $data['prices'] = $prices;
 //                    echo"<pre>";print_r($prices);die;
                         $data['labels'] = $labels;
@@ -8012,6 +8091,29 @@ function unsave_checkout_data(){
 
                     $this->db->insert($artwork_table, $artowrk);
 
+
+                    //print_r('product_code = '.$product_code); exit;
+                    /*FOR SCO1 Start*/
+                    if($product_code && $product_code == 'SCO1'){
+                        $flexible_dies_mat = $this->db->select('flexible_dies_mat.ID, flexible_dies_mat.qty')
+                            ->join('flexible_dies_info', 'flexible_dies_info.ID = flexible_dies_mat.OID')
+                            ->where('flexible_dies_info.QID', $lineNumber)
+                            ->get('flexible_dies_mat')
+                            ->row();
+                        if($flexible_dies_mat){
+                            $flexible_dies_mat_id = $flexible_dies_mat->ID;
+                            $prev_qty = $flexible_dies_mat->qty;
+                        }else{
+                            $flexible_dies_mat_id = 0;
+                            $prev_qty = 0;
+                        }
+                        $mat_update = array(
+                            'qty' => $sheets+$prev_qty
+                        );
+                        //$this->db->update('flexible_dies_mat', $mat_update, array('ID' => $flexible_dies_mat_id));
+                    }
+                    /*FOR SCO1 Ends*/
+
                 } else {
 
 					if( isset($edit_cart_flag) && $edit_cart_flag != '' ) {
@@ -8031,6 +8133,7 @@ function unsave_checkout_data(){
 	                );
 					$this->db->insert('integrated_attachments', $artowrk);
 
+                    /*FOR SCO1 Start*/
 					if($product_code && $product_code == 'SCO1'){
 					    $flexible_dies_mat = $this->db->select('flexible_dies_mat.ID')
                             ->join('flexible_dies_info', 'flexible_dies_info.ID = flexible_dies_mat.OID')
@@ -8046,8 +8149,9 @@ function unsave_checkout_data(){
                         $mat_update = array(
                             'qty' => $sheets
                         );
-                        $this->db->update('flexible_dies_mat', $mat_update, array('ID' => $flexible_dies_mat_id));
+                        //$this->db->update('flexible_dies_mat', $mat_update, array('ID' => $flexible_dies_mat_id));
                     }
+                    /*FOR SCO1 Ends*/
                 }
 
                 if ($type == 'roll') {
@@ -8106,6 +8210,8 @@ function unsave_checkout_data(){
 //        print_r($preferences);
                 $data['availabel_in'] = $data['preferences']['available_in'];
 
+
+
                 if (!empty($limit_exceed_designs) || !empty($limit_exceed_sheets)) {
 
                     if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
@@ -8113,7 +8219,9 @@ function unsave_checkout_data(){
                     } else {
                         $row = $this->db->query('Select * from temporaryshoppingbasket WHERE ID LIKE "' . $cartid . '"')->row_array();
                     }
-
+                    /*echo '<pre>';
+                    print_r($row);
+                    exit;*/
                     $menu = $this->db->query("Select ManufactureID from products WHERE ProductID = $productid")->row_array();
                     $menu = $menu['ManufactureID'];
 //                    $menu = $this->home_model->get_db_column('products', 'ManufactureID', 'ProductID', $productid);
@@ -8343,6 +8451,7 @@ function unsave_checkout_data(){
                         $Print_Design = 'Multiple Designs';
                     }
 
+                    //print_r($printprice_shopping_cart); exit;
                     $printing_items = array('Free' => $prices['artworks'],
                         'Print_Type' => $labeltype,
                         'Print_Qty' => $design,
@@ -8361,23 +8470,124 @@ function unsave_checkout_data(){
                         'FinishTypePrintedLabels' => json_encode($rollfinish_child_array),
                         'FinishTypePricePrintedLabels' => json_encode( $prices['label_finish_individual_cost_array']),
                         'custom_roll_and_label' => $upload_artwork_option_radio,
-                        'use_old_plate' => json_encode($use_old_plate));
+                        'use_old_plate' => json_encode($use_old_plate)
+                    );
 
 
                     $items = array_merge($items, $printing_items);
 
+                    /*echo '<pre>';
+                    print_r('items<br>');
+                    print_r($items);
+                    exit;*/
+
 
                     if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
 
-                        $updation_array = $this->home_model->emb_update_line($items,$flag,$refNumber,$lineNumber);
+                        $items_sheets = array(
+                            'sheets' => $sheets
+                        );
+                        $items = array_merge($items, $items_sheets);
+
+                        $updation_array = $this->home_model->emb_update_line($items,$flag,$refNumber,$lineNumber, $product_code);
 
                     } else {
-						
+
+
+
 						if( isset($edit_cart_flag) && $edit_cart_flag != '' ) {
-							$this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid));
+
+                            /*FOR SCO1 Start*/
+                            $check_for_custom_die = $this->db->select('p_code')->where('ID', $cartid)->get('temporaryshoppingbasket')->row();
+                            if($check_for_custom_die && $check_for_custom_die->p_code == 'SCO1'){
+                                $flexible_dies_mat = $this->db->select('flexible_dies_mat.ID')
+                                    ->join('flexible_dies_info', 'flexible_dies_info.ID = flexible_dies_mat.OID')
+                                    ->where('flexible_dies_info.CartID', $cartid)
+                                    ->get('flexible_dies_mat')
+                                    ->row();
+                                if($flexible_dies_mat){
+                                    $flexible_dies_mat_id = $flexible_dies_mat->ID;
+                                }else{
+                                    $flexible_dies_mat_id = 0;
+                                }
+
+                                $flex_array = array(
+                                    'qty' => $items['Quantity'],
+                                    'rolllabels' => $items['orignalQty'],
+                                    'designs' => $items['Print_Qty'],
+                                    'printing' => $items['Print_Type'],
+                                    'plainprice' => $items['TotalPrice'],
+                                    'printprice' => $items['Print_Total']
+                                );
+                                $this->db->update('flexible_dies_mat', $flex_array, array('ID' => $flexible_dies_mat_id));
+
+                                unset($items['Quantity'], $items['TotalPrice'], $items['UnitPrice'], $items['Print_Total']);
+                                /*echo '<pre>';
+                                print_r('items<br>');
+                                print_r($items);
+                                exit;*/
+
+
+                                $SID = $this->shopping_model->sessionid();
+                                $this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid, 'SessionID' => $SID));
+                                /*FOR SCO1 Ends*/
+
+                            }else{
+                                $this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid));
+                            }
+
+
+
 						} else {
-							$SID = $this->shopping_model->sessionid() . '-PRJB';
-							$this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid, 'SessionID' => $SID));
+
+
+
+
+
+
+						    /*FOR SCO1 Start*/
+                            $check_for_custom_die = $this->db->select('p_code')->where('ID', $cartid)->get('temporaryshoppingbasket')->row();
+                            if($check_for_custom_die && $check_for_custom_die->p_code == 'SCO1'){
+                                $flexible_dies_mat = $this->db->select('flexible_dies_mat.ID')
+                                    ->join('flexible_dies_info', 'flexible_dies_info.ID = flexible_dies_mat.OID')
+                                    ->where('flexible_dies_info.CartID', $cartid)
+                                    ->get('flexible_dies_mat')
+                                    ->row();
+                                if($flexible_dies_mat){
+                                    $flexible_dies_mat_id = $flexible_dies_mat->ID;
+                                }else{
+                                    $flexible_dies_mat_id = 0;
+                                }
+
+                                $flex_array = array(
+                                    'qty' => $items['Quantity'],
+                                    'rolllabels' => $items['orignalQty'],
+                                    'designs' => $items['Print_Qty'],
+                                    'printing' => $items['Print_Type'],
+                                    'plainprice' => $items['TotalPrice'],
+                                    'printprice' => $items['Print_Total']
+                                );
+                                $this->db->update('flexible_dies_mat', $flex_array, array('ID' => $flexible_dies_mat_id));
+
+                                unset($items['Quantity'], $items['TotalPrice'], $items['UnitPrice'], $items['Print_Total']);
+
+
+
+                                $SID = $this->shopping_model->sessionid();
+                                $this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid, 'SessionID' => $SID));
+                                /*FOR SCO1 Ends*/
+
+                            }else{
+                                $SID = $this->shopping_model->sessionid() . '-PRJB';
+                                $this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid, 'SessionID' => $SID));
+                            }
+
+
+
+
+
+
+
 						}
                     }
 
@@ -9290,13 +9500,52 @@ function unsave_checkout_data(){
                 
 
                 $items = array_merge($items, $printing_items);
+                /*echo '<pre>';
+                print_r($items); exit;*/
 
                 if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
                     $updation_array = $this->home_model->emb_update_line($items,$flag,$refNumber,$lineNumber);
                 } else {
 
 					if( $edit_cart_flag ) {
-						$this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid));	
+                        /*FOR SCO1 Start*/
+                        $check_for_custom_die = $this->db->select('p_code')->where('ID', $cartid)->get('temporaryshoppingbasket')->row();
+                        if($check_for_custom_die && $check_for_custom_die->p_code == 'SCO1'){
+                            $flexible_dies_mat = $this->db->select('flexible_dies_mat.ID')
+                                ->join('flexible_dies_info', 'flexible_dies_info.ID = flexible_dies_mat.OID')
+                                ->where('flexible_dies_info.CartID', $cartid)
+                                ->get('flexible_dies_mat')
+                                ->row();
+                            if($flexible_dies_mat){
+                                $flexible_dies_mat_id = $flexible_dies_mat->ID;
+                            }else{
+                                $flexible_dies_mat_id = 0;
+                            }
+
+                            $flex_array = array(
+                                'qty' => $items['Quantity'],
+                                'rolllabels' => $items['orignalQty'],
+                                'designs' => $items['Print_Qty'],
+                                'printing' => $items['Print_Type'],
+                                'plainprice' => $items['TotalPrice'],
+                                'printprice' => $items['Print_Total']
+                            );
+                            $this->db->update('flexible_dies_mat', $flex_array, array('ID' => $flexible_dies_mat_id));
+
+                            unset($items['Quantity'], $items['TotalPrice'], $items['UnitPrice'], $items['Print_Total']);
+                            /*echo '<pre>';
+                            print_r('items<br>');
+                            print_r($items);
+                            exit;*/
+
+
+                            $SID = $this->shopping_model->sessionid();
+                            $this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid, 'SessionID' => $SID));
+                            /*FOR SCO1 Ends*/
+
+                        }else{
+                            $this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid));
+                        }
 					} else {
 						$SID = $this->shopping_model->sessionid() . '-PRJB';
 						$this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid, 'SessionID' => $SID));	
@@ -10619,8 +10868,64 @@ function unsave_checkout_data(){
 
     }
 
+    function test(){
+        if (isset($cartid) and $cartid != '') {
+
+
+
+            /*FOR SCO1*/
+            /*$this->db->set('SessionID', $SID)
+                ->where('ID', $cartid)
+                ->update('temporaryshoppingbasket');*/
+            $check_for_custom_die = $this->db->select('p_code')->where('ID', $cartid)->get('temporaryshoppingbasket')->row();
+            if($check_for_custom_die && $check_for_custom_die->p_code == 'SCO1'){
+                $flexible_dies_mat = $this->db->select('flexible_dies_mat.ID')
+                    ->join('flexible_dies_info', 'flexible_dies_info.ID = flexible_dies_mat.OID')
+                    ->where('flexible_dies_info.CartID', $cartid)
+                    ->get('flexible_dies_mat')
+                    ->row();
+                if($flexible_dies_mat){
+                    $flexible_dies_mat_id = $flexible_dies_mat->ID;
+                }else{
+                    $flexible_dies_mat_id = 0;
+                }
+
+                $flex_array = array(
+                    'qty' => $items['Quantity'],
+                    'designs' => $items['Print_Qty'],
+                    'printing' => $items['Print_Type'],
+                    'plainprice' => $items['TotalPrice'],
+                    'printprice' => $items['Print_Total']
+                );
+                $this->db->update('flexible_dies_mat', $flex_array, array('ID' => $flexible_dies_mat_id));
+
+                unset($items['Quantity'], $items['TotalPrice'], $items['UnitPrice'], $items['Print_Total']);
+            }
+            /*echo '<pre>';
+            print_r($items); exit;*/
+            //$this->orderModal->update_flexible_dies_mat($items);
+
+
+            //print_r($flexible_dies_mat_id); exit;
+
+
+
+
+            $this->db->update('temporaryshoppingbasket', $items, array('ID' => $cartid));
+        } else {
+            $this->db->insert('temporaryshoppingbasket', $items);
+            if ($this->db->insert_id()) {
+                $cartid = $this->db->insert_id();
+            }
+
+        }
+    }
+
     function add_printing_tocart_label_emb()
     {
+
+        /*echo '<pre>';
+        print_r($_POST); exit;*/
 
         $cartid = $this->input->post('cartid');
         $prdid = $this->input->post('prdid');
@@ -10730,6 +11035,39 @@ function unsave_checkout_data(){
                     $update_array = array_merge($update_array,
                         array('Product_detail' => '***DO NOT START PRINTING ORDER UNTIL PRESS PROOF HAS BEEN APPROVED***'));
                 }
+
+
+
+
+
+/*SCO11*/
+                /*$check_for_custom_die = $this->db->select('p_code')->where('ID', $cartid)->get('temporaryshoppingbasket')->row();
+                if($check_for_custom_die && $check_for_custom_die->p_code == 'SCO1'){
+                    $flexible_dies_mat = $this->db->select('flexible_dies_mat.ID')
+                        ->join('flexible_dies_info', 'flexible_dies_info.ID = flexible_dies_mat.OID')
+                        ->where('flexible_dies_info.CartID', $cartid)
+                        ->get('flexible_dies_mat')
+                        ->row();
+                    if($flexible_dies_mat){
+                        $flexible_dies_mat_id = $flexible_dies_mat->ID;
+                    }else{
+                        $flexible_dies_mat_id = 0;
+                    }
+
+                    $flex_array = array(
+                        'qty' => $items['Quantity'],
+                        'designs' => $items['Print_Qty'],
+                        'printing' => $items['Print_Type'],
+                        'plainprice' => $items['TotalPrice'],
+                        'printprice' => $items['Print_Total']
+                    );
+                    $this->db->update('flexible_dies_mat', $flex_array, array('ID' => $flexible_dies_mat_id));
+
+                    unset($items['Quantity'], $items['TotalPrice'], $items['UnitPrice'], $items['Print_Total']);
+                }*/
+
+
+
 
 
                 $this->db->update('temporaryshoppingbasket', $update_array, array('ID' => $cartid, 'SessionID' => $SID . '-PRJB'));
@@ -13834,7 +14172,7 @@ function unsave_checkout_data(){
             $preferences = $this->home_model->generate_preferences_data($line_detail,$flag);
         }
 
-       /* echo "<pre>";
+        /*echo "<pre>";
         print_r($line_detail);
         echo "<br>-----------------------------";
         print_r($preferences);
@@ -13851,9 +14189,20 @@ function unsave_checkout_data(){
                 $preferences['cat_desc_a4'] = $cat_desc[0];
                 $preferences['cat_desc_roll'] = '';
 
-                $dataProdu = $this->orderModal->getProductData($preferences['productcode_a4']);
-                $preferences['ProductID'] = $dataProdu[0]->ProductID;
-                $preferences['ManufactureID'] = $dataProdu[0]->ManufactureID;
+                /*echo '<pre>';
+                print_r($preferences);
+                exit;*/
+
+                if($preferences['productcode_a4'] == 'SCO1'){
+                    $dataProdu = $this->orderModal->getProductDataWithID($preferences['ProductID']);
+                    $preferences['ProductID'] = $dataProdu[0]->ProductID;
+                    $preferences['ManufactureID'] = 'SCO1';
+                }else{
+                    $dataProdu = $this->orderModal->getProductData($preferences['productcode_a4']);
+                    $preferences['ProductID'] = $dataProdu[0]->ProductID;
+                    $preferences['ManufactureID'] = $dataProdu[0]->ManufactureID;
+                }
+
 
                 $category_id = $preferences['selected_size'];
 
@@ -13909,10 +14258,21 @@ function unsave_checkout_data(){
                 $preferences['cat_desc_a4'] = '';
                 $preferences['cat_desc_roll'] = $this->home_model->get_db_column("category", "CategoryDescription", "CategoryID", $catID[0]);
 
-                $dataProdu = $this->orderModal->getProductData($preferences['productcode_roll']);
 
-                $preferences['ProductID'] = $dataProdu[0]->ProductID;
-                $preferences['ManufactureID'] = $dataProdu[0]->ManufactureID;
+
+
+                if($preferences['productcode_roll'] == 'SCO1'){
+                    $dataProdu = $this->orderModal->getProductDataWithID($preferences['ProductID']);
+                    $preferences['ProductID'] = $dataProdu[0]->ProductID;
+                    $preferences['ManufactureID'] = 'SCO1';
+                }else{
+                    $dataProdu = $this->orderModal->getProductData($preferences['productcode_roll']);
+                    $preferences['ProductID'] = $dataProdu[0]->ProductID;
+                    $preferences['ManufactureID'] = $dataProdu[0]->ManufactureID;
+                }
+
+
+
                 $category_id = explode('R', $preferences['selected_size']);
                 $category_id = $category_id[0];
                 $rollcores = $this->orderModal->roll_core_sizes($category_id, $preferences['coresize']);
@@ -14012,7 +14372,6 @@ function unsave_checkout_data(){
 
             $hostory_plates_content = $this->purchased_plate_history_selected($history);
             $data['hostory_plates_content'] = $hostory_plates_content;
-
 
             $this->output->set_content_type('application/json');
             $this->output->set_output(json_encode(array('response' => 'yes', 'preferences' => $preferences, 'data' => $data)));
@@ -14218,6 +14577,11 @@ function unsave_checkout_data(){
 	        $preferences['labels_a4'] = $line_detail['orignalQty'];
 	        $preferences['quantity'] = $line_detail['Quantity'];
 	    }
+
+
+	    /*echo '<pre>';
+	    print_r($preferences);
+	    exit;*/
 
 	    return $preferences;
 	}

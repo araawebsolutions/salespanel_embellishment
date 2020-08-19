@@ -4513,6 +4513,13 @@ class orderModal extends CI_Model
         return $result;
     }
 
+    function getProductDataWithID($id)
+    {
+        $query = $this->db->query("SELECT * FROM `products` WHERE ProductID = $id ");
+        $result = $query->result();
+        return $result;
+    }
+
     function getCustomDieData()
     {
         $query = $this->db->query("SELECT * FROM `products` WHERE ProductID = 0 ");

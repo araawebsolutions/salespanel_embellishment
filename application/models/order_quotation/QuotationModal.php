@@ -211,6 +211,20 @@ class quotationModal extends CI_Model
             if($cartdata->ProductID==0 || $cartdata->p_code == 'SCO1'){
                 $prodcompletename = $cartdata->p_name;
                 $p_code=$cartdata->p_code;
+
+
+                $flexible_dies_mat = $this->db->select('flexible_dies_mat.ID, flexible_dies_mat.qty')
+                    ->join('flexible_dies_info', 'flexible_dies_info.ID = flexible_dies_mat.OID')
+                    ->where('flexible_dies_info.CartID', $cartdata->ID)
+                    ->get('flexible_dies_mat')
+                    ->row();
+                if($flexible_dies_mat){
+                    $qty_custom = $flexible_dies_mat->qty;
+                }else{
+                    $qty_custom = 0;
+                }
+
+
             }else{
                 $p_code = $cartdata->ManufactureID;
             }
@@ -243,10 +257,16 @@ class quotationModal extends CI_Model
 
 
 
-
+//print_r($qty_custom); exit;
 
             $product = $this->db->query("select * from products where ProductID = '".$cartdata->ProductID."' ")->row_array();
-            $orignalQty = $cartdata->LabelsPerRoll * $cartdata->Quantity;
+
+            if($cartdata->ProductID==0 || $cartdata->p_code == 'SCO1'){
+                $orignalQty = $cartdata->LabelsPerRoll * $qty_custom;
+            }else{
+                $orignalQty = $cartdata->LabelsPerRoll * $cartdata->Quantity;
+            }
+
             if(preg_match('/Integrated Labels/is',$cartdata->ProductBrand)){
                 $orignalQty = $cartdata->orignalQty;
             }

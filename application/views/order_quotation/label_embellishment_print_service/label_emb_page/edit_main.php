@@ -1652,9 +1652,9 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
 
                 if (data.response == 'yes') {
 
-                   /* if (data.preferences.source != "material_page") {
-                        document.location = "<?php echo base_url() . 'printed-labels/';?>";
-                    }*/
+                    if (data.preferences.source != "material_page") {
+                        //document.location = "<?php //echo base_url() . 'printed-labels/';?>//";
+                    }
 
                     preferences = data.preferences;
                     preferences_global = preferences;
@@ -3212,6 +3212,7 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
         // var cartid = $('#cartid').val();
         // alert(cartid);
         var prdid = $('#cartproductid').val();
+        var product_code = $('#product_code').text();
         var labelpersheets = $('#labels_p_sheet' + prdid).val();
         var artworkname = $(_this).parents('.upload_row').find('.artwork_name').val();
         if (upload_artwork_radio == "upload_artwork_now") {
@@ -3297,6 +3298,7 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
                 form_data.append("sheet_product_quality", sheet_product_quality);
                 form_data.append("cartid", cartid);
                 form_data.append("productid", prdid);
+                form_data.append("product_code", product_code);
                 form_data.append("labels", labels);
                 form_data.append("sheets", sheets);
                 form_data.append("artworkname", artworkname);
@@ -3399,6 +3401,7 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
                 form_data.append("lines_to_populate", lines_to_populate);
                 form_data.append("cartid", cartid);
                 form_data.append("productid", prdid);
+                form_data.append("product_code", product_code);
                 form_data.append("labels", labels);
                 form_data.append("sheets", sheets);
                 form_data.append("artworkname", artworkname);
