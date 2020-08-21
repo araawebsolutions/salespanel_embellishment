@@ -333,6 +333,8 @@ class quotationModal extends CI_Model
                 'design_file'=>$cartdata->design_file,
                 'regmark'=>$cartdata->regmark,
                 'sample'=>$cartdata->OrderData,
+                'label_application' => $cartdata->label_application,
+                'combination_base' => $cartdata->combination_base,
                 'custom_roll_and_label' => $cartdata->custom_roll_and_label,
                 'FinishTypePrintedLabels' => $cartdata->FinishTypePrintedLabels,
                 'FinishTypePricePrintedLabels' => $cartdata->FinishTypePricePrintedLabels,
@@ -1442,11 +1444,13 @@ class quotationModal extends CI_Model
                 'design_file'=>$order_detail->design_file,
                 'regmark'=>$order_detail->regmark,
                 'sample'=>$order_detail->sample,
-              
+                
                 'odp_proof'=>$order_detail->qp_proof,
                 'odp_qty'=>$order_detail->qp_qty,
                 'odp_price'=>$order_detail->qp_price,
                 'odp_foc'=>$order_detail->qp_foc,
+                'label_application' => $order_detail->label_application,
+                'combination_base' => $order_detail->combination_base,
                 'custom_roll_and_label' => $order_detail->custom_roll_and_label,
                 'FinishTypePrintedLabels' => $order_detail->FinishTypePrintedLabels,
                 'FinishTypePricePrintedLabels' => $order_detail->FinishTypePricePrintedLabels,

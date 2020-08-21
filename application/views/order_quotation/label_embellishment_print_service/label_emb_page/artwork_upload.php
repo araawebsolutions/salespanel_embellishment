@@ -29,7 +29,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div>
-                    <a href="#" class="artwork-upload-popup" data-dismiss="modal" aria-label="Close"><i class="fa fa-chevron-left"></i> Close</a>
+                    <a href="javascript:;" class="artwork-upload-popup" data-dismiss="modal" aria-label="Close"><i class="fa fa-chevron-left"></i> Close</a>
                 </div>
             </div>
             <div class="modal-body">
@@ -50,6 +50,13 @@
                             } else if( $cart_and_product_data['custom_roll_and_label'] == "custom_roll_and_label" ) {
                                 $custom_roll_and_label = true;
                             }
+
+                        /*FOR SCO1 START*/
+                        $check_if_custom_die = $this->home_model->get_db_column('temporaryshoppingbasket', 'p_code', 'ID', $cart_and_product_data['ID']);
+                        if($check_if_custom_die && $check_if_custom_die == 'SCO1'){
+                            $cost_effective = true;
+                        }
+                        /*FOR SCO1 ENDS*/
                     }
                     ?>
 
@@ -139,13 +146,13 @@
 
 <!-- Popup For Artwork Upload & Artwork to follow Start 1 -->
 <!--<div class="modal left fade" id="artworkuploadpopup1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-keyboard="false" data-backdrop="static" >-->
-<div class="modal left fade" id="artworkuploadpopup1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"   >
+<div class="modal left fade" id="artworkuploadpopup1" data-backdrop="static"  data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"   >
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <div>
-                    <!--                    <a href="#" class="artwork-upload-popup proceed_to_checkout" data-dismiss="modal" aria-label="Close">Save and Close <i class="fa fa-chevron-right"></i></a>-->
-                    <a href="javascript:void(0);" class="artwork-upload-popup proceed_to_checkout" aria-label="Close">Save and Close <i class="fa fa-chevron-right"></i></a>
+<!--                    <a href="#" class="artwork-upload-popup proceed_to_checkout" data-dismiss="modal" aria-label="Close">Save and Close <i class="fa fa-chevron-right"></i></a>-->
+                    <a href="javascript:void(0);" class="artwork-upload-popup save_and_close_inner_popup save_and_close_popup_checks"      aria-label="Close">Save and Close <i class="fa fa-chevron-right"></i></a>
                 </div>
             </div>
             <div class="modal-body">
@@ -221,7 +228,8 @@
             </div>
             <div class="modal-footer">
                 <div>
-                    <a href="javascript:void(0);" class="artwork-upload-popup proceed_to_checkout" aria-label="Close">Save and Close <i class="fa fa-chevron-right"></i></a>
+<!--                    <a href="javascript:void(0);" class="artwork-upload-popup proceed_to_checkout"   aria-label="Close">Save and Close <i class="fa fa-chevron-right"></i></a>-->
+                    <a href="javascript:void(0);" class="artwork-upload-popup  save_and_close_inner_popup save_and_close_popup_checks"     aria-label="Close">Save and Close <i class="fa fa-chevron-right"></i></a>
 
                 </div>
             </div>

@@ -254,7 +254,7 @@
                             </div>
                         </div>
                         <div class="mt-15 col-md-3 col-xs-6 rowflex">
-                            <div class="panel panel-default rowflexdiv">
+                            <div class="panel panel-default rowflexdiv field_containers">
                                 <div id="headingOne" class="panel-title_blue">
                                     <div>Select Finish Preferences</div>
                                 </div>
@@ -269,6 +269,8 @@
                                             <i></i> </label>
                                         <label class="select">
                                             <select id="woundoption" class="printing_options">
+                                                <option selected="selected" value="">Please Select Wound</option>
+
                                                 <option <?php if (strtolower($preferences['wound_roll']) == 'outside') {
                                                     echo 'selected';
                                                 } else {
@@ -291,7 +293,7 @@
                                                     <div class="col-xs-12 roll_sheets_block">
 
                                                         <div class="btn-group btn-block dm-selector"><a
-                                                                    class="btn btn-default btn-block dropdown-toggle"
+                                                                    class="btn btn-default btn-block dropdown-toggle orientation_style_class"
                                                                     data-toggle="dropdown" data-value="">Orientation
                                                                 01<i
                                                                         class="fa fa-unsorted"></i></a>
@@ -390,9 +392,10 @@
                                     </div>
 
                                     <label class="select margin-bottom">
-                                        <select name="inquiry" id="inquiry" class="required printing_options"
+                                        <select name="label_application" id="label_application" class="required printing_options"
                                                 aria-required="true">
-                                            <option value="" selected="selected">Label Application</option>
+
+                                            <option value="" selected="selected">Please Select Label Application</option>
                                             <option value="by_hand">By Hand</option>
                                             <option value="by_machine">By Machine</option>
 

@@ -23,7 +23,7 @@ class Shopping_model extends CI_Model{
 function show_quotation_basket(){
         $cookie = (isset($_COOKIE['ci_session']))?$_COOKIE['ci_session']:'';
         $cookie = stripslashes($cookie);
-        $cookie = @unserialize($cookie);
+        $cookie = unserialize($cookie);
         $cisess_session_id = $cookie['session_id'];
 		$session_id = $this->session->userdata('session_id');
 		
@@ -37,7 +37,7 @@ function show_quotation_basket(){
 	function total_order(){
         $cookie = (isset($_COOKIE['ci_session']))?$_COOKIE['ci_session']:'';
         $cookie = stripslashes($cookie);
-        $cookie = @unserialize($cookie);
+        $cookie = unserialize($cookie);
         $cisess_session_id = $cookie['session_id'];
 		$session_id = $this->session->userdata('session_id');
 		
@@ -53,7 +53,7 @@ function show_quotation_basket(){
 	function cart_count(){
         $cookie = (isset($_COOKIE['ci_session']))?$_COOKIE['ci_session']:'';
         $cookie = stripslashes($cookie);
-        $cookie = @unserialize($cookie);
+        $cookie = unserialize($cookie);
         $cisess_session_id = $cookie['session_id'];
 		$session_id = $this->session->userdata('session_id');
 		 
@@ -70,7 +70,7 @@ function show_quotation_basket(){
 	function show_cart(){
         $cookie = (isset($_COOKIE['ci_session']))?$_COOKIE['ci_session']:'';
         $cookie = stripslashes($cookie);
-        $cookie = @unserialize($cookie);
+        $cookie = unserialize($cookie);
         $cisess_session_id = $cookie['session_id'];
         $session_id = $this->session->userdata('session_id');
 
@@ -85,7 +85,7 @@ function show_quotation_basket(){
 	public function emptcart(){
         $cookie = (isset($_COOKIE['ci_session']))?$_COOKIE['ci_session']:'';
         $cookie = stripslashes($cookie);
-        $cookie = @unserialize($cookie);
+        $cookie = unserialize($cookie);
         $cisess_session_id = $cookie['session_id'];
         $session_id = $this->session->userdata('session_id');
 		
@@ -106,7 +106,7 @@ function show_quotation_basket(){
    function delete_product_cart($id){
         $cookie = (isset($_COOKIE['ci_session']))?$_COOKIE['ci_session']:'';
         $cookie = stripslashes($cookie);
-        $cookie = @unserialize($cookie);
+        $cookie = unserialize($cookie);
         $cisess_session_id = $cookie['session_id'];
         $session_id = $this->session->userdata('session_id');
 	   
@@ -157,9 +157,8 @@ function show_quotation_basket(){
 		if(($sample=='sample' || $lba =='lba' ) || ($printing > 0 && $offshore['status']==false)){
 
 	
-			// AA27 STARTS
-				$qry = $this->db->query("select * from shippingservices where ServiceID=20  order by sorting asc");
-			// AA27 ENDS
+
+			$qry = $this->db->query("select * from shippingservices where ServiceID=20");
 
 			// AA21 STARTS
             $delivery = $qry->result_array();
@@ -178,9 +177,8 @@ function show_quotation_basket(){
 		}
 
 		if($xmass > 0){
-			// AA27 STARTS
-				$qry = $this->db->query("select * from shippingservices where ServiceID=12  order by sorting asc");
-			// AA27 ENDS
+
+			$qry = $this->db->query("select * from shippingservices where ServiceID=12");
 
 			return $qry->result_array();
 
@@ -229,9 +227,8 @@ function show_quotation_basket(){
 		}
 
 		else if($amount < 25.00 ){
-			// AA27 STARTS
-				$qry = $this->db->query("select * from shippingservices where ServiceID!=20 AND CountryID = '1'  order by sorting asc");
-			// AA27 ENDS
+
+			$qry = $this->db->query("select * from shippingservices where ServiceID!=20 AND CountryID = '1' order by ServiceID asc");
 
 			// AA21 STARTS
             $delivery = $qry->result_array();
@@ -248,9 +245,8 @@ function show_quotation_basket(){
 			$lba = $this->calculate_lba_in_cart();
 
 			if($printing > 0 || $lba =='lba'){
-				// AA27 STARTS
-					$qry = $this->db->query("select * from shippingservices where ServiceID=20  order by sorting asc");
-				// AA27 ENDS
+
+				$qry = $this->db->query("select * from shippingservices where ServiceID=20");
 
 				// AA21 STARTS
 	            $delivery = $qry->result_array();
@@ -259,9 +255,8 @@ function show_quotation_basket(){
 	            // AA21 ENDS
 
 			}else{
-				// AA27 STARTS
-					$qry = $this->db->query("select * from shippingservices where CountryID = '1' and ServiceID !=19  order by sorting asc");
-				// AA27 ENDS
+
+				$qry = $this->db->query("select * from shippingservices where CountryID = '1' and ServiceID !=19 order by ServiceID asc");
 
 			    // AA21 STARTS
 	            $delivery = $qry->result_array();
@@ -770,9 +765,7 @@ function show_quotation_basket(){
 		  /******************Sample Order implementation***********************/
 
 				$sample = $this->shopping_model->is_order_sample();
-				//$courier = "Fedex";
-					$courier = "Parcelforce";
-				
+				$courier = "Fedex";
 
 				if($sample=='sample'){
 				    $courier = "";
@@ -784,8 +777,6 @@ function show_quotation_basket(){
 				    $amount = $amount + $discount_offer;
 				    $discount_offer = 0.00;
 				    $voucherOfferd = 'No';
-
-
 				}else{
 						$status = 6;
 						 $offshore = $this->product_model->offshore_delviery_charges_WPC($d_pcode, $dcountry);
@@ -934,17 +925,9 @@ function show_quotation_basket(){
 					$data = array_merge($data, $mixed_array);
 					$this->db->insert('orders', $data);	
 				}
-
-
-
-
 		/******************Sample Order implementation***********************/
 
 		$cart = $this->show_cart();
-		/*echo '<pre>';
-		print_r('h = ');
-		print_r($cart);
-		exit;*/
         foreach($cart as $c)
         {
             $print_type = '';
@@ -964,13 +947,7 @@ function show_quotation_basket(){
 			
 		
 			$passvalue = ($c->Printing=="Y")?"":"plain";  
-			if(preg_match('/Roll Labels/is',$ProductBrand['ProductBrand']) && $c->Printing=="Y" and $c->regmark != 'Y') {
-              $prodName =  $this->orderModal->Printed_desc($c->wound,$c->Print_Type,$prodName,$c->orientation,$c->FinishType);
-           }else{
-            $prodName =  $this->orderModal->customize_product_name($c->is_custom,$prodName,$c->LabelsPerRoll,$ProductBrand['LabelsPerSheet'],$reordercode,$manf_id,$ProductBrand['ProductBrand'],$c->wound,$c->OrderData,$passvalue);
-           }
-
-			//$prodName =  $this->orderModal->customize_product_name($c->is_custom,$prodName,$c->LabelsPerRoll,$ProductBrand['LabelsPerSheet'],$reordercode,$manf_id,$ProductBrand['ProductBrand'],$c->wound,$c->OrderData,$passvalue);
+			$prodName =  $this->orderModal->customize_product_name($c->is_custom,$prodName,$c->LabelsPerRoll,$ProductBrand['LabelsPerSheet'],$reordercode,$manf_id,$ProductBrand['ProductBrand'],$c->wound,$c->OrderData,$passvalue);
 			
            if(preg_match('/Integrated Labels/is',$ProductBrand['ProductBrand'])){
 		      $print_type = $c->OrderData;
@@ -1106,168 +1083,14 @@ function show_quotation_basket(){
                     'design_service'=>$c->design_service,
                     'design_service_charge'=>$c->design_service_charge,
                     'design_file'=>$c->design_file,
-                    'FinishTypePrintedLabels' => $c->FinishTypePrintedLabels,
-                    'FinishTypePricePrintedLabels' => $c->FinishTypePricePrintedLabels,
-                    'label_application' => $c->label_application,
-                    'combination_base' => $c->combination_base,
-                    'custom_roll_and_label' => $c->custom_roll_and_label,
-                    'total_emb_cost' => $c->total_emb_cost,
-                    'page_location'=>$c->page_location,
-                    'product_preferences'=>$c->product_preferences
-                );
+                    'page_location'=>$c->page_location);
 				
 				if($c->regmark == "Y")
 				{
 					$A4Printing['regmark'] = "Y";
 				}
 				$data_ins = array_merge($data_ins, $A4Printing);
-//----------------------------purchased plates history algo Starts -------------------------------
-//                Algo overview
-//                purpose is to determine user-purchased plates from user selected finish and embellishment options according
-//                to shopping cart that is converting in order.
-//                Some Rules
-//               1:- if user choose embellishment plate from already purchased plates then it'll not update in customer's
-//                purchased plate section
-//               2:- if user choose embellishment option that requires plate/tool and its not present in his purchased plate
-//                history then it'll update in it's current purchased plates history column alongwith existing plates.
-//                3:- if user select plate from purchased history & also has new plate from embellishment option then existing plate will
-//                be ignored & new plate will be added in already purchased list of plates
-                //add finish plates in customer purchased history for fututre use these plates in order
-                $emb_option_values = json_decode($c->FinishTypePrintedLabels);
-                $use_old_plate = json_decode($c->use_old_plate);
-                $user_purchased_plates = $this->home_model->get_db_column("customers", "purchased_plate_history", "UserID", $userid);
-                if (empty($user_purchased_plates)) {
-                    $user_purchased_plates = array();
-                }
-//               get all emb options that required plates to proceed (have plate cost from label_embellishment table for matching)
-                $this->db->select('parsed_title');
-                $this->db->where('plate_cost !=', 0);
-                $embellishment_plate_parsed_title_all_db = $this->db->get('label_embellishment')->result_array();
-                //convert 2d array into 1d array
-                $embellishment_plate_parsed_title_all_db = array_column($embellishment_plate_parsed_title_all_db, 'parsed_title');
-                if (isset($emb_option_values) && !empty($emb_option_values)) {
-                    //determine those options that requires plate from user selected embellishment options and compare it to array of all available plates in system
-                    $new_plates = array_intersect($embellishment_plate_parsed_title_all_db, $emb_option_values);
-//                    if user selected some plate from already purchased history then remove this to prevent addition in user purchased plate history
-                    if (isset($new_plates) && !empty($new_plates)) {
-
-                        $attach_q = $this->db->query("select * from integrated_attachments 
-									WHERE ProductID LIKE '" . $c->ProductID . "' AND CartID LIKE '" . $c->ID . "' AND status LIKE 'confirm' LIMIT 15 ");
-                        $attach_q = $attach_q->result();
-                        $order_attach_file = '';
-                        $order_attach_name = '';
-                        if (isset($use_old_plate) && !empty($use_old_plate)) {
-                            $new_plates_merged = array_diff($new_plates, $use_old_plate);
-
-                            if (isset($new_plates_merged) && !empty($new_plates_merged)){
-
-                                foreach ($new_plates_merged as $purchased_plate) {
-                                    $loop_count =1;
-                                    if (count($attach_q) >0) {
-
-                                        foreach ($attach_q as $key => $attach) {
-                                            if ($loop_count == 1){
-
-                                                $new_plate_obj = new stdClass();
-                                                $new_plate_obj->order_number = $OrderNumber;
-                                                $new_plate_obj->purchased_plate = $purchased_plate;
-                                                $new_plate_obj->order_attach_file = $attach->file;
-                                                $new_plate_obj->order_attach_name = $attach->name;
-                                                $new_plates_final[] = $new_plate_obj;
-                                                $order_attach_file = $attach->file;
-                                                $order_attach_name = $attach->name;
-                                                unset($attach_q[$key]);
-                                                $loop_count++;
-                                            }
-                                        }
-                                    }else{
-                                        $new_plate_obj = new stdClass();
-                                        $new_plate_obj->order_number = $OrderNumber;
-                                        $new_plate_obj->purchased_plate = $purchased_plate;
-                                        $new_plate_obj->order_attach_file = $order_attach_file;
-                                        $new_plate_obj->order_attach_name = $order_attach_name;
-                                        $new_plates_final[] = $new_plate_obj;
-
-                                    }
-                                }
-                            }
-                        } else {
-                            $new_plates_merged = $new_plates;
-
-                            foreach ($new_plates_merged as $purchased_plate) {
-                                $loop_count =1;
-                                if (count($attach_q) >0){
-                                    foreach ($attach_q as $key=> $attach){
-                                        if ($loop_count == 1){
-
-
-                                            $new_plate_obj = new stdClass();
-                                            $new_plate_obj->order_number = $OrderNumber;
-                                            $new_plate_obj->purchased_plate = $purchased_plate;
-                                            $new_plate_obj->order_attach_file = $attach->file;
-                                            $new_plate_obj->order_attach_name = $attach->name;
-                                            $new_plates_final[] = $new_plate_obj;
-                                            $order_attach_file = $attach->file;
-                                            $order_attach_name = $attach->name;
-                                            unset($attach_q[$key]);
-                                            $loop_count++;
-                                        }
-                                    }
-                                }else{
-
-
-                                    $new_plate_obj = new stdClass();
-                                    $new_plate_obj->order_number = $OrderNumber;
-                                    $new_plate_obj->purchased_plate = $purchased_plate;
-                                    $new_plate_obj->order_attach_file = $order_attach_file;
-                                    $new_plate_obj->order_attach_name = $order_attach_name;
-                                    $new_plates_final[] = $new_plate_obj;
-                                }
-
-                            }
-//                            foreach ($new_plates_merged as $purchased_plate) {
-//                                $new_plate_obj = new stdClass();
-//                                $new_plate_obj->order_number = $OrderNumber;
-//                                $new_plate_obj->purchased_plate = $purchased_plate;
-//                                $new_plates_final[] = $new_plate_obj;
-//                            }
-                        }
-
-                        // if user has already 'purchased plates history' then update it & add new plates in it.
-//                 $plates_add_to_user_existing_plates = array_diff($new_plates_final, json_decode($user_purchased_plates));
-                        if (!empty(json_decode($user_purchased_plates))) {
-                            if (isset($new_plates_final) && !empty($new_plates_final)) {
-
-                                $user_purchased_plates_merged = array_merge(json_decode($user_purchased_plates), $new_plates_final);
-                            }else{
-                                $user_purchased_plates_merged = json_decode($user_purchased_plates);
-                            }
-
-                        } else {
-//                        if user does'nt have any plate then add plates in his purchased plate history
-                            $user_purchased_plates_merged = $new_plates_final;
-
-                        }
-
-                        $update_data = array();
-                        $update_data['purchased_plate_history'] = json_encode($user_purchased_plates_merged);
-                        $this->db->update('customers', $update_data, array('UserID' => $userid));
-                    }
-//                    print_r($new_plates);echo"gfdfgdfgfd";die;
-                }
-                //----------------------------purchased plates history Algo ends -------------------------------
-
-
-//                echo"<pre>";print_r(json_decode($user_purchased_plates));
-//                 print_r( ($emb_option_values));
-//                 var_dump( ($user_purchased_plates_merged));
-//                 print_r( ($use_old_plate));
-//                echo $userid;echo"<br>";
-//                echo $order_num;die;
-
-            }
-
-
+			}
             /******************Sample Order implementation***********************/
 
             $this->db->insert('orderdetails', $data_ins);
@@ -1276,13 +1099,11 @@ function show_quotation_basket(){
             
             if(preg_match('/Integrated Labels/is',$ProductBrand['ProductBrand']) || $c->Printing=='Y'){
                 if($c->OrderData=='Black' || $c->OrderData=='Printed' || $c->Printing=='Y'){
-
                     $query = $this->db->query("select count(*) as total from integrated_attachments WHERE ProductID LIKE '".$c->ProductID."' AND CartID LIKE '".$c->ID."' AND status LIKE 'confirm' ");
                     $query = $query->row_array();
                     if($query['total'] > 0 || $c->regmark == "Y"){
                         $attach_q = $this->db->query("select * from integrated_attachments WHERE ProductID LIKE '".$c->ProductID."' AND CartID LIKE '".$c->ID."' AND status LIKE 'confirm' LIMIT 15 ");
                         $attach_q = $attach_q->result();
-
                         if(preg_match("/SRA3/i",$ProductBrand['ProductBrand'])){
                             $brand = 'SRA3';
                         }
@@ -1294,10 +1115,6 @@ function show_quotation_basket(){
                         }
                         else if(preg_match("/Integrated/i",$ProductBrand['ProductBrand'])){
                             $brand = 'Integrated';
-                        }
-
-                        else if(preg_match("/A5/i",$ProductBrand['ProductBrand'])){
-                            $brand = 'A5';
                         }
                         else{
                             $brand = 'A4';
@@ -1417,7 +1234,7 @@ function show_quotation_basket(){
 
                             //new code
                             $checked = ($int_row->source=='flash')?'1':'0';
-                            $des_source = ($int_row->source=='flash')?'flash':'backoffice';
+                            $des_source = ($int_row->source=='flash')?'flash':'web';
                             $job_status = ($int_row->source=='flash')?70:64;
                             $approve_date_field = ($int_row->source=='flash')?time():0;
                             $attach_array = array('OrderNumber'=>$OrderNumber,
@@ -1459,15 +1276,8 @@ function show_quotation_basket(){
 						}
 				}
 		
-         $Order['OrderNumber'] = $OrderNumber;
+        $Order['OrderNumber'] = $OrderNumber;
         $this->session->set_userdata($Order);
-
-        /*if($sample=='sample') {
-            //echo 'in';
-            $OrderNumberSamples = $OrderNumber;
-            $this->custom->assign_dispatch_date($OrderNumberSamples, TRUE);
-        }*/
-
 
         /***-------- code start for voucher implementations------****/
 
@@ -1506,10 +1316,10 @@ function show_quotation_basket(){
                 'attachemt'=>$imagename);
 					$this->send_purcasheorder_attachemts($parameters);
         }
-         //$this->session->set_userdata("changeDrop","0");
-//		$this->session->unset_userdata("userid");
-//		$this->session->unset_userdata('payment_redirection');
-//        $this->emptcart();
+        $this->session->set_userdata("changeDrop","0");
+		$this->session->unset_userdata("userid");
+		$this->session->unset_userdata('payment_redirection');
+        $this->emptcart();
 	}
 
 
@@ -1552,7 +1362,7 @@ function show_quotation_basket(){
 
     	$cookie = (isset($_COOKIE['ci_session']))?$_COOKIE['ci_session']:'';
         $cookie = stripslashes($cookie);
-        $cookie = @unserialize($cookie);
+        $cookie = unserialize($cookie);
         $cisess_session_id = $cookie['session_id'];
         $session_id = $this->session->userdata('session_id');
 		
@@ -2625,7 +2435,7 @@ function show_quotation_basket(){
 	function check_discount_applied($newGrandTotal, $perentage=NULL){
         $cookie = (isset($_COOKIE['ci_session']))?$_COOKIE['ci_session']:'';
         $cookie = stripslashes($cookie);
-        $cookie = @unserialize($cookie);
+        $cookie = unserialize($cookie);
         $cisess_session_id = $cookie['session_id'];
 		$session_id = $this->session->userdata('session_id');
 
@@ -2758,7 +2568,7 @@ function show_quotation_basket(){
    function wtp_discount_applied_on_order(){
         $cookie = (isset($_COOKIE['ci_session']))?$_COOKIE['ci_session']:'';
         $cookie = stripslashes($cookie);
-        $cookie = @unserialize($cookie);
+        $cookie = unserialize($cookie);
         $cisess_session_id = $cookie['session_id'];
 
         $session_id = $this->session->userdata('session_id');
@@ -2775,7 +2585,7 @@ function show_quotation_basket(){
    function check_wtp_voucher_applied($newGrandTotal){
         $cookie = (isset($_COOKIE['ci_session']))?$_COOKIE['ci_session']:'';
         $cookie = stripslashes($cookie);
-        $cookie = @unserialize($cookie);
+        $cookie = unserialize($cookie);
         $cisess_session_id = $cookie['session_id'];
 
         $session_id = $this->session->userdata('session_id');
@@ -2847,7 +2657,7 @@ function show_quotation_basket(){
 
 		$cookie = (isset($_COOKIE['ci_session']))?$_COOKIE['ci_session']:'';
         $cookie = stripslashes($cookie);
-        $cookie = @unserialize($cookie);
+        $cookie = unserialize($cookie);
         $cisess_session_id = $cookie['session_id'];
 
         $session_id = $this->session->userdata('session_id');
@@ -2885,7 +2695,7 @@ function show_quotation_basket(){
 	function calculate_total_wtp_amount(){
         $cookie = (isset($_COOKIE['ci_session']))?$_COOKIE['ci_session']:'';
         $cookie = stripslashes($cookie);
-        $cookie = @unserialize($cookie);
+        $cookie = unserialize($cookie);
         $cisess_session_id = $cookie['session_id'];
 		$session_id = $this->session->userdata('session_id');
 
@@ -2939,7 +2749,7 @@ function show_quotation_basket(){
 
 			$cookie = (isset($_COOKIE['ci_session']))?$_COOKIE['ci_session']:'';
 			$cookie = stripslashes($cookie);
-			$cookie = @unserialize($cookie);
+			$cookie = unserialize($cookie);
 			$cisess_session_id = $cookie['session_id'];
 			$session_id = $this->session->userdata('session_id');
 
@@ -3108,7 +2918,7 @@ function show_quotation_basket(){
   function is_wpep_disocunt_applied(){
         $cookie = (isset($_COOKIE['ci_session']))?$_COOKIE['ci_session']:'';
         $cookie = stripslashes($cookie);
-        $cookie = @unserialize($cookie);
+        $cookie = unserialize($cookie);
         $cisess_session_id = $cookie['session_id'];
      	$session_id = $this->session->userdata('session_id');
 
@@ -3277,24 +3087,40 @@ function show_quotation_basket(){
   
 
   function is_order_sample(){
-    		 $sample = $this->sample_count_items();
-    		 $other = $this->standard_count_items();
+
+	
+
+		$sample = $this->sample_count_items();
+
+		$other = $this->standard_count_items();
+
+				
+
 		if($sample > 0 and $other==0){
+
 			return "sample";
-    	}
+
+		}
+
 		else if($sample > 0 and $other > 0){
+
 			return "mixed";
+
 		}
+
 		else{
+
 			return "other";
+
 		}
+
     }
 
 	function sample_count_items(){
 
 		$cookie = (isset($_COOKIE['ci_session']))?$_COOKIE['ci_session']:'';
         $cookie = stripslashes($cookie);
-        $cookie = @unserialize($cookie);
+        $cookie = unserialize($cookie);
         $cisess_session_id = $cookie['session_id'];
 		$session_id = $this->session->userdata('session_id');
 		
@@ -3315,7 +3141,7 @@ function show_quotation_basket(){
 
 		$cookie = (isset($_COOKIE['ci_session']))?$_COOKIE['ci_session']:'';
         $cookie = stripslashes($cookie);
-        $cookie = @unserialize($cookie);
+        $cookie = unserialize($cookie);
         $cisess_session_id = $cookie['session_id'];
 		$session_id = $this->session->userdata('session_id');
 
@@ -3325,8 +3151,6 @@ function show_quotation_basket(){
 
 		$row = $result->row_array();
 
-		//echo $this->db->last_query(); echo '<br>';
-
 		return $row['total'];
 
 	}
@@ -3335,7 +3159,7 @@ function show_quotation_basket(){
 
 		$cookie = (isset($_COOKIE['ci_session']))?$_COOKIE['ci_session']:'';
         $cookie = stripslashes($cookie);
-        $cookie = @unserialize($cookie);
+        $cookie = unserialize($cookie);
         $cisess_session_id = $cookie['session_id'];
 		$session_id = $this->session->userdata('session_id');
 
@@ -3383,7 +3207,7 @@ function show_quotation_basket(){
 
 		$cookie = (isset($_COOKIE['ci_session']))?$_COOKIE['ci_session']:'';
         $cookie = stripslashes($cookie);
-        $cookie = @unserialize($cookie);
+        $cookie = unserialize($cookie);
         $cisess_session_id = $cookie['session_id'];
 		$session_id = $this->session->userdata('session_id');
 
@@ -3427,7 +3251,7 @@ function show_quotation_basket(){
    function printedroll_discount_applied_on_order(){
         $cookie = (isset($_COOKIE['ci_session']))?$_COOKIE['ci_session']:'';
         $cookie = stripslashes($cookie);
-        $cookie = @unserialize($cookie);
+        $cookie = unserialize($cookie);
         $cisess_session_id = $cookie['session_id'];
 		$session_id = $this->session->userdata('session_id');
 		
@@ -3443,7 +3267,7 @@ function show_quotation_basket(){
 
 		$cookie = (isset($_COOKIE['ci_session']))?$_COOKIE['ci_session']:'';
         $cookie = stripslashes($cookie);
-        $cookie = @unserialize($cookie);
+        $cookie = unserialize($cookie);
         $cisess_session_id = $cookie['session_id'];
 		$session_id = $this->session->userdata('session_id');
 
@@ -3589,7 +3413,7 @@ function show_quotation_basket(){
 
 		$cookie = (isset($_COOKIE['ci_session']))?$_COOKIE['ci_session']:'';
         $cookie = stripslashes($cookie);
-        $cookie = @unserialize($cookie);
+        $cookie = unserialize($cookie);
         $cisess_session_id = $cookie['session_id'];
 		$session_id = $this->session->userdata('session_id');
 
@@ -3604,7 +3428,7 @@ function show_quotation_basket(){
 	function get_integrated_delivery_charges(){
         $cookie = (isset($_COOKIE['ci_session']))?$_COOKIE['ci_session']:'';
         $cookie = stripslashes($cookie);
-        $cookie = @unserialize($cookie);
+        $cookie = unserialize($cookie);
         $cisess_session_id = $cookie['session_id'];
 		$session_id = $this->session->userdata('session_id'); 
 

@@ -73,7 +73,7 @@ class cartModal extends CI_Model
             'labelPerSheet'=>$this->product_model->getProductById($productId)['LabelsPerSheet']
         );
     }
-
+/*HERE*/
     public function insertIntoCart(){
         $params = array('SessionID'=>$this->session->userdata('session_id'),'UserID'=>$this->session->userdata('customer_id'),'ProductID'=>0,'p_code'=>'SCO1','p_name'=>'Set-up charge'
         ,'OrderTime'=>date('Y-m-d h:m:i'),'Quantity'=>'1','orignalQty'=>'0','LabelsPerRoll'=>'0','OrderData'=>date('Y-m-d'),'UnitPrice'=>'0.00','TotalPrice'=>'0.00','is_custom'=>'No');

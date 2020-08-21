@@ -1,23 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b33a2ee8-7d7e-41ba-b205-57cbcdb217a2" name="Default Changelist" comment="">
+    <list default="true" id="c81e5106-f238-4a36-9ded-c4b954723c42" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/application/models/outer/--Filter_model.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/Accountmodel.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/Artwork_model.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/Credit_account_model.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/DashboardModel.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/Discount_model.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/Emailmodel.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/Filter_model.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/Filter_model__old.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/Foreign_currency_model.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/Home_model-org.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/Home_model.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/Invoice_model.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/MyPriceModel.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/Pagination.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/Payment_sales_audit_model.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/ProductInfoModel.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/Product_model-org.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/Product_model.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/QuoteModel.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/Rejected_artwork_model.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/Reporting_model.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/Settingmodel.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/Shopping_model.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/Shopping_model_live.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/User_model.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/models/outer/Vat_exempt_orders_model.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/in_house_design_service.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/controllers/ajax.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/ajax.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/controllers/search/Search.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/controllers/search/Search.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/models/Home_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Home_model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Invoice_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Invoice_model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Product_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Product_model.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/models/Shopping_model.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/Shopping_model.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/models/cart/CartModal.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/cart/CartModal.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/models/order_quotation/OrderModal.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/order_quotation/OrderModal.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/models/order_quotation/QuotationModal.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/models/order_quotation/QuotationModal.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/checkout/cart_material.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/checkout/cart_material.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/checkout/die_material.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/checkout/die_material.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/checkout/temp_products_lists.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/checkout/temp_products_lists.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/artwork_upload.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/artwork_upload.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/artwork_upload_section.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/artwork_upload_section.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/cart_summery.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/cart_summery.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/edit_cart_main.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/edit_cart_main.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/edit_main.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/edit_main.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/main.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/main.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/quotation/quotation_detail_page.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/quotation/quotation_detail_page.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/theme/assets/js/tab.js" beforeDir="false" afterPath="$PROJECT_DIR$/theme/assets/js/tab.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/printing_process.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/label_emb_page/printing_process.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/upload/a4_artwork_files.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/upload/a4_artwork_files.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/upload/roll_artwork_files.php" beforeDir="false" afterPath="$PROJECT_DIR$/application/views/order_quotation/label_embellishment_print_service/upload/roll_artwork_files.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/theme/assets/css/dropzone.css" beforeDir="false" afterPath="$PROJECT_DIR$/theme/assets/css/dropzone.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/theme/assets/js/dropzone.js" beforeDir="false" afterPath="$PROJECT_DIR$/theme/assets/js/dropzone.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/theme/site/css/label_embellishment.css" beforeDir="false" afterPath="$PROJECT_DIR$/theme/site/css/label_embellishment.css" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -33,10 +66,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectId" id="1fwUhNzSV1AjQrU2EyyqrPEDTVb" />
+  <component name="ProjectId" id="1gLucvscPnhd5gjqRj1pIZzvvFP" />
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="nodejs_package_manager_path" value="npm" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -55,20 +87,14 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="b33a2ee8-7d7e-41ba-b205-57cbcdb217a2" name="Default Changelist" comment="" />
-      <created>1597128766537</created>
+      <changelist id="c81e5106-f238-4a36-9ded-c4b954723c42" name="Default Changelist" comment="" />
+      <created>1597906276746</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1597128766537</updated>
-      <workItem from="1597128768908" duration="29000" />
-      <workItem from="1597128806552" duration="15000" />
-      <workItem from="1597128833859" duration="27372000" />
-      <workItem from="1597215083647" duration="29179000" />
-      <workItem from="1597301494888" duration="30611000" />
-      <workItem from="1597650345804" duration="28070000" />
-      <workItem from="1597734144718" duration="21170000" />
-      <workItem from="1597757289646" duration="9214000" />
-      <workItem from="1597820065184" duration="17804000" />
+      <updated>1597906276746</updated>
+      <workItem from="1597906279061" duration="57000" />
+      <workItem from="1597906350033" duration="29712000" />
+      <workItem from="1597993273393" duration="20513000" />
     </task>
     <servers />
   </component>

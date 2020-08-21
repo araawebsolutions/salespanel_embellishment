@@ -1,6 +1,6 @@
 <?php
 
-if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $flag == 'cart_detail')) {
+if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
     //$refNumber = OrderNumner,QuotationNumnber
     //$lineNumber = O_SerialNumnber,Q_SerialNumber
     //$flag = order_detail,quotation_detail
@@ -28,8 +28,9 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
     if (count($files) > 0){
         $q = $this->db->query(" select sum(qty) as total_roll from ".$artwork_table." WHERE Serial = ".$lineNumber." AND ProductID = ".$ProductID."  ");
         $total_uploaded_rolls =  $q->result();
+
         if (isset($total_uploaded_rolls) && !empty($total_uploaded_rolls)   ){
-            $additional_cost_per_roll = $prices['additional_cost']/($total_uploaded_rolls[0]->total_roll);
+            $additional_cost_per_roll = $prices['additional_cost']/($total_uploaded_rolls[0]->total_roll-$minroll);
         }
     }
 
@@ -39,6 +40,7 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
     $min_labels_per_roll = $this->home_model->min_labels_per_roll($minroll);
     $upload_path = base_url().'theme/assets/images/artworks/';
     $uploaded_designs = 0;
+    $flag_minus = false;
 } else {
 
     $ProductID = $details['ProductID'];
@@ -48,6 +50,19 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
 
     $total = $this->home_model->get_db_column('temporaryshoppingbasket', 'Quantity', 'ID', $cartid);
     $labels = $this->home_model->get_db_column('temporaryshoppingbasket', 'orignalQty', 'ID', $cartid);
+
+
+    /*FOR SCO1 START*/
+    $check_if_custom_die = $this->home_model->get_db_column('temporaryshoppingbasket', 'p_code', 'ID', $cartid);
+    if($check_if_custom_die && $check_if_custom_die == 'SCO1'){
+        $flexible_dies_data = $this->home_model->flexible_dies_data($cartid, 'cart_id');
+        if($flexible_dies_data){
+            $total = $flexible_dies_data->qty;
+        }
+    }
+    /*FOR SCO1 ENDS*/
+
+
     $designs = $this->home_model->get_db_column('temporaryshoppingbasket', 'Print_Qty', 'ID', $cartid);
     $minroll = $this->home_model->min_qty_roll($details['ManufactureID']);
     $min_labels_per_roll = $this->home_model->min_labels_per_roll($minroll);
@@ -73,11 +88,7 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
             }
         }
     }
-
-    
-
 }
-
 ?>
 
 <table class="table table-striped">

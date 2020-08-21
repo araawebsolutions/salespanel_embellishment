@@ -5,7 +5,7 @@
 </style>
 <?php
 
-if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $flag == 'cart_detail')) {
+if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail')) {
     //$refNumber = OrderNumner,QuotationNumnber
     //$lineNumber = O_SerialNumnber,Q_SerialNumber
     //$flag = order_detail,quotation_detail
@@ -38,6 +38,17 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
     $ProductID = $details['ProductID'];
 
     $total = $this->home_model->get_db_column('temporaryshoppingbasket', 'Quantity', 'ID', $cartid);
+
+    /*FOR SCO1 START*/
+    $check_if_custom_die = $this->home_model->get_db_column('temporaryshoppingbasket', 'p_code', 'ID', $cartid);
+    if($check_if_custom_die && $check_if_custom_die == 'SCO1'){
+        $flexible_dies_data = $this->home_model->flexible_dies_data($cartid, 'cart_id');
+        if($flexible_dies_data){
+            $total = $flexible_dies_data->qty;
+        }
+    }
+    /*FOR SCO1 ENDS*/
+
     $designs = $this->home_model->get_db_column('temporaryshoppingbasket', 'Print_Qty', 'ID', $cartid);
 
     $upload_path = base_url().'theme/assets/images/artworks/';
@@ -367,9 +378,8 @@ if (isset($flag) && ($flag == 'order_detail' || $flag == 'quotation_detail' || $
     </div>
 <? } ?>
 
-<input type="hidden" id="actual_designs_qty" value="<?=$designs?>"  />
-<input type="hidden" id="upload_remaining_designs" value="<?=($designs-$uploaded_designs)?>"  />
-<input type="hidden" id="upload_remaining_labels" value="<?=($remaingsheets*$details['LabelsPerSheet'])?>"  />
-
-<input type="hidden" id="actual_sheets" value="<?=$total?>"  />
-<input type="hidden" id="uploaded_sheets" value="<?=$total_sheets?>"  />
+<input type="hidden" id="actual_designs_qty" value="<?=$designs?>" />
+<input type="hidden" id="upload_remaining_designs" value="<?=($designs-$uploaded_designs)?>" />
+<input type="hidden" id="upload_remaining_labels" value="<?=($remaingsheets*$details['LabelsPerSheet'])?>" />
+<input type="hidden" id="actual_sheets" value="<?=$total?>" />
+<input type="hidden" id="uploaded_sheets" value="<?=$total_sheets?>" />
